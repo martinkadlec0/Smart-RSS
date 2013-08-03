@@ -1,0 +1,39 @@
+header {
+	padding: 25px 30px 15px 30px;
+	font-family: sans-serif;
+	border-bottom: 1px solid rgb(199, 203, 214);
+}
+
+.clear {
+	clear: both;
+}
+
+h1 {
+	margin: 0;
+	margin-bottom: 20px;
+	padding: 0;
+	color: rgb(72, 72, 72);
+	font-size: 1.5rem;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+header p {
+	color: rgb(182, 147, 171);
+	font-size: 0.9rem;
+	margin: 0;
+	padding: 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 220px;
+}
+
+header p:first-of-type {
+	float: left;
+}
+
+header p:last-of-type {
+	float: right;
+}

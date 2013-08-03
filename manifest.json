@@ -1,0 +1,20 @@
+{
+	"name": "Smart RSS",
+	"developer": {
+		"name": "BS-Harou (Martin Kadlec)",
+		"url": "http://my.opera.com/BS-Harou/blog"
+	},
+	"description": "RSS Reader for Opera 15+!",
+	"manifest_version": 2,
+	"version": "1.0",
+	"background": {
+		"page": "index.html"
+	},
+	"web_accessible_resources": ["libs/jquery.min.js", "libs/underscore.min.js", "libs/backbone.min.js", "libs/backbone.localStorage.min.js"],
+	"permissions": ["https://*/*", "storage", "http://*/*", "opera://favicon/*"],
+	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'unsafe-eval';",
+	"browser_action": {
+		"default_title": "Smart RSS", 
+		"default_popup": "rss.html"
+	}
+}

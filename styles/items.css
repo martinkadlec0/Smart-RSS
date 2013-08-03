@@ -1,0 +1,50 @@
+html, body {
+	height: 100%;
+	max-height: 100%;
+}
+
+body {
+	display: flex;
+	flex-flow: column;
+}
+
+#toolbar {
+	flex: 0 0 auto;
+}
+
+#list {
+	flex: 1 1;
+	-webkit-user-select: none;
+	user-select: none;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	font-family: sans-serif;
+}
+
+.item {
+	width: 100%;
+	padding: 4px 5px 4px 15px;
+	cursor: pointer;
+	border-bottom: 1px solid #ccc;
+}
+
+.item:active, .selected {
+	color: #f1f1f1 !important;
+	background: rgb(51, 153, 255);	
+}
+
+.item:active .item-author, .selected  .item-author {
+	color: #f1f1f1 !important;
+}
+
+.item-title {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 0.9rem;
+}
+
+.item-author {
+	color: #444;
+	font-size: 0.8rem;
+}
