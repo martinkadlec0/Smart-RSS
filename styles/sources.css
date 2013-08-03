@@ -1,0 +1,52 @@
+#list {
+	padding-top: 3px;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+.source {
+	width: 100%;
+	padding: 2px 5px;
+	display: flex;
+	font-family: sans-serif;
+	font-size: 0.9rem;
+	cursor: pointer;
+}
+
+.selected {
+	background: rgb(148, 198, 248);
+}
+
+.source:active {
+	background: rgb(118, 168, 218);	
+}
+
+.source:hover .source-title {
+	color: rgb(40, 80, 120);
+	text-decoration: underline;
+}
+
+.source-icon {
+	flex: 0 0 16px;
+	height: 16px;
+}
+
+.source-title {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	flex: 1 1;
+	padding: 0 5px;
+	line-height: 16px;
+	font-size: 0.9rem;
+}
+
+.source-counter {
+	flex: 0 0 auto;
+	padding: 0 5px;
+	background: #e1e1e1;
+	border-radius: 3px;
+	height: 100%;
+	max-width: 50px;
+	overflow: hidden;
+}

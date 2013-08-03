@@ -1,0 +1,35 @@
+* {
+	box-sizing: border-box;
+}
+body {
+	margin: 0;
+	font-size: 100%;
+}
+#toolbar {
+	display: flex;
+	height: 32px;
+	background: #f2f2f2;
+	border-bottom: 1px solid #a6a6a6;
+	align-items: stretch;
+	justify-content: flex-start;
+	padding: 3px 6px;
+	-webkit-user-select: none;
+	user-select: none;
+}
+.button {
+	flex: 0 0 28px;
+	overflow: hidden;
+	border-radius: 3px;
+	margin-right: 3px;
+	border: 1px solid transparent;
+	text-align: center;
+	line-height: 21px;
+	cursor: pointer;
+	/*transition: border-color 0.1s;*/
+}
+.button:hover, .button:active {
+	border-color: #c4c4c4;
+}
+.button:active {
+	box-shadow: inset 0 1px 3px #bbb;
+}

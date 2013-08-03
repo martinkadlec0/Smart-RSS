@@ -1,0 +1,1431 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"content",
+				"content-box"
+			],
+			[
+				"remove",
+				"removeAttribute"
+			],
+			[
+				"sqlS",
+				"sqlStringA"
+			],
+			[
+				"sql",
+				"sqlStringA"
+			],
+			[
+				"valid",
+				"validationError"
+			],
+			[
+				"hidde",
+				"hiddenImages"
+			],
+			[
+				"show",
+				"show_spoilers"
+			],
+			[
+				"requi",
+				"require_once"
+			],
+			[
+				"categ",
+				"category_name"
+			],
+			[
+				"var",
+				"var_dump"
+			],
+			[
+				"e",
+				"echoh	<?php echo htmlentities(…) ?>"
+			],
+			[
+				"get",
+				"getOwnPropertyNames"
+			],
+			[
+				"must",
+				"must-revalidate"
+			],
+			[
+				"arrDyn",
+				"arrDynBig"
+			],
+			[
+				"dy",
+				"arrDynBig"
+			],
+			[
+				"uin",
+				"uint16_t"
+			],
+			[
+				"uint",
+				"uint8_t"
+			],
+			[
+				"u",
+				"uint16_t"
+			],
+			[
+				"CMatrix",
+				"CMatrixColumn"
+			],
+			[
+				"CM",
+				"CMatrixColumn"
+			],
+			[
+				"C",
+				"CSizeException"
+			],
+			[
+				"hand",
+				"handledTerms"
+			],
+			[
+				"creat",
+				"createDocumentFragment"
+			],
+			[
+				"bac",
+				"background"
+			],
+			[
+				"fon",
+				"font-size"
+			],
+			[
+				"real",
+				"realRowSize"
+			],
+			[
+				"row",
+				"rowSize"
+			],
+			[
+				"re",
+				"reinterpret_cast"
+			],
+			[
+				"array",
+				"array_chunk"
+			],
+			[
+				"arr",
+				"array_chunk"
+			],
+			[
+				"inli",
+				"inline-block"
+			],
+			[
+				"querySel",
+				"querySelector"
+			],
+			[
+				"Link",
+				"LinkList"
+			],
+			[
+				"ad",
+				"addEventListener"
+			],
+			[
+				"i",
+				"i"
+			],
+			[
+				"if",
+				"if	if"
+			],
+			[
+				"q",
+				"querySelectorAll"
+			],
+			[
+				"load",
+				"loadSteps"
+			],
+			[
+				"pre",
+				"preferences"
+			],
+			[
+				"Wea",
+				"WeatherTemplate"
+			],
+			[
+				"proto",
+				"prototype"
+			],
+			[
+				"input",
+				"input	input - checkbox"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"settings":
+			{
+				"buffer_size": 0,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "Packages/User/graphviz.sublime-build",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+			[
+				"tidy",
+				"Tidy HTML"
+			],
+			[
+				"install pac",
+				"Package Control: Install Package"
+			],
+			[
+				"enable pa",
+				"Package Control: Enable Package"
+			],
+			[
+				"disable",
+				"Package Control: Disable Package"
+			],
+			[
+				"list packa",
+				"Package Control: List Packages"
+			],
+			[
+				"list pack",
+				"Package Control: List Packages"
+			],
+			[
+				"instal ",
+				"Package Control: Install Package"
+			],
+			[
+				"remove ",
+				"Package Control: Remove Package"
+			],
+			[
+				"remove pa",
+				"Package Control: Remove Package"
+			],
+			[
+				"remove pac",
+				"Package Control: Remove Package"
+			],
+			[
+				"list pac",
+				"Package Control: List Packages"
+			],
+			[
+				"instal pac",
+				"Package Control: Install Package"
+			],
+			[
+				"list pa",
+				"Package Control: List Packages"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"enable pac",
+				"Package Control: Enable Package"
+			],
+			[
+				"enable",
+				"Package Control: Enable Package"
+			],
+			[
+				"enable ",
+				"Package Control: Enable Package"
+			],
+			[
+				"enable pack",
+				"Package Control: Enable Package"
+			],
+			[
+				"disable ",
+				"Package Control: Disable Package"
+			],
+			[
+				"disable pa",
+				"Package Control: Disable Package"
+			],
+			[
+				"browse",
+				"SFTP: Browse Remote…"
+			],
+			[
+				"brow",
+				"SFTP: Browse Remote…"
+			],
+			[
+				"brows",
+				"SFTP: Browse Remote…"
+			],
+			[
+				"remove pack",
+				"Package Control: Remove Package"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"package",
+				"Package Control: Enable Package"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			],
+			[
+				"rmove",
+				"Package Control: Remove Package"
+			],
+			[
+				"packa",
+				"Package Control: Remove Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"install packa",
+				"Package Control: Install Package"
+			],
+			[
+				"packag",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"package ",
+				"Package Control: Install Package"
+			],
+			[
+				"Packa",
+				"Package Control: List Packages"
+			]
+		],
+		"width": 528.0
+	},
+	"console":
+	{
+		"height": 213.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/D/Work/bookmarks2/examples/index.html",
+		"/D/Work/LapiBackup/app/sections/uschovna.php",
+		"/D/Work/LapiBackup/app/sections/smaz.php",
+		"/D/Work/LapiBackup/libs/Lapi/CoreClasses/DefaultParams.php",
+		"/D/Work/LapiBackup/app/templates/layout.html",
+		"/C/Users/Martin/Videos/layout.html",
+		"/D/Work/LapiBackup/app/sections/nastaveni.php",
+		"/D/Work/LapiBackup/app/models/Settings.php",
+		"/D/Work/LapiBackup/libs/Lapi/CoreClasses/LapiModel.php",
+		"/D/Work/LapiBackup/app/models/Post.php",
+		"/D/Work/LapiBackup/static/styles/main.css",
+		"/D/Work/LapiBackup/libs/Lapi/CoreClasses/LapiUser.php",
+		"/D/Work/LapiBackup/app/sections/test.php",
+		"/D/Work/LapiBackup/libs/Lapi/CoreClasses/LapiCollection.php",
+		"/D/Work/LapiBackup/libs/Lapi/init.php",
+		"/D/Work/LapiBackup/libs/Lapi/CoreClasses/LapiApplication.php",
+		"/D/Work/LapiBackup/app/templates/kategorie.html",
+		"/D/Work/LapiBackup/app/templates/kluby.html",
+		"/D/Work/LapiBackup/app/sections/klub.php",
+		"/D/Work/LapiBackup/app/templates/nove.html",
+		"/D/Work/LapiBackup/app/templates/oblibene.html",
+		"/D/Work/LapiBackup/app/sections/pridat.php",
+		"/D/Work/LapiBackup/app/templates/uschovna.html",
+		"/D/Work/LapiBackup/libs/Lapi/helpers.php",
+		"/D/Work/LapiBackup/static/scripts/script.js",
+		"/D/Work/LapiBackup/.htaccess",
+		"/D/Work/LapiBackup/.gitignore",
+		"/D/Texty/Programming/GIT.txt",
+		"/D/Work/LapiBackup/app/sections/posta.php",
+		"/D/Work/LapiBackup/index.php",
+		"/C/Users/Martin/Desktop/martinkadleceu2.sql",
+		"/D/Work/LapiBackup/README.md",
+		"/C/Users/Martin/Desktop/uschovna.sql",
+		"/D/Work/LapiBackup/db_login.php",
+		"/D/Work/LapiBackup/app/templates/zebricky.html",
+		"/D/Work/LapiBackup/app/templates/posta.html",
+		"/D/Work/LapiBackup/app/templates/new_posta.html",
+		"/D/Work/LapiBackup/app/templates/new_klub.html",
+		"/D/Work/LapiBackup/app/templates/klub.html",
+		"/D/Work/LapiBackup/lapi.sublime-workspace",
+		"/D/Work/LapiBackup/lapi.sublime-project",
+		"/C/Program Files (x86)/Git/doc/git/html/git-tag.html",
+		"/D/Work/LapiBackup/lib.php",
+		"/D/Work/LapiBackup/libs/Lapi/CoreClasses/LapiDatabase.php",
+		"/D/Work/LapiBackup/app/templates/login.html",
+		"/D/Work/LapiBackup/app/templates/menu.html",
+		"/D/Work/LapiBackup/app/templates/nastaveni.html",
+		"/D/Work/LapiBackup/static/.htaccess",
+		"/D/Work/LapiBackup/app/sections/login.php",
+		"/D/Work/LapiBackup/app/sections/poslat.php",
+		"/D/Work/LapiBackup/app/templates/error.html",
+		"/D/Work/LapiBackup/app/templates/e404.html",
+		"/D/Work/LapiBackup/app/templates/smaz.html",
+		"/D/Work/LapiBackup/app/templates/pridat.html",
+		"/D/Work/LapiBackup/app/templates/poslat.html",
+		"/D/Work/LapiBackup/app/sections/menu.php",
+		"/D/Work/LapiBackup/app/models/User.php",
+		"/D/Work/LapiBackup/app/sections/zebricky.php",
+		"/D/Work/LapiBackup/app/sections/nove.php",
+		"/D/Work/LapiBackup/app/sections/odhlasit.php",
+		"/D/Work/LapiBackup/app/sections/oblibene.php",
+		"/D/Work/LapiBackup/app/sections/kluby.php",
+		"/D/Work/LapiBackup/app/sections/kategorie.php",
+		"/D/Work/LapiBackup/app/sections/error.php",
+		"/D/Work/LapiBackup/libs/Mustache/Loader/InlineLoader.php",
+		"/C/Users/Martin/Desktop/The Switcher/manifest.json",
+		"/D/Work/LapiMK_working/sections/posta.php",
+		"/C/Users/Martin/Desktop/lapi.sql",
+		"/D/Work/LapiBackup/scripts/script.js",
+		"/D/Work/LapiBackup/styles/main.css",
+		"/D/Work/LapiMK_working/lib.php",
+		"/D/Work/LapiBackup/app/collections/Posts.php",
+		"/C/Users/Martin/Desktop/index.js",
+		"/D/Work/LapiMK_working/index.php",
+		"/D/Work/LapiMK_working/scripts/script.js",
+		"/C/Users/Martin/AppData/Roaming/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/D/Work/phptest/test.php",
+		"/C/Users/Martin/Desktop/SILEX LAPI/silex-lapi/web/index.php",
+		"/D/Work/LapiMK_working/sections/klub.php",
+		"/D/Work/LapiBackup/sections/poslat.php",
+		"/D/Work/LapiBackup/sections/pridat.php",
+		"/D/Work/LapiBackup/sections/klub.php",
+		"/D/Work/LapiBackup/sections/smaz.php",
+		"/D/Work/LapiBackup/sections/login.php",
+		"/D/Work/LapiBackup/sections/nastaveni.php",
+		"/D/Work/LapiBackup/sections/odhlasit.php",
+		"/D/Work/LapiBackup/sections/posta.php",
+		"/D/Work/LapiBackup/sections/error.php",
+		"/D/Work/LapiBackup/sections/nastaveni.html",
+		"/D/Work/LapiBackup/.user.ini",
+		"/D/Work/LapiBackup/sections/kategorie.php",
+		"/D/Work/LapiBackup/sections/nove.php",
+		"/D/Work/LapiBackup/sections/menu.php",
+		"/D/Work/LapiBackup/sections/zebricky.php",
+		"/D/Work/LapiBackup/sections/kluby.php",
+		"/D/Work/LapiMK_working/sections/error.php",
+		"/D/Work/LapiBackup/tpls/search.php",
+		"/D/Work/LapiBackup/sections/oblibene.php",
+		"/D/Work/LapiBackup/test.php",
+		"/D/Work/bookmarks/scripts/main.js",
+		"/D/Work/bookmarks/index.html",
+		"/D/Work/bookmarks/manifest.json",
+		"/D/Work/DNA-7518/popup.html",
+		"/D/Work/LapiBackup/index2.html",
+		"/D/Work/bookmarks/libs/indexdb-for-backbone.js",
+		"/D/Work/DNA-7518/bg.html",
+		"/D/Work/DNA-7518/manifest.json",
+		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371390281/operacesky-net/html/silex-lapi/app/templates/layout.twig",
+		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371390243/operacesky-net/html/silex-lapi/app/templates/login.twig",
+		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371329943/operacesky-net/html/silex-lapi/composer.json",
+		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371380479/operacesky-net/html/silex-lapi/vendor/composer/autoload_namespaces.php",
+		"/D/Work/backbone-lists/public/javascripts/main.js",
+		"/D/Work/backbone-lists/app.js",
+		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371564176/operacesky-net/html/silex-lapi/app/Lapi/Modules/User.php",
+		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371564164/operacesky-net/html/silex-lapi/app/Lapi/Controllers/DefaultController.php",
+		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371314009/operacesky-net/html/silex-lapi/web/index.php",
+		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371311843/operacesky-net/html/silex-lapi/.htaccess",
+		"/D/Work/bookmarks/bg.html",
+		"/C/Users/Martin/Desktop/Houby/houby.css",
+		"/C/Users/Martin/Desktop/Houby/houby.js",
+		"/C/Users/Martin/Desktop/Downloads/Operas/Opera 15 Next/15.0.1147.72/localization/en-GB.pak",
+		"/C/Users/Martin/Desktop/Downloads/Operas/Opera 15 Next/15.0.1147.72/localization/en-US.pak",
+		"/C/Users/Martin/Desktop/Downloads/Operas/Opera 15 Next/15.0.1147.72/resources/default_partner_content.json",
+		"/C/Users/Martin/Desktop/Downloads/Operas/Opera 15 Next/profile/data/History",
+		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371563419/operacesky-net/html/silex-lapi/app/modules/Lapi/User.php",
+		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371564006/operacesky-net/html/silex-lapi/app/controllers/Lapi/Controllers/DefaultController.php",
+		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371387757/operacesky-net/html/silex-lapi/app/controllers/Lapi/DefaultController.php",
+		"/C/Users/Martin/Desktop/silex-fat/vendor/composer/autoload_namespaces.php"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 90.0,
+		"where_history":
+		[
+			"D:\\Work\\LapiBackup"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"new Post(",
+			"$posts",
+			"fetch",
+			"save",
+			"$app",
+			"$app->database",
+			"db->query",
+			"database->query",
+			"->query",
+			"isNew",
+			"destroy",
+			"dump",
+			"database",
+			"echo",
+			"dump",
+			"echo",
+			"database",
+			"->query",
+			"firstWhere",
+			"^//",
+			"//",
+			"tag",
+			"src=\"/",
+			"src=\"\\w+",
+			"href=\"\\w+",
+			"href=\"/",
+			"querySe",
+			"success",
+			"$q",
+			"object",
+			"video",
+			"vide",
+			"addValue",
+			".php",
+			"SETTINGS",
+			"SETTING",
+			"echo",
+			"var_du",
+			"tag",
+			"-a",
+			"is_mine",
+			"$app->user",
+			"$app->user->nick",
+			"is_new",
+			"branch",
+			"./static",
+			".gif",
+			"png",
+			"var_du",
+			"echo",
+			":",
+			"echo",
+			"something",
+			"LapiUser",
+			"LapiUs",
+			"LapiUser",
+			":489",
+			"Settings.php",
+			":436",
+			"LapiModule",
+			"Sett",
+			"User.php",
+			"SETTING",
+			"SETTINGS",
+			"filled",
+			"lapi_user",
+			"$_SESS",
+			"$_SESSION",
+			"$user",
+			"user",
+			"filled_list",
+			"user",
+			"filled_list",
+			"user",
+			"sett",
+			"$user",
+			"filled_list",
+			"$user",
+			"filled_list",
+			"User",
+			"LapiUser",
+			"validationError",
+			"inDatabase",
+			"save",
+			"$_POST",
+			"$_GET",
+			"id_num",
+			"stripString",
+			"is_bookmarked",
+			"isNew",
+			"co",
+			"$item->id",
+			"dirMo",
+			"$item->tex",
+			"echo",
+			"has",
+			"requir",
+			"$user",
+			"{{time",
+			"klub.php",
+			"$user",
+			"is_min",
+			"post-content",
+			"show_post_menu",
+			"> div",
+			"new-post",
+			"klub",
+			"club",
+			"klub",
+			"addV",
+			"dataset",
+			"club",
+			"echo",
+			"odhlasit",
+			".post",
+			"QUERY_STRING",
+			"echo",
+			"\"",
+			"$app->",
+			"id",
+			"user",
+			"query",
+			"a {",
+			"footer",
+			"var_du",
+			"echo",
+			"new_count",
+			"prihlasit"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"..",
+			"has_items",
+			"$post_id",
+			"old_style",
+			"'",
+			"new_count",
+			"items",
+			"more_new_posts",
+			"is_new",
+			"title",
+			"href=\".",
+			"./images/",
+			"_",
+			"w",
+			"",
+			"p",
+			" ",
+			"",
+			"cout",
+			"",
+			"companyAddr",
+			"companyName",
+			"addr",
+			"name",
+			"CCompanyIndex",
+			"",
+			"bla::Stack",
+			"",
+			"TNode",
+			"TOperatorNode",
+			"TNumberNode",
+			" ",
+			"",
+			"<<",
+			"endl;",
+			"::",
+			"->",
+			".",
+			"",
+			" ",
+			"$1",
+			"",
+			" ",
+			"",
+			" ",
+			"",
+			".",
+			"::",
+			" ",
+			".",
+			"->",
+			".",
+			" ",
+			"",
+			"->",
+			".",
+			" ",
+			"",
+			" ",
+			"->",
+			".",
+			" ",
+			", ",
+			" ",
+			"",
+			" ",
+			"{\\n$1\\n}",
+			") {",
+			"--",
+			"++",
+			"->",
+			".",
+			", ",
+			"return sum;",
+			"{\\n$1\\n}",
+			") {",
+			"--",
+			"++",
+			" ",
+			"->",
+			".",
+			", ",
+			"",
+			"int",
+			"",
+			"Key",
+			"",
+			"int ",
+			" ",
+			"!",
+			"->",
+			".",
+			" ",
+			"{\\n$1",
+			" {",
+			"",
+			"--",
+			"++",
+			"!",
+			"{\\n$1",
+			" {",
+			", ",
+			" ",
+			"->",
+			".",
+			"return false",
+			"return true",
+			" ",
+			", ",
+			" ",
+			"",
+			"!",
+			"{\\n$1",
+			"\\n{$1",
+			" {",
+			"->",
+			".",
+			"",
+			"->",
+			".",
+			"",
+			".",
+			"r1.amax",
+			"r2.amax",
+			"r2.amin",
+			"r1.amin",
+			"",
+			"offsetY"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"incomplete_sync": null,
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 32.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 198.0
+	},
+	"output.jslint_result_view":
+	{
+		"height": 180.0
+	},
+	"output.sftp":
+	{
+		"height": 96.0
+	},
+	"replace":
+	{
+		"height": 62.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"lapimode",
+				"libs/Lapi/CoreClasses/LapiModel.php"
+			],
+			[
+				"lapicoll",
+				"libs/Lapi/CoreClasses/LapiCollection.php"
+			],
+			[
+				"uschovna.php",
+				"app/sections/uschovna.php"
+			],
+			[
+				"klub.php",
+				"app/sections/klub.php"
+			],
+			[
+				"uschovna",
+				"app/sections/uschovna.php"
+			],
+			[
+				"test.php",
+				"app/sections/test.php"
+			],
+			[
+				"lapimodel",
+				"libs/Lapi/CoreClasses/LapiModel.php"
+			],
+			[
+				".css",
+				"static/styles/main.css"
+			],
+			[
+				"oblibene",
+				"app/templates/oblibene.html"
+			],
+			[
+				"test",
+				"app/sections/test.php"
+			],
+			[
+				"databa",
+				"libs/Lapi/CoreClasses/LapiDatabase.php"
+			],
+			[
+				"smaz.php",
+				"app/sections/smaz.php"
+			],
+			[
+				"lapiapp",
+				"libs/Lapi/CoreClasses/LapiApplication.php"
+			],
+			[
+				"lapda",
+				"libs/Lapi/CoreClasses/LapiDatabase.php"
+			],
+			[
+				"smaz",
+				"app/sections/smaz.php"
+			],
+			[
+				"defa",
+				"libs/Lapi/CoreClasses/DefaultParams.php"
+			],
+			[
+				"lapidata",
+				"libs/Lapi/CoreClasses/LapiDatabase.php"
+			],
+			[
+				"inde",
+				"index.php"
+			],
+			[
+				"posta.php",
+				"app/sections/posta.php"
+			],
+			[
+				"posta",
+				"app/sections/posta.php"
+			],
+			[
+				"git",
+				"/D/Texty/Programming/GIT.txt"
+			],
+			[
+				"db_lgin",
+				"db_login.php"
+			],
+			[
+				".gitigno",
+				".gitignore"
+			],
+			[
+				"htacce",
+				".htaccess"
+			],
+			[
+				"script",
+				"static/scripts/script.js"
+			],
+			[
+				"helpe",
+				"libs/Lapi/helpers.php"
+			],
+			[
+				"prida",
+				"app/sections/pridat.php"
+			],
+			[
+				"zebrick",
+				"app/templates/zebricky.html"
+			],
+			[
+				"klub",
+				"app/templates/klub.html"
+			],
+			[
+				"new_",
+				"app/templates/new_klub.html"
+			],
+			[
+				"oblibe",
+				"app/templates/oblibene.html"
+			],
+			[
+				"nove.html",
+				"app/templates/nove.html"
+			],
+			[
+				"new_kl",
+				"app/templates/new_klub.html"
+			],
+			[
+				"klub.html",
+				"app/templates/klub.html"
+			],
+			[
+				"kluby",
+				"app/templates/kluby.html"
+			],
+			[
+				"kategorie",
+				"app/templates/kategorie.html"
+			],
+			[
+				"de",
+				"libs/Lapi/CoreClasses/DefaultParams.php"
+			],
+			[
+				"defaul",
+				"libs/Lapi/CoreClasses/DefaultParams.php"
+			],
+			[
+				"htacc",
+				".htaccess"
+			],
+			[
+				"index",
+				"index.php"
+			],
+			[
+				"subli",
+				"LapiBackup/lapi.sublime-project"
+			],
+			[
+				"work",
+				"LapiBackup/lapi.sublime-workspace"
+			],
+			[
+				"layout",
+				"LapiBackup/app/templates/layout.html"
+			],
+			[
+				"script.js",
+				"LapiBackup/static/scripts/script.js"
+			],
+			[
+				"lay",
+				"Videos/layout.html"
+			],
+			[
+				".js",
+				"LapiBackup/static/scripts/script.js"
+			],
+			[
+				"nastaven",
+				"LapiBackup/app/sections/nastaveni.php"
+			],
+			[
+				"default",
+				"LapiBackup/libs/Lapi/CoreClasses/DefaultParams.php"
+			],
+			[
+				"uschovna.html",
+				"LapiBackup/app/templates/uschovna.html"
+			],
+			[
+				"new_posta",
+				"LapiBackup/app/templates/new_posta.html"
+			],
+			[
+				"new_klub",
+				"LapiBackup/app/templates/new_klub.html"
+			],
+			[
+				"setting",
+				"LapiBackup/app/models/Settings.php"
+			],
+			[
+				"lapi",
+				"LapiBackup/libs/Lapi/CoreClasses/LapiModel.php"
+			],
+			[
+				"uschovn",
+				"LapiBackup/app/sections/uschovna.php"
+			],
+			[
+				"lapimod",
+				"LapiBackup/libs/Lapi/CoreClasses/LapiModel.php"
+			],
+			[
+				"post",
+				"LapiBackup/app/models/Post.php"
+			],
+			[
+				"lapicol",
+				"LapiBackup/libs/Lapi/CoreClasses/LapiCollection.php"
+			],
+			[
+				"main.css",
+				"LapiBackup/static/styles/main.css"
+			],
+			[
+				"lapiappl",
+				"LapiBackup/libs/Lapi/CoreClasses/LapiApplication.php"
+			],
+			[
+				"index.php",
+				"LapiBackup/index.php"
+			],
+			[
+				"lib.php",
+				"LapiBackup/lib.php"
+			],
+			[
+				"sett",
+				"LapiBackup/app/models/Settings.php"
+			],
+			[
+				"login.php",
+				"LapiBackup/app/sections/login.php"
+			],
+			[
+				"poslat.php",
+				"LapiBackup/app/sections/poslat.php"
+			],
+			[
+				"nastave",
+				"LapiBackup/app/sections/nastaveni.php"
+			],
+			[
+				"posta.html",
+				"LapiBackup/app/templates/posta.html"
+			],
+			[
+				"new_pos",
+				"LapiBackup/app/templates/new_posta.html"
+			],
+			[
+				"new_klub.",
+				"LapiBackup/app/templates/new_klub.html"
+			],
+			[
+				".htac",
+				"LapiBackup/static/.htaccess"
+			],
+			[
+				"style.css",
+				"LapiBackup/static/styles/main.css"
+			],
+			[
+				"nove",
+				"LapiBackup/app/templates/nove.html"
+			],
+			[
+				"menu.html",
+				"LapiBackup/app/templates/menu.html"
+			],
+			[
+				"menu.php",
+				"app/sections/menu.php"
+			],
+			[
+				"settin",
+				"app/models/Settings.php"
+			],
+			[
+				"nove.h",
+				"app/templates/nove.html"
+			],
+			[
+				"kluby.ht",
+				"app/templates/kluby.html"
+			],
+			[
+				"kategore",
+				"app/templates/kategorie.html"
+			],
+			[
+				"post.php",
+				"app/models/Post.php"
+			],
+			[
+				"use",
+				"app/models/User.php"
+			],
+			[
+				"uschovna.",
+				"app/templates/uschovna.html"
+			],
+			[
+				"pridat",
+				"app/templates/pridat.html"
+			],
+			[
+				"pridat.php",
+				"app/sections/pridat.php"
+			],
+			[
+				"poslat",
+				"app/templates/poslat.html"
+			],
+			[
+				"poslat.html",
+				"app/templates/poslat.html"
+			],
+			[
+				"new_post",
+				"app/templates/new_posta.html"
+			],
+			[
+				"/smaz",
+				"app/sections/smaz.php"
+			],
+			[
+				"ne_klub.html",
+				"app/templates/new_klub.html"
+			],
+			[
+				"user.php",
+				"app/models/User.php"
+			],
+			[
+				"newklub",
+				"app/templates/new_klub.html"
+			],
+			[
+				"uschov",
+				"app/templates/uschovna.html"
+			],
+			[
+				"new_klub.html",
+				"app/templates/new_klub.html"
+			],
+			[
+				"css",
+				"styles/main.css"
+			],
+			[
+				"usch",
+				"app/sections/uschovna.php"
+			],
+			[
+				"ush",
+				"app/sections/uschovna.php"
+			],
+			[
+				"lib",
+				"lib.php"
+			],
+			[
+				"uscho",
+				"app/sections/uschovna.php"
+			],
+			[
+				"uschova",
+				"app/sections/uschovna.php"
+			],
+			[
+				"us",
+				"app/sections/uschovna.php"
+			],
+			[
+				"nastaveni",
+				"app/templates/nastaveni.html"
+			],
+			[
+				"klub.htm",
+				"app/templates/klub.html"
+			],
+			[
+				"style",
+				"styles/main.css"
+			],
+			[
+				"ew_klb",
+				"app/templates/new_klub.html"
+			],
+			[
+				"na",
+				"app/templates/nastaveni.html"
+			],
+			[
+				"user",
+				"app/models/User.php"
+			],
+			[
+				"nasta",
+				"app/sections/nastaveni.php"
+			],
+			[
+				"st",
+				"styles/main.css"
+			],
+			[
+				"nast",
+				"app/templates/nastaveni.html"
+			],
+			[
+				"style.c",
+				"styles/main.css"
+			],
+			[
+				"new",
+				"app/templates/new_klub.html"
+			],
+			[
+				"klub.",
+				"app/templates/klub.html"
+			],
+			[
+				"db_",
+				"db_login.php"
+			],
+			[
+				"nastav",
+				"app/templates/nastaveni.html"
+			],
+			[
+				"login",
+				"app/sections/login.php"
+			],
+			[
+				"odhla",
+				"app/sections/odhlasit.php"
+			],
+			[
+				"/sma",
+				"app/sections/smaz.php"
+			],
+			[
+				"odhlasit",
+				"app/sections/odhlasit.php"
+			],
+			[
+				"po",
+				"app/models/Post.php"
+			],
+			[
+				"styl",
+				"styles/main.css"
+			],
+			[
+				"pos",
+				"app/sections/posta.php"
+			],
+			[
+				"menu.htm",
+				"app/templates/menu.html"
+			],
+			[
+				"menu",
+				"app/sections/menu.php"
+			],
+			[
+				"logi",
+				"app/templates/login.html"
+			],
+			[
+				"zebri",
+				"app/templates/zebricky.html"
+			],
+			[
+				"zebric",
+				"app/sections/zebricky.php"
+			],
+			[
+				"kluby.html",
+				"app/templates/kluby.html"
+			],
+			[
+				"db",
+				"db_login.php"
+			],
+			[
+				"nas",
+				"app/sections/nastaveni.php"
+			],
+			[
+				"obli",
+				"app/templates/oblibene.html"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 210.0,
+	"status_bar_visible": true
+}

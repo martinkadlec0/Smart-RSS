@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+	<meta charset="utf-8" />
+	<title>Smart RSS - sources</title>
+	<script src="libs/jquery.min.js"></script>
+	<script src="libs/underscore.min.js"></script>
+	<script src="libs/backbone.min.js"></script>
+	<script src="scripts/sources.js"></script>
+	<link rel="stylesheet" type="text/css" href="styles/global.css" />
+	<link rel="stylesheet" type="text/css" href="styles/sources.css" />
+</head>
+<body>
+	<div id="toolbar">
+		<div class="button" id="button-add">A</div>
+		<div class="button" id="button-refresh">R</div>
+	</div>
+	<div id="list">
+
+	</div>
+	<script id="template-source" type="template">
+		<img src="#" class="source-icon" />
+		<div class="source-title"><%= title %></div>
+		<% if (count > 0) { %>
+			<div class="source-counter"><%= count %></div>
+		<% } %>
+	</script>
+</body>
+</html>
