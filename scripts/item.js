@@ -41,7 +41,9 @@ $(function() {
 			}
 		},
 		render: function() {
-			this.$el.html(this.template(this.model.toJSON()));
+			var data = this.model.toJSON();
+			data.date = bg.formatDate.call(new Date(data.date), 'YYYY-MM-DD hh:mm:ss');
+			this.$el.html(this.template(data));
 			return this;
 		},
 		handleNewSelected: function(model) {

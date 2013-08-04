@@ -42,15 +42,19 @@ body {
 	color: #f1f1f1 !important;
 }
 
+.unread {
+	font-weight: bold;
+}
+
 .item-title {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	font-size: 0.9rem;
+	font-size: 0.8rem;
 }
 
 .item-author {
 	color: #444;
 	padding-top: 0.2rem;
-	font-size: 0.8rem;
+	font-size: 0.75rem;
 }

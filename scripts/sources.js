@@ -16,8 +16,15 @@ $(function() {
 			this.$el.html(this.template(this.model.toJSON()));
 			return this;
 		},
-		handleMouseDown: function() {
-			bg.sources.trigger('new-selected', this.model);
+		handleMouseDown: function(e) {
+			if (e.shiftKey != true) {
+				$('.selected').removeClass('selected');
+				bg.sources.trigger('new-selected', this.model);
+			} 
+
+			$('.last-selected').removeClass('last-selected');
+			this.$el.addClass('selected');
+			this.$el.addClass('last-selected');
 		}
 	});
 
@@ -57,13 +64,14 @@ $(function() {
 
 			bg.sources.on('reset', this.addSources, this);
 
-			this.addSource(bg.sources);
+			this.addSources(bg.sources);
 		},
 		addSource: function(source) {
 			var view = new SourceView({ model: source });
 			$('#list').append(view.render().$el);
 		},
 		addSources: function(sources) {
+			$('#list').html('');
 			sources.forEach(function(source) {
 				this.addSource(source);
 			}, this);
