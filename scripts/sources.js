@@ -1,29 +1,23 @@
-$(function() {
-	var Source = Backbone.Model.extend({
-		defaults: {
-			title: '<no title>',
-			url: 'rss.rss',
-			count: 0
-		}
-	});
+chrome.runtime.getBackgroundPage(function(bg) {
 
-	var sources = new (Backbone.Collection.extend({
-		model: Source,
-		comparator: function(a, b) {
-			return a.get('tile') > b.get('title') ? 1 : -1;
-		}
-	}));
+$(function() {
 
 	var SourceView = Backbone.View.extend({
 		tagName: 'div',
 		className: 'source',
 		template: _.template($('#template-source').html()),
+		events: {
+			'mousedown': 'handleMouseDown'
+		},
 		initialize: function() {
 			console.log('View created');
 		},
 		render: function() {
 			this.$el.html(this.template(this.model.toJSON()));
 			return this;
+		},
+		handleMouseDown: function() {
+			bg.sources.trigger('new-selected', this.model);
 		}
 	});
 
@@ -61,96 +55,9 @@ $(function() {
 		initialize: function() {
 			console.log('App started');
 
-			sources.on('reset', this.addSources, this);
+			bg.sources.on('reset', this.addSources, this);
 
-			sources.reset([
-				{ title: 'OMG! Ubuntu!', url: 'aa', count: 2000 },
-				{ title: 'Perfection kills', url: 'aa', count: 0 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				{ title: 'Lapiduch.cz', url: 'aa', count: 5 },
-				
-			]);
+			this.addSource(bg.sources);
 		},
 		addSource: function(source) {
 			var view = new SourceView({ model: source });
@@ -162,4 +69,6 @@ $(function() {
 			}, this);
 		}
 	}));
+});
+
 });

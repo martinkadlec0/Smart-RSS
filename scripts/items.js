@@ -1,28 +1,30 @@
+chrome.runtime.getBackgroundPage(function(bg) {
+
 $(function() {
-	var Item = Backbone.Model.extend({
-		defaults: {
-			title: '<no title>',
-			author: 'Martin Kadlec'
-		}
-	});
-
-	var items = new (Backbone.Collection.extend({
-		model: Item,
-		comparator: function(a, b) {
-			return a.get('tile') > b.get('title') ? 1 : -1;
-		}
-	}));
-
 	var ItemView = Backbone.View.extend({
 		tagName: 'div',
 		className: 'item',
 		template: _.template($('#template-item').html()),
+		events: {
+			'mousedown': 'handleMouseDown'
+		},
 		initialize: function() {
-			console.log('View created');
+			
 		},
 		render: function() {
 			this.$el.html(this.template(this.model.toJSON()));
 			return this;
+		},
+		handleMouseDown: function(e) {
+			if (e.shiftKey != true) {
+				$('.selected').removeClass('selected');
+				//sendMessage('item', { action: 'item-show', value: 'XYZ' });
+				bg.items.trigger('new-selected', this.model);
+			} 
+
+			$('.last-selected').removeClass('last-selected');
+			this.$el.addClass('selected');
+			this.$el.addClass('last-selected');
 		}
 	});
 
@@ -58,24 +60,25 @@ $(function() {
 			
 		},
 		initialize: function() {
-			console.log('App started');
-
-			items.on('reset', this.addItems, this);
-
-			items.reset([
-				{ title: 'OMG! Ubuntu!', author: 'aa' },
-				{ title: 'Perfection kills', author: 'aa' }
-				
-			]);
+			bg.items.on('reset', this.addItems, this);
+			bg.sources.on('new-selected', this.handleNewSelected, this)	;
+			this.addItems(bg.items);
 		},
 		addItem: function(item) {
 			var view = new ItemView({ model: item });
 			$('#list').append(view.render().$el);
 		},
 		addItems: function(items) {
+			$('#list').html();
 			items.forEach(function(item) {
 				this.addItem(item);
 			}, this);
+		},
+		handleNewSelected: function(source) {
+			this.addItems(bg.items.where({ sourceID: source.id });
 		}
 	}));
+});
+
+
 });

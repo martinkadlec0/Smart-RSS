@@ -6,6 +6,7 @@
 	<script src="libs/jquery.min.js"></script>
 	<script src="libs/underscore.min.js"></script>
 	<script src="libs/backbone.min.js"></script>
+	<!--<script src="scripts/global.js"></script>-->
 	<script src="scripts/item.js"></script>
 	<link rel="stylesheet" type="text/css" href="styles/global.css" />
 	<link rel="stylesheet" type="text/css" href="styles/item.css" />
@@ -16,12 +17,22 @@
 		<div class="button" id="button-delete">D</div>
 	</div>
 	<div id="item">
+		
+	</div>
+
+	<script type="template" id="template-item">
 		<header>
-			<h1>Going Live With Node</h1>
-			<p class="author">Martin Kadlec</p>
-			<p class="date">2013-02-02 22:33</p>
+			<h1><%= title %></h1>
+			<p class="author"><%= author %></p>
+			<p class="date"><%= date %></p>
 			<div class="clear"></div>
 		</header>
-	</div>
+		<main>
+			<%= content %>
+		</main>
+		<footer>
+			<a href="<%= url %>">Whole article</a>
+		</foote>
+	</script>
 </body>
 </html>

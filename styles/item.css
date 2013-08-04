@@ -1,3 +1,19 @@
+body {
+	display: flex;
+	flex-flow: column;
+}
+
+#toolbar {
+	flex: 0 0 auto;
+}
+
+#item {
+	flex: 1 1;
+	user-select: none;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
 header {
 	padding: 25px 30px 15px 30px;
 	font-family: sans-serif;
@@ -36,4 +52,19 @@ header p:first-of-type {
 
 header p:last-of-type {
 	float: right;
+}
+
+main, footer {
+	padding: 20px 30px;
+}
+
+main * {
+	max-width: 100%;
+	height: auto;
+	width: auto;
+}
+
+footer a {
+	color: rgb(151, 128, 128);
+	text-decoration: none;
 }

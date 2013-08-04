@@ -17,20 +17,25 @@ body {
 	-webkit-user-select: none;
 	user-select: none;
 	overflow-x: hidden;
-	overflow-y: scroll;
+	overflow-y: auto;
 	font-family: sans-serif;
 }
 
 .item {
 	width: 100%;
-	padding: 4px 5px 4px 15px;
+	padding: 4px 5px 4px 20px;
 	cursor: pointer;
 	border-bottom: 1px solid #ccc;
 }
 
 .item:active, .selected {
 	color: #f1f1f1 !important;
-	background: rgb(51, 153, 255);	
+	background: rgb(51, 153, 255);
+	border-bottom-color: rgb(51, 153, 255);
+}
+
+.last-selected {
+	outline: 1px dotted grey;
 }
 
 .item:active .item-author, .selected  .item-author {
@@ -46,5 +51,6 @@ body {
 
 .item-author {
 	color: #444;
+	padding-top: 0.2rem;
 	font-size: 0.8rem;
 }
