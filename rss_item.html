@@ -13,8 +13,11 @@
 </head>
 <body>
 	<div id="toolbar">
-		<div class="button" id="button-read">R</div>
-		<div class="button" id="button-delete">D</div>
+		<div class="button" id="button-read" title="Mark as read"></div>
+		<div class="button" id="button-delete" title="Delete"></div>
+		<div class="button" id="button-print" title="Print"></div>
+
+		<div class="button" id="button-config"></div>
 	</div>
 	<div id="item">
 		
@@ -30,9 +33,11 @@
 		<main>
 			<%= content %>
 		</main>
-		<footer>
-			<a href="<%= url %>">Whole article</a>
-		</foote>
+		<% if (url) { %>
+			<footer>
+				<a href="<%= url %>">Whole article</a>
+			</foote>
+		<% } %>
 	</script>
 </body>
 </html>

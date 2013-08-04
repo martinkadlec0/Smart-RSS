@@ -15,7 +15,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 
 var Source = Backbone.Model.extend({
 	defaults: {
-		id: -1,
+		id: null,
 		title: '<no title>',
 		url: 'rss.rss',
 		count: 0
@@ -24,8 +24,12 @@ var Source = Backbone.Model.extend({
 
 var sources = new (Backbone.Collection.extend({
 	model: Source,
+	localStorage: new Backbone.LocalStorage('sources-backbone'),
 	comparator: function(a, b) {
 		return a.get('tile') < b.get('title') ? 1 : -1;
+	},
+	initialize: function() {
+		this.fetch();
 	}
 }));
 
@@ -56,21 +60,33 @@ $.support.cors = true;
 
 $(function() {
 
-	sources.reset([
+	/*sources.reset([
 		{ title: 'Zero Code', url: 'http://shincodezeroblog.wordpress.com/feed/', count: 10, id: 1 },
 		{ title: 'Buni', url: 'http://www.bunicomic.com/feed/', count: 8, id: 2 },
-	]);
+	]);*/
 
-	var urls = sources.clone();
-
-	downloadURL(urls, function() {
-		console.log('All fetched');
+	sources.on('add', function(source) {
+		var data = { tmpStorage: [] };
+		downloadURL([source], data, function() {
+			items.add(data.tmpStorage);
+		});
 	});
 
+	//downloadAll();
 
 });
 
-function downloadURL(urls, cb) {
+function downloadAll() {
+	var urls = sources.clone();
+
+	var data = { tmpStorage: [] };
+
+	downloadURL(urls, data, function() {
+		items.reset(data.tmpStorage);
+	});
+}
+
+function downloadURL(urls, data, cb) {
 	if (!urls.length) {
 		cb();
 		return;
@@ -79,12 +95,13 @@ function downloadURL(urls, cb) {
 	$.ajax({
 		url: url.get('url'),
 		success: function(r) {
-			items.add(parseRSS(r, url.get('id') ));
-			downloadURL(urls, cb);
+			data.tmpStorage = data.tmpStorage.concat( parseRSS(r, url.get('id')) );
+			//items.add();
+			downloadURL(urls, data, cb);
 		},
 		error: function(e) {
 			console.log('Failed load RSS: url');
-			downloadURL(urls, cb);
+			downloadURL(urls, data, cb);
 		}
 	});
 }
@@ -96,13 +113,20 @@ function downloadURL(urls, cb) {
 function parseRSS(xml, sourceID) {
 	var items = [];
 	var nodes = xml.querySelectorAll('item');
+	var title = xml.querySelector('channel > title');
+	var source = sources.findWhere({ id: sourceID });
+	if (title && source.get('title') == source.get('url')) {
+		source.set('title', title.textContent);
+	}
+	source.set('count', nodes.length);
+
 	[].forEach.call(nodes, function(node) {
 		items.push({
-			title: node.querySelector('title') ? node.querySelector('title').textContent : '&nbsp;',
-			url: node.querySelector('link') ? node.querySelector('link').textContent : '&nbsp;',
+			title: rssGetTitle(node),
+			url: node.querySelector('link') ? node.querySelector('link').textContent : false,
 			date: node.querySelector('pubDate') ? (new Date(node.querySelector('pubDate').textContent)).getTime() : '&nbsp;',
-			author: node.querySelector('creator') ? node.querySelector('creator').textContent : '&nbsp;',
-			content: node.querySelector('encoded') ? node.querySelector('encoded').textContent : '&nbsp;',
+			author: rssGetAuthor(node, title),
+			content: rssGetContent(node),
 			sourceID: sourceID,
 			unread: true
 		});
@@ -111,6 +135,34 @@ function parseRSS(xml, sourceID) {
 	return items;
 }
 
+function rssGetAuthor(node, title) {
+	var creator = node.querySelector('creator');
+	if (creator) {
+		return creator.textContent;
+	}
+
+	if (title && title.textContent.length > 0) {
+		return title.textContent;
+	}
+	return '&nbsp;';
+}
+
+function rssGetTitle(node) {
+	return node.querySelector('title') ? node.querySelector('title').textContent : '&nbsp;';
+}
+
+function rssGetContent(node) {
+	var encoded = node.querySelector('encoded');
+	if (encoded) {
+		return encoded.textContent; 
+	} 
+
+	var desc = node.querySelector('description'); 
+	if (desc) {
+		return desc.textContent;
+	}
+	return  '&nbsp;'
+}
 
 /**
  * Date parser

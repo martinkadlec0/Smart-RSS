@@ -4,26 +4,13 @@ $(function() {
 	var toolbar = new (Backbone.View.extend({
 		el: '#toolbar',
 		events: {
-			'click #button-add': 'addItemDialog',
-			'click #button-refresh': 'refreshItems'
+			'click #button-print': 'handleButtonPrint'
 		},
 		initialize: function() {
 			
 		},
-		addItemDialog: function() {
-			var url = prompt('RSS item url:');
-			if (url) {
-				$.ajax({ url: url, responseType: 'xml' })
-				 .success(function(e) {
-				 	alert('success');
-				 })
-				 .error(function() {
-				 	alert('error');
-				 });
-			}
-		},
-		refreshItems: function() {
-			alert('Refreshing!');
+		handleButtonPrint: function() {
+			window.print();
 		}
 	}));
 

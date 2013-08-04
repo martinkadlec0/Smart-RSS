@@ -68,3 +68,10 @@ footer a {
 	color: rgb(151, 128, 128);
 	text-decoration: none;
 }
+
+
+@media print { 
+	footer, header, #toolbar {
+		display: none !important;
+	}
+}

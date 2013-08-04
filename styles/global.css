@@ -39,3 +39,41 @@ body {
 .button:active {
 	box-shadow: inset 0 1px 3px #bbb;
 }
+
+#button-add {
+	background: url('/images/add.png') no-repeat center center;
+}
+#button-reload {
+	background: url('/images/reload.png') no-repeat center center;
+}
+#button-read {
+	background: url('/images/read.png') no-repeat center center;
+}
+#button-delete {
+	background: url('/images/delete.png') no-repeat center center;
+}
+#button-print {
+	background: url('/images/print.png') no-repeat center center;
+}
+
+#button-config {
+	background: url('/images/config.png') no-repeat center center;
+	margin-right: 0;
+	margin-left: auto;
+}
+
+input[type=search] {
+	max-width: 160px;
+	width: 160px;
+	margin-left: auto;
+	margin-right: 0;
+	margin-top: 0px;
+	padding: 2px 5px;
+	margin-bottom: 0px;
+	font-size: 0.8rem;
+	border: 1px solid #a6a6a6;
+	border-radius: 5px;
+}
+input[type=search]:not(:focus):not(:valid) {
+	background: url('/images/search.png') no-repeat right center white;
+}

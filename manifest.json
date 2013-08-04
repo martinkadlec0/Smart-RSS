@@ -14,6 +14,9 @@
 	"permissions": ["https://*/*", "storage", "tabs", "http://*/*", "opera://favicon/*"],
 	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'unsafe-eval';",
 	"browser_action": {
-		"default_title": "Smart RSS"
+		"default_title": "Smart RSS",
+		"default_icon": {
+			"19": "images/icon16.png"
+		}
 	}
 }

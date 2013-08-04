@@ -10,7 +10,7 @@ $(function() {
 			'mousedown': 'handleMouseDown'
 		},
 		initialize: function() {
-			console.log('View created');
+			this.model.on('change', this.render, this);
 		},
 		render: function() {
 			this.$el.html(this.template(this.model.toJSON()));
@@ -18,11 +18,14 @@ $(function() {
 		},
 		handleMouseDown: function(e) {
 			if (e.shiftKey != true) {
+				list.selectedItems = [];
 				$('.selected').removeClass('selected');
 				bg.sources.trigger('new-selected', this.model);
 			} 
 
 			$('.last-selected').removeClass('last-selected');
+
+			list.selectedItems.push(this);
 			this.$el.addClass('selected');
 			this.$el.addClass('last-selected');
 		}
@@ -32,7 +35,7 @@ $(function() {
 		el: '#toolbar',
 		events: {
 			'click #button-add': 'addSourceDialog',
-			'click #button-refresh': 'refreshSources'
+			'click #button-reload': 'reloadSources'
 		},
 		initialize: function() {
 			
@@ -40,31 +43,28 @@ $(function() {
 		addSourceDialog: function() {
 			var url = prompt('RSS source url:');
 			if (url) {
-				$.ajax({ url: url, responseType: 'xml' })
-				 .success(function(e) {
-				 	alert('success');
-				 })
-				 .error(function() {
-				 	alert('error');
-				 });
+				bg.sources.create({
+					title: url,
+					url: url
+				}).fetch();
 			}
 		},
-		refreshSources: function() {
-			alert('Refreshing!');
+		reloadSources: function() {
+			bg.downloadAll();
 		}
 	}));
 
 	var list = new (Backbone.View.extend({
 		el: '#list',
+		selectedItems: [],
 		events: {
 			
 		},
 		initialize: function() {
-			console.log('App started');
+			this.addSources(bg.sources);
 
 			bg.sources.on('reset', this.addSources, this);
-
-			this.addSources(bg.sources);
+			bg.sources.on('add', this.addSource, this);
 		},
 		addSource: function(source) {
 			var view = new SourceView({ model: source });
@@ -75,6 +75,27 @@ $(function() {
 			sources.forEach(function(source) {
 				this.addSource(source);
 			}, this);
+		},
+		removeSource: function(view) {
+			view.model.destroy();
+			view.undelegateEvents();
+			view.$el.removeData().unbind(); 
+			view.off();
+			view.remove();  
+		}
+	}));
+
+	var app =  new (Backbone.View.extend({
+		el: 'body',
+		events: {
+			'keydown': 'handleKeyDown'
+		},
+		initialize: function() {
+		},
+		handleKeyDown: function(e) {
+			if (e.keyCode == 68) {
+				list.selectedItems.forEach(list.removeSource);
+			}
 		}
 	}));
 });

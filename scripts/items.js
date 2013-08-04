@@ -1,3 +1,7 @@
+RegExp.escape = function(str) {
+	return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+};
+
 chrome.runtime.getBackgroundPage(function(bg) {
 
 $(function() {
@@ -38,7 +42,8 @@ $(function() {
 		el: '#toolbar',
 		events: {
 			'click #button-read': 'handleButtonRead',
-			'click #button-refresh': 'refreshItems'
+			'click #button-refresh': 'refreshItems',
+			'input input[type=search]': 'handleSearch'
 		},
 		initialize: function() {
 			
@@ -51,25 +56,46 @@ $(function() {
 		},
 		refreshItems: function() {
 			alert('Refreshing!');
+		},
+		handleSearch: function(e) {
+			var str = e.currentTarget.value || '';
+			var searchInContent = false;
+			if (str[0] && str[0] == ':') {
+				str = str.replace(/^:/, '', str);
+				searchInContent = true;
+			}
+			var rg = new RegExp(RegExp.escape(str), 'i');
+			list.views.forEach(function(view) {
+				if (rg.test(view.model.get('title')) || rg.test(view.model.get('author')) || (searchInContent && rg.test(view.model.get('content')) )) {
+					view.$el.removeClass('invisible');
+				} else {
+					view.$el.addClass('invisible');
+				}
+			});
+
 		}
 	}));
 
 	var list = new (Backbone.View.extend({
 		el: '#list',
 		selectedItems: [],
+		views: [],
 		events: {
 			
 		},
 		initialize: function() {
 			bg.items.on('reset', this.addItems, this);
+			bg.items.on('add', this.addItem, this);
 			bg.sources.on('new-selected', this.handleNewSelected, this)	;
 			this.addItems(bg.items);
 		},
 		addItem: function(item) {
 			var view = new ItemView({ model: item });
 			$('#list').append(view.render().$el);
+			this.views.push(view);
 		},
 		addItems: function(items) {
+			this.views = [];
 			$('#list').html('');
 			items.forEach(function(item) {
 				this.addItem(item);

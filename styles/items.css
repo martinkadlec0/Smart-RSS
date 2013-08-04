@@ -28,6 +28,10 @@ body {
 	border-bottom: 1px solid #ccc;
 }
 
+.invisible {
+	display: none !important;
+}
+
 .item:active, .selected {
 	color: #f1f1f1 !important;
 	background: rgb(51, 153, 255);
