@@ -25,17 +25,17 @@
 
 	<script type="template" id="template-item">
 		<header>
-			<h1><%= title %></h1>
-			<p class="author"><%= author %></p>
-			<p class="date"><%= date %></p>
+			<h1><%- title %></h1>
+			<p class="author"><%- author %></p>
+			<p class="date"><%- date %></p>
 			<div class="clear"></div>
 		</header>
 		<main>
-			<%= content %>
+			<%= content.replace(/script/gmi, 'nope') %>
 		</main>
 		<% if (url) { %>
 			<footer>
-				<a href="<%= url %>">Whole article</a>
+				<a href="<%- url %>">Full article</a>
 			</foote>
 		<% } %>
 	</script>

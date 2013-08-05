@@ -81,11 +81,11 @@ $(function() {
 			view.undelegateEvents();
 			view.$el.removeData().unbind(); 
 			view.off();
-			view.remove();  
+			view.remove();
 		}
 	}));
 
-	var app =  new (Backbone.View.extend({
+	var app = new (Backbone.View.extend({
 		el: 'body',
 		events: {
 			'keydown': 'handleKeyDown'

@@ -67,6 +67,8 @@ main * {
 footer a {
 	color: rgb(151, 128, 128);
 	text-decoration: none;
+	background: url('/images/full.png') no-repeat left center white;
+	padding-left: 18px;
 }
 
 

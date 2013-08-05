@@ -1,3 +1,9 @@
+window.errors = [];
+
+window.onerror = function(a) {
+	window.errors.push(a.toString());
+}
+
 /**
  * onclick:button -> open RSS
  */
@@ -10,8 +16,6 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 /**
  * Items
  */
-
-// USE SET TO SMARTLY UPDATE THE RSS ON UPDATE!
 
 var Source = Backbone.Model.extend({
 	defaults: {
@@ -36,19 +40,24 @@ var sources = new (Backbone.Collection.extend({
 var Item = Backbone.Model.extend({
 	defaults: {
 		title: '<no title>',
-		author: '',
+		author: '<no author>',
 		url: 'opera:blank',
 		date: 0,
 		content: 'No content loaded.',
 		sourceID: -1,
-		unread: true
+		unread: true,
+		deleted: false
 	}
 });
 
 var items = new (Backbone.Collection.extend({
 	model: Item,
+	localStorage: new Backbone.LocalStorage('items-backbone'),
 	comparator: function(a, b) {
 		return a.get('date') < b.get('date') ? 1 : -1;
+	},
+	initialize: function() {
+		this.fetch();
 	}
 }));
 
@@ -72,7 +81,13 @@ $(function() {
 		});
 	});
 
-	//downloadAll();
+	sources.on('destroy', function(a, b, c) {
+		items.where({ sourceID: a.get('id') }).forEach(function(item) {
+			item.destroy();
+		});
+	});
+
+	setTimeout(downloadAll, 5000);
 
 });
 
@@ -82,7 +97,7 @@ function downloadAll() {
 	var data = { tmpStorage: [] };
 
 	downloadURL(urls, data, function() {
-		items.reset(data.tmpStorage);
+		items.set(data.tmpStorage, { remove: false });
 	});
 }
 
@@ -95,8 +110,11 @@ function downloadURL(urls, data, cb) {
 	$.ajax({
 		url: url.get('url'),
 		success: function(r) {
-			data.tmpStorage = data.tmpStorage.concat( parseRSS(r, url.get('id')) );
-			//items.add();
+			//data.tmpStorage = data.tmpStorage.concat( parseRSS(r, url.get('id')) );
+			//items.create( parseRSS(r, url.get('id')) );
+			parseRSS(r, url.get('id')).forEach(function(item) {
+				items.create(item);
+			});
 			downloadURL(urls, data, cb);
 		},
 		error: function(e) {
@@ -117,6 +135,7 @@ function parseRSS(xml, sourceID) {
 	var source = sources.findWhere({ id: sourceID });
 	if (title && source.get('title') == source.get('url')) {
 		source.set('title', title.textContent);
+		source.save();
 	}
 	source.set('count', nodes.length);
 
@@ -124,35 +143,52 @@ function parseRSS(xml, sourceID) {
 		items.push({
 			title: rssGetTitle(node),
 			url: node.querySelector('link') ? node.querySelector('link').textContent : false,
-			date: node.querySelector('pubDate') ? (new Date(node.querySelector('pubDate').textContent)).getTime() : '&nbsp;',
+			date: rssGetDate(node),
 			author: rssGetAuthor(node, title),
 			content: rssGetContent(node),
 			sourceID: sourceID,
 			unread: true
 		});
+
+		var last = items[items.length-1];
+		last.id = CryptoJS.MD5(last.title + last.date + last.content).toString();
 	});
 
 	return items;
 }
 
+function rssGetDate(node) {
+	var pubDate = node.querySelector('pubDate, updated');
+	if (pubDate) {
+		return (new Date(pubDate.textContent)).getTime();
+	}
+	return '0';
+}
+
 function rssGetAuthor(node, title) {
-	var creator = node.querySelector('creator');
+	var creator = node.querySelector('creator, author');
 	if (creator) {
-		return creator.textContent;
+		creator = creator.textContent;
+	} else if (title && title.textContent.length > 0) {
+		creator = title.textContent;
 	}
 
-	if (title && title.textContent.length > 0) {
-		return title.textContent;
+	if (creator) {
+		if (/^\S+@\S+\.\S+\s+\(.+\)$/.test(creator)) {
+			creator = creator.replace(/^\S+@\S+\.\S+\s+\((.+)\)$/, '$1');
+		}
+		return creator;
 	}
-	return '&nbsp;';
+
+	return '<no author>';
 }
 
 function rssGetTitle(node) {
-	return node.querySelector('title') ? node.querySelector('title').textContent : '&nbsp;';
+	return node.querySelector('title') ? node.querySelector('title').textContent : '<no title>;';
 }
 
 function rssGetContent(node) {
-	var encoded = node.querySelector('encoded');
+	var encoded = node.querySelector('encoded, content');
 	if (encoded) {
 		return encoded.textContent; 
 	} 
@@ -217,3 +253,24 @@ var formatDate = function(){
         return str;
     };
 }();
+
+
+/**
+ * Messages
+ */
+
+chrome.runtime.onMessageExternal.addListener(function(message, sender, sendResponse) {
+	// if.sender.id != blahblah -> return;
+	if (!message.hasOwnProperty('action')) {
+		return;
+	}
+
+	if (message.action == 'new-rss' && message.value) {
+		sources.create({
+			title: message.value,
+			url: message.value
+		}).fetch();
+
+		chrome.tabs.create({'url': chrome.extension.getURL('rss.html')}, function(tab) {});
+	}
+});

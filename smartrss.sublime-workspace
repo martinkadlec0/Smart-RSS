@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"handle",
+				"handleButtonRead"
+			],
+			[
+				"selec",
+				"selectedItems"
+			],
+			[
 				"unde",
 				"underline"
 			],
@@ -199,7 +207,7 @@
 			"file": "rss_items.html",
 			"settings":
 			{
-				"buffer_size": 826,
+				"buffer_size": 977,
 				"line_ending": "Windows"
 			}
 		},
@@ -207,7 +215,7 @@
 			"file": "styles/items.css",
 			"settings":
 			{
-				"buffer_size": 839,
+				"buffer_size": 882,
 				"line_ending": "Windows"
 			}
 		},
@@ -215,7 +223,7 @@
 			"file": "rss_item.html",
 			"settings":
 			{
-				"buffer_size": 963,
+				"buffer_size": 1168,
 				"line_ending": "Windows"
 			}
 		},
@@ -223,7 +231,7 @@
 			"file": "styles/item.css",
 			"settings":
 			{
-				"buffer_size": 887,
+				"buffer_size": 966,
 				"line_ending": "Windows"
 			}
 		},
@@ -231,7 +239,7 @@
 			"file": "manifest.json",
 			"settings":
 			{
-				"buffer_size": 632,
+				"buffer_size": 686,
 				"line_ending": "Unix"
 			}
 		},
@@ -239,7 +247,7 @@
 			"file": "index.html",
 			"settings":
 			{
-				"buffer_size": 389,
+				"buffer_size": 445,
 				"line_ending": "Windows"
 			}
 		},
@@ -247,7 +255,7 @@
 			"file": "scripts/bg.js",
 			"settings":
 			{
-				"buffer_size": 4279,
+				"buffer_size": 5715,
 				"line_ending": "Windows"
 			}
 		},
@@ -263,7 +271,15 @@
 			"file": "scripts/items.js",
 			"settings":
 			{
-				"buffer_size": 2042,
+				"buffer_size": 5297,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Martin/Desktop/The Switcher/scripts/main.js",
+			"settings":
+			{
+				"buffer_size": 7352,
 				"line_ending": "Windows"
 			}
 		},
@@ -271,7 +287,7 @@
 			"file": "scripts/item.js",
 			"settings":
 			{
-				"buffer_size": 1185,
+				"buffer_size": 1352,
 				"line_ending": "Windows"
 			}
 		},
@@ -289,7 +305,7 @@
 			"file": "rss_sources.html",
 			"settings":
 			{
-				"buffer_size": 864,
+				"buffer_size": 903,
 				"line_ending": "Windows"
 			}
 		},
@@ -297,15 +313,18 @@
 			"file": "styles/global.css",
 			"settings":
 			{
-				"buffer_size": 669,
+				"buffer_size": 1534,
 				"line_ending": "Windows"
 			}
 		},
 		{
+			"contents": "chrome.runtime.getBackgroundPage(function(bg) {\n\n$(function() {\n\n	var SourceView = Backbone.View.extend({\n		tagName: 'div',\n		className: 'source',\n		template: _.template($('#template-source').html()),\n		events: {\n			'mousedown': 'handleMouseDown'\n		},\n		initialize: function() {\n			this.model.on('change', this.render, this);\n		},\n		render: function() {\n			this.$el.html(this.template(this.model.toJSON()));\n			return this;\n		},\n		handleMouseDown: function(e) {\n			if (e.shiftKey != true) {\n				list.selectedItems = [];\n				$('.selected').removeClass('selected');\n				bg.sources.trigger('new-selected', this.model);\n			} \n\n			$('.last-selected').removeClass('last-selected');\n\n			list.selectedItems.push(this);\n			this.$el.addClass('selected');\n			this.$el.addClass('last-selected');\n		}\n	});\n\n	var toolbar = new (Backbone.View.extend({\n		el: '#toolbar',\n		events: {\n			'click #button-add': 'addSourceDialog',\n			'click #button-reload': 'reloadSources'\n		},\n		initialize: function() {\n			\n		},\n		addSourceDialog: function() {\n			var url = prompt('RSS source url:');\n			if (url) {\n				bg.sources.create({\n					title: url,\n					url: url\n				}).fetch();\n			}\n		},\n		reloadSources: function() {\n			bg.downloadAll();\n		}\n	}));\n\n	var list = new (Backbone.View.extend({\n		el: '#list',\n		selectedItems: [],\n		events: {\n			\n		},\n		initialize: function() {\n			this.addSources(bg.sources);\n\n			bg.sources.on('reset', this.addSources, this);\n			bg.sources.on('add', this.addSource, this);\n		},\n		addSource: function(source) {\n			var view = new SourceView({ model: source });\n			$('#list').append(view.render().$el);\n		},\n		addSources: function(sources) {\n			$('#list').html('');\n			sources.forEach(function(source) {\n				this.addSource(source);\n			}, this);\n		},\n		removeSource: function(view) {\n			view.model.destroy();\n			view.undelegateEvents();\n			view.$el.removeData().unbind(); \n			view.off();\n			view.remove();\n		}\n	}));\n\n	var app = new (Backbone.View.extend({\n		el: 'body',\n		events: {\n			'keydown': 'handleKeyDown'\n		},\n		initialize: function() {\n		},\n		handleKeyDown: function(e) {\n			if (e.keyCode == 68) {\n				list.selectedItems.forEach(list.removeSource);\n			}\n		}\n	}));\n});\n\n});",
 			"file": "scripts/sources.js",
+			"file_size": 2284,
+			"file_write_time": 130201289584167085,
 			"settings":
 			{
-				"buffer_size": 1747,
+				"buffer_size": 2180,
 				"line_ending": "Windows"
 			}
 		},
@@ -494,6 +513,8 @@
 	},
 	"file_history":
 	[
+		"/D/Work/smartrss/scripts/md5.js",
+		"/C/Users/Martin/Desktop/The Switcher/manifest.json",
 		"/D/Programování/JavaScript/MODS/MDATE.MOD/mdate.mod.js",
 		"/D/Work/smartrss/smartrss.sublime-project",
 		"/D/Work/smartrss/.gitignore",
@@ -563,7 +584,6 @@
 		"/D/Work/LapiBackup/app/sections/kategorie.php",
 		"/D/Work/LapiBackup/app/sections/error.php",
 		"/D/Work/LapiBackup/libs/Mustache/Loader/InlineLoader.php",
-		"/C/Users/Martin/Desktop/The Switcher/manifest.json",
 		"/D/Work/LapiMK_working/sections/posta.php",
 		"/C/Users/Martin/Desktop/lapi.sql",
 		"/D/Work/LapiBackup/scripts/script.js",
@@ -620,8 +640,7 @@
 		"/C/Users/Martin/Desktop/Houby/houby.js",
 		"/C/Users/Martin/Desktop/Downloads/Operas/Opera 15 Next/15.0.1147.72/localization/en-GB.pak",
 		"/C/Users/Martin/Desktop/Downloads/Operas/Opera 15 Next/15.0.1147.72/localization/en-US.pak",
-		"/C/Users/Martin/Desktop/Downloads/Operas/Opera 15 Next/15.0.1147.72/resources/default_partner_content.json",
-		"/C/Users/Martin/Desktop/Downloads/Operas/Opera 15 Next/profile/data/History"
+		"/C/Users/Martin/Desktop/Downloads/Operas/Opera 15 Next/15.0.1147.72/resources/default_partner_content.json"
 	],
 	"find":
 	{
@@ -629,7 +648,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 90.0,
+		"height": 0.0,
 		"where_history":
 		[
 			"D:\\Work\\smartrss",
@@ -641,6 +660,14 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"change",
+			"set('read",
+			"'title",
+			"set(",
+			"fetch",
+			"sources.fet",
+			"dbeugger",
+			"bg.items",
 			".selec",
 			"url",
 			"sendMes",
@@ -760,15 +787,7 @@
 			"new-post",
 			"klub",
 			"club",
-			"klub",
-			"addV",
-			"dataset",
-			"club",
-			"echo",
-			"odhlasit",
-			".post",
-			"QUERY_STRING",
-			"echo"
+			"klub"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -914,7 +933,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 8,
 			"sheets":
 			[
 				{
@@ -929,8 +948,8 @@
 						"selection":
 						[
 							[
-								233,
-								233
+								395,
+								395
 							]
 						],
 						"settings":
@@ -1069,15 +1088,15 @@
 					"file": "rss_items.html",
 					"settings":
 					{
-						"buffer_size": 826,
+						"buffer_size": 977,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								297,
-								297
+								977,
+								977
 							]
 						],
 						"settings":
@@ -1143,15 +1162,15 @@
 					"file": "styles/items.css",
 					"settings":
 					{
-						"buffer_size": 839,
+						"buffer_size": 882,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								832,
-								832
+								379,
+								379
 							]
 						],
 						"settings":
@@ -1217,15 +1236,15 @@
 					"file": "rss_item.html",
 					"settings":
 					{
-						"buffer_size": 963,
+						"buffer_size": 1168,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								872,
-								872
+								1141,
+								1141
 							]
 						],
 						"settings":
@@ -1281,7 +1300,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 120.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1291,15 +1310,15 @@
 					"file": "styles/item.css",
 					"settings":
 					{
-						"buffer_size": 887,
+						"buffer_size": 966,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								818,
-								818
+								821,
+								821
 							]
 						],
 						"settings":
@@ -1351,7 +1370,8 @@
 							"incomplete_sync": null,
 							"remote_loading": false,
 							"synced": false,
-							"syntax": "Packages/CSS/CSS.tmLanguage"
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 570.0,
@@ -1364,15 +1384,15 @@
 					"file": "manifest.json",
 					"settings":
 					{
-						"buffer_size": 632,
+						"buffer_size": 686,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								627,
-								627
+								195,
+								195
 							]
 						],
 						"settings":
@@ -1438,15 +1458,15 @@
 					"file": "index.html",
 					"settings":
 					{
-						"buffer_size": 389,
+						"buffer_size": 445,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								389,
-								389
+								343,
+								343
 							]
 						],
 						"settings":
@@ -1511,15 +1531,15 @@
 					"file": "scripts/bg.js",
 					"settings":
 					{
-						"buffer_size": 4279,
+						"buffer_size": 5715,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2348,
-								2348
+								1527,
+								1527
 							]
 						],
 						"settings":
@@ -1574,7 +1594,7 @@
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 2003.0,
+						"translation.y": 855.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1658,15 +1678,15 @@
 					"file": "scripts/items.js",
 					"settings":
 					{
-						"buffer_size": 2042,
+						"buffer_size": 5297,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1395,
-								1395
+								2506,
+								2506
 							]
 						],
 						"settings":
@@ -1722,25 +1742,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 270.0,
+						"translation.y": 1177.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 11,
-					"file": "scripts/item.js",
+					"file": "/C/Users/Martin/Desktop/The Switcher/scripts/main.js",
 					"settings":
 					{
-						"buffer_size": 1185,
+						"buffer_size": 7352,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								911,
-								911
+								6374,
+								6329
 							]
 						],
 						"settings":
@@ -1792,16 +1812,91 @@
 							"incomplete_sync": null,
 							"remote_loading": false,
 							"synced": false,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 195.0,
+						"translation.y": 3972.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 12,
+					"file": "scripts/item.js",
+					"settings":
+					{
+						"buffer_size": 1352,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								651,
+								651
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 150.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 13,
 					"settings":
 					{
 						"buffer_size": 1169,
@@ -1908,10 +2003,12 @@
 							"detect_indentation": false,
 							"incomplete_sync": null,
 							"output_tag": 1,
+							"remote_loading": false,
 							"result_base_dir": "",
 							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
 							"result_line_regex": "^ +([0-9]+):",
 							"scroll_past_end": true,
+							"synced": false,
 							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
 						},
 						"translation.x": 0.0,
@@ -1921,19 +2018,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 13,
+					"buffer": 14,
 					"file": "rss_sources.html",
 					"settings":
 					{
-						"buffer_size": 864,
+						"buffer_size": 903,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								678,
-								678
+								625,
+								625
 							]
 						],
 						"settings":
@@ -1995,19 +2092,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 14,
+					"buffer": 15,
 					"file": "styles/global.css",
 					"settings":
 					{
-						"buffer_size": 669,
+						"buffer_size": 1534,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								31,
-								31
+								1413,
+								1413
 							]
 						],
 						"settings":
@@ -2059,7 +2156,8 @@
 							"incomplete_sync": null,
 							"remote_loading": false,
 							"synced": false,
-							"syntax": "Packages/CSS/CSS.tmLanguage"
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -2068,19 +2166,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 15,
+					"buffer": 16,
 					"file": "scripts/sources.js",
 					"settings":
 					{
-						"buffer_size": 1747,
+						"buffer_size": 2180,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								446,
-								446
+								1905,
+								1787
 							]
 						],
 						"settings":
@@ -2136,13 +2234,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 934.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 16,
+					"buffer": 17,
 					"file": "styles/sources.css",
 					"settings":
 					{
@@ -2216,7 +2314,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 17,
+					"buffer": 18,
 					"file": "styles/rss.css",
 					"settings":
 					{
@@ -2345,32 +2443,96 @@
 		"selected_items":
 		[
 			[
-				"rss.html",
-				"rss.html"
-			],
-			[
-				"item.js",
-				"scripts/item.js"
-			],
-			[
 				"bg.js",
 				"scripts/bg.js"
 			],
 			[
-				"items.html",
-				"rss_items.html"
+				"items",
+				"scripts/items.js"
 			],
 			[
 				"items.js",
 				"scripts/items.js"
 			],
 			[
-				"items.css",
-				"styles/items.css"
+				"item.js",
+				"scripts/item.js"
+			],
+			[
+				"index.html",
+				"index.html"
+			],
+			[
+				"soure.js",
+				"scripts/sources.js"
+			],
+			[
+				"source.html",
+				"rss_sources.html"
+			],
+			[
+				"items.html",
+				"rss_items.html"
+			],
+			[
+				"item.html",
+				"rss_item.html"
 			],
 			[
 				"source",
 				"scripts/sources.js"
+			],
+			[
+				"source.js",
+				"scripts/sources.js"
+			],
+			[
+				"sources.js",
+				"scripts/sources.js"
+			],
+			[
+				"sources.html",
+				"rss_sources.html"
+			],
+			[
+				"sources",
+				"scripts/sources.js"
+			],
+			[
+				"items.css",
+				"styles/items.css"
+			],
+			[
+				".css",
+				"styles/item.css"
+			],
+			[
+				"item.css",
+				"styles/item.css"
+			],
+			[
+				"sources.ht",
+				"rss_sources.html"
+			],
+			[
+				"global.css",
+				"styles/global.css"
+			],
+			[
+				"mani",
+				"manifest.json"
+			],
+			[
+				"globa",
+				"styles/global.css"
+			],
+			[
+				"glob",
+				"styles/global.css"
+			],
+			[
+				"rss.html",
+				"rss.html"
 			],
 			[
 				"sourc",
@@ -2393,32 +2555,12 @@
 				"manifest.json"
 			],
 			[
-				"sources.js",
-				"scripts/sources.js"
-			],
-			[
-				"item.css",
-				"styles/item.css"
-			],
-			[
 				"globa.",
 				"styles/global.css"
 			],
 			[
-				"item.html",
-				"rss_item.html"
-			],
-			[
-				".css",
-				"styles/item.css"
-			],
-			[
 				"index",
 				"index.html"
-			],
-			[
-				"items",
-				"scripts/items.js"
 			],
 			[
 				"subli",
@@ -2431,10 +2573,6 @@
 			[
 				"global.js",
 				"scripts/global.js"
-			],
-			[
-				"index.html",
-				"index.html"
 			],
 			[
 				"rss.js",
@@ -2815,46 +2953,6 @@
 			[
 				"ush",
 				"app/sections/uschovna.php"
-			],
-			[
-				"lib",
-				"lib.php"
-			],
-			[
-				"uscho",
-				"app/sections/uschovna.php"
-			],
-			[
-				"uschova",
-				"app/sections/uschovna.php"
-			],
-			[
-				"us",
-				"app/sections/uschovna.php"
-			],
-			[
-				"nastaveni",
-				"app/templates/nastaveni.html"
-			],
-			[
-				"klub.htm",
-				"app/templates/klub.html"
-			],
-			[
-				"style",
-				"styles/main.css"
-			],
-			[
-				"ew_klb",
-				"app/templates/new_klub.html"
-			],
-			[
-				"na",
-				"app/templates/nastaveni.html"
-			],
-			[
-				"user",
-				"app/models/User.php"
 			]
 		],
 		"width": 0.0

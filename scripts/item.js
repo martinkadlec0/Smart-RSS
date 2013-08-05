@@ -4,13 +4,29 @@ $(function() {
 	var toolbar = new (Backbone.View.extend({
 		el: '#toolbar',
 		events: {
-			'click #button-print': 'handleButtonPrint'
+			'click #button-print': 'handleButtonPrint',
+			'click #button-read': 'handleButtonRead',
+			'click #button-delete': 'handleButtonDelete'
 		},
 		initialize: function() {
 			
 		},
 		handleButtonPrint: function() {
 			window.print();
+		},
+		handleButtonRead: function() {
+			itemView.model.save({
+				unread: !itemView.model.get('unread')
+			});
+		},
+		handleButtonDelete: function() {
+			itemView.model.save({
+				'deleted': true,
+				'content': '',
+				'author': '',
+				'title': ''
+			});
+			itemView.getSome();
 		}
 	}));
 
@@ -22,9 +38,17 @@ $(function() {
 		},
 		initialize: function() {
 			bg.items.on('new-selected', this.handleNewSelected, this);
-			if (bg.items.at(0)) {
-				this.model = bg.items.at(0);
+			this.getSome();
+		},
+		getSome: function() {
+			var first = bg.items.findWhere({ deleted: false });
+			if (first) {
+				this.$el.css('display', 'block');
+				this.model = first;
+				this.model.on('destroy', this.getSome, this);
 				this.render();
+			} else {
+				this.$el.css('display', 'none');
 			}
 		},
 		render: function() {

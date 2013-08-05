@@ -2,6 +2,11 @@ RegExp.escape = function(str) {
 	return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
 };
 
+Array.prototype.last = function() {
+	if (!this.length) return null;
+	return this[this.length - 1];
+}
+
 chrome.runtime.getBackgroundPage(function(bg) {
 
 $(function() {
@@ -14,6 +19,7 @@ $(function() {
 		},
 		initialize: function() {
 			this.model.on('change', this.handleModelChange, this);
+			this.model.on('destroy', this.handleModelDestroy, this);
 		},
 		render: function() {
 			this.$el.toggleClass('unread', this.model.get('unread'));
@@ -24,7 +30,11 @@ $(function() {
 			if (e.shiftKey != true) {
 				list.selectedItems = [];
 				$('.selected').removeClass('selected');
-				bg.items.trigger('new-selected', this.model);
+				try {
+					bg.items.trigger('new-selected', this.model);
+				} catch(e) {
+					// WTF? what is set_animation??
+				}
 			} 
 
 			$('.last-selected').removeClass('last-selected');
@@ -34,7 +44,14 @@ $(function() {
 			this.$el.addClass('last-selected');
 		},
 		handleModelChange: function() {
-			this.render();
+			if (this.model.get('deleted')) {
+				list.removeItem(this);
+			} else {
+				this.render();
+			}
+		},
+		handleModelDestroy: function(e) {
+			list.removeItem(this);
 		}
 	});
 
@@ -43,6 +60,7 @@ $(function() {
 		events: {
 			'click #button-read': 'handleButtonRead',
 			'click #button-refresh': 'refreshItems',
+			'click #button-delete': 'handleButtonDelete',
 			'input input[type=search]': 'handleSearch'
 		},
 		initialize: function() {
@@ -52,6 +70,7 @@ $(function() {
 			var val = list.selectedItems.length ? !list.selectedItems[0].model.get('unread') : false;
 			list.selectedItems.forEach(function(item) {
 				item.model.set('unread', val);
+				item.model.save();
 			}, this);
 		},
 		refreshItems: function() {
@@ -72,7 +91,9 @@ $(function() {
 					view.$el.addClass('invisible');
 				}
 			});
-
+		},
+		handleButtonDelete: function() {
+			list.selectedItems.forEach(list.removeItem);
 		}
 	}));
 
@@ -90,9 +111,11 @@ $(function() {
 			this.addItems(bg.items);
 		},
 		addItem: function(item) {
-			var view = new ItemView({ model: item });
-			$('#list').append(view.render().$el);
-			this.views.push(view);
+			if (!item.get('deleted')) {
+				var view = new ItemView({ model: item });
+				$('#list').append(view.render().$el);
+				this.views.push(view);
+			}
 		},
 		addItems: function(items) {
 			this.views = [];
@@ -103,7 +126,84 @@ $(function() {
 		},
 		handleNewSelected: function(source) {
 			this.addItems(bg.items.where({ sourceID: source.id }));
+		},
+		removeItem: function(view) {
+			view.model.save({
+				'deleted': true,
+				'content': '',
+				'author': '',
+				'title': ''
+			});
+			view.undelegateEvents();
+			view.$el.removeData().unbind(); 
+			view.off();
+			view.remove();
 		}
+	}));
+
+	var app = new (Backbone.View.extend({
+		el: 'body',
+		events: {
+			'keydown': 'handleKeyDown'
+		},
+		initialize: function() {
+		},
+		handleKeyDown: function(e) {
+			if (e.keyCode == 68) {
+				list.selectedItems.forEach(list.removeItem);
+			} else if (e.keyCode == 75) {
+				toolbar.handleButtonRead();
+			} else if (e.keyCode == 40) {
+				//if (e.shiftKey != true) {
+					var last = list.selectedItems.last();
+					list.selectedItems = [];
+					$('.selected').removeClass('selected');
+					//bg.items.trigger('new-selected', this.model);
+				//} 
+
+				$('.last-selected').removeClass('last-selected');
+				var next;
+				var i = 1;
+				do {
+					next = list.views[list.views.indexOf(last) + i];
+					i++;
+				} while (next && next.$el.hasClass('invisible'));
+
+				if (next) {
+					bg.items.trigger('new-selected', next.model);
+					list.selectedItems.push(next);
+					next.$el.addClass('selected');
+					next.$el.addClass('last-selected');
+					next.$el.get(0).scrollIntoView(false);
+					e.preventDefault();
+				}
+			} else if (e.keyCode == 38) {
+				//if (e.shiftKey != true) {
+					var last = list.selectedItems.last();
+					list.selectedItems = [];
+					$('.selected').removeClass('selected');
+					//bg.items.trigger('new-selected', this.model);
+				//} 
+
+				$('.last-selected').removeClass('last-selected');
+				var next;
+				var i = 1;
+				do {
+					next = list.views[(list.views.indexOf(last) || list.views.length) - i];
+					i++;
+				} while (next && next.$el.hasClass('invisible'));
+
+
+				if (next) {
+					bg.items.trigger('new-selected', next.model);
+					list.selectedItems.push(next);
+					next.$el.addClass('selected');
+					next.$el.addClass('last-selected');
+					next.$el.get(0).scrollIntoView(false);
+					e.preventDefault();
+				}
+			}
+		} 
 	}));
 });
 
