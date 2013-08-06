@@ -1,3 +1,7 @@
+document.addEventListener('contextmenu', function(e) {
+	e.preventDefault();
+});	
+
 chrome.runtime.getBackgroundPage(function(bg) {
 
 $(function() {
@@ -7,7 +11,7 @@ $(function() {
 		className: 'source',
 		template: _.template($('#template-source').html()),
 		events: {
-			'mousedown': 'handleMouseDown'
+			'mouseup': 'handleMouseUp'
 		},
 		initialize: function() {
 			this.model.on('change', this.render, this);
@@ -18,7 +22,31 @@ $(function() {
 			this.$el.html(this.template(this.model.toJSON()));
 			return this;
 		},
-		handleMouseDown: function(e) {
+		handleMouseUp: function(e) {
+			if (e.which == 1) {
+				this.showSourceItems(e);
+			} else if (e.which == 3) {
+				this.showContextMenu(e);
+				e.preventDefault();
+				e.stopPropagation();
+			}
+		},
+		showContextMenu: function(e) {
+			sourcesContextMenu.currentSource = this.model;
+			$('body').append(sourcesContextMenu.render().$el);
+
+			var posY = e.clientY;
+			var posX = e.clientX;
+			if (posX + sourcesContextMenu.el.offsetWidth > document.body.offsetWidth) {
+				posX = document.body.offsetWidth - sourcesContextMenu.el.offsetWidth;
+			} 
+			if (posY + sourcesContextMenu.el.offsetHeight > document.body.offsetHeight) {
+				posY = document.body.offsetHeight - sourcesContextMenu.el.offsetHeight;
+			} 
+			sourcesContextMenu.$el.css('top', posY + 'px');
+			sourcesContextMenu.$el.css('left', posX + 'px');
+		},
+		showSourceItems: function(e) {
 			if (e.shiftKey != true) {
 				list.selectedItems = [];
 				$('.selected').removeClass('selected');
@@ -30,6 +58,7 @@ $(function() {
 			list.selectedItems.push(this);
 			this.$el.addClass('selected');
 			this.$el.addClass('last-selected');
+
 		},
 		handleModelDestroy: function(e) {
 			list.destroySource(this);
@@ -62,6 +91,76 @@ $(function() {
 		}
 	}));
 
+	var MenuItem = Backbone.Model.extend({
+		defaults: {
+			'title': '<no title>',
+			'action': null
+		}
+	});
+
+	var MenuCollection = Backbone.Collection.extend({
+		model: MenuItem
+	});
+
+	var MenuItemView = Backbone.View.extend({
+		tagName: 'div',
+		className: 'context-menu-item',
+		events: {
+			'click': 'handleClick'
+		},
+		render: function() {
+			this.$el.html(this.model.get('title'));
+			return this;
+		},
+		handleClick: function() {
+			var action = this.model.get('action');
+			if (action && typeof action == 'function') {
+				action();
+				this.el.parentNode.parentNode.removeChild(this.el.parentNode);
+			}
+		}
+	});
+
+	var ContextMenu = Backbone.View.extend({
+		tagName: 'div',
+		className: 'context-menu',
+		menuCollection: null,
+		initialize: function(mc) {
+			this.menuCollection = new MenuCollection(mc);
+			this.addItems(this.menuCollection);
+		},
+		addItem: function(item) {
+			var v = new MenuItemView({ model: item });
+			this.$el.append(v.render().$el);
+		},
+		addItems: function(items) {
+			items.forEach(function(item) {
+				this.addItem(item);
+			}, this);
+		},
+		render: function() {
+			return this;
+		}
+	});
+
+	var sourcesContextMenu = new ContextMenu([
+		{ title: 'Update', action: function() {
+			bg.downloadOne(sourcesContextMenu.currentSource);
+		}},
+		{ title: 'Mark All As Read', action: function() { 
+			var id = sourcesContextMenu.currentSource.get('id');
+			bg.items.where({ sourceID: id }).forEach(function(item) {
+				item.set('unread', false);
+			});
+		}},
+		{ title: 'Delete', action: function() { 
+			sourcesContextMenu.currentSource.destroy();
+		}},
+		{ title: 'Properties', action: function() { 
+			alert(JSON.stringify(sourcesContextMenu.currentSource.toJSON(), null, 1));
+		}},
+	]);
+
 	var list = new (Backbone.View.extend({
 		el: '#list',
 		selectedItems: [],
@@ -86,10 +185,10 @@ $(function() {
 		},
 		removeSource: function(view) {
 			view.model.destroy();
-			view.undelegateEvents();
+			/*view.undelegateEvents();
 			view.$el.removeData().unbind(); 
 			view.off();
-			view.remove();
+			view.remove();*/
 		},
 		destroySource: function(view) {
 			view.undelegateEvents();
@@ -115,7 +214,7 @@ $(function() {
 		},
 		handleKeyDown: function(e) {
 			if (e.keyCode == 68) {
-				list.selectedItems.forEach(list.removeSource);
+				list.selectedItems.forEach(list.removeSource, list);
 			}
 		},
 		handleLoadingChange: function(e) {
