@@ -32,7 +32,7 @@ body {
 	display: none !important;
 }
 
-.item:active, .selected {
+/*.item:active,*/ .selected {
 	color: #f1f1f1 !important;
 	background: rgb(51, 153, 255);
 	border-bottom-color: rgb(51, 153, 255);

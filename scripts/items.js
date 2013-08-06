@@ -33,6 +33,22 @@ $(function() {
 				list.selectedItems = [];
 				$('.selected').removeClass('selected');
 				if (!e.preventLoading) bg.items.trigger('new-selected', this.model);
+			} else if (list.selectedItems.length) {
+				$('.selected').removeClass('selected');
+				list.selectedItems = [list.selectedItems[0]];
+				list.selectedItems[0].$el.addClass('selected');
+
+				if (list.selectedItems[0].model.get('date') > this.model.get('date')) {
+					list.selectedItems[0].$el.nextUntil(this.$el).each(function(i, el) {
+						$(el).addClass('selected');
+						list.selectedItems.push(el.view);
+					});
+				} else {
+					this.$el.nextUntil(list.selectedItems[0].$el).each(function(i, el) {
+						$(el).addClass('selected');
+						list.selectedItems.push(el.view);
+					});
+				}
 			} 
 
 			$('.last-selected').removeClass('last-selected');
