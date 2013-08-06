@@ -109,6 +109,10 @@ $(function() {
 			'click': 'handleClick'
 		},
 		render: function() {
+			if (this.model.get('icon')) {
+				//alert('url("/images/' + this.model.get('icon') + '") no-repeat left center');
+				this.$el.css('background', 'url(/images/' + this.model.get('icon') + ') no-repeat left center');
+			}
 			this.$el.html(this.model.get('title'));
 			return this;
 		},
@@ -144,21 +148,35 @@ $(function() {
 	});
 
 	var sourcesContextMenu = new ContextMenu([
-		{ title: 'Update', action: function() {
-			bg.downloadOne(sourcesContextMenu.currentSource);
-		}},
-		{ title: 'Mark All As Read', action: function() { 
-			var id = sourcesContextMenu.currentSource.get('id');
-			bg.items.where({ sourceID: id }).forEach(function(item) {
-				item.set('unread', false);
-			});
-		}},
-		{ title: 'Delete', action: function() { 
-			sourcesContextMenu.currentSource.destroy();
-		}},
-		{ title: 'Properties', action: function() { 
-			alert(JSON.stringify(sourcesContextMenu.currentSource.toJSON(), null, 1));
-		}},
+		{
+			title: 'Update',
+			icon: 'reload.png',
+			action: function() {
+				bg.downloadOne(sourcesContextMenu.currentSource);
+			}
+		},
+		{ 
+			title: 'Mark All As Read',
+			action: function() { 
+				var id = sourcesContextMenu.currentSource.get('id');
+				bg.items.where({ sourceID: id }).forEach(function(item) {
+					item.set('unread', false);
+				});
+			}
+		},
+		{ 
+			title: 'Delete',
+			icon: 'delete.png',
+			action: function() { 
+				sourcesContextMenu.currentSource.destroy();
+			}
+		},
+		{ 
+			title: 'Properties',
+			action: function() { 
+				alert(JSON.stringify(sourcesContextMenu.currentSource.toJSON(), null, 1));
+			}
+		}
 	]);
 
 	var list = new (Backbone.View.extend({

@@ -83,27 +83,44 @@ input[type=search]:not(:focus):not(:valid) {
 	min-width: 150px;
 	max-width: 200px;
 	border: 1px solid rgb(160, 160, 160);
-	background: rgb(240, 240, 240);
+	background: linear-gradient(to right, rgb(240, 240, 240) 27px, rgb(174, 207, 247) 27px, rgb(240, 240, 240) 28px);
 	position: absolute;
 	top: 300px;
 	left: 10px;
 	overflow: hidden;
-	z-index: 2;
+	z-index: 3;
 	padding: 2px;
+	box-shadow: 2px 2px 2px #999;
 }
 
 .context-menu-item {
-	font-size: 0.8rem;
+	font-size: 0.75rem;
 	font-family: sans-serif;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	cursor: pointer;
-	padding: 3px 3px 3px 20px;
+	padding: 4px 3px 4px 30px;
 	border: 1px solid transparent;
 }
 
 .context-menu-item:hover {
 	border-radius: 3px;
 	border-color: rgb(174, 207, 247);
+}
+
+.overlay {
+	min-width: 150px;
+	max-width: 400px;
+	min-height: 50px;
+	border: 1px solid rgb(160, 160, 160);
+	background: rgb(240, 240, 240);
+	position: absolute;
+	top: 30px;
+	right: 5px;
+	overflow: hidden;
+	z-index: 2;
+	padding: 5px;
+	border-radius: 5px;
+	box-shadow: 2px 2px 2px #999;
 }
