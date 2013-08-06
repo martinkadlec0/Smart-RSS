@@ -39,12 +39,12 @@ $(function() {
 				list.selectedItems[0].$el.addClass('selected');
 
 				if (list.selectedItems[0].model.get('date') > this.model.get('date')) {
-					list.selectedItems[0].$el.nextUntil(this.$el).each(function(i, el) {
+					list.selectedItems[0].$el.nextUntil(this.$el).not('.invisible').each(function(i, el) {
 						$(el).addClass('selected');
 						list.selectedItems.push(el.view);
 					});
 				} else {
-					this.$el.nextUntil(list.selectedItems[0].$el).each(function(i, el) {
+					this.$el.nextUntil(list.selectedItems[0].$el).not('.invisible').each(function(i, el) {
 						$(el).addClass('selected');
 						list.selectedItems.push(el.view);
 					});
@@ -113,6 +113,8 @@ $(function() {
 					view.$el.addClass('invisible');
 				}
 			});
+
+			list.restartSelection();
 		},
 		handleButtonDelete: function() {
 			list.selectedItems.forEach(list.removeItem, list);
@@ -169,7 +171,8 @@ $(function() {
 			}, this);
 
 			setTimeout(function() {
-				if (list.views[0]) list.views[0].select();
+				//if (list.views[0]) list.views[0].select();
+				list.selectFirst();
 			}, 0);
 		},
 		handleNewSelected: function(source) {
@@ -204,6 +207,18 @@ $(function() {
 			if (io >= 0) list.selectedItems.splice(io, 1);
 			io = list.views.indexOf(this);
 			if (io >= 0) list.views.splice(io, 1);
+		},
+		restartSelection: function() {
+			if (this.selectedItems.length) {
+				this.selectedItems = [];
+				$('.selected').removeClass('selected');
+				$('.last-selected').removeClass('last-selected');
+			}
+			this.selectFirst();
+		},
+		selectFirst: function() {
+			var first = $('.item:not(.invisible)').get(0);
+			if (first) first.view.select();
 		}
 	}));
 
