@@ -196,11 +196,60 @@ $(function() {
 		{ 
 			title: 'Properties',
 			icon: 'properties.png',
-			action: function() { 
-				alert(JSON.stringify(sourcesContextMenu.currentSource.toJSON(), null, 1));
+			action: function() {
+				properties.show(sourcesContextMenu.currentSource);
+				properties.currentSource = sourcesContextMenu.currentSource;
 			}
 		}
 	]);
+
+	var properties = new (Backbone.View.extend({
+		el: '#properties',
+		currentSource: null,
+		events: {
+			'click button' : 'handleClick',
+			'keydown button' : 'handleKeyDown'
+		},
+		initialize: function() {
+			//$('#prop-cancel').on('click', this.hide);
+			//$('#prop-cancel').on('keydown', this.handleKeyDown);
+		},
+		handleClick: function(e) {
+			var t = e.currentTarget;
+			if (t.id == 'prop-cancel') {
+				this.hide();
+			} else if (t.id == 'prop-ok') {
+				this.saveData();
+			}
+		},
+		saveData: function() {
+			if (!this.currentSource) {
+				this.hide();
+				return;
+			}
+
+			this.currentSource.save({
+				title: $('#prop-title').val(),
+				url: $('#prop-url').val(),
+			});
+
+			this.hide();
+
+		},
+		handleKeyDown: function(e) {
+			if (e.keyCode == 13) {
+				this.handleClick(e);
+			} 
+		},
+		show: function(source) {
+			$('#prop-title').val(source.get('title'));;
+			$('#prop-url').val(source.get('url'));
+			properties.$el.css('display', 'block');
+		},
+		hide: function() {
+			properties.$el.css('display', 'none');
+		}
+	}));
 
 	var list = new (Backbone.View.extend({
 		el: '#list',

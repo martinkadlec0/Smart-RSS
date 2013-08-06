@@ -78,9 +78,15 @@ $(function() {
 		{ title: 'Buni', url: 'http://www.bunicomic.com/feed/', count: 8, id: 2 },
 	]);*/
 
-	sources.on('add', function(source) {
+	sources.on('add change:url', function(source) {
 		downloadOne(source);
 	});
+
+	/*sources.on('change:title', function(source) {
+		if (!source.get('title')) {
+			downloadOne(source);
+		}
+	});*/
 
 	sources.on('destroy', function(a, b, c) {
 		items.where({ sourceID: a.get('id') }).forEach(function(item) {
@@ -97,6 +103,14 @@ $(function() {
 		}
 	});
 
+	items.on('change:deleted', function(model) {
+		var source = sources.findWhere({ id: model.get('sourceID') });
+		if (model.get('deleted') == true) {
+			source.save({ 'count': source.get('count') - 1 });
+		} else {
+			source.save({ 'count': source.get('count') + 1 });
+		}
+	});
 
 
 	// I should make sure all items are fetched before downloadAll is called .. ideas?
@@ -154,7 +168,7 @@ function downloadURL(urls, cb) {
 			});
 
 			// too many wheres and stuff .. optimize?
-			var count = items.where({ sourceID: url.get('id'), unread: true  }).length;
+			var count = items.where({ sourceID: url.get('id'), unread: true, deleted: false  }).length;
 			sources.findWhere({ id: url.get('id') }).save({ 'count': count });
 
 
@@ -178,7 +192,7 @@ function parseRSS(xml, sourceID) {
 	var nodes = xml.querySelectorAll('item');
 	var title = xml.querySelector('channel > title');
 	var source = sources.findWhere({ id: sourceID });
-	if (title && source.get('title') == source.get('url')) {
+	if (title && (source.get('title') == source.get('url') || !source.get('title')) ) {
 		source.set('title', title.textContent);
 		source.save();
 	}

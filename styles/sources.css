@@ -9,7 +9,7 @@ body {
 
 #list {
 	flex: 1 1;
-	padding-top: 3px;
+	/*padding-top: 3px;*/
 	-webkit-user-select: none;
 	user-select: none;
 	overflow-x: hidden;
@@ -18,7 +18,7 @@ body {
 
 .source {
 	width: 100%;
-	padding: 2px 5px 2px 10px;
+	padding: 3px 5px 3px 10px;
 	display: flex;
 	font-family: sans-serif;
 	font-size: 0.9rem;
@@ -75,4 +75,35 @@ body {
 	border-top: 1px solid #a6a6a6;
 	font-size: 0.8rem;
 	background: linear-gradient(to right, #d1d1d1 0%, #eee 0%);
+}
+
+#properties {
+	padding: 10px;
+	background: #f2f2f2;
+	border-bottom: 1px solid #a6a6a6;
+	display: none;
+}
+
+#properties label {
+	font-size: 0.8rem;
+	font-weight: bold;
+}
+
+#properties input, #properties select {
+	width: 100%;
+	padding: 2px 5px;
+}
+
+#properties button {
+	width: 49%;
+	margin-top: 5px;
+	background: white;
+	border: 1px solid #a6a6a6;
+	border-radius: 4px;
+	padding: 3px 0;
+	cursor: pointer;
+}
+
+#properties button:first-of-type {
+	margin-right: 2%;
 }

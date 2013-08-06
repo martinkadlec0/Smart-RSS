@@ -27,12 +27,12 @@ $(function() {
 			this.$el.html(this.template(this.model.toJSON()));
 			return this;
 		},
-		handleMouseDown: function(e) {
+		select: function(e) {
+			e = e || {};
 			if (e.shiftKey != true) {
 				list.selectedItems = [];
 				$('.selected').removeClass('selected');
-				bg.items.trigger('new-selected', this.model);
-				
+				if (!e.preventLoading) bg.items.trigger('new-selected', this.model);
 			} 
 
 			$('.last-selected').removeClass('last-selected');
@@ -40,6 +40,9 @@ $(function() {
 			list.selectedItems.push(this);
 			this.$el.addClass('selected');
 			this.$el.addClass('last-selected');
+		},
+		handleMouseDown: function(e) {
+			this.select({ shiftKey: e.shiftKey });
 		},
 		handleModelChange: function() {
 			if (this.model.get('deleted')) {
@@ -148,6 +151,10 @@ $(function() {
 			items.forEach(function(item) {
 				this.addItem(item, true);
 			}, this);
+
+			setTimeout(function() {
+				if (list.views[0]) list.views[0].select();
+			}, 0);
 		},
 		handleNewSelected: function(source) {
 			if (this.currentSource) {
@@ -156,6 +163,7 @@ $(function() {
 			this.currentSource = source;
 			source.on('destroy', this.handleDestroyedSource, this);
 			this.addItems(bg.items.where({ sourceID: source.id }));
+			
 		},
 		handleDestroyedSource: function() {
 			this.currentSource = null;
@@ -175,6 +183,7 @@ $(function() {
 			view.$el.removeData().unbind(); 
 			view.off();
 			view.remove();
+			debugger;
 			var io = list.selectedItems.indexOf(this);
 			if (io >= 0) list.selectedItems.splice(io, 1);
 			io = list.views.indexOf(this);

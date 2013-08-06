@@ -12,8 +12,14 @@
 </head>
 <body>
 	<div id="toolbar">
-		<div class="button" id="button-add" title="Add RSS source"></div>
-		<div class="button" id="button-reload" title="Reload all"></div>
+		<div class="button" id="button-add" title="Add RSS Source"></div>
+		<div class="button" id="button-reload" title="Update All"></div>
+	</div>
+	<div id="properties">
+		<label>Name: <input type="text" id="prop-title" placeholder="If empty, it will be fetched." /></label>
+		<label>Address: <input type="url" id="prop-url" /></label>
+		<label>Update: <select id="prop-reload"><option>Never</option></select></label>
+		<button id="prop-ok">Ok</button><button id="prop-cancel">Cancel</button>
 	</div>
 	<div id="list">
 
