@@ -11,6 +11,8 @@ $(function() {
 		},
 		initialize: function() {
 			this.model.on('change', this.render, this);
+			this.model.on('destroy', this.handleModelDestroy, this);
+			this.el.view = this;
 		},
 		render: function() {
 			this.$el.html(this.template(this.model.toJSON()));
@@ -28,6 +30,9 @@ $(function() {
 			list.selectedItems.push(this);
 			this.$el.addClass('selected');
 			this.$el.addClass('last-selected');
+		},
+		handleModelDestroy: function(e) {
+			list.destroySource(this);
 		}
 	});
 
@@ -71,10 +76,10 @@ $(function() {
 		},
 		addSource: function(source) {
 			var view = new SourceView({ model: source });
-			$('#list').append(view.render().$el);
+			this.$el.append(view.render().$el);	
 		},
 		addSources: function(sources) {
-			$('#list').html('');
+			this.$el.html('');
 			sources.forEach(function(source) {
 				this.addSource(source);
 			}, this);
@@ -85,6 +90,16 @@ $(function() {
 			view.$el.removeData().unbind(); 
 			view.off();
 			view.remove();
+		},
+		destroySource: function(view) {
+			view.undelegateEvents();
+			view.$el.removeData().unbind(); 
+			view.off();
+			view.remove();
+			var io = list.selectedItems.indexOf(this);
+			if (io >= 0) {
+				list.selectedItems.splice(io, 1);
+			}
 		}
 	}));
 

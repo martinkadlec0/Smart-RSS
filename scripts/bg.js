@@ -97,7 +97,7 @@ $(function() {
 
 
 	// I should make sure all items are fetched before downloadAll is called .. ideas?
-	setTimeout(downloadAll, 5000);
+	//setTimeout(downloadAll, 5000);
 
 	/**
 	 * onclick:button -> open RSS

@@ -20,6 +20,7 @@ $(function() {
 		initialize: function() {
 			this.model.on('change', this.handleModelChange, this);
 			this.model.on('destroy', this.handleModelDestroy, this);
+			this.el.view = this;
 		},
 		render: function() {
 			this.$el.toggleClass('unread', this.model.get('unread'));
@@ -109,10 +110,28 @@ $(function() {
 			bg.sources.on('new-selected', this.handleNewSelected, this)	;
 			this.addItems(bg.items);
 		},
-		addItem: function(item) {
+		addItem: function(item, noManualSort) {
 			if (!item.get('deleted')) {
 				var view = new ItemView({ model: item });
-				$('#list').append(view.render().$el);
+
+
+				var after = null;
+				if (noManualSort !== true) {
+					$.makeArray($('#list .item')).some(function(itemEl) {
+						if (itemEl.view.model.get('date') < item.get('date')) {
+							after =  itemEl;
+							return true;
+						}
+					});
+				}
+
+				if (!after) {
+					this.$el.append(view.render().$el);	
+				} else {
+					//$(after).insertBefore(view.render().$el);
+					view.render().$el.insertBefore($(after));
+				}
+
 				this.views.push(view);
 			}
 		},
@@ -120,7 +139,7 @@ $(function() {
 			this.views = [];
 			$('#list').html('');
 			items.forEach(function(item) {
-				this.addItem(item);
+				this.addItem(item, true);
 			}, this);
 		},
 		handleNewSelected: function(source) {
@@ -140,6 +159,10 @@ $(function() {
 			view.$el.removeData().unbind(); 
 			view.off();
 			view.remove();
+			var io = list.selectedItems.indexOf(this);
+			if (io >= 0) list.selectedItems.splice(io, 1);
+			io = list.views.indexOf(this);
+			if (io >= 0) list.views.splice(io, 1);
 		}
 	}));
 
