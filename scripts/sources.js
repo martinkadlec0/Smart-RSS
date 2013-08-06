@@ -44,7 +44,7 @@ $(function() {
 			sourcesContextMenu.show(e.clientX, e.clientY);
 		},
 		select: function(e) {
-			if (e.shiftKey != true) {
+			if (e.ctrlKey != true && e.shiftKey != true) {
 				list.selectedItems = [];
 				$('.selected').removeClass('selected');
 			} 
@@ -57,7 +57,7 @@ $(function() {
 		},
 		showSourceItems: function(e) {
 			this.select(e);
-			if (e.shiftKey != true) {
+			if (e.ctrlKey != true && e.shiftKey != true) {
 				bg.sources.trigger('new-selected', this.model);
 			} 
 		},
@@ -190,7 +190,10 @@ $(function() {
 			title: 'Delete',
 			icon: 'delete.png',
 			action: function() { 
-				sourcesContextMenu.currentSource.destroy();
+				if (confirm('Do you really want to delete this feed?')) {
+					sourcesContextMenu.currentSource.destroy();	
+				}
+				
 			}
 		},
 		{ 
@@ -311,7 +314,8 @@ $(function() {
 		},
 		handleKeyDown: function(e) {
 			if (e.keyCode == 68) {
-				list.selectedItems.forEach(list.removeSource, list);
+				//there shouldnt be same shortcut for deleting item and source
+				//list.selectedItems.forEach(list.removeSource, list);
 			}
 		},
 		handleLoadingChange: function(e) {
