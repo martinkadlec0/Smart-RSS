@@ -29,11 +29,11 @@ $(function() {
 		},
 		select: function(e) {
 			e = e || {};
-			if (e.shiftKey != true) {
+			if (e.shiftKey != true && e.ctrlKey != true) {
 				list.selectedItems = [];
 				$('.selected').removeClass('selected');
 				if (!e.preventLoading) bg.items.trigger('new-selected', this.model);
-			} else if (list.selectedItems.length) {
+			} else if (e.shiftKey && list.selectedItems.length) {
 				$('.selected').removeClass('selected');
 				list.selectedItems = [list.selectedItems[0]];
 				list.selectedItems[0].$el.addClass('selected');
@@ -49,7 +49,7 @@ $(function() {
 						list.selectedItems.push(el.view);
 					});
 				}
-			} 
+			}
 
 			$('.last-selected').removeClass('last-selected');
 
@@ -58,7 +58,7 @@ $(function() {
 			this.$el.addClass('last-selected');
 		},
 		handleMouseDown: function(e) {
-			this.select({ shiftKey: e.shiftKey });
+			this.select({ shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });
 		},
 		handleModelChange: function() {
 			if (this.model.get('deleted')) {
