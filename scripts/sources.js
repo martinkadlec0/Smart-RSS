@@ -109,11 +109,31 @@ $(function() {
 			'keydown': 'handleKeyDown'
 		},
 		initialize: function() {
+			bg.loader.on('change:loading', this.handleLoadingChange, this);
+			bg.loader.on('change:loaded', this.renderIndicator, this);
+			this.handleLoadingChange();
 		},
 		handleKeyDown: function(e) {
 			if (e.keyCode == 68) {
 				list.selectedItems.forEach(list.removeSource);
 			}
+		},
+		handleLoadingChange: function(e) {
+			if (bg.loader.get('loading') == true) {
+				this.renderIndicator();
+				$('#indicator').css('display', 'block');
+			} else {
+				setTimeout(function() {
+					$('#indicator').css('display', 'none');
+				}, 500);
+			}
+		},
+		renderIndicator: function() {
+			// should ount and show failed
+			var l = bg.loader;
+			var perc = Math.round(l.get('loaded') * 100 / l.get('maxSources'));
+			$('#indicator').css('background', 'linear-gradient(to right,  #d1d1d1 ' + perc + '%, #eee ' + perc + '%)');
+			$('#indicator').html(l.get('loaded') + '/' + l.get('maxSources'));
 		}
 	}));
 });

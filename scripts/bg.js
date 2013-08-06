@@ -57,6 +57,15 @@ var items = new (Backbone.Collection.extend({
 }));
 
 
+var loader = new (Backbone.Model.extend({
+	defaults: {
+		maxSources: 0,
+		loaded: 0,
+		loading: false
+	}
+}));
+
+
 /**
  * RSS Downloader
  */
@@ -70,10 +79,7 @@ $(function() {
 	]);*/
 
 	sources.on('add', function(source) {
-		//var data = { tmpStorage: [] };
-		downloadURL([source], function() {
-			// download completed
-		});
+		downloadOne(source);
 	});
 
 	sources.on('destroy', function(a, b, c) {
@@ -91,9 +97,6 @@ $(function() {
 		}
 	});
 
-	sources.on('change:count', function(source) {
-		source;
-	});
 
 
 	// I should make sure all items are fetched before downloadAll is called .. ideas?
@@ -110,14 +113,28 @@ $(function() {
 
 });
 
+function downloadOne(source) {
+	loader.set('maxSources', 1);
+	loader.set('loading', true);
+	loader.set('loaded', 0);
+	downloadURL([source], function() {
+		loader.set('loaded', 1);
+		loader.set('loading', false);
+	});
+}
+
 function downloadAll() {
 	var urls = sources.clone();
 
-	//var data = { tmpStorage: [] };
-
-	downloadURL(urls, function() {
-		//items.set(data.tmpStorage, { remove: false });
-	});
+	if (urls.length) {
+		loader.set('maxSources', urls.length);
+		loader.set('loaded', 0);
+		loader.set('loading', true);
+		downloadURL(urls, function() {
+			loader.set('loading', false);
+		});
+	}
+	
 }
 
 function downloadURL(urls, cb) {
@@ -129,6 +146,8 @@ function downloadURL(urls, cb) {
 	$.ajax({
 		url: url.get('url'),
 		success: function(r) {
+
+			loader.set('loaded', loader.get('loaded') + 1);
 			
 			parseRSS(r, url.get('id')).forEach(function(item) {
 				items.create(item);
@@ -142,6 +161,8 @@ function downloadURL(urls, cb) {
 			downloadURL(urls, cb);
 		},
 		error: function(e) {
+			loader.set('loaded', loader.get('loaded') + 1);
+
 			console.log('Failed load RSS: url');
 			downloadURL(urls, cb);
 		}

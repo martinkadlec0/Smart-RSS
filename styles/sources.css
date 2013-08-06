@@ -62,3 +62,17 @@ body {
 	max-width: 50px;
 	overflow: hidden;
 }
+
+#indicator {
+	display: none;
+	flex: 0 0 25px;
+	line-height: 25px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 100%;
+	text-align: center;
+	border-top: 1px solid #a6a6a6;
+	font-size: 0.8rem;
+	background: linear-gradient(to right, #d1d1d1 0%, #eee 0%);
+}

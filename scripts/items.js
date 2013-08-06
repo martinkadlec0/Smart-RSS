@@ -31,11 +31,8 @@ $(function() {
 			if (e.shiftKey != true) {
 				list.selectedItems = [];
 				$('.selected').removeClass('selected');
-				try {
-					bg.items.trigger('new-selected', this.model);
-				} catch(e) {
-					// WTF? what is set_animation??
-				}
+				bg.items.trigger('new-selected', this.model);
+				
 			} 
 
 			$('.last-selected').removeClass('last-selected');
@@ -60,7 +57,7 @@ $(function() {
 		el: '#toolbar',
 		events: {
 			'click #button-read': 'handleButtonRead',
-			'click #button-refresh': 'refreshItems',
+			'click #button-reload': 'refreshItems',
 			'click #button-delete': 'handleButtonDelete',
 			'input input[type=search]': 'handleSearch'
 		},
@@ -74,7 +71,13 @@ $(function() {
 			}, this);
 		},
 		refreshItems: function() {
-			alert('Refreshing!');
+			if (list.currentSource) {
+				// need to add listener for source destroy to prevent loading deleted source
+				bg.downloadOne(list.currentSource);	
+			} else {
+				bg.downloadAll();
+			}
+			
 		},
 		handleSearch: function(e) {
 			var str = e.currentTarget.value || '';
@@ -101,6 +104,7 @@ $(function() {
 		el: '#list',
 		selectedItems: [],
 		views: [],
+		currentSource: null,
 		events: {
 			
 		},
@@ -136,14 +140,26 @@ $(function() {
 			}
 		},
 		addItems: function(items) {
+			// better solution?
+			this.views.forEach(this.destroyItem, this);
 			this.views = [];
+
 			$('#list').html('');
 			items.forEach(function(item) {
 				this.addItem(item, true);
 			}, this);
 		},
 		handleNewSelected: function(source) {
+			if (this.currentSource) {
+				this.currentSource.off('destroy', this.handleDestroyedSource, this);
+			}
+			this.currentSource = source;
+			source.on('destroy', this.handleDestroyedSource, this);
 			this.addItems(bg.items.where({ sourceID: source.id }));
+		},
+		handleDestroyedSource: function() {
+			this.currentSource = null;
+			this.addItems(bg.items);	
 		},
 		removeItem: function(view) {
 			view.model.save({
