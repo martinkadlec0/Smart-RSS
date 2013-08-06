@@ -2,6 +2,11 @@ document.addEventListener('contextmenu', function(e) {
 	e.preventDefault();
 });	
 
+
+if (!Element.prototype.hasOwnProperty('matchesSelector')) {
+	Element.prototype.matchesSelector = Element.prototype.webkitMatchesSelector;
+}
+
 chrome.runtime.getBackgroundPage(function(bg) {
 
 $(function() {
@@ -11,7 +16,8 @@ $(function() {
 		className: 'source',
 		template: _.template($('#template-source').html()),
 		events: {
-			'mouseup': 'handleMouseUp'
+			'mouseup': 'handleMouseUp',
+			'mousedown': 'handleMouseDown',
 		},
 		initialize: function() {
 			this.model.on('change', this.render, this);
@@ -22,35 +28,25 @@ $(function() {
 			this.$el.html(this.template(this.model.toJSON()));
 			return this;
 		},
-		handleMouseUp: function(e) {
+		handleMouseDown: function(e) {
 			if (e.which == 1) {
 				this.showSourceItems(e);
-			} else if (e.which == 3) {
+			} 
+		},
+		handleMouseUp: function(e) {
+			if (e.which == 3) {
 				this.showContextMenu(e);
-				e.preventDefault();
-				e.stopPropagation();
 			}
 		},
 		showContextMenu: function(e) {
+			this.select(e);
 			sourcesContextMenu.currentSource = this.model;
-			$('body').append(sourcesContextMenu.render().$el);
-
-			var posY = e.clientY;
-			var posX = e.clientX;
-			if (posX + sourcesContextMenu.el.offsetWidth > document.body.offsetWidth) {
-				posX = document.body.offsetWidth - sourcesContextMenu.el.offsetWidth;
-			} 
-			if (posY + sourcesContextMenu.el.offsetHeight > document.body.offsetHeight) {
-				posY = document.body.offsetHeight - sourcesContextMenu.el.offsetHeight;
-			} 
-			sourcesContextMenu.$el.css('top', posY + 'px');
-			sourcesContextMenu.$el.css('left', posX + 'px');
+			sourcesContextMenu.show(e.clientX, e.clientY);
 		},
-		showSourceItems: function(e) {
+		select: function(e) {
 			if (e.shiftKey != true) {
 				list.selectedItems = [];
 				$('.selected').removeClass('selected');
-				bg.sources.trigger('new-selected', this.model);
 			} 
 
 			$('.last-selected').removeClass('last-selected');
@@ -58,7 +54,12 @@ $(function() {
 			list.selectedItems.push(this);
 			this.$el.addClass('selected');
 			this.$el.addClass('last-selected');
-
+		},
+		showSourceItems: function(e) {
+			this.select(e);
+			if (e.shiftKey != true) {
+				bg.sources.trigger('new-selected', this.model);
+			} 
 		},
 		handleModelDestroy: function(e) {
 			list.destroySource(this);
@@ -120,7 +121,7 @@ $(function() {
 			var action = this.model.get('action');
 			if (action && typeof action == 'function') {
 				action();
-				this.el.parentNode.parentNode.removeChild(this.el.parentNode);
+				sourcesContextMenu.hide();
 			}
 		}
 	});
@@ -132,6 +133,10 @@ $(function() {
 		initialize: function(mc) {
 			this.menuCollection = new MenuCollection(mc);
 			this.addItems(this.menuCollection);
+			$('body').append(this.render().$el);
+
+			window.addEventListener('blur', this.hide.bind(this));
+			window.addEventListener('resize', this.hide.bind(this));
 		},
 		addItem: function(item) {
 			var v = new MenuItemView({ model: item });
@@ -144,6 +149,22 @@ $(function() {
 		},
 		render: function() {
 			return this;
+		},
+		show: function(x, y) {
+			if (x + this.$el.width() + 4 > document.body.offsetWidth) {
+				x = document.body.offsetWidth - this.$el.width() - 8;
+			} 
+			if (y + this.$el.height() + 4 > document.body.offsetHeight) {
+				y = document.body.offsetHeight - this.$el.height() - 8;
+			} 
+			this.$el.css('top', y + 'px');
+			this.$el.css('left', x + 'px');
+			this.$el.css('display', 'block');
+		},
+		hide: function() {
+			if (this.$el.css('display') == 'block') {
+				this.$el.css('display', 'none');
+			}
 		}
 	});
 
@@ -157,6 +178,7 @@ $(function() {
 		},
 		{ 
 			title: 'Mark All As Read',
+			icon: 'read.png',
 			action: function() { 
 				var id = sourcesContextMenu.currentSource.get('id');
 				bg.items.where({ sourceID: id }).forEach(function(item) {
@@ -173,6 +195,7 @@ $(function() {
 		},
 		{ 
 			title: 'Properties',
+			icon: 'properties.png',
 			action: function() { 
 				alert(JSON.stringify(sourcesContextMenu.currentSource.toJSON(), null, 1));
 			}
@@ -223,12 +246,19 @@ $(function() {
 	var app = new (Backbone.View.extend({
 		el: 'body',
 		events: {
-			'keydown': 'handleKeyDown'
+			'keydown': 'handleKeyDown',
+			'mousedown': 'handleMouseDown'
 		},
 		initialize: function() {
 			bg.loader.on('change:loading', this.handleLoadingChange, this);
 			bg.loader.on('change:loaded', this.renderIndicator, this);
 			this.handleLoadingChange();
+		},
+		handleMouseDown: function(e) {
+			if (sourcesContextMenu.el.parentNode && !e.target.matchesSelector('.context-menu, .context-menu *')) {
+				// make sure the action gets executed
+				sourcesContextMenu.hide();
+			}
 		},
 		handleKeyDown: function(e) {
 			if (e.keyCode == 68) {

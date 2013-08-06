@@ -91,6 +91,10 @@ input[type=search]:not(:focus):not(:valid) {
 	z-index: 3;
 	padding: 2px;
 	box-shadow: 2px 2px 2px #999;
+	-webkit-user-select: none;
+	user-select: none;
+	cursor: default;
+	display: none;
 }
 
 .context-menu-item {
