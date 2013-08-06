@@ -51,7 +51,7 @@ $(function() {
 			}
 		},
 		handleModelDestroy: function(e) {
-			list.removeItem(this);
+			list.destroyItem(this);
 		}
 	});
 
@@ -69,8 +69,7 @@ $(function() {
 		handleButtonRead: function() {
 			var val = list.selectedItems.length ? !list.selectedItems[0].model.get('unread') : false;
 			list.selectedItems.forEach(function(item) {
-				item.model.set('unread', val);
-				item.model.save();
+				item.model.save({ unread: val });
 			}, this);
 		},
 		refreshItems: function() {
@@ -93,7 +92,7 @@ $(function() {
 			});
 		},
 		handleButtonDelete: function() {
-			list.selectedItems.forEach(list.removeItem);
+			list.selectedItems.forEach(list.removeItem, list);
 		}
 	}));
 
@@ -134,6 +133,9 @@ $(function() {
 				'author': '',
 				'title': ''
 			});
+			this.destroyItem(view);
+		},
+		destroyItem: function(view) {
 			view.undelegateEvents();
 			view.$el.removeData().unbind(); 
 			view.off();
@@ -150,7 +152,7 @@ $(function() {
 		},
 		handleKeyDown: function(e) {
 			if (e.keyCode == 68) {
-				list.selectedItems.forEach(list.removeItem);
+				list.selectedItems.forEach(list.removeItem, list);
 			} else if (e.keyCode == 75) {
 				toolbar.handleButtonRead();
 			} else if (e.keyCode == 40) {

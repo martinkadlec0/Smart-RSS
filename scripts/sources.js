@@ -44,9 +44,12 @@ $(function() {
 			var url = prompt('RSS source url:');
 			if (url) {
 				bg.sources.create({
+					id: bg.sourceIdIndex++,
 					title: url,
 					url: url
 				}).fetch();
+
+				localStorage.setItem('sourceIdIndex', bg.sourceIdIndex);
 			}
 		},
 		reloadSources: function() {

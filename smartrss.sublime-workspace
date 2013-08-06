@@ -4,8 +4,16 @@
 		"selected_items":
 		[
 			[
+				"error",
+				"errors"
+			],
+			[
 				"handle",
-				"handleButtonRead"
+				"handleNewRS"
+			],
+			[
+				"rssGet",
+				"rssGetDate"
 			],
 			[
 				"selec",
@@ -223,7 +231,7 @@
 			"file": "rss_item.html",
 			"settings":
 			{
-				"buffer_size": 1168,
+				"buffer_size": 1167,
 				"line_ending": "Windows"
 			}
 		},
@@ -231,7 +239,7 @@
 			"file": "styles/item.css",
 			"settings":
 			{
-				"buffer_size": 966,
+				"buffer_size": 1053,
 				"line_ending": "Windows"
 			}
 		},
@@ -255,8 +263,82 @@
 			"file": "scripts/bg.js",
 			"settings":
 			{
-				"buffer_size": 5715,
+				"buffer_size": 7192,
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "todo.txt",
+			"settings":
+			{
+				"buffer_size": 472,
+				"line_ending": "Windows",
+				"name": "# TODO"
+			}
+		},
+		{
+			"file": "/D/Work/smartrsspage/scripts/detector_bg.js",
+			"settings":
+			{
+				"buffer_size": 538,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/D/Work/smartrsspage/popup.html",
+			"settings":
+			{
+				"buffer_size": 292,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/D/Work/smartrsspage/index.html",
+			"settings":
+			{
+				"buffer_size": 185,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/D/Work/smartrsspage/manifest.json",
+			"settings":
+			{
+				"buffer_size": 685,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/D/Work/smartrsspage/scripts/detector_popup.js",
+			"settings":
+			{
+				"buffer_size": 933,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/D/Work/smartrsspage/styles/detector_popup.css",
+			"settings":
+			{
+				"buffer_size": 947,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/D/Work/smartrsspage/includes/rss_detector.js",
+			"settings":
+			{
+				"buffer_size": 795,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "<link rel=\"alternate\" type=\"application/rss+xml\" title=\"Prohlížeč Opera česky zprávičky\" href=\"http://www.operacesky.net/forum/rss.php?forums=25&amp;firstonly=25\" />\n<link rel=\"alternate\" type=\"application/rss+xml\" title=\"Prohlížeč Opera česky\" href=\"http://www.operacesky.net/forum/rss.php\" />\n\n<link rel=\"alternate\" type=\"application/rss+xml\" title=\"RSS 2.0 Feed\" href=\"/desktopteam/xml/rss/blog/\">\n<link rel=\"alternate\" type=\"application/atom+xml\" title=\"Atom 1.0 Feed\" href=\"/desktopteam/xml/atom/blog/\">",
+			"settings":
+			{
+				"buffer_size": 508,
+				"line_ending": "Windows",
+				"name": "<link rel=\"alternate\" type=\"application/rss+xml\" t"
 			}
 		},
 		{
@@ -271,7 +353,7 @@
 			"file": "scripts/items.js",
 			"settings":
 			{
-				"buffer_size": 5297,
+				"buffer_size": 5481,
 				"line_ending": "Windows"
 			}
 		},
@@ -287,7 +369,7 @@
 			"file": "scripts/item.js",
 			"settings":
 			{
-				"buffer_size": 1352,
+				"buffer_size": 1489,
 				"line_ending": "Windows"
 			}
 		},
@@ -318,29 +400,26 @@
 			}
 		},
 		{
-			"contents": "chrome.runtime.getBackgroundPage(function(bg) {\n\n$(function() {\n\n	var SourceView = Backbone.View.extend({\n		tagName: 'div',\n		className: 'source',\n		template: _.template($('#template-source').html()),\n		events: {\n			'mousedown': 'handleMouseDown'\n		},\n		initialize: function() {\n			this.model.on('change', this.render, this);\n		},\n		render: function() {\n			this.$el.html(this.template(this.model.toJSON()));\n			return this;\n		},\n		handleMouseDown: function(e) {\n			if (e.shiftKey != true) {\n				list.selectedItems = [];\n				$('.selected').removeClass('selected');\n				bg.sources.trigger('new-selected', this.model);\n			} \n\n			$('.last-selected').removeClass('last-selected');\n\n			list.selectedItems.push(this);\n			this.$el.addClass('selected');\n			this.$el.addClass('last-selected');\n		}\n	});\n\n	var toolbar = new (Backbone.View.extend({\n		el: '#toolbar',\n		events: {\n			'click #button-add': 'addSourceDialog',\n			'click #button-reload': 'reloadSources'\n		},\n		initialize: function() {\n			\n		},\n		addSourceDialog: function() {\n			var url = prompt('RSS source url:');\n			if (url) {\n				bg.sources.create({\n					title: url,\n					url: url\n				}).fetch();\n			}\n		},\n		reloadSources: function() {\n			bg.downloadAll();\n		}\n	}));\n\n	var list = new (Backbone.View.extend({\n		el: '#list',\n		selectedItems: [],\n		events: {\n			\n		},\n		initialize: function() {\n			this.addSources(bg.sources);\n\n			bg.sources.on('reset', this.addSources, this);\n			bg.sources.on('add', this.addSource, this);\n		},\n		addSource: function(source) {\n			var view = new SourceView({ model: source });\n			$('#list').append(view.render().$el);\n		},\n		addSources: function(sources) {\n			$('#list').html('');\n			sources.forEach(function(source) {\n				this.addSource(source);\n			}, this);\n		},\n		removeSource: function(view) {\n			view.model.destroy();\n			view.undelegateEvents();\n			view.$el.removeData().unbind(); \n			view.off();\n			view.remove();\n		}\n	}));\n\n	var app = new (Backbone.View.extend({\n		el: 'body',\n		events: {\n			'keydown': 'handleKeyDown'\n		},\n		initialize: function() {\n		},\n		handleKeyDown: function(e) {\n			if (e.keyCode == 68) {\n				list.selectedItems.forEach(list.removeSource);\n			}\n		}\n	}));\n});\n\n});",
-			"file": "scripts/sources.js",
-			"file_size": 2284,
-			"file_write_time": 130201289584167085,
-			"settings":
-			{
-				"buffer_size": 2180,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "styles/sources.css",
-			"settings":
-			{
-				"buffer_size": 885,
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "styles/rss.css",
 			"settings":
 			{
 				"buffer_size": 40,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "scripts/sources.js",
+			"settings":
+			{
+				"buffer_size": 2271,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": ".gitignore",
+			"settings":
+			{
+				"buffer_size": 31,
 				"line_ending": "Windows"
 			}
 		}
@@ -513,6 +592,12 @@
 	},
 	"file_history":
 	[
+		"/D/Work/smartrss/includes/rss_detector.js",
+		"/D/Work/smartrsspage/manifest.json",
+		"/D/Work/smartrss/styles/sources.css",
+		"/D/Work/smartrss/scripts/sources.js",
+		"/C/Users/Martin/AppData/Roaming/Sublime Text 2/Packages/AdvancedNewFile/Default (Windows).sublime-keymap",
+		"/D/Work/smartrss/libs/backbone.localStorage.min.js",
 		"/D/Work/smartrss/scripts/md5.js",
 		"/C/Users/Martin/Desktop/The Switcher/manifest.json",
 		"/D/Programování/JavaScript/MODS/MDATE.MOD/mdate.mod.js",
@@ -634,13 +719,7 @@
 		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371564176/operacesky-net/html/silex-lapi/app/Lapi/Modules/User.php",
 		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371564164/operacesky-net/html/silex-lapi/app/Lapi/Controllers/DefaultController.php",
 		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371314009/operacesky-net/html/silex-lapi/web/index.php",
-		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371311843/operacesky-net/html/silex-lapi/.htaccess",
-		"/D/Work/bookmarks/bg.html",
-		"/C/Users/Martin/Desktop/Houby/houby.css",
-		"/C/Users/Martin/Desktop/Houby/houby.js",
-		"/C/Users/Martin/Desktop/Downloads/Operas/Opera 15 Next/15.0.1147.72/localization/en-GB.pak",
-		"/C/Users/Martin/Desktop/Downloads/Operas/Opera 15 Next/15.0.1147.72/localization/en-US.pak",
-		"/C/Users/Martin/Desktop/Downloads/Operas/Opera 15 Next/15.0.1147.72/resources/default_partner_content.json"
+		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371311843/operacesky-net/html/silex-lapi/.htaccess"
 	],
 	"find":
 	{
@@ -660,6 +739,29 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"downloadURL",
+			"downloadAll",
+			"fetch",
+			"downloadAll",
+			"unread",
+			"10",
+			"count",
+			"10",
+			"count",
+			"removeItem",
+			"deleted",
+			"deleted: true",
+			"deleted:true",
+			"deleted: true",
+			"handleModelC",
+			"removeSour",
+			"removeItem",
+			"DELETE",
+			"deleted",
+			"on('chan",
+			"on('remov",
+			"on('dest",
+			"debugg",
 			"change",
 			"set('read",
 			"'title",
@@ -764,30 +866,7 @@
 			"inDatabase",
 			"save",
 			"$_POST",
-			"$_GET",
-			"id_num",
-			"stripString",
-			"is_bookmarked",
-			"isNew",
-			"co",
-			"$item->id",
-			"dirMo",
-			"$item->tex",
-			"echo",
-			"has",
-			"requir",
-			"$user",
-			"{{time",
-			"klub.php",
-			"$user",
-			"is_min",
-			"post-content",
-			"show_post_menu",
-			"> div",
-			"new-post",
-			"klub",
-			"club",
-			"klub"
+			"$_GET"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1236,15 +1315,15 @@
 					"file": "rss_item.html",
 					"settings":
 					{
-						"buffer_size": 1168,
+						"buffer_size": 1167,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1141,
-								1141
+								1159,
+								1159
 							]
 						],
 						"settings":
@@ -1310,15 +1389,15 @@
 					"file": "styles/item.css",
 					"settings":
 					{
-						"buffer_size": 966,
+						"buffer_size": 1053,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								821,
-								821
+								975,
+								975
 							]
 						],
 						"settings":
@@ -1374,7 +1453,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 570.0,
+						"translation.y": 660.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1391,8 +1470,8 @@
 						"selection":
 						[
 							[
-								195,
-								195
+								686,
+								686
 							]
 						],
 						"settings":
@@ -1531,15 +1610,15 @@
 					"file": "scripts/bg.js",
 					"settings":
 					{
-						"buffer_size": 5715,
+						"buffer_size": 7192,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1527,
-								1527
+								1997,
+								1997
 							]
 						],
 						"settings":
@@ -1594,13 +1673,668 @@
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 855.0,
+						"translation.y": 1125.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 9,
+					"file": "todo.txt",
+					"settings":
+					{
+						"buffer_size": 472,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								109,
+								109
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_name": "# TODO",
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"incomplete_sync": null,
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "/D/Work/smartrsspage/scripts/detector_bg.js",
+					"settings":
+					{
+						"buffer_size": 538,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								338,
+								338
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "/D/Work/smartrsspage/popup.html",
+					"settings":
+					{
+						"buffer_size": 292,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								292,
+								292
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "/D/Work/smartrsspage/index.html",
+					"settings":
+					{
+						"buffer_size": 185,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								142,
+								142
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "/D/Work/smartrsspage/manifest.json",
+					"settings":
+					{
+						"buffer_size": 685,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								367,
+								367
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JSON.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"file": "/D/Work/smartrsspage/scripts/detector_popup.js",
+					"settings":
+					{
+						"buffer_size": 933,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								643,
+								643
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 15,
+					"file": "/D/Work/smartrsspage/styles/detector_popup.css",
+					"settings":
+					{
+						"buffer_size": 947,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								316,
+								316
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/CSS/CSS.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"file": "/D/Work/smartrsspage/includes/rss_detector.js",
+					"settings":
+					{
+						"buffer_size": 795,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								786,
+								786
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 17,
+					"settings":
+					{
+						"buffer_size": 508,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								343,
+								324
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_name": "<link rel=\"alternate\" type=\"application/rss+xml\" t",
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"incomplete_sync": null,
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 18,
 					"file": "scripts/global.js",
 					"settings":
 					{
@@ -1674,19 +2408,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 19,
 					"file": "scripts/items.js",
 					"settings":
 					{
-						"buffer_size": 5297,
+						"buffer_size": 5481,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2506,
-								2506
+								1908,
+								1908
 							]
 						],
 						"settings":
@@ -1742,13 +2476,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1177.0,
+						"translation.y": 739.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 20,
 					"file": "/C/Users/Martin/Desktop/The Switcher/scripts/main.js",
 					"settings":
 					{
@@ -1822,19 +2556,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 21,
 					"file": "scripts/item.js",
 					"settings":
 					{
-						"buffer_size": 1352,
+						"buffer_size": 1489,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								651,
-								651
+								621,
+								621
 							]
 						],
 						"settings":
@@ -1890,13 +2624,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 150.0,
+						"translation.y": 450.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 13,
+					"buffer": 22,
 					"settings":
 					{
 						"buffer_size": 1169,
@@ -2018,7 +2752,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 14,
+					"buffer": 23,
 					"file": "rss_sources.html",
 					"settings":
 					{
@@ -2092,7 +2826,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 15,
+					"buffer": 24,
 					"file": "styles/global.css",
 					"settings":
 					{
@@ -2103,8 +2837,8 @@
 						"selection":
 						[
 							[
-								1413,
-								1413
+								1532,
+								1465
 							]
 						],
 						"settings":
@@ -2160,161 +2894,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1110.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 16,
-					"file": "scripts/sources.js",
-					"settings":
-					{
-						"buffer_size": 2180,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1905,
-								1787
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 934.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 17,
-					"file": "styles/sources.css",
-					"settings":
-					{
-						"buffer_size": 885,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								388,
-								388
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/CSS/CSS.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 45.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 18,
+					"buffer": 25,
 					"file": "styles/rss.css",
 					"settings":
 					{
@@ -2385,6 +2971,153 @@
 						"zoom_level": 1.0
 					},
 					"type": "text"
+				},
+				{
+					"buffer": 26,
+					"file": "scripts/sources.js",
+					"settings":
+					{
+						"buffer_size": 2271,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2183,
+								2185
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1174.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 27,
+					"file": ".gitignore",
+					"settings":
+					{
+						"buffer_size": 31,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								31,
+								31
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
 				}
 			]
 		}
@@ -2447,16 +3180,96 @@
 				"scripts/bg.js"
 			],
 			[
-				"items",
-				"scripts/items.js"
+				"bg",
+				"scripts/bg.js"
 			],
 			[
 				"items.js",
 				"scripts/items.js"
 			],
 			[
+				"source",
+				"scripts/sources.js"
+			],
+			[
+				"todo",
+				"todo.txt"
+			],
+			[
+				"sources",
+				"scripts/sources.js"
+			],
+			[
 				"item.js",
 				"scripts/item.js"
+			],
+			[
+				".cs",
+				"/D/Work/smartrsspage/styles/detector_popup.css"
+			],
+			[
+				"globa",
+				"styles/global.css"
+			],
+			[
+				"item.css",
+				"styles/item.css"
+			],
+			[
+				"item.html",
+				"rss_item.html"
+			],
+			[
+				"rss_dete",
+				"/D/Work/smartrsspage/includes/rss_detector.js"
+			],
+			[
+				"popu",
+				"/D/Work/smartrsspage/scripts/detector_popup.js"
+			],
+			[
+				".css",
+				"/D/Work/smartrsspage/styles/detector_popup.css"
+			],
+			[
+				"maif",
+				"/D/Work/smartrsspage/manifest.json"
+			],
+			[
+				"poup.js",
+				"/D/Work/smartrsspage/scripts/detector_popup.js"
+			],
+			[
+				"manife",
+				"/D/Work/smartrsspage/manifest.json"
+			],
+			[
+				"popup",
+				"/D/Work/smartrsspage/scripts/detector_popup.js"
+			],
+			[
+				"sources.js",
+				"scripts/sources.js"
+			],
+			[
+				"pop",
+				"/D/Work/smartrsspage/popup.html"
+			],
+			[
+				"popp",
+				"/D/Work/smartrsspage/scripts/detector_popup.js"
+			],
+			[
+				"dete",
+				"/D/Work/smartrsspage/scripts/detector_popup.js"
+			],
+			[
+				"rss_de",
+				"/D/Work/smartrsspage/includes/rss_detector.js"
+			],
+			[
+				"items",
+				"scripts/items.js"
 			],
 			[
 				"index.html",
@@ -2475,19 +3288,7 @@
 				"rss_items.html"
 			],
 			[
-				"item.html",
-				"rss_item.html"
-			],
-			[
-				"source",
-				"scripts/sources.js"
-			],
-			[
 				"source.js",
-				"scripts/sources.js"
-			],
-			[
-				"sources.js",
 				"scripts/sources.js"
 			],
 			[
@@ -2495,20 +3296,8 @@
 				"rss_sources.html"
 			],
 			[
-				"sources",
-				"scripts/sources.js"
-			],
-			[
 				"items.css",
 				"styles/items.css"
-			],
-			[
-				".css",
-				"styles/item.css"
-			],
-			[
-				"item.css",
-				"styles/item.css"
 			],
 			[
 				"sources.ht",
@@ -2521,10 +3310,6 @@
 			[
 				"mani",
 				"manifest.json"
-			],
-			[
-				"globa",
-				"styles/global.css"
 			],
 			[
 				"glob",
@@ -2549,10 +3334,6 @@
 			[
 				"sour",
 				"scripts/sources.js"
-			],
-			[
-				"manife",
-				"manifest.json"
 			],
 			[
 				"globa.",
@@ -2905,54 +3686,6 @@
 			[
 				"pridat.php",
 				"app/sections/pridat.php"
-			],
-			[
-				"poslat",
-				"app/templates/poslat.html"
-			],
-			[
-				"poslat.html",
-				"app/templates/poslat.html"
-			],
-			[
-				"new_post",
-				"app/templates/new_posta.html"
-			],
-			[
-				"/smaz",
-				"app/sections/smaz.php"
-			],
-			[
-				"ne_klub.html",
-				"app/templates/new_klub.html"
-			],
-			[
-				"user.php",
-				"app/models/User.php"
-			],
-			[
-				"newklub",
-				"app/templates/new_klub.html"
-			],
-			[
-				"uschov",
-				"app/templates/uschovna.html"
-			],
-			[
-				"new_klub.html",
-				"app/templates/new_klub.html"
-			],
-			[
-				"css",
-				"styles/main.css"
-			],
-			[
-				"usch",
-				"app/sections/uschovna.php"
-			],
-			[
-				"ush",
-				"app/sections/uschovna.php"
 			]
 		],
 		"width": 0.0

@@ -4,14 +4,8 @@ window.onerror = function(a) {
 	window.errors.push(a.toString());
 }
 
-/**
- * onclick:button -> open RSS
- */
-chrome.browserAction.onClicked.addListener(function(tab) {
-	chrome.tabs.create({'url': chrome.extension.getURL('rss.html')}, function(tab) {
-		// ...
-	});
-});
+var sourceIdIndex = localStorage.getItem('sourceIdIndex') || 1;
+
 
 /**
  * Items
@@ -33,7 +27,7 @@ var sources = new (Backbone.Collection.extend({
 		return a.get('tile') < b.get('title') ? 1 : -1;
 	},
 	initialize: function() {
-		this.fetch();
+		this.fetch({ silent: true });
 	}
 }));
 
@@ -57,7 +51,8 @@ var items = new (Backbone.Collection.extend({
 		return a.get('date') < b.get('date') ? 1 : -1;
 	},
 	initialize: function() {
-		this.fetch();
+		var that = this;
+		this.fetch({ silent: true });
 	}
 }));
 
@@ -75,9 +70,9 @@ $(function() {
 	]);*/
 
 	sources.on('add', function(source) {
-		var data = { tmpStorage: [] };
-		downloadURL([source], data, function() {
-			items.add(data.tmpStorage);
+		//var data = { tmpStorage: [] };
+		downloadURL([source], function() {
+			// download completed
 		});
 	});
 
@@ -87,21 +82,45 @@ $(function() {
 		});
 	});
 
+	items.on('change:unread', function(model) {
+		var source = sources.findWhere({ id: model.get('sourceID') });
+		if (model.get('unread') == true) {
+			source.save({ 'count': source.get('count') + 1 });
+		} else {
+			source.save({ 'count': source.get('count') - 1 });
+		}
+	});
+
+	sources.on('change:count', function(source) {
+		source;
+	});
+
+
+	// I should make sure all items are fetched before downloadAll is called .. ideas?
 	setTimeout(downloadAll, 5000);
+
+	/**
+	 * onclick:button -> open RSS
+	 */
+	chrome.browserAction.onClicked.addListener(function(tab) {
+		chrome.tabs.create({'url': chrome.extension.getURL('rss.html')}, function(tab) {
+			// ...
+		});
+	});
 
 });
 
 function downloadAll() {
 	var urls = sources.clone();
 
-	var data = { tmpStorage: [] };
+	//var data = { tmpStorage: [] };
 
-	downloadURL(urls, data, function() {
-		items.set(data.tmpStorage, { remove: false });
+	downloadURL(urls, function() {
+		//items.set(data.tmpStorage, { remove: false });
 	});
 }
 
-function downloadURL(urls, data, cb) {
+function downloadURL(urls, cb) {
 	if (!urls.length) {
 		cb();
 		return;
@@ -110,16 +129,21 @@ function downloadURL(urls, data, cb) {
 	$.ajax({
 		url: url.get('url'),
 		success: function(r) {
-			//data.tmpStorage = data.tmpStorage.concat( parseRSS(r, url.get('id')) );
-			//items.create( parseRSS(r, url.get('id')) );
+			
 			parseRSS(r, url.get('id')).forEach(function(item) {
 				items.create(item);
 			});
-			downloadURL(urls, data, cb);
+
+			// too many wheres and stuff .. optimize?
+			var count = items.where({ sourceID: url.get('id'), unread: true  }).length;
+			sources.findWhere({ id: url.get('id') }).save({ 'count': count });
+
+
+			downloadURL(urls, cb);
 		},
 		error: function(e) {
 			console.log('Failed load RSS: url');
-			downloadURL(urls, data, cb);
+			downloadURL(urls, cb);
 		}
 	});
 }
@@ -137,7 +161,6 @@ function parseRSS(xml, sourceID) {
 		source.set('title', title.textContent);
 		source.save();
 	}
-	source.set('count', nodes.length);
 
 	[].forEach.call(nodes, function(node) {
 		items.push({
@@ -151,7 +174,7 @@ function parseRSS(xml, sourceID) {
 		});
 
 		var last = items[items.length-1];
-		last.id = CryptoJS.MD5(last.title + last.date + last.content).toString();
+		last.id = CryptoJS.MD5(last.sourceID + last.title + last.date + last.content).toString();
 	});
 
 	return items;
@@ -267,9 +290,12 @@ chrome.runtime.onMessageExternal.addListener(function(message, sender, sendRespo
 
 	if (message.action == 'new-rss' && message.value) {
 		sources.create({
+			id: sourceIdIndex++,
 			title: message.value,
 			url: message.value
-		}).fetch();
+		});
+
+		localStorage.setItem('sourceIdIndex', sourceIdIndex);
 
 		chrome.tabs.create({'url': chrome.extension.getURL('rss.html')}, function(tab) {});
 	}
