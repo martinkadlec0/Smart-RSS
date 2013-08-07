@@ -17,6 +17,7 @@ var Source = Backbone.Model.extend({
 		title: '<no title>',
 		url: 'rss.rss',
 		updateEvery: 0,
+		lastUpdate: 0,
 		count: 0
 	}
 });
@@ -79,7 +80,37 @@ $(function() {
 		{ title: 'Buni', url: 'http://www.bunicomic.com/feed/', count: 8, id: 2 },
 	]);*/
 
-	sources.on('add change:url', function(source) {
+	sources.on('add', function(source) {
+		if (source.get('updateEvery') > 0) {
+			chrome.alarms.create('source-' + source.get('id'), {
+				delayInMinutes: source.get('updateEvery'),
+				periodInMinutes: source.get('updateEvery')
+			});
+		}
+		downloadOne(source);
+	});
+
+	sources.on('change:updateEvery', function(source) {
+		if (source.get('updateEvery') > 0) {
+			chrome.alarms.create('source-' + source.get('id'), {
+				delayInMinutes: source.get('updateEvery'),
+				periodInMinutes: source.get('updateEvery')
+			});
+		} else {
+			chrome.alarms.clear('source-' + source.get('id'));
+		}
+	});
+
+	chrome.alarms.onAlarm.addListener(function(alarm) {
+		var sourceID = parseInt(alarm.name.replace('source-', ''));
+		if (sourceID) {
+			var source = sources.findWhere({ id: sourceID });
+			downloadOne(source);
+		}
+		
+	});
+
+	sources.on('change:url', function(source) {
 		downloadOne(source);
 	});
 
@@ -141,6 +172,12 @@ function downloadOne(source) {
 function downloadAll() {
 	var urls = sources.clone();
 
+	urls.forEach(function(url) {
+		if (!url.get('lastUpdate') || url.get('lastUpdate') > Date.now() - url.get('updateEVery') * 60 * 1000) {
+			urls.remove(url);
+		}
+	});
+
 	if (urls.length) {
 		loader.set('maxSources', urls.length);
 		loader.set('loaded', 0);
@@ -175,7 +212,10 @@ function downloadURL(urls, cb) {
 
 			// too many wheres and stuff .. optimize?
 			var count = items.where({ sourceID: url.get('id'), unread: true, deleted: false  }).length;
-			sources.findWhere({ id: url.get('id') }).save({ 'count': count });
+			sources.findWhere({ id: url.get('id') }).save({
+				'count': count,
+				'lastUpdate': Date.now()
+			});
 
 
 			downloadURL(urls, cb);

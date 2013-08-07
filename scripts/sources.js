@@ -235,7 +235,7 @@ $(function() {
 			this.currentSource.save({
 				title: $('#prop-title').val(),
 				url: $('#prop-url').val(),
-				updateEvery: $('#prop-update-every').val()
+				updateEvery: parseFloat($('#prop-update-every').val())
 			});
 
 			this.hide();
