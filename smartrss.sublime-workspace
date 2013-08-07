@@ -4,6 +4,22 @@
 		"selected_items":
 		[
 			[
+				"sourc",
+				"sourcesContextMenu"
+			],
+			[
+				"sour",
+				"sourcesContextMenu"
+			],
+			[
+				"destr",
+				"destroyItem"
+			],
+			[
+				"curren",
+				"currentSource"
+			],
+			[
 				"error",
 				"errors"
 			],
@@ -199,7 +215,7 @@
 			"file": "rss.html",
 			"settings":
 			{
-				"buffer_size": 395,
+				"buffer_size": 455,
 				"line_ending": "Windows"
 			}
 		},
@@ -207,7 +223,7 @@
 			"file": "scripts/rss.js",
 			"settings":
 			{
-				"buffer_size": 136,
+				"buffer_size": 138,
 				"line_ending": "Windows"
 			}
 		},
@@ -215,7 +231,7 @@
 			"file": "rss_items.html",
 			"settings":
 			{
-				"buffer_size": 977,
+				"buffer_size": 985,
 				"line_ending": "Windows"
 			}
 		},
@@ -239,7 +255,7 @@
 			"file": "styles/item.css",
 			"settings":
 			{
-				"buffer_size": 1053,
+				"buffer_size": 1163,
 				"line_ending": "Windows"
 			}
 		},
@@ -263,7 +279,7 @@
 			"file": "scripts/bg.js",
 			"settings":
 			{
-				"buffer_size": 7192,
+				"buffer_size": 8113,
 				"line_ending": "Windows"
 			}
 		},
@@ -271,7 +287,7 @@
 			"file": "todo.txt",
 			"settings":
 			{
-				"buffer_size": 472,
+				"buffer_size": 813,
 				"line_ending": "Windows",
 				"name": "# TODO"
 			}
@@ -353,8 +369,18 @@
 			"file": "scripts/items.js",
 			"settings":
 			{
-				"buffer_size": 5481,
+				"buffer_size": 7871,
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "Searching 41 files for \"+ 1\"\n\nD:\\Work\\smartrss\\libs\\jquery.min.js:\n 1915  					operator === \"$=\" ? check && result.slice( -check.length ) === check :\n 1916  					operator === \"~=\" ? ( \" \" + result + \" \" ).indexOf( check ) > -1 :\n 1917: 					operator === \"|=\" ? result === check || result.slice( 0, check.length + 1 ) === check + \"-\" :\n 1918  					false;\n 1919  			};\n ....\n 4035  					one = elem.type === \"select-one\" || index < 0,\n 4036  					values = one ? null : [],\n 4037: 					max = one ? index + 1 : options.length,\n 4038  					i = index < 0 ?\n 4039  						max :\n ....\n 6269  			// convert relative number strings (+= or -=) to relative numbers. #7345\n 6270  			if ( type === \"string\" && (ret = rrelNum.exec( value )) ) {\n 6271: 				value = ( ret[1] + 1 ) * ret[2] + parseFloat( jQuery.css( elem, name ) );\n 6272  				// Fixes bug #9237\n 6273  				type = \"number\";\n ....\n 7901  				// If a +=/-= token was provided, we're doing a relative animation\n 7902  				tween.end = parts[ 1 ] ?\n 7903: 					start + ( parts[ 1 ] + 1 ) * parts[ 2 ] :\n 7904  					+parts[ 2 ];\n 7905  			}\n\nD:\\Work\\smartrss\\scripts\\bg.js:\n   98  		var source = sources.findWhere({ id: model.get('sourceID') });\n   99  		if (model.get('unread') == true) {\n  100: 			source.save({ 'count': source.get('count') + 1 });\n  101  		} else {\n  102  			source.save({ 'count': source.get('count') - 1 });\n  ...\n  154  		success: function(r) {\n  155  \n  156: 			loader.set('loaded', loader.get('loaded') + 1);\n  157  			\n  158  			parseRSS(r, url.get('id')).forEach(function(item) {\n  ...\n  168  		},\n  169  		error: function(e) {\n  170: 			loader.set('loaded', loader.get('loaded') + 1);\n  171  \n  172  			console.log('Failed load RSS: url');\n\n7 matches across 2 files\n",
+			"settings":
+			{
+				"buffer_size": 1735,
+				"line_ending": "Windows",
+				"name": "Find Results",
+				"scratch": true
 			}
 		},
 		{
@@ -369,25 +395,15 @@
 			"file": "scripts/item.js",
 			"settings":
 			{
-				"buffer_size": 1489,
+				"buffer_size": 1863,
 				"line_ending": "Windows"
-			}
-		},
-		{
-			"contents": "Searching 24 files for \"alert\" (case sensitive)\n\nD:\\Work\\smartrss\\scripts\\bg.js:\n   35  \n   36  \n   37: 	alert('LEN: ' + bg.items.length);\n   38  \n   39  	$.ajax({\n\nD:\\Work\\smartrss\\scripts\\item.js:\n    5  \n    6  window.addEventListener('message', function(e) {\n    7: 	alert('NOWWW');\n    8  });\n\nD:\\Work\\smartrss\\scripts\\items.js:\n    9  $(function() {\n   10  \n   11: 	alert(bg.items);\n   12  \n   13  	var ItemView = Backbone.View.extend({\n   ..\n   51  				$.ajax({ url: url, responseType: 'xml' })\n   52  				 .success(function(e) {\n   53: 				 	alert('success');\n   54  				 })\n   55  				 .error(function() {\n   56: 				 	alert('error');\n   57  				 });\n   58  			}\n   59  		},\n   60  		refreshItems: function() {\n   61: 			alert('Refreshing!');\n   62  		}\n   63  	}));\n\nD:\\Work\\smartrss\\scripts\\sources.js:\n   42  				$.ajax({ url: url, responseType: 'xml' })\n   43  				 .success(function(e) {\n   44: 				 	alert('success');\n   45  				 })\n   46  				 .error(function() {\n   47: 				 	alert('error');\n   48  				 });\n   49  			}\n   50  		},\n   51  		refreshSources: function() {\n   52: 			alert('Refreshing!');\n   53  		}\n   54  	}));\n\n9 matches across 4 files\n",
-			"settings":
-			{
-				"buffer_size": 1169,
-				"line_ending": "Windows",
-				"name": "Find Results",
-				"scratch": true
 			}
 		},
 		{
 			"file": "rss_sources.html",
 			"settings":
 			{
-				"buffer_size": 903,
+				"buffer_size": 1294,
 				"line_ending": "Windows"
 			}
 		},
@@ -395,7 +411,7 @@
 			"file": "styles/global.css",
 			"settings":
 			{
-				"buffer_size": 1534,
+				"buffer_size": 2543,
 				"line_ending": "Windows"
 			}
 		},
@@ -411,7 +427,7 @@
 			"file": "scripts/sources.js",
 			"settings":
 			{
-				"buffer_size": 2271,
+				"buffer_size": 8359,
 				"line_ending": "Windows"
 			}
 		},
@@ -420,6 +436,14 @@
 			"settings":
 			{
 				"buffer_size": 31,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "styles/sources.css",
+			"settings":
+			{
+				"buffer_size": 1634,
 				"line_ending": "Windows"
 			}
 		}
@@ -727,7 +751,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 90.0,
 		"where_history":
 		[
 			"D:\\Work\\smartrss",
@@ -739,6 +763,32 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"keyCode",
+			"title",
+			"handleSe",
+			"handleDestroyedSource",
+			"select(",
+			"'count'",
+			"+ 1",
+			"save",
+			"'count'",
+			"count:",
+			"'count'",
+			"'count':",
+			"+ 1",
+			"show function(x, ",
+			"sourcesContextMenu",
+			"action",
+			"removeSource",
+			"currentSou",
+			"downloadOne",
+			"destroyItem",
+			"new-selec",
+			"loader",
+			"appendBefore",
+			"source",
+			"append",
+			"downloadAll",
 			"downloadURL",
 			"downloadAll",
 			"fetch",
@@ -840,33 +890,7 @@
 			":489",
 			"Settings.php",
 			":436",
-			"LapiModule",
-			"Sett",
-			"User.php",
-			"SETTING",
-			"SETTINGS",
-			"filled",
-			"lapi_user",
-			"$_SESS",
-			"$_SESSION",
-			"$user",
-			"user",
-			"filled_list",
-			"user",
-			"filled_list",
-			"user",
-			"sett",
-			"$user",
-			"filled_list",
-			"$user",
-			"filled_list",
-			"User",
-			"LapiUser",
-			"validationError",
-			"inDatabase",
-			"save",
-			"$_POST",
-			"$_GET"
+			"LapiModule"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1012,7 +1036,7 @@
 	"groups":
 	[
 		{
-			"selected": 8,
+			"selected": 26,
 			"sheets":
 			[
 				{
@@ -1020,15 +1044,15 @@
 					"file": "rss.html",
 					"settings":
 					{
-						"buffer_size": 395,
+						"buffer_size": 455,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								395,
-								395
+								213,
+								213
 							]
 						],
 						"settings":
@@ -1094,15 +1118,15 @@
 					"file": "scripts/rss.js",
 					"settings":
 					{
-						"buffer_size": 136,
+						"buffer_size": 138,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								136,
-								136
+								138,
+								138
 							]
 						],
 						"settings":
@@ -1167,15 +1191,15 @@
 					"file": "rss_items.html",
 					"settings":
 					{
-						"buffer_size": 977,
+						"buffer_size": 985,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								977,
-								977
+								985,
+								985
 							]
 						],
 						"settings":
@@ -1248,8 +1272,8 @@
 						"selection":
 						[
 							[
-								379,
-								379
+								410,
+								411
 							]
 						],
 						"settings":
@@ -1389,15 +1413,15 @@
 					"file": "styles/item.css",
 					"settings":
 					{
-						"buffer_size": 1053,
+						"buffer_size": 1163,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								975,
-								975
+								1035,
+								1035
 							]
 						],
 						"settings":
@@ -1610,15 +1634,15 @@
 					"file": "scripts/bg.js",
 					"settings":
 					{
-						"buffer_size": 7192,
+						"buffer_size": 8113,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1997,
-								1997
+								3579,
+								3579
 							]
 						],
 						"settings":
@@ -1673,7 +1697,7 @@
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1125.0,
+						"translation.y": 2374.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1683,15 +1707,15 @@
 					"file": "todo.txt",
 					"settings":
 					{
-						"buffer_size": 472,
+						"buffer_size": 813,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								109,
-								109
+								813,
+								813
 							]
 						],
 						"settings":
@@ -1742,6 +1766,8 @@
 								"bh_single_quote_close"
 							],
 							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
@@ -2108,7 +2134,8 @@
 							"incomplete_sync": null,
 							"remote_loading": false,
 							"synced": false,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -2181,7 +2208,8 @@
 							"incomplete_sync": null,
 							"remote_loading": false,
 							"synced": false,
-							"syntax": "Packages/CSS/CSS.tmLanguage"
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -2254,7 +2282,8 @@
 							"incomplete_sync": null,
 							"remote_loading": false,
 							"synced": false,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -2325,6 +2354,8 @@
 								"bh_single_quote_close"
 							],
 							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
@@ -2412,15 +2443,15 @@
 					"file": "scripts/items.js",
 					"settings":
 					{
-						"buffer_size": 5481,
+						"buffer_size": 7871,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1908,
-								1908
+								5654,
+								5654
 							]
 						],
 						"settings":
@@ -2476,13 +2507,125 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 739.0,
+						"translation.y": 2809.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 20,
+					"settings":
+					{
+						"buffer_size": 1735,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										311,
+										314
+									],
+									[
+										500,
+										503
+									],
+									[
+										756,
+										759
+									],
+									[
+										1024,
+										1027
+									],
+									[
+										1284,
+										1287
+									],
+									[
+										1469,
+										1472
+									],
+									[
+										1648,
+										1651
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"detect_indentation": false,
+							"incomplete_sync": null,
+							"output_tag": 1,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 21,
 					"file": "/C/Users/Martin/Desktop/The Switcher/scripts/main.js",
 					"settings":
 					{
@@ -2556,19 +2699,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 21,
+					"buffer": 22,
 					"file": "scripts/item.js",
 					"settings":
 					{
-						"buffer_size": 1489,
+						"buffer_size": 1863,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								621,
-								621
+								741,
+								741
 							]
 						],
 						"settings":
@@ -2624,129 +2767,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 450.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 22,
-					"settings":
-					{
-						"buffer_size": 1169,
-						"regions":
-						{
-							"match":
-							{
-								"flags": 112,
-								"regions":
-								[
-									[
-										105,
-										110
-									],
-									[
-										271,
-										276
-									],
-									[
-										372,
-										377
-									],
-									[
-										550,
-										555
-									],
-									[
-										628,
-										633
-									],
-									[
-										730,
-										735
-									],
-									[
-										915,
-										920
-									],
-									[
-										993,
-										998
-									],
-									[
-										1097,
-										1102
-									]
-								],
-								"scope": ""
-							}
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"detect_indentation": false,
-							"incomplete_sync": null,
-							"output_tag": 1,
-							"remote_loading": false,
-							"result_base_dir": "",
-							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
-							"result_line_regex": "^ +([0-9]+):",
-							"scroll_past_end": true,
-							"synced": false,
-							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 135.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2756,15 +2777,15 @@
 					"file": "rss_sources.html",
 					"settings":
 					{
-						"buffer_size": 903,
+						"buffer_size": 1294,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								625,
-								625
+								851,
+								851
 							]
 						],
 						"settings":
@@ -2830,15 +2851,15 @@
 					"file": "styles/global.css",
 					"settings":
 					{
-						"buffer_size": 1534,
+						"buffer_size": 2543,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1532,
-								1465
+								219,
+								164
 							]
 						],
 						"settings":
@@ -2894,7 +2915,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1110.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2977,15 +2998,15 @@
 					"file": "scripts/sources.js",
 					"settings":
 					{
-						"buffer_size": 2271,
+						"buffer_size": 8359,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2183,
-								2185
+								4787,
+								4787
 							]
 						],
 						"settings":
@@ -3041,7 +3062,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1174.0,
+						"translation.y": 2517.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -3118,6 +3139,80 @@
 						"zoom_level": 1.0
 					},
 					"type": "text"
+				},
+				{
+					"buffer": 28,
+					"file": "styles/sources.css",
+					"settings":
+					{
+						"buffer_size": 1634,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								254,
+								254
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
 				}
 			]
 		}
@@ -3176,18 +3271,6 @@
 		"selected_items":
 		[
 			[
-				"bg.js",
-				"scripts/bg.js"
-			],
-			[
-				"bg",
-				"scripts/bg.js"
-			],
-			[
-				"items.js",
-				"scripts/items.js"
-			],
-			[
 				"source",
 				"scripts/sources.js"
 			],
@@ -3196,28 +3279,120 @@
 				"todo.txt"
 			],
 			[
+				"items.css",
+				"styles/items.css"
+			],
+			[
+				"sourc",
+				"scripts/sources.js"
+			],
+			[
+				"items.js",
+				"scripts/items.js"
+			],
+			[
+				"items",
+				"scripts/items.js"
+			],
+			[
+				"too",
+				"todo.txt"
+			],
+			[
 				"sources",
 				"scripts/sources.js"
 			],
 			[
-				"item.js",
-				"scripts/item.js"
+				"items.html",
+				"rss_items.html"
 			],
 			[
-				".cs",
-				"/D/Work/smartrsspage/styles/detector_popup.css"
+				"source.html",
+				"rss_sources.html"
 			],
 			[
-				"globa",
+				"bg.js",
+				"scripts/bg.js"
+			],
+			[
+				"sources.js",
+				"scripts/sources.js"
+			],
+			[
+				"source.css",
+				"styles/sources.css"
+			],
+			[
+				"global.css",
 				"styles/global.css"
+			],
+			[
+				"sources.css",
+				"styles/sources.css"
+			],
+			[
+				"sources.html",
+				"rss_sources.html"
+			],
+			[
+				"rss.html",
+				"rss.html"
 			],
 			[
 				"item.css",
 				"styles/item.css"
 			],
 			[
+				"sour",
+				"scripts/sources.js"
+			],
+			[
 				"item.html",
 				"rss_item.html"
+			],
+			[
+				"item.js",
+				"scripts/item.js"
+			],
+			[
+				"globa",
+				"styles/global.css"
+			],
+			[
+				"global",
+				"scripts/global.js"
+			],
+			[
+				"source.js",
+				"scripts/sources.js"
+			],
+			[
+				"rss.js",
+				"scripts/rss.js"
+			],
+			[
+				"rsshtml",
+				"rss.html"
+			],
+			[
+				"todo.txt",
+				"todo.txt"
+			],
+			[
+				"itemsjs",
+				"scripts/items.js"
+			],
+			[
+				".css",
+				"styles/sources.css"
+			],
+			[
+				"bg",
+				"scripts/bg.js"
+			],
+			[
+				".cs",
+				"/D/Work/smartrsspage/styles/detector_popup.css"
 			],
 			[
 				"rss_dete",
@@ -3226,10 +3401,6 @@
 			[
 				"popu",
 				"/D/Work/smartrsspage/scripts/detector_popup.js"
-			],
-			[
-				".css",
-				"/D/Work/smartrsspage/styles/detector_popup.css"
 			],
 			[
 				"maif",
@@ -3248,10 +3419,6 @@
 				"/D/Work/smartrsspage/scripts/detector_popup.js"
 			],
 			[
-				"sources.js",
-				"scripts/sources.js"
-			],
-			[
 				"pop",
 				"/D/Work/smartrsspage/popup.html"
 			],
@@ -3268,10 +3435,6 @@
 				"/D/Work/smartrsspage/includes/rss_detector.js"
 			],
 			[
-				"items",
-				"scripts/items.js"
-			],
-			[
 				"index.html",
 				"index.html"
 			],
@@ -3280,32 +3443,8 @@
 				"scripts/sources.js"
 			],
 			[
-				"source.html",
-				"rss_sources.html"
-			],
-			[
-				"items.html",
-				"rss_items.html"
-			],
-			[
-				"source.js",
-				"scripts/sources.js"
-			],
-			[
-				"sources.html",
-				"rss_sources.html"
-			],
-			[
-				"items.css",
-				"styles/items.css"
-			],
-			[
 				"sources.ht",
 				"rss_sources.html"
-			],
-			[
-				"global.css",
-				"styles/global.css"
 			],
 			[
 				"mani",
@@ -3316,23 +3455,11 @@
 				"styles/global.css"
 			],
 			[
-				"rss.html",
-				"rss.html"
-			],
-			[
-				"sourc",
-				"scripts/sources.js"
-			],
-			[
 				"items.",
 				"scripts/items.js"
 			],
 			[
 				"sor",
-				"scripts/sources.js"
-			],
-			[
-				"sour",
 				"scripts/sources.js"
 			],
 			[
@@ -3354,10 +3481,6 @@
 			[
 				"global.js",
 				"scripts/global.js"
-			],
-			[
-				"rss.js",
-				"scripts/rss.js"
 			],
 			[
 				"items.s",
@@ -3658,34 +3781,6 @@
 			[
 				"nove.h",
 				"app/templates/nove.html"
-			],
-			[
-				"kluby.ht",
-				"app/templates/kluby.html"
-			],
-			[
-				"kategore",
-				"app/templates/kategorie.html"
-			],
-			[
-				"post.php",
-				"app/models/Post.php"
-			],
-			[
-				"use",
-				"app/models/User.php"
-			],
-			[
-				"uschovna.",
-				"app/templates/uschovna.html"
-			],
-			[
-				"pridat",
-				"app/templates/pridat.html"
-			],
-			[
-				"pridat.php",
-				"app/sections/pridat.php"
 			]
 		],
 		"width": 0.0

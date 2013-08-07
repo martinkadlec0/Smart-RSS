@@ -332,8 +332,8 @@ $(function() {
 			// should ount and show failed
 			var l = bg.loader;
 			var perc = Math.round(l.get('loaded') * 100 / l.get('maxSources'));
-			$('#indicator').css('background', 'linear-gradient(to right,  #d1d1d1 ' + perc + '%, #eee ' + perc + '%)');
-			$('#indicator').html(l.get('loaded') + '/' + l.get('maxSources'));
+			$('#indicator').css('background', 'linear-gradient(to right,  #c5c5c5 ' + perc + '%, #eee ' + perc + '%)');
+			$('#indicator').html('Updating feeds (' + l.get('loaded') + '/' + l.get('maxSources') + ')');
 		}
 	}));
 });

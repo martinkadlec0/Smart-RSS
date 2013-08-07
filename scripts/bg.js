@@ -114,7 +114,7 @@ $(function() {
 
 
 	// I should make sure all items are fetched before downloadAll is called .. ideas?
-	//setTimeout(downloadAll, 5000);
+	setTimeout(downloadAll, 5000);
 
 	/**
 	 * onclick:button -> open RSS
@@ -163,8 +163,13 @@ function downloadURL(urls, cb) {
 
 			loader.set('loaded', loader.get('loaded') + 1);
 			
-			parseRSS(r, url.get('id')).forEach(function(item) {
-				items.create(item);
+			// parsedData step needed for debugging
+			var parsedData = parseRSS(r, url.get('id'));
+			console.log('get pass here: ' + Date.now());
+			parsedData.forEach(function(item) {
+				if (!items.get(item.id)) {
+					items.create(item);	
+				}
 			});
 
 			// too many wheres and stuff .. optimize?

@@ -69,6 +69,7 @@ body {
 	line-height: 25px;
 	white-space: nowrap;
 	overflow: hidden;
+	font-family: sans-serif;
 	text-overflow: ellipsis;
 	width: 100%;
 	text-align: center;
