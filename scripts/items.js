@@ -7,6 +7,11 @@ Array.prototype.last = function() {
 	return this[this.length - 1];
 }
 
+Array.prototype.first = function() {
+	if (!this.length) return null;
+	return this[0];
+}
+
 chrome.runtime.getBackgroundPage(function(bg) {
 
 $(function() {
@@ -235,6 +240,7 @@ $(function() {
 			} else if (e.keyCode == 75) {
 				toolbar.handleButtonRead();
 			} else if (e.keyCode == 40) {
+				/*
 				//if (e.shiftKey != true) {
 					var last = list.selectedItems.last();
 					list.selectedItems = [];
@@ -255,10 +261,18 @@ $(function() {
 					list.selectedItems.push(next);
 					next.$el.addClass('selected');
 					next.$el.addClass('last-selected');
-					next.$el.get(0).scrollIntoView(false);
-					e.preventDefault();
+					
 				}
+				*/
+				var next = $('.last-selected').nextAll('.item:not(.invisible):first');
+				if (!next.length) next = $('.item:not(.invisible):first');
+				if (next.length) {
+					next.get(0).view.select(e);
+					next.get(0).scrollIntoView(false);
+					e.preventDefault();
+				} 
 			} else if (e.keyCode == 38) {
+				/*
 				//if (e.shiftKey != true) {
 					var last = list.selectedItems.last();
 					list.selectedItems = [];
@@ -281,6 +295,13 @@ $(function() {
 					next.$el.addClass('selected');
 					next.$el.addClass('last-selected');
 					next.$el.get(0).scrollIntoView(false);
+					e.preventDefault();
+				}*/
+				var prev = $('.last-selected').prevAll('.item:not(.invisible):first');
+				if (!prev.length) prev = $('.item:not(.invisible):last');
+				if (prev.length) {
+					prev.get(0).view.select(e);
+					prev.get(0).scrollIntoView(false);
 					e.preventDefault();
 				}
 			}
