@@ -81,7 +81,8 @@ $(function() {
 				bg.sources.create({
 					id: bg.sourceIdIndex++,
 					title: url,
-					url: url
+					url: url,
+					updateEvery: 180
 				}).fetch();
 
 				localStorage.setItem('sourceIdIndex', bg.sourceIdIndex);
@@ -234,6 +235,7 @@ $(function() {
 			this.currentSource.save({
 				title: $('#prop-title').val(),
 				url: $('#prop-url').val(),
+				updateEvery: $('#prop-update-every').val()
 			});
 
 			this.hide();
@@ -247,6 +249,10 @@ $(function() {
 		show: function(source) {
 			$('#prop-title').val(source.get('title'));;
 			$('#prop-url').val(source.get('url'));
+			if (source.get('updateEvery')) {
+				$('#prop-update-every').val(source.get('updateEvery'));	
+			}
+			
 			properties.$el.css('display', 'block');
 		},
 		hide: function() {

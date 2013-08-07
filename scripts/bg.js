@@ -16,6 +16,7 @@ var Source = Backbone.Model.extend({
 		id: null,
 		title: '<no title>',
 		url: 'rss.rss',
+		updateEvery: 0,
 		count: 0
 	}
 });
@@ -165,7 +166,7 @@ function downloadURL(urls, cb) {
 			
 			// parsedData step needed for debugging
 			var parsedData = parseRSS(r, url.get('id'));
-			console.log('get pass here: ' + Date.now());
+
 			parsedData.forEach(function(item) {
 				if (!items.get(item.id)) {
 					items.create(item);	
@@ -194,6 +195,8 @@ function downloadURL(urls, cb) {
  */
 function parseRSS(xml, sourceID) {
 	var items = [];
+
+	
 	var nodes = xml.querySelectorAll('item');
 	var title = xml.querySelector('channel > title');
 	var source = sources.findWhere({ id: sourceID });
@@ -216,6 +219,7 @@ function parseRSS(xml, sourceID) {
 		var last = items[items.length-1];
 		last.id = CryptoJS.MD5(last.sourceID + last.title + last.date + last.content).toString();
 	});
+
 
 	return items;
 }
@@ -332,7 +336,8 @@ chrome.runtime.onMessageExternal.addListener(function(message, sender, sendRespo
 		sources.create({
 			id: sourceIdIndex++,
 			title: message.value,
-			url: message.value
+			url: message.value,
+			updateEvery: 180
 		});
 
 		localStorage.setItem('sourceIdIndex', sourceIdIndex);

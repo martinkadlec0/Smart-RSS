@@ -18,7 +18,19 @@
 	<div id="properties">
 		<label>Name: <input type="text" id="prop-title" placeholder="If empty, it will be fetched." /></label>
 		<label>Address: <input type="url" id="prop-url" /></label>
-		<label>Update: <select id="prop-reload"><option>Never</option></select></label>
+		<label>Update: <select id="prop-update-every">
+			<option value="0">Never</option>
+			<option value="5">Every 5 minutes</option>
+			<option value="15">Every 15 minutes</option>
+			<option value="30">Every 30 minutes</option>
+			<option value="60">Every hour</option>
+			<option value="120">Every 2 hours</option>
+			<option value="180">Every 3 hours</option>
+			<option value="300">Every 5 hours</option>
+			<option value="600">Every 10 hours</option>
+			<option value="1440">Every 24 hours</option>
+			<option value="1080">Every week</option>
+		</select></label>
 		<button id="prop-ok">Ok</button><button id="prop-cancel">Cancel</button>
 	</div>
 	<div id="list">
