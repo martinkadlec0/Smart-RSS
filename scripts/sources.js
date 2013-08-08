@@ -58,7 +58,8 @@ $(function() {
 		showSourceItems: function(e) {
 			this.select(e);
 			if (e.ctrlKey != true && e.shiftKey != true) {
-				bg.sources.trigger('new-selected', this.model);
+				//bg.sources.trigger('new-selected', this.model);
+				window.top.frames[1].postMessage({ action: 'new-select', value: this.model.id }, '*');
 			} 
 		},
 		handleModelDestroy: function(e) {

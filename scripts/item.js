@@ -62,7 +62,13 @@ $(function() {
 			'load iframe': 'handleIframeLoad'
 		},
 		initialize: function() {
-			bg.items.on('new-selected', this.handleNewSelected, this);
+			var that = this;
+			//bg.items.on('new-selected', this.handleNewSelected, this);
+			window.addEventListener('message', function(e) {
+				if (e.data.action == 'new-select') {
+					that.handleNewSelected(bg.items.findWhere({ id: e.data.value }));
+				}
+			});
 			this.getSome();
 		},
 		handleIframeLoad: function() {

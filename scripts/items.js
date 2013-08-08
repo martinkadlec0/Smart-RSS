@@ -37,7 +37,10 @@ $(function() {
 			if (e.shiftKey != true && e.ctrlKey != true) {
 				list.selectedItems = [];
 				$('.selected').removeClass('selected');
-				if (!e.preventLoading) bg.items.trigger('new-selected', this.model);
+				if (!e.preventLoading) {
+					//bg.items.trigger('new-selected', this.model);
+					window.top.frames[2].postMessage({ action: 'new-select', value: this.model.id }, '*');
+				}
 			} else if (e.shiftKey && list.selectedItems.length) {
 				$('.selected').removeClass('selected');
 				list.selectedItems = [list.selectedItems[0]];
@@ -135,9 +138,14 @@ $(function() {
 			
 		},
 		initialize: function() {
+			var that = this;
 			bg.items.on('reset', this.addItems, this);
 			bg.items.on('add', this.addItem, this);
-			bg.sources.on('new-selected', this.handleNewSelected, this)	;
+			window.addEventListener('message', function(e) {
+				if (e.data.action == 'new-select') {
+					that.handleNewSelected(bg.sources.findWhere({ id: e.data.value }));
+				}
+			});
 			this.addItems(bg.items);
 		},
 		addItem: function(item, noManualSort) {
