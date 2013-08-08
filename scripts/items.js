@@ -255,32 +255,68 @@ $(function() {
 			var e = e || {};
 			var q = e.selectUnread ? '.unread:not(.invisible):first' : '.item:not(.invisible):first';
 			var next = $('.last-selected').nextAll(q);
-			if (!next.length) next = $('.item:not(.invisible):first');
+			if (!next.length) next = $(q);
 			if (next.length) {
 				next.get(0).view.select(e);
 				next.get(0).scrollIntoView(false);
 			} 
 		},
+		selectPrev: function(e) {
+			var e = e || {};
+			var q = e.selectUnread ? '.unread:not(.invisible)' : '.item:not(.invisible)';
+			var prev = $('.last-selected').prevAll(q + ':first');
+			if (!prev.length) prev = $(q + ':last');
+			if (prev.length) {
+				prev.get(0).view.select(e);
+				prev.get(0).scrollIntoView(false);
+			}
+		},
 		handleKeyDown: function(e) {
 			if (e.keyCode == 68) {
 				list.selectedItems.forEach(list.removeItem, list);
-			} else if (e.keyCode == 75) {
+			} else if (e.keyCode == 75) { // mark as read/unread
 				toolbar.handleButtonRead();
-			} else if (e.keyCode == 40) {
+			} else if (e.keyCode == 40) { // arrow down
 				this.selectNext(e);
-			} else if (e.keyCode == 71) {
+			} else if (e.keyCode == 38) { // arrow up
+				this.selectPrev(e);
+			} else if (e.keyCode == 71) { // G - mark as read and go to next unread
 				list.changeUnreadState({ onlyToRead: true });
 				this.selectNext({ selectUnread: true });
-			} else if (e.keyCode == 38) {
-				var prev = $('.last-selected').prevAll('.item:not(.invisible):first');
-				if (!prev.length) prev = $('.item:not(.invisible):last');
-				if (prev.length) {
-					prev.get(0).view.select(e);
-					prev.get(0).scrollIntoView(false);
+			}  else if (e.keyCode == 84) { // T - mark as read and go to prev unread
+				list.changeUnreadState({ onlyToRead: true });
+				this.selectPrev({ selectUnread: true });
+			} else if (e.keyCode == 72) { // H = go to next unread
+				this.selectNext({ selectUnread: true });
+			} else if (e.keyCode == 89) { // Y = go to prev unread
+				this.selectPrev({ selectUnread: true });
+			} else if (e.keyCode == 65 && e.ctrlKey && e.shiftKey) { // A = Mark all as read
+				if (list.currentSource) {
+					var id = list.currentSource.get('id');
+					if (!id) return;
+					bg.items.where({ sourceID: id }).forEach(function(item) {
+						item.set('unread', false);
+					});
+				} else if (confirm('Do you really want to mark ALL items as read?')) {
+					bg.items.forEach(function(item) {
+						item.set('unread', false);
+					});
 				}
-			}
+			} else if (e.keyCode == 65 && e.ctrlKey) { // A = Select all
+				$('.selected').removeClass('selected');
+				var visible = $('.item:not(.invisible)');
+				var views = visible.map(function(i, item) {
+					item.view.$el.addClass('selected');
+					return item.view;
+				}).toArray();
 
-			if (e.keyCode > 30 && e.keyCode < 120 && e.keyCode != 73) {
+
+				list.selectedItems = views;
+				$('.last-selected').removeClass('last-selected');
+				$('.item:not(.invisible):last').addClass('last-selected');
+			} 
+
+			if (e.keyCode > 30 && e.keyCode < 100 && e.keyCode != 73) {
 				e.preventDefault();
 			}
 		} 
