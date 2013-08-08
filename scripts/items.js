@@ -92,10 +92,7 @@ $(function() {
 			
 		},
 		handleButtonRead: function() {
-			var val = list.selectedItems.length ? !list.selectedItems[0].model.get('unread') : false;
-			list.selectedItems.forEach(function(item) {
-				item.model.save({ unread: val });
-			}, this);
+			list.changeUnreadState();
 		},
 		refreshItems: function() {
 			if (list.currentSource) {
@@ -232,6 +229,18 @@ $(function() {
 		selectFirst: function() {
 			var first = $('.item:not(.invisible)').get(0);
 			if (first) first.view.select();
+		},
+		changeUnreadState: function(opt) {
+			var opt = opt || {};
+			var val = list.selectedItems.length ? !list.selectedItems[0].model.get('unread') : false;
+			list.selectedItems.forEach(function(item) {
+				if (opt.onlyToRead && item.model.get('unread') == false) {
+					// do nothing
+				} else {
+					item.model.save({ unread: val });	
+				}
+				
+			}, this);
 		}
 	}));
 
@@ -242,28 +251,37 @@ $(function() {
 		},
 		initialize: function() {
 		},
+		selectNext: function(e) {
+			var e = e || {};
+			var q = e.selectUnread ? '.unread:not(.invisible):first' : '.item:not(.invisible):first';
+			var next = $('.last-selected').nextAll(q);
+			if (!next.length) next = $('.item:not(.invisible):first');
+			if (next.length) {
+				next.get(0).view.select(e);
+				next.get(0).scrollIntoView(false);
+			} 
+		},
 		handleKeyDown: function(e) {
 			if (e.keyCode == 68) {
 				list.selectedItems.forEach(list.removeItem, list);
 			} else if (e.keyCode == 75) {
 				toolbar.handleButtonRead();
 			} else if (e.keyCode == 40) {
-				var next = $('.last-selected').nextAll('.item:not(.invisible):first');
-				if (!next.length) next = $('.item:not(.invisible):first');
-				if (next.length) {
-					next.get(0).view.select(e);
-					next.get(0).scrollIntoView(false);
-					e.preventDefault();
-				} 
+				this.selectNext(e);
+			} else if (e.keyCode == 71) {
+				list.changeUnreadState({ onlyToRead: true });
+				this.selectNext({ selectUnread: true });
 			} else if (e.keyCode == 38) {
-
 				var prev = $('.last-selected').prevAll('.item:not(.invisible):first');
 				if (!prev.length) prev = $('.item:not(.invisible):last');
 				if (prev.length) {
 					prev.get(0).view.select(e);
 					prev.get(0).scrollIntoView(false);
-					e.preventDefault();
 				}
+			}
+
+			if (e.keyCode > 30 && e.keyCode < 120 && e.keyCode != 73) {
+				e.preventDefault();
 			}
 		} 
 	}));

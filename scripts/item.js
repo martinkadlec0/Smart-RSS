@@ -77,7 +77,6 @@ $(function() {
 		getSome: function() {
 			var first = bg.items.findWhere({ deleted: false });
 			if (first) {
-				this.$el.css('display', 'flex');
 				this.model = first;
 				this.model.on('destroy', this.getSome, this);
 				this.render();
@@ -90,7 +89,9 @@ $(function() {
 			data.date = bg.formatDate.call(new Date(data.date), 'DD.MM.YYYY hh:mm:ss');
 			data.content64 = utf8_to_b64(data.content);*/
 
-			var date = bg.formatDate.call(new Date(this.model.escape('date')), 'DD.MM.YYYY hh:mm:ss');
+			this.$el.css('display', 'flex');
+
+			var date = bg.formatDate.call(new Date(this.model.get('date')), 'DD.MM.YYYY hh:mm:ss');
 
 			var content = utf8_to_b64(this.contentTemplate({ 
 				content: this.model.get('content'),
@@ -99,7 +100,7 @@ $(function() {
 
 			this.$el.find('h1:first').html(this.model.escape('title'));
 			this.$el.find('.author').html(this.model.escape('author'));
-			this.$el.find('.date').html(this.model.escape('author'));
+			this.$el.find('.date').html(date);
 			this.$el.find('iframe').attr('src', 'data:text/html;base64,' + content);
 			//this.$el.find('footer a').attr('href', this.model.escape('url'));
 

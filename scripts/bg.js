@@ -284,6 +284,7 @@ function rssGetAuthor(node, title) {
 		if (/^\S+@\S+\.\S+\s+\(.+\)$/.test(creator)) {
 			creator = creator.replace(/^\S+@\S+\.\S+\s+\((.+)\)$/, '$1');
 		}
+		creator = creator.replace(/\s*\(\)\s*$/, '');
 		return creator;
 	}
 
