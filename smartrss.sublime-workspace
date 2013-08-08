@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"update",
+				"updateEvery"
+			],
+			[
 				"sourc",
 				"sourcesContextMenu"
 			],
@@ -263,7 +267,7 @@
 			"file": "manifest.json",
 			"settings":
 			{
-				"buffer_size": 686,
+				"buffer_size": 696,
 				"line_ending": "Unix"
 			}
 		},
@@ -279,7 +283,7 @@
 			"file": "scripts/bg.js",
 			"settings":
 			{
-				"buffer_size": 8113,
+				"buffer_size": 9301,
 				"line_ending": "Windows"
 			}
 		},
@@ -287,7 +291,7 @@
 			"file": "todo.txt",
 			"settings":
 			{
-				"buffer_size": 813,
+				"buffer_size": 945,
 				"line_ending": "Windows",
 				"name": "# TODO"
 			}
@@ -369,7 +373,7 @@
 			"file": "scripts/items.js",
 			"settings":
 			{
-				"buffer_size": 7871,
+				"buffer_size": 8450,
 				"line_ending": "Windows"
 			}
 		},
@@ -403,7 +407,7 @@
 			"file": "rss_sources.html",
 			"settings":
 			{
-				"buffer_size": 1294,
+				"buffer_size": 1827,
 				"line_ending": "Windows"
 			}
 		},
@@ -419,7 +423,7 @@
 			"file": "styles/rss.css",
 			"settings":
 			{
-				"buffer_size": 40,
+				"buffer_size": 44,
 				"line_ending": "Windows"
 			}
 		},
@@ -427,7 +431,7 @@
 			"file": "scripts/sources.js",
 			"settings":
 			{
-				"buffer_size": 8359,
+				"buffer_size": 8574,
 				"line_ending": "Windows"
 			}
 		},
@@ -443,7 +447,7 @@
 			"file": "styles/sources.css",
 			"settings":
 			{
-				"buffer_size": 1634,
+				"buffer_size": 1660,
 				"line_ending": "Windows"
 			}
 		}
@@ -751,7 +755,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 90.0,
+		"height": 0.0,
 		"where_history":
 		[
 			"D:\\Work\\smartrss",
@@ -763,6 +767,11 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"downloadONe",
+			"sources.add",
+			"parseRSS",
+			"$('#prop-update-every').val(source.get('update-every'));",
+			"updateEvery",
 			"keyCode",
 			"title",
 			"handleSe",
@@ -885,12 +894,7 @@
 			"echo",
 			"something",
 			"LapiUser",
-			"LapiUs",
-			"LapiUser",
-			":489",
-			"Settings.php",
-			":436",
-			"LapiModule"
+			"LapiUs"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1036,7 +1040,7 @@
 	"groups":
 	[
 		{
-			"selected": 26,
+			"selected": 19,
 			"sheets":
 			[
 				{
@@ -1487,15 +1491,15 @@
 					"file": "manifest.json",
 					"settings":
 					{
-						"buffer_size": 686,
+						"buffer_size": 696,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								686,
-								686
+								696,
+								696
 							]
 						],
 						"settings":
@@ -1634,15 +1638,15 @@
 					"file": "scripts/bg.js",
 					"settings":
 					{
-						"buffer_size": 8113,
+						"buffer_size": 9301,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3579,
-								3579
+								9144,
+								9144
 							]
 						],
 						"settings":
@@ -1694,10 +1698,11 @@
 							"incomplete_sync": null,
 							"remote_loading": false,
 							"synced": false,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2374.0,
+						"translation.y": 5239.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1707,15 +1712,15 @@
 					"file": "todo.txt",
 					"settings":
 					{
-						"buffer_size": 813,
+						"buffer_size": 945,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								813,
-								813
+								536,
+								536
 							]
 						],
 						"settings":
@@ -2081,8 +2086,8 @@
 						"selection":
 						[
 							[
-								643,
-								643
+								671,
+								671
 							]
 						],
 						"settings":
@@ -2443,15 +2448,15 @@
 					"file": "scripts/items.js",
 					"settings":
 					{
-						"buffer_size": 7871,
+						"buffer_size": 8450,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5654,
-								5654
+								8122,
+								8122
 							]
 						],
 						"settings":
@@ -2507,7 +2512,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2809.0,
+						"translation.y": 4013.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2612,10 +2617,12 @@
 							"detect_indentation": false,
 							"incomplete_sync": null,
 							"output_tag": 1,
+							"remote_loading": false,
 							"result_base_dir": "",
 							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
 							"result_line_regex": "^ +([0-9]+):",
 							"scroll_past_end": true,
+							"synced": false,
 							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
 						},
 						"translation.x": 0.0,
@@ -2777,15 +2784,15 @@
 					"file": "rss_sources.html",
 					"settings":
 					{
-						"buffer_size": 1294,
+						"buffer_size": 1827,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								851,
-								851
+								1550,
+								1550
 							]
 						],
 						"settings":
@@ -2841,7 +2848,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 90.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2925,15 +2932,15 @@
 					"file": "styles/rss.css",
 					"settings":
 					{
-						"buffer_size": 40,
+						"buffer_size": 44,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								40,
-								40
+								44,
+								44
 							]
 						],
 						"settings":
@@ -2998,15 +3005,15 @@
 					"file": "scripts/sources.js",
 					"settings":
 					{
-						"buffer_size": 8359,
+						"buffer_size": 8574,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4787,
-								4787
+								5780,
+								5780
 							]
 						],
 						"settings":
@@ -3062,7 +3069,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2517.0,
+						"translation.y": 2337.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -3145,15 +3152,15 @@
 					"file": "styles/sources.css",
 					"settings":
 					{
-						"buffer_size": 1634,
+						"buffer_size": 1660,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								254,
-								254
+								1022,
+								1022
 							]
 						],
 						"settings":
@@ -3209,7 +3216,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 679.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -3271,12 +3278,60 @@
 		"selected_items":
 		[
 			[
+				"items.js",
+				"scripts/items.js"
+			],
+			[
+				"bg.js",
+				"scripts/bg.js"
+			],
+			[
 				"source",
 				"scripts/sources.js"
 			],
 			[
+				"g.js",
+				"scripts/global.js"
+			],
+			[
 				"todo",
 				"todo.txt"
+			],
+			[
+				"sources.js",
+				"scripts/sources.js"
+			],
+			[
+				"sources.html",
+				"rss_sources.html"
+			],
+			[
+				"sources",
+				"scripts/sources.js"
+			],
+			[
+				"manife",
+				"manifest.json"
+			],
+			[
+				"source.html",
+				"rss_sources.html"
+			],
+			[
+				"todo.txt",
+				"todo.txt"
+			],
+			[
+				"source.css",
+				"styles/sources.css"
+			],
+			[
+				"source.js",
+				"scripts/sources.js"
+			],
+			[
+				"rss.css",
+				"styles/rss.css"
 			],
 			[
 				"items.css",
@@ -3287,10 +3342,6 @@
 				"scripts/sources.js"
 			],
 			[
-				"items.js",
-				"scripts/items.js"
-			],
-			[
 				"items",
 				"scripts/items.js"
 			],
@@ -3299,28 +3350,8 @@
 				"todo.txt"
 			],
 			[
-				"sources",
-				"scripts/sources.js"
-			],
-			[
 				"items.html",
 				"rss_items.html"
-			],
-			[
-				"source.html",
-				"rss_sources.html"
-			],
-			[
-				"bg.js",
-				"scripts/bg.js"
-			],
-			[
-				"sources.js",
-				"scripts/sources.js"
-			],
-			[
-				"source.css",
-				"styles/sources.css"
 			],
 			[
 				"global.css",
@@ -3329,10 +3360,6 @@
 			[
 				"sources.css",
 				"styles/sources.css"
-			],
-			[
-				"sources.html",
-				"rss_sources.html"
 			],
 			[
 				"rss.html",
@@ -3363,20 +3390,12 @@
 				"scripts/global.js"
 			],
 			[
-				"source.js",
-				"scripts/sources.js"
-			],
-			[
 				"rss.js",
 				"scripts/rss.js"
 			],
 			[
 				"rsshtml",
 				"rss.html"
-			],
-			[
-				"todo.txt",
-				"todo.txt"
 			],
 			[
 				"itemsjs",
@@ -3409,10 +3428,6 @@
 			[
 				"poup.js",
 				"/D/Work/smartrsspage/scripts/detector_popup.js"
-			],
-			[
-				"manife",
-				"/D/Work/smartrsspage/manifest.json"
 			],
 			[
 				"popup",
@@ -3497,10 +3512,6 @@
 			[
 				"man",
 				"manifest.json"
-			],
-			[
-				"rss.css",
-				"styles/rss.css"
 			],
 			[
 				"lapimode",
@@ -3777,10 +3788,6 @@
 			[
 				"settin",
 				"app/models/Settings.php"
-			],
-			[
-				"nove.h",
-				"app/templates/nove.html"
 			]
 		],
 		"width": 0.0

@@ -207,7 +207,7 @@ $(function() {
 			view.$el.removeData().unbind(); 
 			view.off();
 			view.remove();
-			debugger;
+			
 			var io = list.selectedItems.indexOf(this);
 			if (io >= 0) list.selectedItems.splice(io, 1);
 			io = list.views.indexOf(this);
@@ -240,30 +240,6 @@ $(function() {
 			} else if (e.keyCode == 75) {
 				toolbar.handleButtonRead();
 			} else if (e.keyCode == 40) {
-				/*
-				//if (e.shiftKey != true) {
-					var last = list.selectedItems.last();
-					list.selectedItems = [];
-					$('.selected').removeClass('selected');
-					//bg.items.trigger('new-selected', this.model);
-				//} 
-
-				$('.last-selected').removeClass('last-selected');
-				var next;
-				var i = 1;
-				do {
-					next = list.views[list.views.indexOf(last) + i];
-					i++;
-				} while (next && next.$el.hasClass('invisible'));
-
-				if (next) {
-					bg.items.trigger('new-selected', next.model);
-					list.selectedItems.push(next);
-					next.$el.addClass('selected');
-					next.$el.addClass('last-selected');
-					
-				}
-				*/
 				var next = $('.last-selected').nextAll('.item:not(.invisible):first');
 				if (!next.length) next = $('.item:not(.invisible):first');
 				if (next.length) {
@@ -272,31 +248,7 @@ $(function() {
 					e.preventDefault();
 				} 
 			} else if (e.keyCode == 38) {
-				/*
-				//if (e.shiftKey != true) {
-					var last = list.selectedItems.last();
-					list.selectedItems = [];
-					$('.selected').removeClass('selected');
-					//bg.items.trigger('new-selected', this.model);
-				//} 
 
-				$('.last-selected').removeClass('last-selected');
-				var next;
-				var i = 1;
-				do {
-					next = list.views[(list.views.indexOf(last) || list.views.length) - i];
-					i++;
-				} while (next && next.$el.hasClass('invisible'));
-
-
-				if (next) {
-					bg.items.trigger('new-selected', next.model);
-					list.selectedItems.push(next);
-					next.$el.addClass('selected');
-					next.$el.addClass('last-selected');
-					next.$el.get(0).scrollIntoView(false);
-					e.preventDefault();
-				}*/
 				var prev = $('.last-selected').prevAll('.item:not(.invisible):first');
 				if (!prev.length) prev = $('.item:not(.invisible):last');
 				if (prev.length) {
