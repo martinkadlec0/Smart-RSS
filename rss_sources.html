@@ -42,9 +42,9 @@
 	</div>
 	<script id="template-source" type="template">
 		<img src="opera://favicon/<%= url %>" class="source-icon" />
-		<div class="source-title"><%= title %></div>
+		<div class="source-title"><%- title %></div>
 		<% if (count > 0) { %>
-			<div class="source-counter"><%= count %></div>
+			<div class="source-counter"><%- count %></div>
 		<% } %>
 	</script>
 </body>
