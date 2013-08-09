@@ -40,22 +40,40 @@ $(function() {
 			itemView.getSome();
 		},
 		handleButtonConfig: function() {
-			$('body').append(overlay.render().$el);
-			setTimeout(function() {
-				overlay.$el.remove();
-			}, 2000);
-
+			overlay.show();
 		}
 	}));
 
 
 
 	var overlay = new (Backbone.View.extend({
-		tagName: 'div',
-		className: 'overlay',
+		el: '.overlay',
+		events: {
+			'change #config-layout': 'handleLayoutChange'
+		},
+		initialize: function() {
+			window.addEventListener('blur', this.hide.bind(this));
+			window.addEventListener('resize', this.hide.bind(this));
+		},
 		render: function() {
-			this.$el.html('No options yet :(');
+			var layout = parseInt(localStorage.getItem('vertical-layout'));
+			this.$el.find('#config-layout').val(layout);
 			return this;
+		},
+		handleLayoutChange: function(e) {
+			var layout = parseInt($(e.currentTarget).val());
+			localStorage.setItem('vertical-layout', layout.toString());
+			window.top.postMessage({ action: 'layout-changed', value: layout }, '*');
+			this.hide();
+		},
+		hide: function() {
+			this.$el.css('display', 'none');
+		},
+		show: function() {
+			this.render().$el.css('display', 'block');
+		},
+		isVisible: function() {
+			return this.$el.css('display') == 'block';
 		}
 	}));
 
@@ -63,7 +81,13 @@ $(function() {
 		el: 'body',
 		contentTemplate: _.template($('#template-content').html()),
 		events: {
-			'load iframe': 'handleIframeLoad'
+			'load iframe': 'handleIframeLoad',
+			'mousedown': 'handleMouseDown'
+		},
+		handleMouseDown: function(e) {
+			if (overlay.isVisible() && !e.target.matchesSelector('.overlay, .overlay *')) {
+				overlay.hide();
+			}
 		},
 		initialize: function() {
 			var that = this;
