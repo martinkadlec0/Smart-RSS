@@ -1,8 +1,10 @@
 var chrome = window.top.chrome;
 
 function utf8_to_b64( str ) {
+	//return Base64.encode(str);
+	//return str;
 	//return encodeURIComponent( str );
-    return btoa(unescape(encodeURIComponent( str )));
+	return btoa(unescape(encodeURIComponent( str )));
 }
 
 chrome.runtime.getBackgroundPage(function(bg) {
@@ -71,7 +73,7 @@ $(function() {
 					that.handleNewSelected(bg.items.findWhere({ id: e.data.value }));
 				}
 			});
-			this.getSome();
+			//this.getSome();
 		},
 		handleIframeLoad: function() {
 			alert('loaded');
@@ -103,7 +105,7 @@ $(function() {
 			this.$el.find('h1:first').html(this.model.escape('title'));
 			this.$el.find('.author').html(this.model.escape('author'));
 			this.$el.find('.date').html(date);
-			this.$el.find('iframe').attr('src', 'data:text/html;base64,' + content);
+			this.$el.find('iframe').attr('src', 'data:text/html;charset=utf-8;base64,' + content);
 			//this.$el.find('footer a').attr('href', this.model.escape('url'));
 
 			/*setTimeout(function() {

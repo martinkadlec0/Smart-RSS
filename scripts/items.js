@@ -274,24 +274,36 @@ $(function() {
 			}
 		},
 		handleKeyDown: function(e) {
+			if (document.activeElement && document.activeElement.tagName == 'INPUT') {
+				return;
+			}
+
 			if (e.keyCode == 68) {
 				list.selectedItems.forEach(list.removeItem, list);
+				e.preventDefault();
 			} else if (e.keyCode == 75) { // mark as read/unread
 				toolbar.handleButtonRead();
+				e.preventDefault();
 			} else if (e.keyCode == 40) { // arrow down
 				this.selectNext(e);
+				e.preventDefault();
 			} else if (e.keyCode == 38) { // arrow up
 				this.selectPrev(e);
+				e.preventDefault();
 			} else if (e.keyCode == 71) { // G - mark as read and go to next unread
 				list.changeUnreadState({ onlyToRead: true });
 				this.selectNext({ selectUnread: true });
+				e.preventDefault();
 			}  else if (e.keyCode == 84) { // T - mark as read and go to prev unread
 				list.changeUnreadState({ onlyToRead: true });
 				this.selectPrev({ selectUnread: true });
+				e.preventDefault();
 			} else if (e.keyCode == 72) { // H = go to next unread
 				this.selectNext({ selectUnread: true });
+				e.preventDefault();
 			} else if (e.keyCode == 89) { // Y = go to prev unread
 				this.selectPrev({ selectUnread: true });
+				e.preventDefault();
 			} else if (e.keyCode == 65 && e.ctrlKey && e.shiftKey) { // A = Mark all as read
 				if (list.currentSource) {
 					var id = list.currentSource.get('id');
@@ -304,6 +316,7 @@ $(function() {
 						item.set('unread', false);
 					});
 				}
+				e.preventDefault();
 			} else if (e.keyCode == 65 && e.ctrlKey) { // A = Select all
 				$('.selected').removeClass('selected');
 				list.selectedItems = [];
@@ -314,11 +327,10 @@ $(function() {
 
 				$('.last-selected').removeClass('last-selected');
 				$('.item:not(.invisible):last').addClass('last-selected');
+				e.preventDefault();
 			} 
 
-			if (e.keyCode > 30 && e.keyCode < 100 && e.keyCode != 73) {
-				e.preventDefault();
-			}
+			
 		} 
 	}));
 });
