@@ -1,3 +1,5 @@
+var chrome = window.top.chrome;
+
 document.addEventListener('contextmenu', function(e) {
 	e.preventDefault();
 });	

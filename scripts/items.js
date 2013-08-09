@@ -1,3 +1,5 @@
+var chrome = window.top.chrome;
+
 RegExp.escape = function(str) {
 	return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
 };
@@ -304,14 +306,12 @@ $(function() {
 				}
 			} else if (e.keyCode == 65 && e.ctrlKey) { // A = Select all
 				$('.selected').removeClass('selected');
-				var visible = $('.item:not(.invisible)');
-				var views = visible.map(function(i, item) {
+				list.selectedItems = [];
+				$('.item:not(.invisible)').each(function(i, item) {
 					item.view.$el.addClass('selected');
-					return item.view;
-				}).toArray();
+					list.selectedItems.push(item.view);
+				});
 
-
-				list.selectedItems = views;
 				$('.last-selected').removeClass('last-selected');
 				$('.item:not(.invisible):last').addClass('last-selected');
 			} 

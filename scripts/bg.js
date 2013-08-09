@@ -120,10 +120,11 @@ $(function() {
 		}
 	});*/
 
-	sources.on('destroy', function(a, b, c) {
-		items.where({ sourceID: a.get('id') }).forEach(function(item) {
+	sources.on('destroy', function(source) {
+		items.where({ sourceID: source.get('id') }).forEach(function(item) {
 			item.destroy();
 		});
+		chrome.alarms.clear('source-' + source.get('id'));
 	});
 
 	items.on('change:unread', function(model) {

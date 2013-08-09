@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"conte",
+				"content"
+			],
+			[
 				"update",
 				"updateEvery"
 			],
@@ -251,7 +255,7 @@
 			"file": "rss_item.html",
 			"settings":
 			{
-				"buffer_size": 1167,
+				"buffer_size": 1962,
 				"line_ending": "Windows"
 			}
 		},
@@ -259,7 +263,7 @@
 			"file": "styles/item.css",
 			"settings":
 			{
-				"buffer_size": 1163,
+				"buffer_size": 809,
 				"line_ending": "Windows"
 			}
 		},
@@ -283,7 +287,7 @@
 			"file": "scripts/bg.js",
 			"settings":
 			{
-				"buffer_size": 9301,
+				"buffer_size": 9406,
 				"line_ending": "Windows"
 			}
 		},
@@ -291,7 +295,7 @@
 			"file": "todo.txt",
 			"settings":
 			{
-				"buffer_size": 945,
+				"buffer_size": 1149,
 				"line_ending": "Windows",
 				"name": "# TODO"
 			}
@@ -373,18 +377,8 @@
 			"file": "scripts/items.js",
 			"settings":
 			{
-				"buffer_size": 8450,
+				"buffer_size": 9257,
 				"line_ending": "Windows"
-			}
-		},
-		{
-			"contents": "Searching 41 files for \"+ 1\"\n\nD:\\Work\\smartrss\\libs\\jquery.min.js:\n 1915  					operator === \"$=\" ? check && result.slice( -check.length ) === check :\n 1916  					operator === \"~=\" ? ( \" \" + result + \" \" ).indexOf( check ) > -1 :\n 1917: 					operator === \"|=\" ? result === check || result.slice( 0, check.length + 1 ) === check + \"-\" :\n 1918  					false;\n 1919  			};\n ....\n 4035  					one = elem.type === \"select-one\" || index < 0,\n 4036  					values = one ? null : [],\n 4037: 					max = one ? index + 1 : options.length,\n 4038  					i = index < 0 ?\n 4039  						max :\n ....\n 6269  			// convert relative number strings (+= or -=) to relative numbers. #7345\n 6270  			if ( type === \"string\" && (ret = rrelNum.exec( value )) ) {\n 6271: 				value = ( ret[1] + 1 ) * ret[2] + parseFloat( jQuery.css( elem, name ) );\n 6272  				// Fixes bug #9237\n 6273  				type = \"number\";\n ....\n 7901  				// If a +=/-= token was provided, we're doing a relative animation\n 7902  				tween.end = parts[ 1 ] ?\n 7903: 					start + ( parts[ 1 ] + 1 ) * parts[ 2 ] :\n 7904  					+parts[ 2 ];\n 7905  			}\n\nD:\\Work\\smartrss\\scripts\\bg.js:\n   98  		var source = sources.findWhere({ id: model.get('sourceID') });\n   99  		if (model.get('unread') == true) {\n  100: 			source.save({ 'count': source.get('count') + 1 });\n  101  		} else {\n  102  			source.save({ 'count': source.get('count') - 1 });\n  ...\n  154  		success: function(r) {\n  155  \n  156: 			loader.set('loaded', loader.get('loaded') + 1);\n  157  			\n  158  			parseRSS(r, url.get('id')).forEach(function(item) {\n  ...\n  168  		},\n  169  		error: function(e) {\n  170: 			loader.set('loaded', loader.get('loaded') + 1);\n  171  \n  172  			console.log('Failed load RSS: url');\n\n7 matches across 2 files\n",
-			"settings":
-			{
-				"buffer_size": 1735,
-				"line_ending": "Windows",
-				"name": "Find Results",
-				"scratch": true
 			}
 		},
 		{
@@ -399,7 +393,7 @@
 			"file": "scripts/item.js",
 			"settings":
 			{
-				"buffer_size": 1863,
+				"buffer_size": 3041,
 				"line_ending": "Windows"
 			}
 		},
@@ -431,7 +425,7 @@
 			"file": "scripts/sources.js",
 			"settings":
 			{
-				"buffer_size": 8574,
+				"buffer_size": 8667,
 				"line_ending": "Windows"
 			}
 		},
@@ -620,6 +614,7 @@
 	},
 	"file_history":
 	[
+		"/D/Work/smartrss/styles/content.css",
 		"/D/Work/smartrss/includes/rss_detector.js",
 		"/D/Work/smartrsspage/manifest.json",
 		"/D/Work/smartrss/styles/sources.css",
@@ -746,8 +741,7 @@
 		"/D/Work/backbone-lists/app.js",
 		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371564176/operacesky-net/html/silex-lapi/app/Lapi/Modules/User.php",
 		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371564164/operacesky-net/html/silex-lapi/app/Lapi/Controllers/DefaultController.php",
-		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371314009/operacesky-net/html/silex-lapi/web/index.php",
-		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371311843/operacesky-net/html/silex-lapi/.htaccess"
+		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371314009/operacesky-net/html/silex-lapi/web/index.php"
 	],
 	"find":
 	{
@@ -755,7 +749,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 90.0,
 		"where_history":
 		[
 			"D:\\Work\\smartrss",
@@ -767,6 +761,23 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"selectedItems =",
+			"currentSource",
+			"getAutho",
+			"alert('now')",
+			"trigger",
+			"handleNewSelected",
+			"trigge",
+			"handleNewSelected",
+			"new-selec",
+			"showSourceItems",
+			"handleMouseDown",
+			"utf",
+			"debugger",
+			"render",
+			"btoa",
+			"atob",
+			"render",
 			"downloadONe",
 			"sources.add",
 			"parseRSS",
@@ -877,24 +888,7 @@
 			"SETTINGS",
 			"SETTING",
 			"echo",
-			"var_du",
-			"tag",
-			"-a",
-			"is_mine",
-			"$app->user",
-			"$app->user->nick",
-			"is_new",
-			"branch",
-			"./static",
-			".gif",
-			"png",
-			"var_du",
-			"echo",
-			":",
-			"echo",
-			"something",
-			"LapiUser",
-			"LapiUs"
+			"var_du"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1040,7 +1034,7 @@
 	"groups":
 	[
 		{
-			"selected": 19,
+			"selected": 21,
 			"sheets":
 			[
 				{
@@ -1276,8 +1270,8 @@
 						"selection":
 						[
 							[
-								410,
-								411
+								409,
+								409
 							]
 						],
 						"settings":
@@ -1333,7 +1327,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 270.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1343,15 +1337,15 @@
 					"file": "rss_item.html",
 					"settings":
 					{
-						"buffer_size": 1167,
+						"buffer_size": 1962,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1159,
-								1159
+								1104,
+								1104
 							]
 						],
 						"settings":
@@ -1407,7 +1401,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 120.0,
+						"translation.y": 75.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1417,15 +1411,15 @@
 					"file": "styles/item.css",
 					"settings":
 					{
-						"buffer_size": 1163,
+						"buffer_size": 809,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1035,
-								1035
+								809,
+								809
 							]
 						],
 						"settings":
@@ -1481,7 +1475,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 660.0,
+						"translation.y": 652.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1638,15 +1632,15 @@
 					"file": "scripts/bg.js",
 					"settings":
 					{
-						"buffer_size": 9301,
+						"buffer_size": 9406,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9144,
-								9144
+								2960,
+								2960
 							]
 						],
 						"settings":
@@ -1702,7 +1696,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5239.0,
+						"translation.y": 1609.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1712,15 +1706,15 @@
 					"file": "todo.txt",
 					"settings":
 					{
-						"buffer_size": 945,
+						"buffer_size": 1149,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								536,
-								536
+								799,
+								799
 							]
 						],
 						"settings":
@@ -2448,15 +2442,15 @@
 					"file": "scripts/items.js",
 					"settings":
 					{
-						"buffer_size": 8450,
+						"buffer_size": 9257,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								8122,
-								8122
+								8844,
+								8844
 							]
 						],
 						"settings":
@@ -2512,127 +2506,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4013.0,
+						"translation.y": 4249.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 20,
-					"settings":
-					{
-						"buffer_size": 1735,
-						"regions":
-						{
-							"match":
-							{
-								"flags": 112,
-								"regions":
-								[
-									[
-										311,
-										314
-									],
-									[
-										500,
-										503
-									],
-									[
-										756,
-										759
-									],
-									[
-										1024,
-										1027
-									],
-									[
-										1284,
-										1287
-									],
-									[
-										1469,
-										1472
-									],
-									[
-										1648,
-										1651
-									]
-								],
-								"scope": ""
-							}
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"detect_indentation": false,
-							"incomplete_sync": null,
-							"output_tag": 1,
-							"remote_loading": false,
-							"result_base_dir": "",
-							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
-							"result_line_regex": "^ +([0-9]+):",
-							"scroll_past_end": true,
-							"synced": false,
-							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 21,
 					"file": "/C/Users/Martin/Desktop/The Switcher/scripts/main.js",
 					"settings":
 					{
@@ -2706,19 +2586,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 22,
+					"buffer": 21,
 					"file": "scripts/item.js",
 					"settings":
 					{
-						"buffer_size": 1863,
+						"buffer_size": 3041,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								741,
-								741
+								1802,
+								1802
 							]
 						],
 						"settings":
@@ -2774,13 +2654,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 135.0,
+						"translation.y": 900.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 23,
+					"buffer": 22,
 					"file": "rss_sources.html",
 					"settings":
 					{
@@ -2791,8 +2671,8 @@
 						"selection":
 						[
 							[
-								1550,
-								1550
+								1600,
+								1600
 							]
 						],
 						"settings":
@@ -2848,13 +2728,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 90.0,
+						"translation.y": 240.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 24,
+					"buffer": 23,
 					"file": "styles/global.css",
 					"settings":
 					{
@@ -2928,7 +2808,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 25,
+					"buffer": 24,
 					"file": "styles/rss.css",
 					"settings":
 					{
@@ -3001,19 +2881,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 26,
+					"buffer": 25,
 					"file": "scripts/sources.js",
 					"settings":
 					{
-						"buffer_size": 8574,
+						"buffer_size": 8667,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5780,
-								5780
+								4709,
+								4555
 							]
 						],
 						"settings":
@@ -3069,13 +2949,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2337.0,
+						"translation.y": 2419.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 26,
 					"file": ".gitignore",
 					"settings":
 					{
@@ -3148,7 +3028,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 28,
+					"buffer": 27,
 					"file": "styles/sources.css",
 					"settings":
 					{
@@ -3278,12 +3158,56 @@
 		"selected_items":
 		[
 			[
-				"items.js",
-				"scripts/items.js"
+				"item.js",
+				"scripts/item.js"
 			],
 			[
 				"bg.js",
 				"scripts/bg.js"
+			],
+			[
+				"sources.js",
+				"scripts/sources.js"
+			],
+			[
+				"items.js",
+				"scripts/items.js"
+			],
+			[
+				"items.html",
+				"rss_items.html"
+			],
+			[
+				"todo",
+				"todo.txt"
+			],
+			[
+				"items.css",
+				"styles/items.css"
+			],
+			[
+				"source.js",
+				"scripts/sources.js"
+			],
+			[
+				"sources.html",
+				"rss_sources.html"
+			],
+			[
+				"con",
+				"styles/content.css"
+			],
+			[
+				"conte",
+				"styles/content.css"
+			],
+			[
+				"item.css",
+				"styles/item.css"
+			],
+			[
+				"item.html",
+				"rss_item.html"
 			],
 			[
 				"source",
@@ -3292,18 +3216,6 @@
 			[
 				"g.js",
 				"scripts/global.js"
-			],
-			[
-				"todo",
-				"todo.txt"
-			],
-			[
-				"sources.js",
-				"scripts/sources.js"
-			],
-			[
-				"sources.html",
-				"rss_sources.html"
 			],
 			[
 				"sources",
@@ -3326,16 +3238,8 @@
 				"styles/sources.css"
 			],
 			[
-				"source.js",
-				"scripts/sources.js"
-			],
-			[
 				"rss.css",
 				"styles/rss.css"
-			],
-			[
-				"items.css",
-				"styles/items.css"
 			],
 			[
 				"sourc",
@@ -3350,10 +3254,6 @@
 				"todo.txt"
 			],
 			[
-				"items.html",
-				"rss_items.html"
-			],
-			[
 				"global.css",
 				"styles/global.css"
 			],
@@ -3366,20 +3266,8 @@
 				"rss.html"
 			],
 			[
-				"item.css",
-				"styles/item.css"
-			],
-			[
 				"sour",
 				"scripts/sources.js"
-			],
-			[
-				"item.html",
-				"rss_item.html"
-			],
-			[
-				"item.js",
-				"scripts/item.js"
 			],
 			[
 				"globa",
@@ -3780,14 +3668,6 @@
 			[
 				"menu.html",
 				"LapiBackup/app/templates/menu.html"
-			],
-			[
-				"menu.php",
-				"app/sections/menu.php"
-			],
-			[
-				"settin",
-				"app/models/Settings.php"
 			]
 		],
 		"width": 0.0
