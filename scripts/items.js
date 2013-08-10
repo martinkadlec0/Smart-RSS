@@ -48,24 +48,30 @@ $(function() {
 				list.selectedItems = [list.selectedItems[0]];
 				list.selectedItems[0].$el.addClass('selected');
 
-				if (list.selectedItems[0].model.get('date') > this.model.get('date')) {
-					list.selectedItems[0].$el.nextUntil(this.$el).not('.invisible').each(function(i, el) {
-						$(el).addClass('selected');
-						list.selectedItems.push(el.view);
-					});
-				} else {
-					this.$el.nextUntil(list.selectedItems[0].$el).not('.invisible').each(function(i, el) {
-						$(el).addClass('selected');
-						list.selectedItems.push(el.view);
-					});
+				if (list.selectedItems[0] != this) {
+
+					if (list.selectedItems[0].model.get('date') > this.model.get('date')) {
+						list.selectedItems[0].$el.nextUntil(this.$el).not('.invisible').each(function(i, el) {
+							$(el).addClass('selected');
+							list.selectedItems.push(el.view);
+						});
+					} else {
+						this.$el.nextUntil(list.selectedItems[0].$el).not('.invisible').each(function(i, el) {
+							$(el).addClass('selected');
+							list.selectedItems.push(el.view);
+						});
+					}
+
 				}
 			}
 
 			$('.last-selected').removeClass('last-selected');
-
-			list.selectedItems.push(this);
-			this.$el.addClass('selected');
+			if (list.selectedItems[0] != this) {
+				list.selectedItems.push(this);
+				this.$el.addClass('selected');
+			}
 			this.$el.addClass('last-selected');
+
 		},
 		handleMouseDown: function(e) {
 			this.select({ shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });
