@@ -186,7 +186,10 @@ $(function() {
 			action: function() { 
 				var id = sourcesContextMenu.currentSource.get('id');
 				bg.items.where({ sourceID: id }).forEach(function(item) {
-					item.set('unread', false);
+					item.save({
+						unread: false,
+						visited: true
+					});
 				});
 			}
 		},

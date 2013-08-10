@@ -30,6 +30,7 @@ $(function() {
 			this.el.view = this;
 		},
 		render: function() {
+			this.$el.toggleClass('unvisited', !this.model.get('visited'));
 			this.$el.toggleClass('unread', this.model.get('unread'));
 			this.$el.html(this.template(this.model.toJSON()));
 			return this;
@@ -42,6 +43,10 @@ $(function() {
 				if (!e.preventLoading) {
 					//bg.items.trigger('new-selected', this.model);
 					window.top.frames[2].postMessage({ action: 'new-select', value: this.model.id }, '*');
+				}
+
+				if (!this.model.get('visited')) {
+					this.model.set('visited', true);
 				}
 			} else if (e.shiftKey && list.selectedItems.length) {
 				$('.selected').removeClass('selected');
@@ -249,7 +254,7 @@ $(function() {
 				if (opt.onlyToRead && item.model.get('unread') == false) {
 					// do nothing
 				} else {
-					item.model.save({ unread: val });	
+					item.model.save({ unread: val, visited: true });	
 				}
 				
 			}, this);

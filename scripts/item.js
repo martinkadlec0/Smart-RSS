@@ -26,7 +26,8 @@ $(function() {
 		handleButtonRead: function() {
 			if (!itemView.model) return;
 			itemView.model.save({
-				unread: !itemView.model.get('unread')
+				unread: !itemView.model.get('unread'),
+				visited: true
 			});
 		},
 		handleButtonDelete: function() {

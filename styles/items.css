@@ -50,6 +50,14 @@ body {
 	font-weight: bold;
 }
 
+.unvisited {
+	color: rgb(0, 59, 179) !important;
+}
+
+.unvisited .item-author {
+	color: rgb(0, 59, 179) !important;
+}
+
 .item-title {
 	white-space: nowrap;
 	overflow: hidden;
