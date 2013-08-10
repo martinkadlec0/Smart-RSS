@@ -257,7 +257,7 @@ $(function() {
 			var e = e || {};
 			var q = e.selectUnread ? '.unread:not(.invisible):first' : '.item:not(.invisible):first';
 			var next = $('.last-selected').nextAll(q);
-			if (!next.length) next = $(q);
+			if (!next.length && !e.shiftKey && !e.ctrlKey) next = $(q);
 			if (next.length) {
 				next.get(0).view.select(e);
 				next.get(0).scrollIntoView(false);
@@ -267,7 +267,7 @@ $(function() {
 			var e = e || {};
 			var q = e.selectUnread ? '.unread:not(.invisible)' : '.item:not(.invisible)';
 			var prev = $('.last-selected').prevAll(q + ':first');
-			if (!prev.length) prev = $(q + ':last');
+			if (!prev.length && !e.shiftKey && !e.ctrlKey) prev = $(q + ':last');
 			if (prev.length) {
 				prev.get(0).view.select(e);
 				prev.get(0).scrollIntoView(false);

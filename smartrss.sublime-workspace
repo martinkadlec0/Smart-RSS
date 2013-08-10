@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"query",
+				"querySelectorAll"
+			],
+			[
 				"conte",
 				"content"
 			],
@@ -223,7 +227,7 @@
 			"file": "rss.html",
 			"settings":
 			{
-				"buffer_size": 455,
+				"buffer_size": 714,
 				"line_ending": "Windows"
 			}
 		},
@@ -231,7 +235,7 @@
 			"file": "scripts/rss.js",
 			"settings":
 			{
-				"buffer_size": 138,
+				"buffer_size": 730,
 				"line_ending": "Windows"
 			}
 		},
@@ -255,7 +259,7 @@
 			"file": "rss_item.html",
 			"settings":
 			{
-				"buffer_size": 1962,
+				"buffer_size": 2267,
 				"line_ending": "Windows"
 			}
 		},
@@ -284,28 +288,12 @@
 			}
 		},
 		{
-			"file": "scripts/bg.js",
-			"settings":
-			{
-				"buffer_size": 9406,
-				"line_ending": "Windows"
-			}
-		},
-		{
 			"file": "todo.txt",
 			"settings":
 			{
-				"buffer_size": 1149,
+				"buffer_size": 1291,
 				"line_ending": "Windows",
 				"name": "# TODO"
-			}
-		},
-		{
-			"file": "/D/Work/smartrsspage/scripts/detector_bg.js",
-			"settings":
-			{
-				"buffer_size": 538,
-				"line_ending": "Windows"
 			}
 		},
 		{
@@ -328,8 +316,24 @@
 			"file": "/D/Work/smartrsspage/manifest.json",
 			"settings":
 			{
-				"buffer_size": 685,
+				"buffer_size": 768,
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/D/Work/smartrsspage/rss_preview.html",
+			"settings":
+			{
+				"buffer_size": 268,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/D/Work/smartrsspage/styles/rss_preview.css",
+			"settings":
+			{
+				"buffer_size": 26,
+				"line_ending": "Windows"
 			}
 		},
 		{
@@ -349,10 +353,29 @@
 			}
 		},
 		{
+			"contents": "// DOMContentLoaded\n\nif (document instanceof HTMLDocument) {\n\n	var interval = setInterval(function() {\n		if (document.querySelector('body')) {\n			detect();\n			clearInterval(interval);\n		}\n	}, 200);\n\n	document.addEventListener('DOMContentLoaded', function() {\n		detect();\n		clearInterval(interval);\n	});\n\n	function detect() {\n\n		var rss = document.querySelectorAll('link[type=\"application/rss+xml\"], link[type=\"application/atom+xml\"]');\n		var rssData = [].map.call(rss, function(one) {\n			return { url: one.href, title: one.title || one.href };\n		});\n\n		if (rssData.length > 0) {\n			chrome.extension.sendMessage({ action: 'show-rss-icon' }, function() {});\n		}\n\n		chrome.extension.onMessage.addListener(function(message, sender, sendResponse){\n			if (message.action == 'get-list') {\n				sendResponse({ action: 'response-list', value: rssData });\n			}\n		});\n\n	}\n\n}\n\n\nchrome.extension.onMessage.addListener(function(message, sender, sendResponse) {\n	if (message.action == 'show-rss') {\n		showRSS(message.value);\n	}\n});\n\nfunction showRSS(source) {\n	var parser = new DOMParser();\n    var xmlDoc = parser.parseFromString(source, 'application/xml');\n	alert(xmlDoc.querySelectorAll('item').length);\n	document.documentElement.innerHTML = ''\n}",
 			"file": "/D/Work/smartrsspage/includes/rss_detector.js",
+			"file_size": 1242,
+			"file_write_time": 130206307880594525,
 			"settings":
 			{
-				"buffer_size": 795,
+				"buffer_size": 1233,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/D/Work/smartrsspage/scripts/detector_bg.js",
+			"settings":
+			{
+				"buffer_size": 1191,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/D/Work/smartrsspage/scripts/rss_preview.js",
+			"settings":
+			{
+				"buffer_size": 560,
 				"line_ending": "Windows"
 			}
 		},
@@ -377,7 +400,7 @@
 			"file": "scripts/items.js",
 			"settings":
 			{
-				"buffer_size": 9257,
+				"buffer_size": 9596,
 				"line_ending": "Windows"
 			}
 		},
@@ -393,8 +416,16 @@
 			"file": "scripts/item.js",
 			"settings":
 			{
-				"buffer_size": 3041,
+				"buffer_size": 3950,
 				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "scripts/base64.js",
+			"settings":
+			{
+				"buffer_size": 5681,
+				"line_ending": "Unix"
 			}
 		},
 		{
@@ -409,7 +440,7 @@
 			"file": "styles/global.css",
 			"settings":
 			{
-				"buffer_size": 2543,
+				"buffer_size": 2559,
 				"line_ending": "Windows"
 			}
 		},
@@ -425,7 +456,7 @@
 			"file": "scripts/sources.js",
 			"settings":
 			{
-				"buffer_size": 8667,
+				"buffer_size": 8700,
 				"line_ending": "Windows"
 			}
 		},
@@ -614,6 +645,12 @@
 	},
 	"file_history":
 	[
+		"/D/Work/smartrss/scripts/bg.js",
+		"/C/Users/Martin/Desktop/Downloads/Operas/Opera 15 Next/profile/data/Extensions/gbammbheopgpmaagmckhpjbfgdfkpadb/1.9.2.1_0/xmltree.js",
+		"/C/Users/Martin/Desktop/Downloads/Operas/Opera 15 Next/profile/data/Extensions/gbammbheopgpmaagmckhpjbfgdfkpadb/1.9.2.1_0/manifest.json",
+		"/C/Users/Martin/Desktop/Downloads/Operas/Opera 15 Next/profile/data/Extensions/gbammbheopgpmaagmckhpjbfgdfkpadb/1.9.2.1_0/intent.html",
+		"/C/Users/Martin/Desktop/Downloads/Operas/Opera 15 Next/profile/data/Extensions/gbammbheopgpmaagmckhpjbfgdfkpadb/1.9.2.1_0/utils.js",
+		"/D/Work/smartrsspage/scripts/detector_bg.js",
 		"/D/Work/smartrss/styles/content.css",
 		"/D/Work/smartrss/includes/rss_detector.js",
 		"/D/Work/smartrsspage/manifest.json",
@@ -735,13 +772,7 @@
 		"/D/Work/DNA-7518/manifest.json",
 		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371390281/operacesky-net/html/silex-lapi/app/templates/layout.twig",
 		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371390243/operacesky-net/html/silex-lapi/app/templates/login.twig",
-		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371329943/operacesky-net/html/silex-lapi/composer.json",
-		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371380479/operacesky-net/html/silex-lapi/vendor/composer/autoload_namespaces.php",
-		"/D/Work/backbone-lists/public/javascripts/main.js",
-		"/D/Work/backbone-lists/app.js",
-		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371564176/operacesky-net/html/silex-lapi/app/Lapi/Modules/User.php",
-		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371564164/operacesky-net/html/silex-lapi/app/Lapi/Controllers/DefaultController.php",
-		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371314009/operacesky-net/html/silex-lapi/web/index.php"
+		"/C/users/martin/appdata/local/temp/sublime-sftp-browse-1371329943/operacesky-net/html/silex-lapi/composer.json"
 	],
 	"find":
 	{
@@ -749,7 +780,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 90.0,
+		"height": 0.0,
 		"where_history":
 		[
 			"D:\\Work\\smartrss",
@@ -761,6 +792,14 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"activate",
+			"executeTransformation",
+			"getDOMFromString",
+			".hide",
+			"min-wid",
+			".overla",
+			"Utf8EncodeEnumerator",
+			",text",
 			"selectedItems =",
 			"currentSource",
 			"getAutho",
@@ -880,15 +919,7 @@
 			"querySe",
 			"success",
 			"$q",
-			"object",
-			"video",
-			"vide",
-			"addValue",
-			".php",
-			"SETTINGS",
-			"SETTING",
-			"echo",
-			"var_du"
+			"object"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -896,6 +927,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			" \n",
 			"item",
 			"Item",
 			"..",
@@ -1022,8 +1054,7 @@
 			".",
 			"r1.amax",
 			"r2.amax",
-			"r2.amin",
-			"r1.amin"
+			"r2.amin"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -1034,7 +1065,7 @@
 	"groups":
 	[
 		{
-			"selected": 21,
+			"selected": 6,
 			"sheets":
 			[
 				{
@@ -1042,15 +1073,15 @@
 					"file": "rss.html",
 					"settings":
 					{
-						"buffer_size": 455,
+						"buffer_size": 714,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								213,
-								213
+								714,
+								714
 							]
 						],
 						"settings":
@@ -1103,7 +1134,8 @@
 							"incomplete_sync": null,
 							"remote_loading": false,
 							"synced": false,
-							"syntax": "Packages/HTML/HTML.tmLanguage"
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1116,15 +1148,15 @@
 					"file": "scripts/rss.js",
 					"settings":
 					{
-						"buffer_size": 138,
+						"buffer_size": 730,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								138,
-								138
+								694,
+								694
 							]
 						],
 						"settings":
@@ -1176,7 +1208,8 @@
 							"incomplete_sync": null,
 							"remote_loading": false,
 							"synced": false,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1337,15 +1370,15 @@
 					"file": "rss_item.html",
 					"settings":
 					{
-						"buffer_size": 1962,
+						"buffer_size": 2267,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1104,
-								1104
+								1290,
+								1290
 							]
 						],
 						"settings":
@@ -1401,7 +1434,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 75.0,
+						"translation.y": 345.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1418,8 +1451,8 @@
 						"selection":
 						[
 							[
-								809,
-								809
+								351,
+								351
 							]
 						],
 						"settings":
@@ -1475,7 +1508,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 652.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1629,92 +1662,18 @@
 				},
 				{
 					"buffer": 8,
-					"file": "scripts/bg.js",
-					"settings":
-					{
-						"buffer_size": 9406,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2960,
-								2960
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1609.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 9,
 					"file": "todo.txt",
 					"settings":
 					{
-						"buffer_size": 1149,
+						"buffer_size": 1291,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								799,
-								799
+								951,
+								951
 							]
 						],
 						"settings":
@@ -1767,80 +1726,7 @@
 							"incomplete_sync": null,
 							"remote_loading": false,
 							"synced": false,
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "/D/Work/smartrsspage/scripts/detector_bg.js",
-					"settings":
-					{
-						"buffer_size": 538,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								338,
-								338
-							]
-						],
-						"settings":
-						{
-							"BracketHighlighterBusy": false,
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"syntax": "Packages/Text/Plain text.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
@@ -1850,7 +1736,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 9,
 					"file": "/D/Work/smartrsspage/popup.html",
 					"settings":
 					{
@@ -1923,7 +1809,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 10,
 					"file": "/D/Work/smartrsspage/index.html",
 					"settings":
 					{
@@ -1995,19 +1881,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 13,
+					"buffer": 11,
 					"file": "/D/Work/smartrsspage/manifest.json",
 					"settings":
 					{
-						"buffer_size": 685,
+						"buffer_size": 768,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								367,
-								367
+								493,
+								493
 							]
 						],
 						"settings":
@@ -2069,6 +1955,152 @@
 					"type": "text"
 				},
 				{
+					"buffer": 12,
+					"file": "/D/Work/smartrsspage/rss_preview.html",
+					"settings":
+					{
+						"buffer_size": 268,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								74,
+								74
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "/D/Work/smartrsspage/styles/rss_preview.css",
+					"settings":
+					{
+						"buffer_size": 26,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								23,
+								23
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/CSS/CSS.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
 					"buffer": 14,
 					"file": "/D/Work/smartrsspage/scripts/detector_popup.js",
 					"settings":
@@ -2080,8 +2112,8 @@
 						"selection":
 						[
 							[
-								671,
-								671
+								776,
+								776
 							]
 						],
 						"settings":
@@ -2154,8 +2186,8 @@
 						"selection":
 						[
 							[
-								316,
-								316
+								460,
+								460
 							]
 						],
 						"settings":
@@ -2221,15 +2253,15 @@
 					"file": "/D/Work/smartrsspage/includes/rss_detector.js",
 					"settings":
 					{
-						"buffer_size": 795,
+						"buffer_size": 1233,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								786,
-								786
+								1008,
+								1008
 							]
 						],
 						"settings":
@@ -2285,13 +2317,160 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 244.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 17,
+					"file": "/D/Work/smartrsspage/scripts/detector_bg.js",
+					"settings":
+					{
+						"buffer_size": 1191,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1191,
+								1191
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 270.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 18,
+					"file": "/D/Work/smartrsspage/scripts/rss_preview.js",
+					"settings":
+					{
+						"buffer_size": 560,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								520,
+								520
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 19,
 					"settings":
 					{
 						"buffer_size": 508,
@@ -2364,7 +2543,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 18,
+					"buffer": 20,
 					"file": "scripts/global.js",
 					"settings":
 					{
@@ -2438,19 +2617,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 19,
+					"buffer": 21,
 					"file": "scripts/items.js",
 					"settings":
 					{
-						"buffer_size": 9257,
+						"buffer_size": 9596,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								8844,
-								8844
+								7483,
+								7483
 							]
 						],
 						"settings":
@@ -2506,13 +2685,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 4249.0,
+						"translation.y": 3703.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 20,
+					"buffer": 22,
 					"file": "/C/Users/Martin/Desktop/The Switcher/scripts/main.js",
 					"settings":
 					{
@@ -2586,19 +2765,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 21,
+					"buffer": 23,
 					"file": "scripts/item.js",
 					"settings":
 					{
-						"buffer_size": 3041,
+						"buffer_size": 3950,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1802,
-								1802
+								1714,
+								1714
 							]
 						],
 						"settings":
@@ -2654,13 +2833,88 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 900.0,
+						"translation.y": 619.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 22,
+					"buffer": 24,
+					"file": "scripts/base64.js",
+					"settings":
+					{
+						"buffer_size": 5681,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1728,
+								1728
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 364.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 25,
 					"file": "rss_sources.html",
 					"settings":
 					{
@@ -2728,25 +2982,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 240.0,
+						"translation.y": 30.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 23,
+					"buffer": 26,
 					"file": "styles/global.css",
 					"settings":
 					{
-						"buffer_size": 2543,
+						"buffer_size": 2559,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								219,
-								164
+								2302,
+								2302
 							]
 						],
 						"settings":
@@ -2802,13 +3056,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1429.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 24,
+					"buffer": 27,
 					"file": "styles/rss.css",
 					"settings":
 					{
@@ -2881,19 +3135,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 25,
+					"buffer": 28,
 					"file": "scripts/sources.js",
 					"settings":
 					{
-						"buffer_size": 8667,
+						"buffer_size": 8700,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4709,
-								4555
+								3541,
+								3427
 							]
 						],
 						"settings":
@@ -2949,13 +3203,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2419.0,
+						"translation.y": 1819.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 26,
+					"buffer": 29,
 					"file": ".gitignore",
 					"settings":
 					{
@@ -3028,7 +3282,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 30,
 					"file": "styles/sources.css",
 					"settings":
 					{
@@ -3158,28 +3412,84 @@
 		"selected_items":
 		[
 			[
-				"item.js",
-				"scripts/item.js"
+				"manife",
+				"manifest.json"
+			],
+			[
+				"manifest",
+				"/D/Work/smartrsspage/manifest.json"
 			],
 			[
 				"bg.js",
 				"scripts/bg.js"
 			],
 			[
-				"sources.js",
-				"scripts/sources.js"
-			],
-			[
 				"items.js",
 				"scripts/items.js"
 			],
 			[
-				"items.html",
-				"rss_items.html"
-			],
-			[
 				"todo",
 				"todo.txt"
+			],
+			[
+				"item.css",
+				"styles/item.css"
+			],
+			[
+				".cs",
+				"/D/Work/smartrsspage/styles/detector_popup.css"
+			],
+			[
+				"item.html",
+				"rss_item.html"
+			],
+			[
+				"item.",
+				"scripts/item.js"
+			],
+			[
+				"sources.js",
+				"scripts/sources.js"
+			],
+			[
+				"sources.html",
+				"rss_sources.html"
+			],
+			[
+				"item.js",
+				"scripts/item.js"
+			],
+			[
+				"rss.js",
+				"scripts/rss.js"
+			],
+			[
+				"item.hml",
+				"rss_item.html"
+			],
+			[
+				"glo",
+				"styles/global.css"
+			],
+			[
+				"rss.html",
+				"rss.html"
+			],
+			[
+				"base64",
+				"scripts/base64.js"
+			],
+			[
+				".gitig",
+				".gitignore"
+			],
+			[
+				"sources",
+				"scripts/sources.js"
+			],
+			[
+				"items.html",
+				"rss_items.html"
 			],
 			[
 				"items.css",
@@ -3190,10 +3500,6 @@
 				"scripts/sources.js"
 			],
 			[
-				"sources.html",
-				"rss_sources.html"
-			],
-			[
 				"con",
 				"styles/content.css"
 			],
@@ -3202,28 +3508,12 @@
 				"styles/content.css"
 			],
 			[
-				"item.css",
-				"styles/item.css"
-			],
-			[
-				"item.html",
-				"rss_item.html"
-			],
-			[
 				"source",
 				"scripts/sources.js"
 			],
 			[
 				"g.js",
 				"scripts/global.js"
-			],
-			[
-				"sources",
-				"scripts/sources.js"
-			],
-			[
-				"manife",
-				"manifest.json"
 			],
 			[
 				"source.html",
@@ -3262,10 +3552,6 @@
 				"styles/sources.css"
 			],
 			[
-				"rss.html",
-				"rss.html"
-			],
-			[
 				"sour",
 				"scripts/sources.js"
 			],
@@ -3276,10 +3562,6 @@
 			[
 				"global",
 				"scripts/global.js"
-			],
-			[
-				"rss.js",
-				"scripts/rss.js"
 			],
 			[
 				"rsshtml",
@@ -3296,10 +3578,6 @@
 			[
 				"bg",
 				"scripts/bg.js"
-			],
-			[
-				".cs",
-				"/D/Work/smartrsspage/styles/detector_popup.css"
 			],
 			[
 				"rss_dete",
@@ -3644,30 +3922,6 @@
 			[
 				"posta.html",
 				"LapiBackup/app/templates/posta.html"
-			],
-			[
-				"new_pos",
-				"LapiBackup/app/templates/new_posta.html"
-			],
-			[
-				"new_klub.",
-				"LapiBackup/app/templates/new_klub.html"
-			],
-			[
-				".htac",
-				"LapiBackup/static/.htaccess"
-			],
-			[
-				"style.css",
-				"LapiBackup/static/styles/main.css"
-			],
-			[
-				"nove",
-				"LapiBackup/app/templates/nove.html"
-			],
-			[
-				"menu.html",
-				"LapiBackup/app/templates/menu.html"
 			]
 		],
 		"width": 0.0
