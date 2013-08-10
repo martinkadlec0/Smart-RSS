@@ -139,10 +139,12 @@ $(function() {
 
 	items.on('change:deleted', function(model) {
 		var source = sources.findWhere({ id: model.get('sourceID') });
-		if (model.get('deleted') == true) {
-			source.save({ 'count': source.get('count') - 1 });
-		} else {
-			source.save({ 'count': source.get('count') + 1 });
+		if (model.get('unread') == true) {
+			if (model.get('deleted') == true) {
+				source.save({ 'count': source.get('count') - 1 });
+			} else {
+				source.save({ 'count': source.get('count') + 1 });
+			}
 		}
 	});
 

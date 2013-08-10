@@ -274,7 +274,8 @@ $(function() {
 			var next = $('.last-selected').nextAll(q);
 			if (!next.length && !e.shiftKey && !e.ctrlKey) {
 				next = $(q);
-				if (next.length && $('.last-selected').$el == next.$el) {
+				if (next.length && $('.last-selected').get(0) == next.get(0)) {
+					debugger;
 					next = [];
 					window.top.frames[2].postMessage({ action: 'no-items' }, '*');
 				}
