@@ -222,7 +222,12 @@ $(function() {
 		},
 		destroyItem: function(view) {
 			if (view == list.selectedItems[0]) {
-				app.selectNext();
+				var last = $('.item:not(.invisible):last').get(0);
+				if (last && view == last.view) {
+					app.selectPrev();
+				} else {
+					app.selectNext();
+				}
 			}
 
 			view.undelegateEvents();
@@ -275,7 +280,6 @@ $(function() {
 			if (!next.length && !e.shiftKey && !e.ctrlKey) {
 				next = $(q);
 				if (next.length && $('.last-selected').get(0) == next.get(0)) {
-					debugger;
 					next = [];
 					window.top.frames[2].postMessage({ action: 'no-items' }, '*');
 				}
@@ -289,7 +293,13 @@ $(function() {
 			var e = e || {};
 			var q = e.selectUnread ? '.unread:not(.invisible)' : '.item:not(.invisible)';
 			var prev = $('.last-selected').prevAll(q + ':first');
-			if (!prev.length && !e.shiftKey && !e.ctrlKey) prev = $(q + ':last');
+			if (!prev.length && !e.shiftKey && !e.ctrlKey) {
+				prev = $(q + ':last');
+				if (prev.length && $('.last-selected').get(0) == prev.get(0)) {
+					prev = [];
+					window.top.frames[2].postMessage({ action: 'no-items' }, '*');
+				}
+			}
 			if (prev.length) {
 				prev.get(0).view.select(e);
 				prev.get(0).scrollIntoView(false);
