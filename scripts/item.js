@@ -20,21 +20,23 @@ $(function() {
 			
 		},
 		handleButtonPrint: function() {
+			if (!itemView.model) return;
 			window.print();
 		},
 		handleButtonRead: function() {
+			if (!itemView.model) return;
 			itemView.model.save({
 				unread: !itemView.model.get('unread')
 			});
 		},
 		handleButtonDelete: function() {
+			if (!itemView.model) return;
 			itemView.model.save({
 				'deleted': true,
 				'content': '',
 				'author': '',
 				'title': ''
 			});
-			itemView.getSome();
 		},
 		handleButtonConfig: function() {
 			overlay.show();
@@ -88,33 +90,21 @@ $(function() {
 		},
 		initialize: function() {
 			var that = this;
-			//bg.items.on('new-selected', this.handleNewSelected, this);
 			window.addEventListener('message', function(e) {
 				if (e.data.action == 'new-select') {
 					that.handleNewSelected(bg.items.findWhere({ id: e.data.value }));
+				} else if (e.data.action == 'no-items') {
+					that.model = null;
+					that.hide();
 				}
 			});
-			//this.getSome();
 		},
 		handleIframeLoad: function() {
 			alert('loaded');
 		},
-		getSome: function() {
-			var first = bg.items.findWhere({ deleted: false });
-			if (first) {
-				this.model = first;
-				this.model.on('destroy', this.getSome, this);
-				this.render();
-			} else {
-				this.$el.css('display', 'none');
-			}
-		},
 		render: function() {
-			/*var data = this.model.toJSON();
-			data.date = bg.formatDate.call(new Date(data.date), 'DD.MM.YYYY hh:mm:ss');
-			data.content64 = utf8_to_b64(data.content);*/
 
-			this.$el.css('display', 'flex');
+			this.show();
 
 			var date = bg.formatDate.call(new Date(this.model.get('date')), 'DD.MM.YYYY hh:mm:ss');
 
@@ -127,18 +117,18 @@ $(function() {
 			this.$el.find('.author').html(this.model.escape('author'));
 			this.$el.find('.date').html(date);
 			this.$el.find('iframe').attr('src', 'data:text/html;charset=utf-8;base64,' + content);
-			//this.$el.find('footer a').attr('href', this.model.escape('url'));
 
-			/*setTimeout(function() {
-				var iframe = $('iframe').get(0);
-				iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
-			}, 500);*/
-			//this.$el.html(this.template(data));
 			return this;
 		},
 		handleNewSelected: function(model) {
 			this.model = model;
 			this.render();
+		},
+		hide: function() {
+			$('header,iframe').css('display', 'none');
+		},
+		show: function() {
+			$('header,iframe').css('display', 'block');
 		}
 	}));
 

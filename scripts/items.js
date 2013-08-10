@@ -78,7 +78,7 @@ $(function() {
 		},
 		handleModelChange: function() {
 			if (this.model.get('deleted')) {
-				list.removeItem(this);
+				list.destroyItem(this);
 			} else {
 				this.render();
 			}
@@ -216,6 +216,10 @@ $(function() {
 			this.destroyItem(view);
 		},
 		destroyItem: function(view) {
+			if (view == list.selectedItems[0]) {
+				app.selectNext();
+			}
+
 			view.undelegateEvents();
 			view.$el.removeData().unbind(); 
 			view.off();
@@ -263,7 +267,13 @@ $(function() {
 			var e = e || {};
 			var q = e.selectUnread ? '.unread:not(.invisible):first' : '.item:not(.invisible):first';
 			var next = $('.last-selected').nextAll(q);
-			if (!next.length && !e.shiftKey && !e.ctrlKey) next = $(q);
+			if (!next.length && !e.shiftKey && !e.ctrlKey) {
+				next = $(q);
+				if (next.length && $('.last-selected').$el == next.$el) {
+					next = [];
+					window.top.frames[2].postMessage({ action: 'no-items' }, '*');
+				}
+			}
 			if (next.length) {
 				next.get(0).view.select(e);
 				next.get(0).scrollIntoView(false);
