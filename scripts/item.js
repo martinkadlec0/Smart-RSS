@@ -1,9 +1,6 @@
 var chrome = window.top.chrome;
 
 function utf8_to_b64( str ) {
-	//return Base64.encode(str);
-	//return str;
-	//return encodeURIComponent( str );
 	return btoa(unescape(encodeURIComponent( str )));
 }
 
