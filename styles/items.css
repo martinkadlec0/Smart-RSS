@@ -23,9 +23,11 @@ body {
 
 .item {
 	width: 100%;
-	padding: 4px 5px 4px 20px;
+	padding: 4px 5px 4px 5px;
 	cursor: pointer;
 	border-bottom: 1px solid #ccc;
+	display: flex;
+	flex-flow: row wrap;
 }
 
 .invisible {
@@ -37,6 +39,12 @@ body {
 	background: rgb(51, 153, 255);
 	border-bottom-color: rgb(51, 153, 255);
 }
+
+.item:active .item-pin:not(.pinned), .selected  .item-pin:not(.pinned) {
+	border-color: rgb(51, 153, 255);
+	background: radial-gradient(circle at center, rgb(51, 153, 255) 30%, #c6c6c6 30%);
+}
+
 
 .last-selected {
 	outline: 1px dotted grey;
@@ -63,10 +71,32 @@ body {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	font-size: 0.8rem;
+	flex: 1 1 100%;
+	padding-left: 1rem;
 }
 
 .item-author {
 	color: #444;
 	padding-top: 0.2rem;
 	font-size: 0.75rem;
+	flex: 1 auto;
+}
+
+.item-pin {
+	break-before: always;
+	break-after: never;
+	width: 0.4rem;
+	height: 0.4rem;
+	margin-top: 0.46rem;
+	margin-right: 0.4rem;
+	margin-left: 0.2rem;
+	border-radius: 0.4rem;
+	background: radial-gradient(circle at center, white 30%, #c6c6c6 30%);
+	border: 1px solid white;
+	flex: 0 0 auto;
+}
+.pinned {
+	//-webkit-transform: scale(1, 1);
+	background: #BB2222;
+	border-color: #222;
 }

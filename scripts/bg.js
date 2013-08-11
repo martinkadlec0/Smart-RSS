@@ -43,7 +43,8 @@ var Item = Backbone.Model.extend({
 		sourceID: -1,
 		unread: true,
 		visited: false,
-		deleted: false
+		deleted: false,
+		pinned: false
 	}
 });
 
@@ -259,7 +260,8 @@ function parseRSS(xml, sourceID) {
 			sourceID: sourceID,
 			unread: true,
 			deleted: false,
-			visited: false
+			visited: false,
+			pinned: false
 		});
 
 		var last = items[items.length-1];

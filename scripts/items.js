@@ -1,4 +1,6 @@
 var chrome = window.top.chrome;
+var topWindow = window.top;
+
 
 RegExp.escape = function(str) {
 	return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
@@ -22,7 +24,9 @@ $(function() {
 		className: 'item',
 		template: _.template($('#template-item').html()),
 		events: {
-			'mousedown': 'handleMouseDown'
+			'mousedown': 'handleMouseDown',
+			'mousedown .item-pin': 'handleClickPin',
+			'mousedown .item-pinned': 'handleClickPin'
 		},
 		initialize: function() {
 			this.model.on('change', this.handleModelChange, this);
@@ -42,7 +46,7 @@ $(function() {
 				$('.selected').removeClass('selected');
 				if (!e.preventLoading) {
 					//bg.items.trigger('new-selected', this.model);
-					window.top.frames[2].postMessage({ action: 'new-select', value: this.model.id }, '*');
+					topWindow.frames[2].postMessage({ action: 'new-select', value: this.model.id }, '*');
 				}
 
 				if (!this.model.get('visited')) {
@@ -90,6 +94,11 @@ $(function() {
 		},
 		handleModelDestroy: function(e) {
 			list.destroyItem(this);
+		},
+		handleClickPin: function(e) {
+			e.stopPropagation();
+			this.model.save({ pinned: !this.model.get('pinned') });
+			this.render();
 		}
 	});
 
@@ -212,6 +221,12 @@ $(function() {
 			this.addItems(bg.items);	
 		},
 		removeItem: function(view) {
+			if (view.model.get('pinned')) {
+				var conf = confirm('Item "' + view.model.escape('title') + '" is pinned. Do you really want to delete it?');
+				if (!conf) {
+					return;
+				}
+			}
 			view.model.save({
 				'deleted': true,
 				'content': '',
