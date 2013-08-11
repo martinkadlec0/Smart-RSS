@@ -56,7 +56,7 @@ $(function() {
 			window.addEventListener('resize', this.hide.bind(this));
 		},
 		render: function() {
-			var layout = parseInt(localStorage.getItem('vertical-layout'));
+			var layout = parseInt(localStorage.getItem('vertical-layout')) || 0;
 			this.$el.find('#config-layout').val(layout);
 			return this;
 		},
