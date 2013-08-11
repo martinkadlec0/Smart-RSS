@@ -263,6 +263,13 @@ $(function() {
 				}
 				
 			}, this);
+		},
+		inView: function(cel) {
+			var $cel = $(cel);
+			if ($cel.position().top - this.$el.offset().top < 0 || $cel.position().top + cel.offsetHeight >= this.el.offsetHeight) {
+				return false;
+			}
+			return true;
 		}
 	}));
 
@@ -286,7 +293,10 @@ $(function() {
 			}
 			if (next.length) {
 				next.get(0).view.select(e);
-				next.get(0).scrollIntoView(false);
+				if (!list.inView(next.get(0))) {
+					next.get(0).scrollIntoView(false);	
+				}
+				
 			} 
 		},
 		selectPrev: function(e) {
@@ -302,7 +312,9 @@ $(function() {
 			}
 			if (prev.length) {
 				prev.get(0).view.select(e);
-				prev.get(0).scrollIntoView(false);
+				if (!list.inView(prev.get(0))) {
+					prev.get(0).scrollIntoView(true);
+				}
 			}
 		},
 		handleKeyDown: function(e) {
