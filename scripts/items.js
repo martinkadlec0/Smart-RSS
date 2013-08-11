@@ -93,10 +93,13 @@ $(function() {
 			}
 		},
 		handleModelDestroy: function(mod, col, opt) {
-			if (opt.noFocus && list.currentSource) reutrn;
+			if (opt.noFocus && list.currentSource) return;
 			if (opt.noFocus) list.noFocus = true;
 			list.destroyItem(this);
-			if (opt.noFocus) list.noFocus = false;
+			if (opt.noFocus) {
+				list.noFocus = false;
+				list.selectFirst();
+			}
 		},
 		handleClickPin: function(e) {
 			e.stopPropagation();
@@ -297,7 +300,6 @@ $(function() {
 		},
 		destroyItem: function(view) {
 			if (!this.noFocus) {
-				alert('now');
 				this.selectAfterDelete(view);
 			}
 
