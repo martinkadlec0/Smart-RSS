@@ -51,6 +51,7 @@ var Item = Backbone.Model.extend({
 
 var items = new (Backbone.Collection.extend({
 	model: Item,
+	batch: false,
 	localStorage: new Backbone.LocalStorage('items-backbone'),
 	comparator: function(a, b) {
 		return a.get('date') < b.get('date') ? 1 : -1;
@@ -125,8 +126,9 @@ $(function() {
 
 	sources.on('destroy', function(source) {
 		items.where({ sourceID: source.get('id') }).forEach(function(item) {
-			item.destroy();
+			item.destroy({ noFocus: true });
 		});
+		items.trigger('batch-ended');
 		chrome.alarms.clear('source-' + source.get('id'));
 	});
 

@@ -9,6 +9,7 @@ body {
 
 
 header {
+	display: none;
 	padding: 25px 30px 15px 30px;
 	font-family: sans-serif;
 	border-bottom: 1px solid rgb(199, 203, 214);
@@ -51,7 +52,7 @@ header p:last-of-type {
 }
 
 iframe {
-	display: block;
+	display: none;
 	flex: 1 1 auto;
 	width: 100%;
 }

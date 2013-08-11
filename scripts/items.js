@@ -92,8 +92,11 @@ $(function() {
 				this.render();
 			}
 		},
-		handleModelDestroy: function(e) {
+		handleModelDestroy: function(mod, col, opt) {
+			if (opt.noFocus && list.currentSource) reutrn;
+			if (opt.noFocus) list.noFocus = true;
 			list.destroyItem(this);
+			if (opt.noFocus) list.noFocus = false;
 		},
 		handleClickPin: function(e) {
 			e.stopPropagation();
@@ -108,6 +111,7 @@ $(function() {
 			'click #button-read': 'handleButtonRead',
 			'click #button-reload': 'refreshItems',
 			'click #button-delete': 'handleButtonDelete',
+			'click #button-undelete': 'handleButtonUndelete',
 			'input input[type=search]': 'handleSearch'
 		},
 		initialize: function() {
@@ -149,6 +153,11 @@ $(function() {
 			} else {
 				list.selectedItems.forEach(list.removeItem, list);	
 			}
+		},
+		handleButtonUndelete: function() {
+			if (list.specialName == 'trash') {
+				list.selectedItems.forEach(list.undeleteItem, list);
+			} 
 		}
 	}));
 
@@ -158,6 +167,7 @@ $(function() {
 		views: [],
 		currentSource: null,
 		specialName: null,
+		noFocus: false,
 		events: {
 			
 		},
@@ -179,6 +189,16 @@ $(function() {
 			setTimeout(function() {
 				that.addItems(bg.items);
 			}, 0);
+		},
+		selectAfterDelete: function(view) {
+			if (view == list.selectedItems[0]) {
+				var last = $('.item:not(.invisible):last').get(0);
+				if (last && view == last.view) {
+					app.selectPrev();
+				} else {
+					app.selectNext();
+				}
+			}
 		},
 		addItem: function(item, noManualSort) {
 			if (!item.get('deleted') && (!item.get('trashed') || this.specialName == 'trash') ) {
@@ -207,7 +227,9 @@ $(function() {
 		},
 		addItems: function(items) {
 			// better solution?
+			this.noFocus = true;
 			this.views.forEach(this.destroyItem, this);
+			this.noFocus = false;
 			this.views = [];
 
 			$('#list').html('');
@@ -225,6 +247,7 @@ $(function() {
 				this.currentSource.off('destroy', this.handleDestroyedSource, this);
 			}
 			this.currentSource = source;
+			if (this.specialName == 'trash') $('#button-undelete').css('display', 'none');
 			this.specialName = null;
 			source.on('destroy', this.handleDestroyedSource, this);
 			this.addItems(bg.items.where({ sourceID: source.id }));
@@ -234,12 +257,20 @@ $(function() {
 				this.currentSource.off('destroy', this.handleDestroyedSource, this);
 			}
 			this.currentSource = null;
+			if (this.specialName == 'trash') $('#button-undelete').css('display', 'none');
 			this.specialName = name;
+			if (this.specialName == 'trash') $('#button-undelete').css('display', 'block');
 			this.addItems(bg.items.where( filter ));
 		},
 		handleDestroyedSource: function() {
 			this.currentSource = null;
 			this.addItems(bg.items);	
+		},
+		undeleteItem: function(view) {
+			view.model.save({
+				'trashed': false
+			});
+			this.destroyItem(view);
 		},
 		removeItem: function(view) {
 			view.model.save({
@@ -265,13 +296,9 @@ $(function() {
 			this.destroyItem(view);
 		},
 		destroyItem: function(view) {
-			if (view == list.selectedItems[0]) {
-				var last = $('.item:not(.invisible):last').get(0);
-				if (last && view == last.view) {
-					app.selectPrev();
-				} else {
-					app.selectNext();
-				}
+			if (!this.noFocus) {
+				alert('now');
+				this.selectAfterDelete(view);
 			}
 
 			view.undelegateEvents();
@@ -332,7 +359,7 @@ $(function() {
 				next = $(q);
 				if (next.length && $('.last-selected').get(0) == next.get(0)) {
 					next = [];
-					window.top.frames[2].postMessage({ action: 'no-items' }, '*');
+					topWindow.frames[2].postMessage({ action: 'no-items' }, '*');
 				}
 			}
 			if (next.length) {
@@ -351,7 +378,7 @@ $(function() {
 				prev = $(q + ':last');
 				if (prev.length && $('.last-selected').get(0) == prev.get(0)) {
 					prev = [];
-					window.top.frames[2].postMessage({ action: 'no-items' }, '*');
+					topWindow.frames[2].postMessage({ action: 'no-items' }, '*');
 				}
 			}
 			if (prev.length) {

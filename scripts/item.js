@@ -117,7 +117,7 @@ $(function() {
 				url: this.model.get('url')
 			}));
 
-			this.$el.find('h1:first').html(this.model.escape('title'));
+			this.$el.find('h1').html(this.model.escape('title'));
 			this.$el.find('.author').html(this.model.escape('author'));
 			this.$el.find('.date').html(date);
 			this.$el.find('iframe').attr('src', 'data:text/html;charset=utf-8;base64,' + content);
@@ -126,7 +126,13 @@ $(function() {
 		},
 		handleNewSelected: function(model) {
 			this.model = model;
-			this.render();
+			if (!this.model) {
+				// should not happen but happens
+				this.hide();
+			} else {
+				this.render();	
+			}
+			
 		},
 		hide: function() {
 			$('header,iframe').css('display', 'none');
