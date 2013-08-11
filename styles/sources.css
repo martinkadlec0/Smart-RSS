@@ -14,9 +14,12 @@ body {
 	user-select: none;
 	overflow-x: hidden;
 	overflow-y: auto;
+	display: flex;
+	flex-flow: column;
 }
 
 .source {
+	order: 2;
 	width: 100%;
 	padding: 3px 5px 3px 10px;
 	display: flex;

@@ -79,13 +79,19 @@ $(function() {
 		defaults: {
 			title: 'All feeds',
 			icon: 'icon16_v2.png',
-			filter: {}
+			filter: {},
+			position: 'top'
 		}
 	});
 
 	var SpecialView = TopView.extend({
 		template: _.template($('#template-special').html()),
 		render: function() {
+			if (this.model.get('position') == 'top') {
+				this.$el.css('order', 1);
+			} else {
+				this.$el.css('order', 3);
+			}
 			this.$el.html(this.template(this.model.toJSON()));
 			return this;
 		}
@@ -298,7 +304,22 @@ $(function() {
 			this.addSpecial(new Special({
 				title: 'All feeds',
 				icon: 'icon16_v2.png',
-				filter: { deleted: false }
+				filter: { deleted: false },
+				position: 'top'
+			}));
+
+			this.addSpecial(new Special({
+				title: 'Pinned',
+				icon: 'pinsource.png',
+				filter: { deleted: false, pinned: true },
+				position: 'bottom'
+			}));
+
+			this.addSpecial(new Special({
+				title: 'Trash',
+				icon: 'trashsource.png',
+				filter: { deleted: true },
+				position: 'bottom'
 			}));
 
 			this.addSources(bg.sources);
