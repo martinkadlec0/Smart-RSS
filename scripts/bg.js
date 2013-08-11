@@ -44,6 +44,7 @@ var Item = Backbone.Model.extend({
 		unread: true,
 		visited: false,
 		deleted: false,
+		trashed: false,
 		pinned: false
 	}
 });
@@ -138,10 +139,10 @@ $(function() {
 		}
 	});
 
-	items.on('change:deleted', function(model) {
+	items.on('change:trashed', function(model) {
 		var source = sources.findWhere({ id: model.get('sourceID') });
 		if (model.get('unread') == true) {
-			if (model.get('deleted') == true) {
+			if (model.get('trashed') == true) {
 				source.save({ 'count': source.get('count') - 1 });
 			} else {
 				source.save({ 'count': source.get('count') + 1 });
@@ -260,6 +261,7 @@ function parseRSS(xml, sourceID) {
 			sourceID: sourceID,
 			unread: true,
 			deleted: false,
+			trashed: false,
 			visited: false,
 			pinned: false
 		});

@@ -54,7 +54,8 @@ $(function() {
 				//bg.sources.trigger('new-selected', this.model);
 				window.top.frames[1].postMessage({
 					action: 'new-select',
-					value: this.model.id || this.model.get('filter')
+					value: this.model.id || this.model.get('filter'),
+					name: this.model.get('name')
 				}, '*');
 			} 
 		}
@@ -79,6 +80,7 @@ $(function() {
 		defaults: {
 			title: 'All feeds',
 			icon: 'icon16_v2.png',
+			name: '',
 			filter: {},
 			position: 'top'
 		}
@@ -304,22 +306,25 @@ $(function() {
 			this.addSpecial(new Special({
 				title: 'All feeds',
 				icon: 'icon16_v2.png',
-				filter: { deleted: false },
-				position: 'top'
+				filter: { trashed: false },
+				position: 'top',
+				name: 'all-feeds'
 			}));
 
 			this.addSpecial(new Special({
 				title: 'Pinned',
 				icon: 'pinsource.png',
-				filter: { deleted: false, pinned: true },
-				position: 'bottom'
+				filter: { trashed: false, pinned: true },
+				position: 'bottom',
+				name: 'pinned'
 			}));
 
 			this.addSpecial(new Special({
 				title: 'Trash',
 				icon: 'trashsource.png',
-				filter: { deleted: true },
-				position: 'bottom'
+				filter: { trashed: true },
+				position: 'bottom',
+				name: 'trash'
 			}));
 
 			this.addSources(bg.sources);

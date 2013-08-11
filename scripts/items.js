@@ -86,7 +86,7 @@ $(function() {
 			this.select({ shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });
 		},
 		handleModelChange: function() {
-			if (this.model.get('deleted')) {
+			if (this.model.get('deleted') || (list.specialName != 'trash' && this.model.get('trashed')) ) {
 				list.destroyItem(this);
 			} else {
 				this.render();
@@ -144,7 +144,11 @@ $(function() {
 			list.restartSelection();
 		},
 		handleButtonDelete: function() {
-			list.selectedItems.forEach(list.removeItem, list);
+			if (list.specialName == 'trash') {
+				list.selectedItems.forEach(list.removeItemCompletely, list);
+			} else {
+				list.selectedItems.forEach(list.removeItem, list);	
+			}
 		}
 	}));
 
@@ -153,6 +157,7 @@ $(function() {
 		selectedItems: [],
 		views: [],
 		currentSource: null,
+		specialName: null,
 		events: {
 			
 		},
@@ -163,17 +168,20 @@ $(function() {
 			window.addEventListener('message', function(e) {
 				if (e.data.action == 'new-select') {
 					if (typeof e.data.value == 'object') {
-						that.handleNewSpecialSelected(e.data.value);
+						that.handleNewSpecialSelected(e.data.value, e.data.name);
 					} else {
 						that.handleNewSelected(bg.sources.findWhere({ id: e.data.value }));	
 					}
 					
 				}
 			});
-			this.addItems(bg.items);
+
+			setTimeout(function() {
+				that.addItems(bg.items);
+			}, 0);
 		},
 		addItem: function(item, noManualSort) {
-			if (!item.get('deleted')) {
+			if (!item.get('deleted') && (!item.get('trashed') || this.specialName == 'trash') ) {
 				var view = new ItemView({ model: item });
 
 
@@ -217,14 +225,16 @@ $(function() {
 				this.currentSource.off('destroy', this.handleDestroyedSource, this);
 			}
 			this.currentSource = source;
+			this.specialName = null;
 			source.on('destroy', this.handleDestroyedSource, this);
 			this.addItems(bg.items.where({ sourceID: source.id }));
 		},
-		handleNewSpecialSelected: function(filter) {
+		handleNewSpecialSelected: function(filter, name) {
 			if (this.currentSource) {
 				this.currentSource.off('destroy', this.handleDestroyedSource, this);
 			}
 			this.currentSource = null;
+			this.specialName = name;
 			this.addItems(bg.items.where( filter ));
 		},
 		handleDestroyedSource: function() {
@@ -232,6 +242,12 @@ $(function() {
 			this.addItems(bg.items);	
 		},
 		removeItem: function(view) {
+			view.model.save({
+				'trashed': true
+			});
+			this.destroyItem(view);
+		},
+		removeItemCompletely: function(view) {
 			if (view.model.get('pinned')) {
 				var conf = confirm('Item "' + view.model.escape('title') + '" is pinned. Do you really want to delete it?');
 				if (!conf) {
@@ -240,6 +256,8 @@ $(function() {
 			}
 			view.model.save({
 				'deleted': true,
+				'trashed': true,
+				'pinned': false,
 				'content': '',
 				'author': '',
 				'title': ''
@@ -349,7 +367,11 @@ $(function() {
 			}
 
 			if (e.keyCode == 68) {
-				list.selectedItems.forEach(list.removeItem, list);
+				if (list.specialName == 'trash') {
+					list.selectedItems.forEach(list.removeItemCompletely, list);
+				} else {
+					list.selectedItems.forEach(list.removeItem, list);	
+				}
 				e.preventDefault();
 			} else if (e.keyCode == 75) { // mark as read/unread
 				toolbar.handleButtonRead();

@@ -32,11 +32,14 @@ $(function() {
 		},
 		handleButtonDelete: function() {
 			if (!itemView.model) return;
-			itemView.model.save({
+			/*itemView.model.save({
 				'deleted': true,
 				'content': '',
 				'author': '',
 				'title': ''
+			});*/
+			itemView.model.save({
+				trashed: true
 			});
 		},
 		handleButtonConfig: function() {
