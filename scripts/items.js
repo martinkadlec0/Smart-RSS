@@ -162,7 +162,12 @@ $(function() {
 			bg.items.on('add', this.addItem, this);
 			window.addEventListener('message', function(e) {
 				if (e.data.action == 'new-select') {
-					that.handleNewSelected(bg.sources.findWhere({ id: e.data.value }));
+					if (typeof e.data.value == 'object') {
+						that.handleNewSpecialSelected(e.data.value);
+					} else {
+						that.handleNewSelected(bg.sources.findWhere({ id: e.data.value }));	
+					}
+					
 				}
 			});
 			this.addItems(bg.items);
@@ -214,7 +219,13 @@ $(function() {
 			this.currentSource = source;
 			source.on('destroy', this.handleDestroyedSource, this);
 			this.addItems(bg.items.where({ sourceID: source.id }));
-			
+		},
+		handleNewSpecialSelected: function(filter) {
+			if (this.currentSource) {
+				this.currentSource.off('destroy', this.handleDestroyedSource, this);
+			}
+			this.currentSource = null;
+			this.addItems(bg.items.where( filter ));
 		},
 		handleDestroyedSource: function() {
 			this.currentSource = null;

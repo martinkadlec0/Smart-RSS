@@ -13,22 +13,13 @@ chrome.runtime.getBackgroundPage(function(bg) {
 
 $(function() {
 
-	var SourceView = Backbone.View.extend({
+	var TopView = Backbone.View.extend({
 		tagName: 'div',
 		className: 'source',
 		template: _.template($('#template-source').html()),
 		events: {
 			'mouseup': 'handleMouseUp',
 			'mousedown': 'handleMouseDown',
-		},
-		initialize: function() {
-			this.model.on('change', this.render, this);
-			this.model.on('destroy', this.handleModelDestroy, this);
-			this.el.view = this;
-		},
-		render: function() {
-			this.$el.html(this.template(this.model.toJSON()));
-			return this;
 		},
 		handleMouseDown: function(e) {
 			if (e.which == 1) {
@@ -61,11 +52,42 @@ $(function() {
 			this.select(e);
 			if (e.ctrlKey != true && e.shiftKey != true) {
 				//bg.sources.trigger('new-selected', this.model);
-				window.top.frames[1].postMessage({ action: 'new-select', value: this.model.id }, '*');
+				window.top.frames[1].postMessage({
+					action: 'new-select',
+					value: this.model.id || this.model.get('filter')
+				}, '*');
 			} 
+		}
+	});
+
+	var SourceView = TopView.extend({
+		initialize: function() {
+			this.model.on('change', this.render, this);
+			this.model.on('destroy', this.handleModelDestroy, this);
+			this.el.view = this;
 		},
 		handleModelDestroy: function(e) {
 			list.destroySource(this);
+		},
+		render: function() {
+			this.$el.html(this.template(this.model.toJSON()));
+			return this;
+		}
+	});
+
+	var Special = Backbone.Model.extend({
+		defaults: {
+			title: 'All feeds',
+			icon: 'icon16_v2.png',
+			filter: {}
+		}
+	});
+
+	var SpecialView = TopView.extend({
+		template: _.template($('#template-special').html()),
+		render: function() {
+			this.$el.html(this.template(this.model.toJSON()));
+			return this;
 		}
 	});
 
@@ -273,17 +295,31 @@ $(function() {
 			
 		},
 		initialize: function() {
+			this.addSpecial(new Special({
+				title: 'All feeds',
+				icon: 'icon16_v2.png',
+				filter: { deleted: false }
+			}));
+
 			this.addSources(bg.sources);
 
 			bg.sources.on('reset', this.addSources, this);
 			bg.sources.on('add', this.addSource, this);
+		},
+		addSpecial: function(special) {
+
+			var view = new SpecialView({ model: special });
+			this.$el.append(view.render().el);
 		},
 		addSource: function(source) {
 			var view = new SourceView({ model: source });
 			this.$el.append(view.render().$el);	
 		},
 		addSources: function(sources) {
-			this.$el.html('');
+			$('.source').each(function(i, source) {
+				if (!source.view) return;
+				list.destroySource(source.view);
+			});
 			sources.forEach(function(source) {
 				this.addSource(source);
 			}, this);
@@ -304,6 +340,9 @@ $(function() {
 			if (io >= 0) {
 				list.selectedItems.splice(io, 1);
 			}
+		},
+		generateAllFeedsSource: function() {
+
 		}
 	}));
 
