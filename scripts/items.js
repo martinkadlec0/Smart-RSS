@@ -225,6 +225,7 @@ $(function() {
 
 				if (!after) {
 					this.$el.append(view.render().$el);	
+					if (!this.selectedItems.length) view.select();
 				} else {
 					//$(after).insertBefore(view.render().$el);
 					view.render().$el.insertBefore($(after));
@@ -313,9 +314,9 @@ $(function() {
 			view.off();
 			view.remove();
 			
-			var io = list.selectedItems.indexOf(this);
+			var io = list.selectedItems.indexOf(view);
 			if (io >= 0) list.selectedItems.splice(io, 1);
-			io = list.views.indexOf(this);
+			io = list.views.indexOf(view);
 			if (io >= 0) list.views.splice(io, 1);
 		},
 		restartSelection: function() {
