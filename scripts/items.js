@@ -16,6 +16,10 @@ Array.prototype.first = function() {
 	return this[0];
 }
 
+window.addEventListener('load', function() {
+	window.focus();
+})
+
 chrome.runtime.getBackgroundPage(function(bg) {
 
 $(function() {
@@ -36,7 +40,18 @@ $(function() {
 		render: function() {
 			this.$el.toggleClass('unvisited', !this.model.get('visited'));
 			this.$el.toggleClass('unread', this.model.get('unread'));
-			this.$el.html(this.template(this.model.toJSON()));
+			var data = this.model.toJSON();
+			if (data.date) {
+				if (parseInt(data.date / 86400000) == parseInt(Date.now() / 86400000)) {
+					data.date = bg.formatDate.call(new Date(data.date), 'hh:mm');
+				} else if ((new Date(data.date)).getYear() == (new Date()).getYear() ) {
+					data.date = bg.formatDate.call(new Date(data.date), 'DD.MM');	
+				} else {
+					data.date = bg.formatDate.call(new Date(data.date), 'DD.MM.YYYY');	
+				}
+			}
+			
+			this.$el.html(this.template(data));
 			return this;
 		},
 		select: function(e) {

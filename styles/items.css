@@ -50,7 +50,7 @@ body {
 	outline: 1px dotted grey;
 }
 
-.item:active .item-author, .selected  .item-author {
+.item:active *, .selected  * {
 	color: #f1f1f1 !important;
 }
 
@@ -76,10 +76,14 @@ body {
 }
 
 .item-author {
-	color: #444;
+	color: #664666;
 	padding-top: 0.2rem;
 	font-size: 0.75rem;
-	flex: 1 auto;
+	flex: 1 1 10px;
+	white-space: nowrap;
+	min-width: 10px;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .item-pin {
@@ -99,4 +103,14 @@ body {
 	//-webkit-transform: scale(1, 1);
 	background: #BB2222;
 	border-color: #222;
+}
+
+.item-date {
+	color: #6d6d6d;
+	padding-top: 0.2rem;
+	font-size: 0.75rem;
+	flex: 1 1 20px;
+	white-space: nowrap;
+	font-weight: normal;
+	text-align: right;
 }
