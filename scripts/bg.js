@@ -20,7 +20,8 @@ var Source = Backbone.Model.extend({
 		lastUpdate: 0,
 		count: 0,
 		username: '',
-		password: ''
+		password: '',
+		hasNew: false
 	}
 });
 
@@ -28,10 +29,15 @@ var sources = new (Backbone.Collection.extend({
 	model: Source,
 	localStorage: new Backbone.LocalStorage('sources-backbone'),
 	comparator: function(a, b) {
-		return a.get('tile') < b.get('title') ? 1 : -1;
+		return a.get('tile') < b.get('title') ? -1 : 1;
 	},
 	initialize: function() {
-		this.fetch({ silent: true });
+		var that = this;
+		this.fetch({ silent: true }).then(function() {
+			if (that.findWhere({ hasNew: true })) {
+				chrome.browserAction.setIcon({ path: '/images/icon19_new.png' });
+			}
+		});
 	}
 }));
 
@@ -133,6 +139,14 @@ $(function() {
 		}
 	});
 
+	sources.on('change:hasNew', function(source) {
+		if (sources.findWhere({ hasNew: true })) {
+			chrome.browserAction.setIcon({ path: '/images/icon19_new.png' });
+		} else {
+			chrome.browserAction.setIcon({ path: '/images/icon19.png' });
+		}
+	});
+
 	sources.on('destroy', function(source) {
 		items.where({ sourceID: source.get('id') }).forEach(function(item) {
 			item.destroy({ noFocus: true });
@@ -231,8 +245,10 @@ function downloadURL(urls, cb) {
 			// parsedData step needed for debugging
 			var parsedData = parseRSS(r, url.get('id'));
 
+			var hasNew = false;
 			parsedData.forEach(function(item) {
 				if (!items.get(item.id)) {
+					hasNew = true;
 					items.create(item);	
 				}
 			});
@@ -241,7 +257,8 @@ function downloadURL(urls, cb) {
 			var count = items.where({ sourceID: url.get('id'), unread: true, deleted: false  }).length;
 			sources.findWhere({ id: url.get('id') }).save({
 				'count': count,
-				'lastUpdate': Date.now()
+				'lastUpdate': Date.now(),
+				'hasNew': hasNew
 			});
 
 

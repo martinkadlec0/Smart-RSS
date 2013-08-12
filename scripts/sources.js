@@ -48,6 +48,17 @@ $(function() {
 			this.select(e);
 			if (e.ctrlKey != true && e.shiftKey != true) {
 				//bg.sources.trigger('new-selected', this.model);
+
+				if (this.model.get('name') == 'all-feeds') {
+					bg.sources.forEach(function(source) {
+						source.save({ hasNew: false });
+					});
+					
+				} else {
+					this.model.save({ hasNew: false });
+				}
+
+				
 				window.top.frames[1].postMessage({
 					action: 'new-select',
 					value: this.model.id || this.model.get('filter'),
