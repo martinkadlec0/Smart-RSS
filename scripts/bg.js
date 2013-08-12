@@ -155,11 +155,13 @@ $(function() {
 	});
 
 	items.on('change:unread', function(model) {
-		var source = sources.findWhere({ id: model.get('sourceID') });
-		if (source && model.get('unread') == true) {
-			source.save({ 'count': source.get('count') + 1 });
-		} else {
-			source.save({ 'count': source.get('count') - 1 });
+		if (!model.get('trashed')) {
+			var source = sources.findWhere({ id: model.get('sourceID') });
+			if (source && model.get('unread') == true) {
+				source.save({ 'count': source.get('count') + 1 });
+			} else {
+				source.save({ 'count': source.get('count') - 1 });
+			}
 		}
 	});
 
