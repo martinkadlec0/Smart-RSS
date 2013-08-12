@@ -220,6 +220,7 @@ function downloadURL(urls, cb) {
 	var url =  urls.pop();
 	$.ajax({
 		url: url.get('url'),
+		dataType: 'xml',
 		success: function(r) {
 
 			loader.set('loaded', loader.get('loaded') + 1);
@@ -261,7 +262,11 @@ function parseRSS(xml, sourceID) {
 
 	
 	var nodes = xml.querySelectorAll('item');
-	var title = xml.querySelector('channel > title');
+	if (!nodes.length) {
+		nodes = xml.querySelectorAll('entry');
+	}
+
+	var title = xml.querySelector('channel > title, feed > title');
 	var source = sources.findWhere({ id: sourceID });
 	if (title && (source.get('title') == source.get('url') || !source.get('title')) ) {
 		source.set('title', title.textContent);
@@ -292,7 +297,13 @@ function parseRSS(xml, sourceID) {
 }
 
 function rssGetDate(node) {
-	var pubDate = node.querySelector('pubDate, updated');
+	var pubDate = node.querySelector('pubDate, published');
+	if (pubDate) {
+		return (new Date(pubDate.textContent)).getTime();
+	}
+
+	pubDate = node.querySelector('lastBuildDate, update');
+
 	if (pubDate) {
 		return (new Date(pubDate.textContent)).getTime();
 	}
@@ -323,15 +334,18 @@ function rssGetTitle(node) {
 }
 
 function rssGetContent(node) {
-	var encoded = node.querySelector('encoded, content');
-	if (encoded) {
-		return encoded.textContent; 
-	} 
+	var desc = node.querySelector('encoded');
+	if (desc) return desc.textContent; 
 
-	var desc = node.querySelector('description'); 
-	if (desc) {
-		return desc.textContent;
-	}
+	desc = node.querySelector('description'); 
+	if (desc) return desc.textContent;
+
+	desc = node.querySelector('summary'); 
+	if (desc) return desc.textContent;
+
+	desc = node.querySelector('content'); 
+	if (desc) return desc.textContent;
+
 	return  '&nbsp;'
 }
 
@@ -409,7 +423,7 @@ chrome.runtime.onMessageExternal.addListener(function(message, sender, sendRespo
 		});
 
 		localStorage.setItem('sourceIdIndex', sourceIdIndex);
-		
+
 		openRSS();
 
 	}
