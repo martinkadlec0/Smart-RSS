@@ -195,8 +195,8 @@ function downloadOne(source) {
 function downloadAll() {
 	var urls = sources.clone();
 
-	urls.forEach(function(url) {
-		if (!url.get('lastUpdate') || url.get('lastUpdate') > Date.now() - url.get('updateEVery') * 60 * 1000) {
+	urls.toArray().forEach(function(url) {
+		if (!url.get('lastUpdate') || url.get('lastUpdate') > Date.now() - url.get('updateEvery') * 60 * 1000) {
 			urls.remove(url);
 		}
 	});
