@@ -139,7 +139,7 @@ $(function() {
 			
 		},
 		addSourceDialog: function() {
-			var url = prompt('RSS source url:');
+			var url = prompt('RSS source url:').trim();
 			if (url) {
 				url = fixURL(url);
 				bg.sources.create({
@@ -153,7 +153,7 @@ $(function() {
 			}
 		},
 		reloadSources: function() {
-			bg.downloadAll();
+			bg.downloadAll(true);
 		}
 	}));
 

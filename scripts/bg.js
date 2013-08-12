@@ -210,14 +210,16 @@ function downloadOne(source) {
 	});
 }
 
-function downloadAll() {
+function downloadAll(force) {
 	var urls = sources.clone();
 
-	urls.toArray().forEach(function(url) {
-		if (!url.get('lastUpdate') || url.get('lastUpdate') > Date.now() - url.get('updateEvery') * 60 * 1000) {
-			urls.remove(url);
-		}
-	});
+	if (!force) {
+		urls.toArray().forEach(function(url) {
+			if (!url.get('lastUpdate') || url.get('lastUpdate') > Date.now() - url.get('updateEvery') * 60 * 1000) {
+				urls.remove(url);
+			}
+		});
+	}
 
 	if (urls.length) {
 		loader.set('maxSources', urls.length);

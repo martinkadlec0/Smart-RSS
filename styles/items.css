@@ -155,5 +155,6 @@ html:not(.focused) .last-selected {
 
 	.item-date {
 		flex: 0 1 5rem;
+		padding-right: 5px;
 	}
 }
