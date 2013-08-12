@@ -63,3 +63,10 @@ iframe {
 	}
 }
 
+#config-layout {
+	padding: 5px;
+}
+
+#config-layout input[type=image] {
+	margin: 3px;
+}

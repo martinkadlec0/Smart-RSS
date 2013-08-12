@@ -53,7 +53,7 @@ $(function() {
 	var overlay = new (Backbone.View.extend({
 		el: '.overlay',
 		events: {
-			'change #config-layout': 'handleLayoutChange'
+			'click #config-layout input[type=image]': 'handleLayoutChange'
 		},
 		initialize: function() {
 			window.addEventListener('blur', this.hide.bind(this));
@@ -61,11 +61,18 @@ $(function() {
 		},
 		render: function() {
 			var layout = parseInt(localStorage.getItem('vertical-layout')) || 0;
+			if (layout) {
+				$('#config-layout input[value=0]').attr('src', '/images/layout_horizontal.png');
+				$('#config-layout input[value=1]').attr('src', '/images/layout_vertical_selected.png');
+			} else {
+				$('#config-layout input[value=0]').attr('src', '/images/layout_horizontal_selected.png');
+				$('#config-layout input[value=1]').attr('src', '/images/layout_vertical.png');
+			}
 			this.$el.find('#config-layout').val(layout);
 			return this;
 		},
 		handleLayoutChange: function(e) {
-			var layout = parseInt($(e.currentTarget).val());
+			var layout = parseInt(e.currentTarget.value);
 			localStorage.setItem('vertical-layout', layout.toString());
 			window.top.postMessage({ action: 'layout-changed', value: layout }, '*');
 			this.hide();

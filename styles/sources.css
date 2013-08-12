@@ -89,11 +89,6 @@ body {
 	display: none;
 }
 
-#properties label {
-	font-family: serif;
-	font-size: 0.8rem;
-	font-weight: bold;
-}
 
 #properties input, #properties select {
 	width: 100%;
