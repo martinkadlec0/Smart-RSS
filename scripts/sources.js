@@ -17,6 +17,14 @@ window.addEventListener('blur', function() {
 	document.documentElement.classList.remove('focused');
 });
 
+function fixURL(url) {
+	if (url.search(/[a-z]+:\/\//) == -1) {
+		url = 'http://' + url;
+	}
+	return url;
+}
+
+
 chrome.runtime.getBackgroundPage(function(bg) {
 
 $(function() {
@@ -133,6 +141,7 @@ $(function() {
 		addSourceDialog: function() {
 			var url = prompt('RSS source url:');
 			if (url) {
+				url = fixURL(url);
 				bg.sources.create({
 					id: bg.sourceIdIndex++,
 					title: url,
@@ -293,7 +302,7 @@ $(function() {
 
 			this.currentSource.save({
 				title: $('#prop-title').val(),
-				url: $('#prop-url').val(),
+				url: fixURL($('#prop-url').val()),
 				username: $('#prop-username').val(),
 				password: $('#prop-password').val(),
 				updateEvery: parseFloat($('#prop-update-every').val())
