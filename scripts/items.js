@@ -20,6 +20,15 @@ window.addEventListener('load', function() {
 	window.focus();
 })
 
+
+window.addEventListener('focus', function() {
+	document.documentElement.classList.add('focused');
+});
+
+window.addEventListener('blur', function() {
+	document.documentElement.classList.remove('focused');
+});
+
 chrome.runtime.getBackgroundPage(function(bg) {
 
 $(function() {

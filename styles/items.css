@@ -40,6 +40,11 @@ body {
 	border-bottom-color: rgb(51, 153, 255);
 }
 
+html:not(.focused) .selected {
+	background: #94C6F7;
+	border-bottom-color: #ccc;
+}
+
 .item:active .item-pin:not(.pinned), .selected  .item-pin:not(.pinned) {
 	border-color: rgb(51, 153, 255);
 	background: radial-gradient(circle at center, rgb(51, 153, 255) 30%, #c6c6c6 30%);
@@ -48,6 +53,10 @@ body {
 
 .last-selected {
 	outline: 1px dotted grey;
+}
+
+html:not(.focused) .last-selected {
+	outline: none;
 }
 
 .item:active *, .selected  * {

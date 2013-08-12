@@ -9,6 +9,14 @@ if (!Element.prototype.hasOwnProperty('matchesSelector')) {
 	Element.prototype.matchesSelector = Element.prototype.webkitMatchesSelector;
 }
 
+window.addEventListener('focus', function() {
+	document.documentElement.classList.add('focused');
+});
+
+window.addEventListener('blur', function() {
+	document.documentElement.classList.remove('focused');
+});
+
 chrome.runtime.getBackgroundPage(function(bg) {
 
 $(function() {
@@ -54,7 +62,7 @@ $(function() {
 						source.save({ hasNew: false });
 					});
 					
-				} else {
+				} else if (this.model instanceof bg.Source) {
 					this.model.save({ hasNew: false });
 				}
 

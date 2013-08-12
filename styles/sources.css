@@ -34,7 +34,7 @@ body {
 }
 
 .source:active {
-	background: rgb(118, 168, 218);	
+	background: rgb(51, 153, 255);	
 }
 
 .source:hover .source-title {
