@@ -166,12 +166,21 @@ $(function() {
 	 * onclick:button -> open RSS
 	 */
 	chrome.browserAction.onClicked.addListener(function(tab) {
-		chrome.tabs.create({'url': chrome.extension.getURL('rss.html')}, function(tab) {
-			// ...
-		});
+		openRSS();
 	});
 
 });
+
+function openRSS() {
+	var url = chrome.extension.getURL('rss.html');
+	chrome.tabs.query({ url: url }, function(tabs) {
+		if (tabs[0]) {
+			chrome.tabs.update(tabs[0].id, { active: true });
+		} else {
+			chrome.tabs.create({'url': url }, function(tab) {});
+		}
+	});
+}
 
 function downloadOne(source) {
 	loader.set('maxSources', 1);
@@ -400,7 +409,8 @@ chrome.runtime.onMessageExternal.addListener(function(message, sender, sendRespo
 		});
 
 		localStorage.setItem('sourceIdIndex', sourceIdIndex);
+		
+		openRSS();
 
-		chrome.tabs.create({'url': chrome.extension.getURL('rss.html')}, function(tab) {});
 	}
 });
