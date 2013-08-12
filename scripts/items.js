@@ -185,6 +185,7 @@ $(function() {
 			bg.items.on('add', this.addItem, this);
 			window.addEventListener('message', function(e) {
 				if (e.data.action == 'new-select') {
+					window.focus();
 					if (typeof e.data.value == 'object') {
 						that.handleNewSpecialSelected(e.data.value, e.data.name);
 					} else {
