@@ -220,7 +220,8 @@ function downloadURL(urls, cb) {
 		return;
 	}
 	var url =  urls.pop();
-	$.ajax({
+
+	var options = {
 		url: url.get('url'),
 		dataType: 'xml',
 		success: function(r) {
@@ -252,7 +253,14 @@ function downloadURL(urls, cb) {
 			console.log('Failed load RSS: url');
 			downloadURL(urls, cb);
 		}
-	});
+	};
+
+	if (url.get('username') || url.get('password')) {
+		options.username = url.get('username') || '';
+		options.password = url.get('password') || '';
+	}
+
+	$.ajax(options);
 }
 
 

@@ -251,7 +251,8 @@ $(function() {
 		currentSource: null,
 		events: {
 			'click button' : 'handleClick',
-			'keydown button' : 'handleKeyDown'
+			'keydown button' : 'handleKeyDown',
+			'click #advanced-switch' : 'handleSwitchClick',
 		},
 		initialize: function() {
 			//$('#prop-cancel').on('click', this.hide);
@@ -274,6 +275,8 @@ $(function() {
 			this.currentSource.save({
 				title: $('#prop-title').val(),
 				url: $('#prop-url').val(),
+				username: $('#prop-username').val(),
+				password: $('#prop-password').val(),
 				updateEvery: parseFloat($('#prop-update-every').val())
 			});
 
@@ -288,6 +291,8 @@ $(function() {
 		show: function(source) {
 			$('#prop-title').val(source.get('title'));;
 			$('#prop-url').val(source.get('url'));
+			$('#prop-username').val(source.get('username'));
+			$('#prop-password').val(source.get('password'));
 			if (source.get('updateEvery')) {
 				$('#prop-update-every').val(source.get('updateEvery'));	
 			}
@@ -296,6 +301,10 @@ $(function() {
 		},
 		hide: function() {
 			properties.$el.css('display', 'none');
+		},
+		handleSwitchClick: function() {
+			$('#properties-advanced').toggleClass('visible');
+			$('#advanced-switch').toggleClass('switched');
 		}
 	}));
 

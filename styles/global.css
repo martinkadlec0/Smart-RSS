@@ -133,3 +133,7 @@ input[type=search]:not(:focus):not(:valid) {
 	border-radius: 5px;
 	box-shadow: 2px 2px 2px #999;
 }
+
+.visible {
+	display: block !important;
+}

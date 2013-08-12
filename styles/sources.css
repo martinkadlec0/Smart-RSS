@@ -90,6 +90,7 @@ body {
 }
 
 #properties label {
+	font-family: serif;
 	font-size: 0.8rem;
 	font-weight: bold;
 }
@@ -111,4 +112,29 @@ body {
 
 #properties button:first-of-type {
 	margin-right: 2%;
+}
+
+#properties-advanced {
+	margin: 5px 0;
+	display: none;
+}
+
+#advanced-switch {
+	-webkit-user-select: none;
+	user-select: none;
+	margin: 5px 0;
+	font-weight: bold;
+	font-size: 0.8rem;
+	cursor: pointer;
+	padding-left: 16px;
+	font-family: serif;
+	background: url('/images/right.png') no-repeat left 37%;
+}
+
+#advanced-switch:hover {
+	text-decoration: underline;
+}
+
+#advanced-switch.switched {
+	background: url('/images/down.png') no-repeat left 37%;
 }
