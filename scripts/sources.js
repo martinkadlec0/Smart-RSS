@@ -17,10 +17,6 @@ $(function() {
 		tagName: 'div',
 		className: 'source',
 		template: _.template($('#template-source').html()),
-		events: {
-			'mouseup': 'handleMouseUp',
-			'mousedown': 'handleMouseDown',
-		},
 		handleMouseDown: function(e) {
 			if (e.which == 1) {
 				this.showSourceItems(e);
@@ -62,6 +58,10 @@ $(function() {
 	});
 
 	var SourceView = TopView.extend({
+		events: {
+			'mouseup': 'handleMouseUp',
+			'mousedown': 'handleMouseDown',
+		},
 		initialize: function() {
 			this.model.on('change', this.render, this);
 			this.model.on('destroy', this.handleModelDestroy, this);
@@ -87,6 +87,9 @@ $(function() {
 	});
 
 	var SpecialView = TopView.extend({
+		events: {
+			'mousedown': 'handleMouseDown'
+		},
 		template: _.template($('#template-special').html()),
 		render: function() {
 			if (this.model.get('position') == 'top') {

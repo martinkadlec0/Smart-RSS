@@ -18,7 +18,9 @@ var Source = Backbone.Model.extend({
 		url: 'rss.rss',
 		updateEvery: 0,
 		lastUpdate: 0,
-		count: 0
+		count: 0,
+		username: '',
+		password: ''
 	}
 });
 
