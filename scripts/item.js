@@ -4,6 +4,10 @@ function utf8_to_b64( str ) {
 	return btoa(unescape(encodeURIComponent( str )));
 }
 
+if (!Element.prototype.hasOwnProperty('matchesSelector')) {
+	Element.prototype.matchesSelector = Element.prototype.webkitMatchesSelector;
+}
+
 
 chrome.runtime.getBackgroundPage(function(bg) {
 

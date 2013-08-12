@@ -9,11 +9,15 @@ RegExp.escape = function(str) {
 Array.prototype.last = function() {
 	if (!this.length) return null;
 	return this[this.length - 1];
-}
+};
 
 Array.prototype.first = function() {
 	if (!this.length) return null;
 	return this[0];
+};
+
+if (!Element.prototype.hasOwnProperty('matchesSelector')) {
+	Element.prototype.matchesSelector = Element.prototype.webkitMatchesSelector;
 }
 
 window.addEventListener('load', function() {

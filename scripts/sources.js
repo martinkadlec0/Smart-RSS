@@ -121,8 +121,10 @@ $(function() {
 		render: function() {
 			if (this.model.get('position') == 'top') {
 				this.$el.css('order', 1);
+				this.$el.css('-webkit-order', 1);
 			} else {
 				this.$el.css('order', 3);
+				this.$el.css('-webkit-order', 3);
 			}
 			this.$el.html(this.template(this.model.toJSON()));
 			return this;

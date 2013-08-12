@@ -1,9 +1,12 @@
 body {
+	display: -webkit-flex;
 	display: flex;
+	-webkit-flex-flow: column;
 	flex-flow: column;
 }
 
 #toolbar {
+	-webkit-flex: 0 0 auto;
 	flex: 0 0 auto;
 }
 
@@ -13,6 +16,7 @@ header {
 	padding: 25px 30px 15px 30px;
 	font-family: sans-serif;
 	border-bottom: 1px solid rgb(199, 203, 214);
+	-webkit-flex: 0 0 auto;
 	flex: 0 0 auto;
 	overflow: hidden;
 }
@@ -27,7 +31,7 @@ h1 {
 	padding: 0;
 	color: rgb(72, 72, 72);
 	font-size: 1.5rem;
-	white-space: nowrap;
+	max-height: 6rem;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
@@ -53,6 +57,7 @@ header p:last-of-type {
 
 iframe {
 	display: none;
+	-webkit-flex: 1 1 auto;
 	flex: 1 1 auto;
 	width: 100%;
 }

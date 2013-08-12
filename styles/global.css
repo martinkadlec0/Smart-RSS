@@ -12,17 +12,21 @@ body {
 	font-size: 100%;
 }
 #toolbar {
+	display: -webkit-flex;
 	display: flex;
 	height: 32px;
 	background: #f2f2f2;
 	border-bottom: 1px solid #a6a6a6;
+	-webkit-align-items: stretch;
 	align-items: stretch;
-	justify-content: flex-start;
+	-webkit-justify-content: flex-start;
+	justify-content: flex-start;	
 	padding: 3px 6px;
 	-webkit-user-select: none;
 	user-select: none;
 }
 .button {
+	-webkit-flex: 0 0 28px;
 	flex: 0 0 28px;
 	overflow: hidden;
 	border-radius: 3px;
