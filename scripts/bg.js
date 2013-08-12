@@ -109,7 +109,13 @@ $(function() {
 		var sourceID = parseInt(alarm.name.replace('source-', ''));
 		if (sourceID) {
 			var source = sources.findWhere({ id: sourceID });
-			downloadOne(source);
+			if (source) {
+				downloadOne(source);
+			} else {
+				console.log('No source with ID: ' + sourceID);
+				debugger;
+			}
+			
 		}
 		
 	});
@@ -118,23 +124,23 @@ $(function() {
 		downloadOne(source);
 	});
 
-	/*sources.on('change:title', function(source) {
-		if (!source.get('title')) {
+	sources.on('change:title', function(source) {
+		// if url was changed as well change:url listener will download the source
+		if (!source.get('title') && !source.changed.url) {
 			downloadOne(source);
 		}
-	});*/
+	});
 
 	sources.on('destroy', function(source) {
 		items.where({ sourceID: source.get('id') }).forEach(function(item) {
 			item.destroy({ noFocus: true });
 		});
-		items.trigger('batch-ended');
 		chrome.alarms.clear('source-' + source.get('id'));
 	});
 
 	items.on('change:unread', function(model) {
 		var source = sources.findWhere({ id: model.get('sourceID') });
-		if (model.get('unread') == true) {
+		if (source && model.get('unread') == true) {
 			source.save({ 'count': source.get('count') + 1 });
 		} else {
 			source.save({ 'count': source.get('count') - 1 });
@@ -143,7 +149,7 @@ $(function() {
 
 	items.on('change:trashed', function(model) {
 		var source = sources.findWhere({ id: model.get('sourceID') });
-		if (model.get('unread') == true) {
+		if (source && model.get('unread') == true) {
 			if (model.get('trashed') == true) {
 				source.save({ 'count': source.get('count') - 1 });
 			} else {

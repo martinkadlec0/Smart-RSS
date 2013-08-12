@@ -46,7 +46,12 @@ $(function() {
 				$('.selected').removeClass('selected');
 				if (!e.preventLoading) {
 					//bg.items.trigger('new-selected', this.model);
-					topWindow.frames[2].postMessage({ action: 'new-select', value: this.model.id }, '*');
+					try {
+						topWindow.frames[2].postMessage({ action: 'new-select', value: this.model.id }, '*');	
+					} catch(e) {
+						debugger;
+					}
+					
 				}
 
 				if (!this.model.get('visited')) {
@@ -430,11 +435,17 @@ $(function() {
 					var id = list.currentSource.get('id');
 					if (!id) return;
 					bg.items.where({ sourceID: id }).forEach(function(item) {
-						item.set('unread', false);
+						item.save({
+							unread: false,
+							visited: true
+						});
 					});
 				} else if (confirm('Do you really want to mark ALL items as read?')) {
 					bg.items.forEach(function(item) {
-						item.set('unread', false);
+						item.save({
+							unread: false,
+							visited: true
+						});
 					});
 				}
 				e.preventDefault();
