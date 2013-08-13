@@ -124,9 +124,12 @@ $(function() {
 
 			var date = bg.formatDate.call(new Date(this.model.get('date')), 'DD.MM.YYYY hh:mm:ss');
 
+			var source = bg.sources.findWhere({ id: this.model.get('sourceID') });
+
 			var content = utf8_to_b64(this.contentTemplate({ 
 				content: this.model.get('content'),
-				url: this.model.get('url')
+				url: this.model.get('url'),
+				sourceUrl: source.get('url')
 			}));
 
 			this.$el.find('h1').html(this.model.escape('title'));

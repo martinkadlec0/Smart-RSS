@@ -184,16 +184,20 @@ $(function() {
 	 * onclick:button -> open RSS
 	 */
 	chrome.browserAction.onClicked.addListener(function(tab) {
-		openRSS();
+		openRSS(true);
 	});
 
 });
 
-function openRSS() {
+function openRSS(closeIfActive) {
 	var url = chrome.extension.getURL('rss.html');
 	chrome.tabs.query({ url: url }, function(tabs) {
 		if (tabs[0]) {
-			chrome.tabs.update(tabs[0].id, { active: true });
+			if (tabs[0].active && closeIfActive) {
+				chrome.tabs.remove(tabs[0].id);
+			} else {
+				chrome.tabs.update(tabs[0].id, { active: true });
+			}
 		} else {
 			chrome.tabs.create({'url': url }, function(tab) {});
 		}
@@ -329,6 +333,11 @@ function parseRSS(xml, sourceID) {
 
 function rssGetDate(node) {
 	var pubDate = node.querySelector('pubDate, published');
+	if (pubDate) {
+		return (new Date(pubDate.textContent)).getTime();
+	}
+
+	pubDate = node.querySelector('date');
 	if (pubDate) {
 		return (new Date(pubDate.textContent)).getTime();
 	}

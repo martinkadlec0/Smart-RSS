@@ -364,7 +364,7 @@ $(function() {
 			this.addSpecial(new Special({
 				title: 'Trash',
 				icon: 'trashsource.png',
-				filter: { trashed: true },
+				filter: { trashed: true, deleted: false },
 				position: 'bottom',
 				name: 'trash'
 			}));
