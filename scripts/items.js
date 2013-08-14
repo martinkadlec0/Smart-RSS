@@ -430,8 +430,8 @@ $(function() {
 				return;
 			}
 
-			if (e.keyCode == 68) {
-				if (list.specialName == 'trash') {
+			if (e.keyCode == 68 || e.keyCode == 46) {
+				if (list.specialName == 'trash' || e.shiftKey) {
 					list.selectedItems.forEach(list.removeItemCompletely, list);
 				} else {
 					list.selectedItems.forEach(list.removeItem, list);	
