@@ -36,17 +36,22 @@ $(function() {
 				visited: true
 			});
 		},
-		handleButtonDelete: function() {
+		handleButtonDelete: function(e) {
 			if (!itemView.model) return;
-			/*itemView.model.save({
-				'deleted': true,
-				'content': '',
-				'author': '',
-				'title': ''
-			});*/
-			itemView.model.save({
-				trashed: true
-			});
+			if (e.shiftKey) {
+				itemView.model.save({
+					trashed: true,
+					deleted: true,
+					'pinned': false,
+					'content': '',
+					'author': '',
+					'title': ''
+				});
+			} else {
+				itemView.model.save({
+					trashed: true
+				});
+			}
 		},
 		handleButtonConfig: function() {
 			overlay.show();
@@ -186,14 +191,18 @@ $(function() {
 
 			if (e.keyCode == 49) {
 				topWindow.frames[0].focus();
+				e.preventDefault();
 			} else if (e.keyCode == 50) {
 				topWindow.frames[1].focus();
+				e.preventDefault();
 			} else if (e.keyCode == 38) {
 				var cw = $('iframe').get(0).contentWindow;
 				cw.scrollBy(0, -40);
+				e.preventDefault();
 			} else if (e.keyCode == 40) {
 				var cw = $('iframe').get(0).contentWindow;
 				cw.scrollBy(0, 40);
+				e.preventDefault();
 			} else if (e.keyCode == 32) {
 				var cw = $('iframe').get(0).contentWindow;
 				var d = $('iframe').get(0).contentWindow.document;
@@ -202,6 +211,13 @@ $(function() {
 				} else {
 					cw.scrollBy(0, d.documentElement.clientHeight * 0.85);
 				}
+				e.preventDefault();
+			} else if (e.keyCode == 68 || e.keyCode == 46) {
+				toolbar.handleButtonDelete(e);
+				e.preventDefault();
+			} else if (e.keyCode == 75) {
+				toolbar.handleButtonRead();
+				e.preventDefault();
 			}
 		}
 	}));

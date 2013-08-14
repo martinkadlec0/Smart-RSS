@@ -183,8 +183,8 @@ $(function() {
 
 			list.restartSelection();
 		},
-		handleButtonDelete: function() {
-			if (list.specialName == 'trash') {
+		handleButtonDelete: function(e) {
+			if (list.specialName == 'trash' || e.shiftKey) {
 				list.selectedItems.forEach(list.removeItemCompletely, list);
 			} else {
 				list.selectedItems.forEach(list.removeItem, list);	
@@ -369,7 +369,7 @@ $(function() {
 				if (opt.onlyToRead && item.model.get('unread') == false) {
 					// do nothing
 				} else {
-					item.model.save({ unread: val, visited: true });	
+					item.model.save({ unread: val, visited: true });
 				}
 				
 			}, this);
@@ -441,10 +441,12 @@ $(function() {
 				e.preventDefault();
 			} else if (e.keyCode == 49) {
 				topWindow.frames[0].focus();
+				e.preventDefault();
 			} else if (e.keyCode == 51) {
 				topWindow.frames[2].focus();
+				e.preventDefault();
 			} else if (e.keyCode == 75) { // mark as read/unread
-				toolbar.handleButtonRead();
+				list.changeUnreadState();
 				e.preventDefault();
 			} else if (e.keyCode == 40) { // arrow down
 				this.selectNext(e);
@@ -476,7 +478,7 @@ $(function() {
 							visited: true
 						});
 					});
-				} else if (confirm('Do you really want to mark ALL items as read?')) {
+				} else if (list.specialName == 'all-feeds' && confirm('Do you really want to mark ALL items as read?')) {
 					bg.items.forEach(function(item) {
 						item.save({
 							unread: false,

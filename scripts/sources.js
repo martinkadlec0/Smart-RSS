@@ -459,8 +459,10 @@ $(function() {
 				//list.selectedItems.forEach(list.removeSource, list);
 			} else if (e.keyCode == 50) {
 				window.top.frames[1].focus();
+				e.preventDefault();
 			} else if (e.keyCode == 51) {
 				window.top.frames[2].focus();
+				e.preventDefault();
 			} else if (e.keyCode == 38) {
 				var cs = $('.selected:first');
 				var s;
@@ -470,6 +472,7 @@ $(function() {
 					s = $('.source:last').get(0);
 				}
 				if (s) s.view.select();
+				e.preventDefault();
 			} else if (e.keyCode == 40) {
 				var cs = $('.selected:first');
 				var s;
@@ -479,11 +482,13 @@ $(function() {
 					s = $('.source:first').get(0);
 				}
 				if (s) s.view.select();
+				e.preventDefault();
 			} else if (e.keyCode == 13) {
 				var cs = $('.selected:first');
 				if (cs.length) {
 					cs.get(0).view.showSourceItems({ noSelect: true });
 				}
+				e.preventDefault();
 			}
 		},
 		handleLoadingChange: function(e) {
