@@ -1,9 +1,3 @@
-window.errors = [];
-
-window.onerror = function(a) {
-	window.errors.push(a.toString());
-}
-
 var sourceIdIndex = localStorage.getItem('sourceIdIndex') || 1;
 
 
@@ -78,6 +72,34 @@ var loader = new (Backbone.Model.extend({
 		loading: false
 	}
 }));
+
+
+var log = Backbone.Model.extend({
+	defaults: {
+		message: '<no message>'
+	}
+});
+
+var logs = new (Backbone.Collection.extend({
+	model: log,
+	initialze: function() {
+		var that = this;
+		window.onerror = function(a, b, c) {
+			
+		}
+	}
+}));
+
+
+window.onerror = function(a, b, c) {
+	var msg = a.toString() + ' (Line: ' + c.toString() + ')';
+	logs.add({ message: msg });
+}
+
+setInterval(function() {
+	a+a;
+}, 3000);
+
 
 
 /**

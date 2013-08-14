@@ -172,6 +172,24 @@ $(function() {
 		}
 	}));
 
+
+	var log = new (Backbone.View.extend({
+		el: 'footer',
+		events: {
+			'click #button-hide-log': 'hide'
+		},
+		initialize: function() {
+			bg.logs.on('add', this.addItem, this);
+		},
+		addItem: function(model) {
+			this.$el.css('display', 'block');
+			$('<div class="log">' + bg.formatDate.call(new Date, 'hh:mm:ss') + ': ' + model.get('message') + '</div>').insertAfter(this.$el.find('#button-hide-log'));
+		},
+		hide: function() {
+			this.$el.css('display', 'none');
+		}
+	}));
+
 });
 
 });

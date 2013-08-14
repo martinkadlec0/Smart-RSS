@@ -92,6 +92,35 @@ iframe {
 	width: 100%;
 }
 
+
+footer {
+	border-top: 2px solid #999;
+	padding: 5px 10px;
+	font-size: 0.75rem;
+	display: none;
+	-webkit-flex: 0 1 auto;
+	max-height: 200px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	background: white;
+}
+
+footer .log {
+	padding: 5px 0;
+}
+
+footer .log:not(:last-of-type) {
+	border-bottom: 1px solid #ccc;
+}
+
+#button-hide-log {
+	margin: 0;
+	padding: 0 4px;
+	border: 1px solid #a6a6a6;
+	cursor: pointer;
+}
+
+
 @media print { 
 	header, #toolbar {
 		display: none !important;
