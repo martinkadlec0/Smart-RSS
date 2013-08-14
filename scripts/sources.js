@@ -140,6 +140,31 @@ $(function() {
 		}
 	});
 
+	var trash = new Special({
+		title: 'Trash',
+		icon: 'trashsource.png',
+		filter: { trashed: true, deleted: false },
+		position: 'bottom',
+		name: 'trash',
+		onReady: function() {
+			this.el.addEventListener('dragover', function(e) {
+				e.preventDefault();
+			});
+			this.el.addEventListener('drop', function(e) {
+				e.preventDefault();
+				var ids = JSON.parse(e.dataTransfer.getData('text/plain') || '[]') || [];
+				ids.forEach(function(id) {
+					var item = bg.items.findWhere({ id: id });
+					if (item && !item.get('trashed')) {
+						item.save({
+							trashed: true
+						});
+					}
+				});
+			});
+		}
+	});
+
 	var toolbar = new (Backbone.View.extend({
 		el: '#toolbar',
 		events: {
@@ -318,28 +343,7 @@ $(function() {
 				name: 'pinned'
 			}));
 
-			this.addSpecial(new Special({
-				title: 'Trash',
-				icon: 'trashsource.png',
-				filter: { trashed: true, deleted: false },
-				position: 'bottom',
-				name: 'trash',
-				onReady: function() {
-					this.el.addEventListener('dragover', function(e) {
-						e.preventDefault();
-					});
-					this.el.addEventListener('drop', function(e) {
-						e.preventDefault();
-						var id = e.dataTransfer.getData('text/plain');
-						var item = bg.items.findWhere({ id: id });
-						if (item && !item.get('trashed')) {
-							item.save({
-								trashed: true
-							});
-						}
-					});
-				}
-			}));
+			this.addSpecial(trash);
 
 			this.addSources(bg.sources);
 

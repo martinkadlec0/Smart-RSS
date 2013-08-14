@@ -77,6 +77,9 @@ $(function() {
 		handleMouseUp: function(e) {
 			if (e.which == 3) {
 				this.showContextMenu(e);
+			} else if (list.selectedItems.length > 1 && list.selectFlag) {
+				this.select({ shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });	
+				list.selectFlag = false;
 			}
 		},
 		showContextMenu: function(e) {
@@ -91,12 +94,7 @@ $(function() {
 				$('.selected').removeClass('selected');
 				if (!e.preventLoading) {
 					//bg.items.trigger('new-selected', this.model);
-					try {
-						topWindow.frames[2].postMessage({ action: 'new-select', value: this.model.id }, '*');	
-					} catch(e) {
-						debugger;
-					}
-					
+					topWindow.frames[2].postMessage({ action: 'new-select', value: this.model.id }, '*');	
 				}
 
 				if (!this.model.get('visited')) {
@@ -122,6 +120,11 @@ $(function() {
 					}
 
 				}
+			} else if (e.ctrlKey && this.$el.hasClass('selected')) {
+				this.$el.removeClass('selected');
+				this.$el.removeClass('last-selected');
+				list.selectedItems.splice(list.selectedItems.indexOf(this), 1);
+				return;
 			}
 
 			$('.last-selected').removeClass('last-selected');
@@ -133,7 +136,11 @@ $(function() {
 
 		},
 		handleMouseDown: function(e) {
-			this.select({ shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });
+			if (list.selectedItems.length > 1 && this.$el.hasClass('selected') && !e.ctrlKey && !e.shiftKey) {
+				list.selectFlag = true;
+				return;
+			}
+			this.select({ shiftKey: e.shiftKey, ctrlKey: e.ctrlKey });	
 		},
 		handleModelChange: function() {
 			if (this.model.get('deleted') || (list.specialName != 'trash' && this.model.get('trashed')) ) {
@@ -320,7 +327,11 @@ $(function() {
 			}, 0);
 		},
 		handleDragStart: function(e) {
-			e.originalEvent.dataTransfer.setData('text/plain', e.currentTarget.view.model.id);
+			var ids = list.selectedItems.map(function(view) {
+				return view.model.id
+			});
+
+			e.originalEvent.dataTransfer.setData('text/plain', JSON.stringify(ids));
 		},
 		selectAfterDelete: function(view) {
 			if (view == list.selectedItems[0]) {
