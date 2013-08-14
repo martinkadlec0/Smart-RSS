@@ -110,7 +110,8 @@ $(function() {
 			icon: 'icon16_v2.png',
 			name: '',
 			filter: {},
-			position: 'top'
+			position: 'top',
+			onReady: null
 		}
 	});
 
@@ -121,6 +122,9 @@ $(function() {
 		},
 		initialize: function() {
 			this.el.view = this;
+			if (this.model.get('onReady')) {
+				this.model.get('onReady').call(this);
+			}
 		},
 		template: _.template($('#template-special').html()),
 		render: function() {
@@ -164,63 +168,15 @@ $(function() {
 		}
 	}));
 
-	var MenuItem = Backbone.Model.extend({
-		defaults: {
-			'title': '<no title>',
-			'action': null
-		}
-	});
 
-	var MenuCollection = Backbone.Collection.extend({
-		model: MenuItem
-	});
-
-	var MenuItemView = Backbone.View.extend({
-		tagName: 'div',
-		className: 'context-menu-item',
-		events: {
-			'click': 'handleClick'
-		},
-		render: function() {
-			if (this.model.get('icon')) {
-				//alert('url("/images/' + this.model.get('icon') + '") no-repeat left center');
-				this.$el.css('background', 'url(/images/' + this.model.get('icon') + ') no-repeat left center');
-			}
-			this.$el.html(this.model.get('title'));
-			return this;
-		},
-		handleClick: function() {
-			var action = this.model.get('action');
-			if (action && typeof action == 'function') {
-				action();
-				sourcesContextMenu.hide();
-			}
-		}
-	});
-
-	var ContextMenu = Backbone.View.extend({
-		tagName: 'div',
-		className: 'context-menu',
-		menuCollection: null,
+	var ContextMenu = bg.ContextMenu.extend({
 		initialize: function(mc) {
-			this.menuCollection = new MenuCollection(mc);
+			this.menuCollection = new (bg.MenuCollection)(mc);
 			this.addItems(this.menuCollection);
 			$('body').append(this.render().$el);
 
 			window.addEventListener('blur', this.hide.bind(this));
 			window.addEventListener('resize', this.hide.bind(this));
-		},
-		addItem: function(item) {
-			var v = new MenuItemView({ model: item });
-			this.$el.append(v.render().$el);
-		},
-		addItems: function(items) {
-			items.forEach(function(item) {
-				this.addItem(item);
-			}, this);
-		},
-		render: function() {
-			return this;
 		},
 		show: function(x, y) {
 			if (x + this.$el.width() + 4 > document.body.offsetWidth) {
@@ -232,13 +188,9 @@ $(function() {
 			this.$el.css('top', y + 'px');
 			this.$el.css('left', x + 'px');
 			this.$el.css('display', 'block');
-		},
-		hide: function() {
-			if (this.$el.css('display') == 'block') {
-				this.$el.css('display', 'none');
-			}
 		}
 	});
+	
 
 	var sourcesContextMenu = new ContextMenu([
 		{
@@ -371,7 +323,22 @@ $(function() {
 				icon: 'trashsource.png',
 				filter: { trashed: true, deleted: false },
 				position: 'bottom',
-				name: 'trash'
+				name: 'trash',
+				onReady: function() {
+					this.el.addEventListener('dragover', function(e) {
+						e.preventDefault();
+					});
+					this.el.addEventListener('drop', function(e) {
+						e.preventDefault();
+						var id = e.dataTransfer.getData('text/plain');
+						var item = bg.items.findWhere({ id: id });
+						if (item && !item.get('trashed')) {
+							item.save({
+								trashed: true
+							});
+						}
+					});
+				}
 			}));
 
 			this.addSources(bg.sources);

@@ -2,6 +2,11 @@ var chrome = window.top.chrome;
 var topWindow = window.top;
 
 
+document.addEventListener('contextmenu', function(e) {
+	e.preventDefault();
+});	
+
+
 RegExp.escape = function(str) {
 	return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
 };
@@ -43,9 +48,11 @@ $(function() {
 		events: {
 			'mousedown': 'handleMouseDown',
 			'mousedown .item-pin': 'handleClickPin',
-			'mousedown .item-pinned': 'handleClickPin'
+			'mousedown .item-pinned': 'handleClickPin',
+			'mouseup': 'handleMouseUp'
 		},
 		initialize: function() {
+			this.el.setAttribute('draggable', 'true');
 			this.model.on('change', this.handleModelChange, this);
 			this.model.on('destroy', this.handleModelDestroy, this);
 			this.el.view = this;
@@ -66,6 +73,16 @@ $(function() {
 			
 			this.$el.html(this.template(data));
 			return this;
+		},
+		handleMouseUp: function(e) {
+			if (e.which == 3) {
+				this.showContextMenu(e);
+			}
+		},
+		showContextMenu: function(e) {
+			this.select(e);
+			itemsContextMenu.currentSource = this.model;
+			itemsContextMenu.show(e.clientX, e.clientY);
 		},
 		select: function(e) {
 			e = e || {};
@@ -197,6 +214,78 @@ $(function() {
 		}
 	}));
 
+	var ContextMenu = bg.ContextMenu.extend({
+		initialize: function(mc) {
+			this.menuCollection = new (bg.MenuCollection)(mc);
+			this.addItems(this.menuCollection);
+			$('body').append(this.render().$el);
+
+			window.addEventListener('blur', this.hide.bind(this));
+			window.addEventListener('resize', this.hide.bind(this));
+		},
+		show: function(x, y) {
+			if (x + this.$el.width() + 4 > document.body.offsetWidth) {
+				x = document.body.offsetWidth - this.$el.width() - 8;
+			} 
+			if (y + this.$el.height() + 4 > document.body.offsetHeight) {
+				y = document.body.offsetHeight - this.$el.height() - 8;
+			} 
+			this.$el.css('top', y + 'px');
+			this.$el.css('left', x + 'px');
+			this.$el.css('display', 'block');
+		}
+	});
+
+	// Mark As Read
+	// Delete (check for shift)
+	// Next unread
+	// Prev unread
+	// MU and next unread
+	// MU and prev unread
+	// Pin
+	// Undelete
+
+	var itemsContextMenu = new ContextMenu([
+		{
+			title: 'Mark As Un/Read (K)',
+			icon: 'read.png',
+			action: function() {
+			}
+		},
+		{
+			title: 'Delete (D)',
+			icon: 'delete.png',
+			action: function() {
+			}
+		},
+		{
+			title: 'Next Unread (H)',
+			action: function() {
+			}
+		},
+		{
+			title: 'Previous Unread (Y)',
+			action: function() {
+			}
+		},
+		{
+			title: 'Mark And Next Unread (G)',
+			action: function() {
+			}
+		},
+		{
+			title: 'Mark And Prev Unread (T)',
+			action: function() {
+			}
+		},
+		{
+			title: 'Pin',
+			icon: 'mail_pinned.png',
+			action: function() {
+			}
+		}
+	]);
+
 	var list = new (Backbone.View.extend({
 		el: '#list',
 		selectedItems: [],
@@ -206,7 +295,7 @@ $(function() {
 		specialFilter: null,
 		noFocus: false,
 		events: {
-			
+			'dragstart .item': 'handleDragStart'
 		},
 		initialize: function() {
 			var that = this;
@@ -229,6 +318,9 @@ $(function() {
 			setTimeout(function() {
 				that.addItems(bg.items);
 			}, 0);
+		},
+		handleDragStart: function(e) {
+			e.originalEvent.dataTransfer.setData('text/plain', e.currentTarget.view.model.id);
 		},
 		selectAfterDelete: function(view) {
 			if (view == list.selectedItems[0]) {
@@ -389,9 +481,16 @@ $(function() {
 	var app = new (Backbone.View.extend({
 		el: 'body',
 		events: {
-			'keydown': 'handleKeyDown'
+			'keydown': 'handleKeyDown',
+			'mousedown': 'handleMouseDown'
 		},
 		initialize: function() {
+		},
+		handleMouseDown: function(e) {
+			if (itemsContextMenu.el.parentNode && !e.target.matchesSelector('.context-menu, .context-menu *')) {
+				// make sure the action gets executed
+				itemsContextMenu.hide();
+			}
 		},
 		selectNext: function(e) {
 			var e = e || {};

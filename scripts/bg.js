@@ -97,6 +97,72 @@ window.onerror = function(a, b, c) {
 	logs.add({ message: msg });
 }
 
+
+/**
+ * Conext Menu
+ */
+
+var MenuItem = Backbone.Model.extend({
+	defaults: {
+		'title': '<no title>',
+		'action': null
+	}
+});
+
+var MenuCollection = Backbone.Collection.extend({
+	model: MenuItem
+});
+
+var MenuItemView = Backbone.View.extend({
+	tagName: 'div',
+	className: 'context-menu-item',
+	contextMenu: null,
+	events: {
+		'click': 'handleClick'
+	},
+	render: function() {
+		if (this.model.get('icon')) {
+			//alert('url("/images/' + this.model.get('icon') + '") no-repeat left center');
+			this.$el.css('background', 'url(/images/' + this.model.get('icon') + ') no-repeat left center');
+		}
+		this.$el.html(this.model.get('title'));
+		return this;
+	},
+	handleClick: function() {
+		var action = this.model.get('action');
+		if (action && typeof action == 'function') {
+			action();
+			this.contextMenu.hide();
+		}
+	}
+});
+
+var ContextMenu = Backbone.View.extend({
+	tagName: 'div',
+	className: 'context-menu',
+	menuCollection: null,
+	addItem: function(item) {
+		var v = new MenuItemView({ model: item });
+		v.contextMenu = this;
+		this.$el.append(v.render().$el);
+	},
+	addItems: function(items) {
+		items.forEach(function(item) {
+			this.addItem(item);
+		}, this);
+	},
+	render: function() {
+		return this;
+	},
+	hide: function() {
+		if (this.$el.css('display') == 'block') {
+			this.$el.css('display', 'none');
+		}
+	}
+});
+
+
+
 /**
  * RSS Downloader
  */

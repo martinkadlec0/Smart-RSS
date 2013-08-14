@@ -164,6 +164,8 @@ $(function() {
 			this.$el.find('.date').html(date);
 			this.$el.find('.pin-button').toggleClass('pinned', this.model.get('pinned'));
 			//this.$el.find('iframe').attr('src', 'data:text/html;charset=utf-8;base64,' + content);
+
+			// first load might be too soon
 			this.$el.find('iframe').get(0).contentWindow.scrollTo(0, 0);
 			this.$el.find('iframe').get(0).contentDocument.documentElement.innerHTML = content;
 
