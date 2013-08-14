@@ -1,4 +1,5 @@
 var sourceIdIndex = localStorage.getItem('sourceIdIndex') || 1;
+$.ajaxSetup({ cache: false });
 
 
 /**

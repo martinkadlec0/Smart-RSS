@@ -10,6 +10,7 @@ if (!Element.prototype.hasOwnProperty('matchesSelector')) {
 }
 
 
+
 chrome.runtime.getBackgroundPage(function(bg) {
 
 $(function() {
