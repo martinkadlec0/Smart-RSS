@@ -262,7 +262,7 @@ function downloadURL(urls, cb) {
 			});
 
 			// too many wheres and stuff .. optimize?
-			var count = items.where({ sourceID: url.get('id'), unread: true, deleted: false  }).length;
+			var count = items.where({ sourceID: url.get('id'), unread: true, trashed: false  }).length;
 			sources.findWhere({ id: url.get('id') }).save({
 				'count': count,
 				'lastUpdate': Date.now(),
