@@ -437,6 +437,10 @@ $(function() {
 					list.selectedItems.forEach(list.removeItem, list);	
 				}
 				e.preventDefault();
+			} else if (e.keyCode == 49) {
+				topWindow.frames[0].focus();
+			} else if (e.keyCode == 51) {
+				topWindow.frames[2].frames[0].focus();
 			} else if (e.keyCode == 75) { // mark as read/unread
 				toolbar.handleButtonRead();
 				e.preventDefault();

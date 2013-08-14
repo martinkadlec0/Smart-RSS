@@ -49,10 +49,10 @@ $(function() {
 			sourcesContextMenu.show(e.clientX, e.clientY);
 		},
 		select: function(e) {
-			if (e.ctrlKey != true && e.shiftKey != true) {
+			//if (e.ctrlKey != true && e.shiftKey != true) {
 				list.selectedItems = [];
 				$('.selected').removeClass('selected');
-			} 
+			//} 
 
 			$('.last-selected').removeClass('last-selected');
 
@@ -61,7 +61,8 @@ $(function() {
 			this.$el.addClass('last-selected');
 		},
 		showSourceItems: function(e) {
-			this.select(e);
+			e = e || {};
+			if (!e.noSelect) this.select(e);
 			if (e.ctrlKey != true && e.shiftKey != true) {
 				//bg.sources.trigger('new-selected', this.model);
 
@@ -114,18 +115,22 @@ $(function() {
 	});
 
 	var SpecialView = TopView.extend({
+		className: 'source special',
 		events: {
 			'mousedown': 'handleMouseDown'
 		},
+		initialize: function() {
+			this.el.view = this;
+		},
 		template: _.template($('#template-special').html()),
 		render: function() {
-			if (this.model.get('position') == 'top') {
+			/*if (this.model.get('position') == 'top') {
 				this.$el.css('order', 1);
 				this.$el.css('-webkit-order', 1);
 			} else {
 				this.$el.css('order', 3);
 				this.$el.css('-webkit-order', 3);
-			}
+			}*/
 			this.$el.html(this.template(this.model.toJSON()));
 			return this;
 		}
@@ -377,21 +382,34 @@ $(function() {
 		addSpecial: function(special) {
 
 			var view = new SpecialView({ model: special });
-			this.$el.append(view.render().el);
+			if (view.model.psoition == 'top') {
+				this.$el.prepend(view.render().el);
+			} else {
+				this.$el.append(view.render().el);
+			}
+			
 		},
 		addSource: function(source) {
 			var view = new SourceView({ model: source });
-			this.$el.append(view.render().$el);	
+			var last = $('.source:not(.special):last');
+			if (last.length) {
+				view.render().$el.insertAfter(last);	
+			} else if ($('.special:first').length) {
+				// .special-first = all feeds, with more "top" specials this will have to be changed
+				view.render().$el.insertAfter($('.special:first'));
+			} else {
+				this.$el.append(view.render().$el);
+			}
 		},
 		addSources: function(sources) {
 			$('.source').each(function(i, source) {
-				if (!source.view) return;
+				if (!source.view || !(source instanceof SourceView)) return;
 				list.destroySource(source.view);
 			});
 			sources.forEach(function(source) {
 				this.addSource(source);
 			}, this);
-		},
+		},	
 		removeSource: function(view) {
 			view.model.destroy();
 			/*view.undelegateEvents();
@@ -432,9 +450,40 @@ $(function() {
 			}
 		},
 		handleKeyDown: function(e) {
+			if (document.activeElement && document.activeElement.tagName == 'INPUT') {
+				return;
+			}
+
 			if (e.keyCode == 68) {
 				//there shouldnt be same shortcut for deleting item and source
 				//list.selectedItems.forEach(list.removeSource, list);
+			} else if (e.keyCode == 50) {
+				window.top.frames[1].focus();
+			} else if (e.keyCode == 51) {
+				window.top.frames[2].frames[0].focus();
+			} else if (e.keyCode == 38) {
+				var cs = $('.selected:first');
+				var s;
+				if (cs.length) {
+					s = cs.prevAll('.source:first').get(0);
+				} else {
+					s = $('.source:last').get(0);
+				}
+				if (s) s.view.select();
+			} else if (e.keyCode == 40) {
+				var cs = $('.selected:first');
+				var s;
+				if (cs.length) {
+					s = cs.nextAll('.source:first').get(0);
+				} else {
+					s = $('.source:first').get(0);
+				}
+				if (s) s.view.select();
+			} else if (e.keyCode == 13) {
+				var cs = $('.selected:first');
+				if (cs.length) {
+					cs.get(0).view.showSourceItems({ noSelect: true });
+				}
 			}
 		},
 		handleLoadingChange: function(e) {

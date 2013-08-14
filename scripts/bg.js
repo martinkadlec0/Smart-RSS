@@ -96,12 +96,6 @@ window.onerror = function(a, b, c) {
 	logs.add({ message: msg });
 }
 
-setInterval(function() {
-	a+a;
-}, 3000);
-
-
-
 /**
  * RSS Downloader
  */
@@ -364,7 +358,7 @@ function rssGetDate(node) {
 		return (new Date(pubDate.textContent)).getTime();
 	}
 
-	pubDate = node.querySelector('lastBuildDate, update');
+	pubDate = node.querySelector('lastBuildDate, updated, update');
 
 	if (pubDate) {
 		return (new Date(pubDate.textContent)).getTime();

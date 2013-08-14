@@ -28,8 +28,6 @@ body {
 .source {
 	-webkit-flex: 0 0 auto;
 	flex: 0 0 auto;
-	-webkit-order: 2;
-	order: 2;
 	width: 100%;
 	padding: 3px 5px 3px 10px;
 	display: -webkit-flex;
