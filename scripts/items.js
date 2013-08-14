@@ -220,6 +220,8 @@ $(function() {
 						that.handleNewSelected(bg.sources.findWhere({ id: e.data.value }));	
 					}
 					
+				} if (e.data.action == 'give-me-next') {
+					app.selectNext();
 				}
 			});
 
@@ -440,7 +442,7 @@ $(function() {
 			} else if (e.keyCode == 49) {
 				topWindow.frames[0].focus();
 			} else if (e.keyCode == 51) {
-				topWindow.frames[2].frames[0].focus();
+				topWindow.frames[2].focus();
 			} else if (e.keyCode == 75) { // mark as read/unread
 				toolbar.handleButtonRead();
 				e.preventDefault();

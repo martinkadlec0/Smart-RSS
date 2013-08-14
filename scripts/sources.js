@@ -460,7 +460,7 @@ $(function() {
 			} else if (e.keyCode == 50) {
 				window.top.frames[1].focus();
 			} else if (e.keyCode == 51) {
-				window.top.frames[2].frames[0].focus();
+				window.top.frames[2].focus();
 			} else if (e.keyCode == 38) {
 				var cs = $('.selected:first');
 				var s;

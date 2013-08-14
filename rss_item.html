@@ -27,7 +27,7 @@
 		</div>
 		
 	</header>
-	<iframe src="" frameborder="0" sandbox="allow-popups"></iframe>
+	<iframe src="rss_content.html" frameborder="0" sandbox="allow-popups allow-same-origin" tabindex="-1"></iframe>
 	<footer>
 		<input type="button" value="Hide log" id="button-hide-log" />
 	</footer>
@@ -45,8 +45,6 @@
 	</div>
 
 	<script type="template" id="template-content">
-		<!DOCTYPE html>
-		<html lang="en" dir="ltr">
 		<head>
 			<meta charset="utf-8">
 			<base href="<%- sourceUrl %>" target="_blank" />
@@ -69,7 +67,6 @@
 				<a href="<%- url %>">Full article</a>
 			</footer>
 		</body>
-		</html>
 	</script>
 </body>
 </html>

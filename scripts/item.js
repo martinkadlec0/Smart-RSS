@@ -1,4 +1,5 @@
 var chrome = window.top.chrome;
+var topWindow = window.top;
 
 function utf8_to_b64( str ) {
 	return btoa(unescape(encodeURIComponent( str )));
@@ -78,7 +79,7 @@ $(function() {
 		handleLayoutChange: function(e) {
 			var layout = parseInt(e.currentTarget.value);
 			localStorage.setItem('vertical-layout', layout.toString());
-			window.top.postMessage({ action: 'layout-changed', value: layout }, '*');
+			topWindow.postMessage({ action: 'layout-changed', value: layout }, '*');
 			this.hide();
 		},
 		hide: function() {
@@ -98,12 +99,18 @@ $(function() {
 		events: {
 			'load iframe': 'handleIframeLoad',
 			'mousedown': 'handleMouseDown',
-			'click .pin-button': 'handlePinClick'
+			'click .pin-button': 'handlePinClick',
+			'mousedown iframe': 'handleIframeClick',
+			'keydown': 'handleKeyDown'
 		},
 		handleMouseDown: function(e) {
 			if (overlay.isVisible() && !e.target.matchesSelector('.overlay, .overlay *')) {
 				overlay.hide();
 			}
+		},
+		handleIframeClick: function() {
+			alert('now');
+			window.focus();
 		},
 		handlePinClick: function(e) {
 			$(e.currentTarget).toggleClass('pinned');
@@ -140,17 +147,19 @@ $(function() {
 
 			var source = bg.sources.findWhere({ id: this.model.get('sourceID') });
 
-			var content = utf8_to_b64(this.contentTemplate({ 
+			var content = this.contentTemplate({ 
 				content: this.model.get('content'),
 				url: this.model.get('url'),
 				sourceUrl: source.get('url')
-			}));
+			});
 
 			this.$el.find('h1').html(this.model.escape('title'));
 			this.$el.find('.author').html(this.model.escape('author'));
 			this.$el.find('.date').html(date);
 			this.$el.find('.pin-button').toggleClass('pinned', this.model.get('pinned'));
-			this.$el.find('iframe').attr('src', 'data:text/html;charset=utf-8;base64,' + content);
+			//this.$el.find('iframe').attr('src', 'data:text/html;charset=utf-8;base64,' + content);
+			this.$el.find('iframe').get(0).contentWindow.scrollTo(0, 0);
+			this.$el.find('iframe').get(0).contentDocument.documentElement.innerHTML = content;
 
 			return this;
 		},
@@ -169,6 +178,31 @@ $(function() {
 		},
 		show: function() {
 			$('header,iframe').css('display', 'block');
+		},
+		handleKeyDown: function(e) {
+			if (document.activeElement && document.activeElement.tagName == 'INPUT') {
+				return;
+			}
+
+			if (e.keyCode == 49) {
+				topWindow.frames[0].focus();
+			} else if (e.keyCode == 50) {
+				topWindow.frames[1].focus();
+			} else if (e.keyCode == 38) {
+				var cw = $('iframe').get(0).contentWindow;
+				cw.scrollBy(0, -40);
+			} else if (e.keyCode == 40) {
+				var cw = $('iframe').get(0).contentWindow;
+				cw.scrollBy(0, 40);
+			} else if (e.keyCode == 32) {
+				var cw = $('iframe').get(0).contentWindow;
+				var d = $('iframe').get(0).contentWindow.document;
+				if (d.documentElement.clientHeight + $(d.body).scrollTop() >= d.body.offsetHeight ) {
+					topWindow.frames[1].postMessage({ action: 'give-me-next' }, '*');
+				} else {
+					cw.scrollBy(0, d.documentElement.clientHeight * 0.85);
+				}
+			}
 		}
 	}));
 
