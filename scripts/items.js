@@ -203,6 +203,7 @@ $(function() {
 		views: [],
 		currentSource: null,
 		specialName: null,
+		specialFilter: null,
 		noFocus: false,
 		events: {
 			
@@ -289,6 +290,7 @@ $(function() {
 			this.currentSource = source;
 			if (this.specialName == 'trash') $('#button-undelete').css('display', 'none');
 			this.specialName = null;
+			this.specialFilter = null;
 			source.on('destroy', this.handleDestroyedSource, this);
 			this.addItems(bg.items.where({ sourceID: source.id }));
 		},
@@ -299,6 +301,7 @@ $(function() {
 			this.currentSource = null;
 			if (this.specialName == 'trash') $('#button-undelete').css('display', 'none');
 			this.specialName = name;
+			this.specialFilter = filter;
 			if (this.specialName == 'trash') $('#button-undelete').css('display', 'block');
 			this.addItems(bg.items.where( filter ));
 		},
@@ -473,19 +476,17 @@ $(function() {
 					var id = list.currentSource.get('id');
 					if (!id) return;
 					bg.items.where({ sourceID: id }).forEach(function(item) {
-						item.save({
-							unread: false,
-							visited: true
-						});
+						item.save({ unread: false, visited: true });
 					});
 				} else if (list.specialName == 'all-feeds' && confirm('Do you really want to mark ALL items as read?')) {
 					bg.items.forEach(function(item) {
-						item.save({
-							unread: false,
-							visited: true
-						});
+						item.save({ unread: false, visited: true });
 					});
-				}
+				} else if (list.specialName) {
+					bg.items.where(list.specialFilter).forEach(function(item) {
+						item.save({ unread: false, visited: true });
+					});
+				} 
 				e.preventDefault();
 			} else if (e.keyCode == 65 && e.ctrlKey) { // A = Select all
 				$('.selected').removeClass('selected');
