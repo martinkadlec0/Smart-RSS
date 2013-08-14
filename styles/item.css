@@ -13,7 +13,7 @@ body {
 
 header {
 	display: none;
-	padding: 25px 30px 15px 30px;
+	padding: 25px 15px 15px 30px;
 	font-family: sans-serif;
 	border-bottom: 1px solid rgb(199, 203, 214);
 	-webkit-flex: 0 0 auto;
@@ -36,6 +36,14 @@ h1 {
 	text-overflow: ellipsis;
 }
 
+#below-h1 {
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-flow: row nowrap;
+	flex-flow: row nowrap;
+	width: 100%;
+}
+
 header p {
 	color: rgb(182, 147, 171);
 	font-size: 0.9rem;
@@ -44,15 +52,37 @@ header p {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	max-width: 220px;
+	/*max-width: 220px;*/
 }
 
-header p:first-of-type {
-	float: left;
+header .author {
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
 }
 
-header p:last-of-type {
-	float: right;
+header .date {
+	-webkit-flex: 0 1 auto;
+	flex: 0 1 200px;
+	text-align: right;
+}
+
+header .pin-button {
+	-webkit-flex: 0 0 25px;
+	flex: 0 0 25px;
+	height: 16px;
+	background: url('/images/mail_unpinned.png') no-repeat right center;
+	opacity: 0.8;
+	-webkit-transition: opacity 0.1s;
+	transition: opacity 0.1s;
+	cursor: pointer;
+}
+
+header .pin-button:hover {
+	opacity: 1;
+}
+
+header .pin-button.pinned {
+	background: url('/images/mail_pinned.png') no-repeat right center;
 }
 
 iframe {
@@ -75,3 +105,4 @@ iframe {
 #config-layout input[type=image] {
 	margin: 3px;
 }
+

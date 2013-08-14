@@ -97,12 +97,19 @@ $(function() {
 		contentTemplate: _.template($('#template-content').html()),
 		events: {
 			'load iframe': 'handleIframeLoad',
-			'mousedown': 'handleMouseDown'
+			'mousedown': 'handleMouseDown',
+			'click .pin-button': 'handlePinClick'
 		},
 		handleMouseDown: function(e) {
 			if (overlay.isVisible() && !e.target.matchesSelector('.overlay, .overlay *')) {
 				overlay.hide();
 			}
+		},
+		handlePinClick: function(e) {
+			$(e.currentTarget).toggleClass('pinned');
+			this.model.save({
+				pinned: $(e.currentTarget).hasClass('pinned')
+			});
 		},
 		initialize: function() {
 			var that = this;
@@ -114,6 +121,13 @@ $(function() {
 					that.hide();
 				}
 			});
+
+			bg.items.on('change:pinned', this.handleItemsPin, this);
+		},
+		handleItemsPin: function(model) {
+			if (model == this.model) {
+				this.$el.find('.pin-button').toggleClass('pinned', this.model.get('pinned'));
+			}
 		},
 		handleIframeLoad: function() {
 			alert('loaded');
@@ -135,6 +149,7 @@ $(function() {
 			this.$el.find('h1').html(this.model.escape('title'));
 			this.$el.find('.author').html(this.model.escape('author'));
 			this.$el.find('.date').html(date);
+			this.$el.find('.pin-button').toggleClass('pinned', this.model.get('pinned'));
 			this.$el.find('iframe').attr('src', 'data:text/html;charset=utf-8;base64,' + content);
 
 			return this;
