@@ -168,7 +168,6 @@ $(function() {
 		handleClickPin: function(e) {
 			e.stopPropagation();
 			this.model.save({ pinned: !this.model.get('pinned') });
-			this.render();
 		}
 	});
 
@@ -264,38 +263,56 @@ $(function() {
 			title: 'Mark As Un/Read (K)',
 			icon: 'read.png',
 			action: function() {
+				list.changeUnreadState();
 			}
 		},
 		{
 			title: 'Delete (D)',
 			icon: 'delete.png',
-			action: function() {
+			action: function(e) {
+				e = e || {};
+				if (list.specialName == 'trash' || e.shiftKey) {
+					list.selectedItems.forEach(list.removeItemCompletely, list);
+				} else {
+					list.selectedItems.forEach(list.removeItem, list);	
+				}
 			}
 		},
 		{
 			title: 'Next Unread (H)',
 			action: function() {
+				app.selectNext({ selectUnread: true });
 			}
 		},
 		{
 			title: 'Previous Unread (Y)',
 			action: function() {
+				app.selectPrev({ selectUnread: true });
 			}
 		},
 		{
 			title: 'Mark And Next Unread (G)',
 			action: function() {
+				list.changeUnreadState({ onlyToRead: true });
+				app.selectNext({ selectUnread: true });
 			}
 		},
 		{
 			title: 'Mark And Prev Unread (T)',
 			action: function() {
+				list.changeUnreadState({ onlyToRead: true });
+				this.selectPrev({ selectUnread: true });
 			}
 		},
 		{
-			title: 'Pin',
+			title: 'Un/Pin (P)',
 			icon: 'mail_pinned.png',
 			action: function() {
+				if (!list.selectedItems || !list.selectedItems.length) return;
+				var val = !list.selectedItems[0].model.get('pinned');
+				list.selectedItems.forEach(function(item) {
+					item.model.save({ pinned: val });
+				});
 			}
 		}
 	]);
@@ -477,7 +494,7 @@ $(function() {
 		},
 		changeUnreadState: function(opt) {
 			var opt = opt || {};
-			var val = list.selectedItems.length ? !list.selectedItems[0].model.get('unread') : false;
+			var val = list.selectedItems.length && !opt.onlyToRead ? !list.selectedItems[0].model.get('unread') : false;
 			list.selectedItems.forEach(function(item) {
 				if (opt.onlyToRead && item.model.get('unread') == false) {
 					// do nothing
@@ -616,7 +633,14 @@ $(function() {
 				$('.last-selected').removeClass('last-selected');
 				$('.item:not(.invisible):last').addClass('last-selected');
 				e.preventDefault();
-			} 
+			} else if (e.keyCode == 80) {
+				if (!list.selectedItems || !list.selectedItems.length) return;
+				var val = !list.selectedItems[0].model.get('pinned');
+				list.selectedItems.forEach(function(item) {
+					item.model.save({ pinned: val });
+				});
+				e.preventDefault();
+			}
 
 			
 		} 

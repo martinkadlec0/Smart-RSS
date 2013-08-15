@@ -1,3 +1,9 @@
+if (!Element.prototype.hasOwnProperty('matchesSelector')) {
+	Element.prototype.matchesSelector = Element.prototype.webkitMatchesSelector;
+}
+
+
+
 var sourceIdIndex = localStorage.getItem('sourceIdIndex') || 1;
 $.ajaxSetup({ cache: false });
 
@@ -128,10 +134,10 @@ var MenuItemView = Backbone.View.extend({
 		this.$el.html(this.model.get('title'));
 		return this;
 	},
-	handleClick: function() {
+	handleClick: function(e) {
 		var action = this.model.get('action');
 		if (action && typeof action == 'function') {
-			action();
+			action(e);
 			this.contextMenu.hide();
 		}
 	}
