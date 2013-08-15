@@ -83,15 +83,19 @@ $(function() {
 			}
 		},
 		showContextMenu: function(e) {
-			this.select(e);
+			if (!this.$el.hasClass('selected')) {
+				this.select(e);	
+			}
 			itemsContextMenu.currentSource = this.model;
 			itemsContextMenu.show(e.clientX, e.clientY);
 		},
 		select: function(e) {
 			e = e || {};
-			if (e.shiftKey != true && e.ctrlKey != true) {
+			if ( (e.shiftKey != true && e.ctrlKey != true) || (e.shiftKey && !list.selectPivot) ) {
 				list.selectedItems = [];
+				list.selectPivot = this;
 				$('.selected').removeClass('selected');
+
 				if (!e.preventLoading) {
 					//bg.items.trigger('new-selected', this.model);
 					topWindow.frames[2].postMessage({ action: 'new-select', value: this.model.id }, '*');	
@@ -100,9 +104,9 @@ $(function() {
 				if (!this.model.get('visited')) {
 					this.model.set('visited', true);
 				}
-			} else if (e.shiftKey && list.selectedItems.length) {
+			} else if (e.shiftKey && list.selectPivot) {
 				$('.selected').removeClass('selected');
-				list.selectedItems = [list.selectedItems[0]];
+				list.selectedItems = [list.selectPivot];
 				list.selectedItems[0].$el.addClass('selected');
 
 				if (list.selectedItems[0] != this) {
@@ -123,8 +127,11 @@ $(function() {
 			} else if (e.ctrlKey && this.$el.hasClass('selected')) {
 				this.$el.removeClass('selected');
 				this.$el.removeClass('last-selected');
+				list.selectPivot = null;
 				list.selectedItems.splice(list.selectedItems.indexOf(this), 1);
 				return;
+			} else if (e.ctrlKey) {
+				list.selectPivot = this;
 			}
 
 			$('.last-selected').removeClass('last-selected');
