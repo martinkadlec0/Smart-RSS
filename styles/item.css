@@ -127,7 +127,7 @@ footer .log:not(:last-of-type) {
 	}
 }
 
-#config-layout {
+.overlay #config-layout {
 	padding: 5px;
 }
 
@@ -135,3 +135,6 @@ footer .log:not(:last-of-type) {
 	margin: 3px;
 }
 
+.overlay select {
+	width: 100%;
+}

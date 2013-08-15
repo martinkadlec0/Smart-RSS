@@ -64,7 +64,8 @@ $(function() {
 	var overlay = new (Backbone.View.extend({
 		el: '.overlay',
 		events: {
-			'click #config-layout input[type=image]': 'handleLayoutChange'
+			'click #config-layout input[type=image]': 'handleLayoutChange',
+			'change #config-lines': 'handleLinesChange'
 		},
 		initialize: function() {
 			window.addEventListener('blur', this.hide.bind(this));
@@ -79,8 +80,11 @@ $(function() {
 				$('#config-layout input[value=horizontal]').attr('src', '/images/layout_horizontal_selected.png');
 				$('#config-layout input[value=vertical]').attr('src', '/images/layout_vertical.png');
 			}
-			this.$el.find('#config-layout').val(layout);
+			this.$el.find('#config-lines').val(bg.settings.get('lines'));
 			return this;
+		},
+		handleLinesChange: function(e) {
+			bg.settings.save('lines', e.currentTarget.value);
 		},
 		handleLayoutChange: function(e) {
 			var layout = e.currentTarget.value;
@@ -102,7 +106,6 @@ $(function() {
 		el: 'body',
 		contentTemplate: _.template($('#template-content').html()),
 		events: {
-			'load iframe': 'handleIframeLoad',
 			'mousedown': 'handleMouseDown',
 			'click .pin-button': 'handlePinClick',
 			'mousedown iframe': 'handleIframeClick',
@@ -141,9 +144,6 @@ $(function() {
 				this.$el.find('.pin-button').toggleClass('pinned', this.model.get('pinned'));
 			}
 		},
-		handleIframeLoad: function() {
-			alert('loaded');
-		},
 		render: function() {
 
 			this.show();
@@ -155,7 +155,7 @@ $(function() {
 			var content = this.contentTemplate({ 
 				content: this.model.get('content'),
 				url: this.model.get('url'),
-				sourceUrl: source.get('url')
+				sourceUrl: source ? source.get('url') : '#'
 			});
 
 			this.$el.find('h1').html(this.model.escape('title'));

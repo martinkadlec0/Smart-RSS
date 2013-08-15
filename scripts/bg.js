@@ -85,7 +85,7 @@ var settings = new (Backbone.Model.extend({
 		id: 'settings-id',
 		lang: 'en', // or cs,sk,tr,de
 		layout: 'horizontal', // or vertical
-		lines: 'auto', // one-line, two-line
+		lines: 'auto', // one-line, two-lines
 		posA: '250,*',
 		posB: '350,*',
 		posC: '50%,*'

@@ -330,8 +330,10 @@ $(function() {
 		},
 		initialize: function() {
 			var that = this;
+			this.$el.addClass('lines-' + bg.settings.get('lines'));
 			bg.items.on('reset', this.addItems, this);
 			bg.items.on('add', this.addItem, this);
+			bg.settings.on('change:lines', this.handleChangeLines, this);
 			window.addEventListener('message', function(e) {
 				if (e.data.action == 'new-select') {
 					window.focus();
@@ -349,6 +351,10 @@ $(function() {
 			setTimeout(function() {
 				that.addItems(bg.items);
 			}, 0);
+		},
+		handleChangeLines: function(settings) {
+			this.$el.removeClass('lines-' + settings.previous('lines'));
+			this.$el.addClass('lines-' + settings.get('lines'));
 		},
 		handleDragStart: function(e) {
 			var ids = list.selectedItems.map(function(view) {
