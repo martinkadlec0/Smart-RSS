@@ -80,6 +80,22 @@ var loader = new (Backbone.Model.extend({
 	}
 }));
 
+var settings = new (Backbone.Model.extend({
+	defaults: {
+		id: 'settings-id',
+		lang: 'en', // or cs,sk,tr,de
+		layout: 'horizontal', // or vertical
+		lines: 'auto', // one-line, two-line
+		posA: '250,*',
+		posB: '350,*',
+		posC: '50%,*'
+	},
+	localStorage: new Backbone.LocalStorage('settings-backbone'),
+	initialize: function() {
+		this.fetch();
+	}
+}));
+
 
 var log = Backbone.Model.extend({
 	defaults: {

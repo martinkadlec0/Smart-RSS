@@ -4,30 +4,40 @@
 	});
 });*/
 
-var ls = parseInt(localStorage.getItem('vertical-layout')) || 0;
 
-function layoutToVertical() {
-	var fs = document.querySelectorAll('frameset');
-	fs[1].cols = '*';
-	fs[1].rows = '50%,50%';
-}
+chrome.runtime.getBackgroundPage(function(bg) {
+	//var ls = parseInt(localStorage.getItem('vertical-layout')) || 0;
+	var ls = bg.settings.get('layout');
 
-function layoutToHorizontal() {
-	var fs = document.querySelectorAll('frameset');
-	fs[1].cols = '350,*';
-	fs[1].rows = '';
-}
+	function layoutToVertical() {
+		var fs = document.querySelectorAll('frameset');
+		fs[1].cols = '*';
+		fs[1].rows = '50%,*';
+	}
 
-document.addEventListener('DOMContentLoaded', function() {
-	if (ls) layoutToVertical();
-});
+	function layoutToHorizontal() {
+		var fs = document.querySelectorAll('frameset');
+		fs[1].cols = '350,*';
+		fs[1].rows = '';
+	}
 
-window.addEventListener('message', function(e) {
-	if (e.data.action == 'layout-changed') {
-		if (e.data.value) {
+	if (ls == 'vertical') {
+		if (document.querySelectorAll('frameset').length > 1) {
+			 layoutToVertical();
+		} else {
+			document.addEventListener('DOMContentLoaded', layoutToVertical);	
+		}
+	}
+	
+	// might not happen!!!!!!!!
+	
+
+	bg.settings.on('change:layout', function() {
+		if (bg.settings.get('layout') == 'vertical') {
 			layoutToVertical();
 		} else {
 			layoutToHorizontal();
 		}
-	}
+	});
+
 });

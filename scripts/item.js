@@ -71,21 +71,20 @@ $(function() {
 			window.addEventListener('resize', this.hide.bind(this));
 		},
 		render: function() {
-			var layout = parseInt(localStorage.getItem('vertical-layout')) || 0;
-			if (layout) {
-				$('#config-layout input[value=0]').attr('src', '/images/layout_horizontal.png');
-				$('#config-layout input[value=1]').attr('src', '/images/layout_vertical_selected.png');
+			var layout = bg.settings.get('layout');
+			if (layout == 'vertical') {
+				$('#config-layout input[value=horizontal]').attr('src', '/images/layout_horizontal.png');
+				$('#config-layout input[value=vertical]').attr('src', '/images/layout_vertical_selected.png');
 			} else {
-				$('#config-layout input[value=0]').attr('src', '/images/layout_horizontal_selected.png');
-				$('#config-layout input[value=1]').attr('src', '/images/layout_vertical.png');
+				$('#config-layout input[value=horizontal]').attr('src', '/images/layout_horizontal_selected.png');
+				$('#config-layout input[value=vertical]').attr('src', '/images/layout_vertical.png');
 			}
 			this.$el.find('#config-layout').val(layout);
 			return this;
 		},
 		handleLayoutChange: function(e) {
-			var layout = parseInt(e.currentTarget.value);
-			localStorage.setItem('vertical-layout', layout.toString());
-			topWindow.postMessage({ action: 'layout-changed', value: layout }, '*');
+			var layout = e.currentTarget.value;
+			bg.settings.save('layout', layout);
 			this.hide();
 		},
 		hide: function() {
