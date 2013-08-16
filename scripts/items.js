@@ -664,13 +664,18 @@ $(function() {
 				$('.last-selected').removeClass('last-selected');
 				$('.item:not(.invisible):last').addClass('last-selected');
 				e.preventDefault();
-			} else if (e.keyCode == 80) {
+			} else if (e.keyCode == 80) { // P
 				if (!list.selectedItems || !list.selectedItems.length) return;
 				var val = !list.selectedItems[0].model.get('pinned');
 				list.selectedItems.forEach(function(item) {
 					item.model.save({ pinned: val });
 				});
 				e.preventDefault();
+			} else if (e.keyCode == 27) { // ESC
+				if (itemsContextMenu.el.parentNode) {
+					// make sure the action gets executed
+					itemsContextMenu.hide();
+				}
 			}
 
 			

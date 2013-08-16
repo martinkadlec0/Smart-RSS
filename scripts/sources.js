@@ -487,6 +487,11 @@ $(function() {
 					cs.get(0).view.showSourceItems({ noSelect: true });
 				}
 				e.preventDefault();
+			} else if (e.keyCode == 27) {
+				if (sourcesContextMenu.el.parentNode) {
+					// make sure the action gets executed
+					sourcesContextMenu.hide();
+				}
 			}
 		},
 		handleLoadingChange: function(e) {
