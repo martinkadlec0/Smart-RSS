@@ -436,10 +436,10 @@ $(function() {
 				this.addItem(item, true);
 			}, this);
 
-			setTimeout(function() {
+			/*setTimeout(function() {
 				//if (list.views[0]) list.views[0].select();
 				list.selectFirst();
-			}, 0);
+			}, 0);*/
 		},
 		handleNewSelected: function(source) {
 			if (this.currentSource) {
