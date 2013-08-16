@@ -9,8 +9,6 @@ if (!Element.prototype.hasOwnProperty('matchesSelector')) {
 	Element.prototype.matchesSelector = Element.prototype.webkitMatchesSelector;
 }
 
-
-
 chrome.runtime.getBackgroundPage(function(bg) {
 
 $(function() {
@@ -172,8 +170,16 @@ $(function() {
 			//this.$el.find('iframe').attr('src', 'data:text/html;charset=utf-8;base64,' + content);
 
 			// first load might be too soon
-			this.$el.find('iframe').get(0).contentWindow.scrollTo(0, 0);
-			this.$el.find('iframe').get(0).contentDocument.documentElement.innerHTML = content;
+			var fr = this.$el.find('iframe').get(0);
+			fr.contentWindow.scrollTo(0, 0);
+			if (fr.contentDocument.readyState == 'complete') {
+				fr.contentDocument.documentElement.innerHTML = content;	
+			} else {
+				setTimeout(function() {
+					fr.contentDocument.documentElement.innerHTML = content;
+				}, 500);
+			}
+			
 
 			return this;
 		},

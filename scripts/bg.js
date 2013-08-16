@@ -315,11 +315,11 @@ function openRSS(closeIfActive) {
  */
 
 var rssTabs = [];
-chrome.tabs.onCreated.addListener(function(tab) {
+/*chrome.tabs.onCreated.addListener(function(tab) {
 	if (/chrome-extension:\/\/\w+\/rss.html/.test(tab.url)) {
 		rssTabs.push(tab.id);
 	}
-});
+});*/
 
 chrome.tabs.onRemoved.addListener(function(tabID) {
 	var index = rssTabs.indexOf(tabID);
@@ -327,6 +327,20 @@ chrome.tabs.onRemoved.addListener(function(tabID) {
 		rssTabs.splice(index, 1);
 		sources.trigger('clear-events', tabID);
 	}
+});
+
+chrome.tabs.onUpdated.addListener(function(tabID, changed, tab) {
+	if (changed.status == 'loading') {
+		var index = rssTabs.indexOf(tabID);
+		if (index >= 0) {
+			rssTabs.splice(index, 1);
+			sources.trigger('clear-events', tabID);
+		} 
+	} else if (changed.status == 'complete') {
+		 if (/chrome-extension:\/\/\w+\/rss.html/.test(tab.url)) {
+			rssTabs.push(tabID);
+		}
+	} 
 });
 
 /**
