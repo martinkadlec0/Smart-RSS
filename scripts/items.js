@@ -55,7 +55,18 @@ $(function() {
 			this.el.setAttribute('draggable', 'true');
 			this.model.on('change', this.handleModelChange, this);
 			this.model.on('destroy', this.handleModelDestroy, this);
+			bg.sources.on('clear-events', this.handleClearEvents, this);
 			this.el.view = this;
+		},
+		handleClearEvents: function(id) {
+			if (window == null || id == window.top.tabID) {
+				this.clearEvents();
+			} 
+		},
+		clearEvents: function() {
+			this.model.off('change', this.handleModelChange);
+			this.model.off('destroy', this.handleModelDestroy);
+			bg.sources.off('clear-events', this.handleClearEvents);
 		},
 		render: function() {
 			this.$el.toggleClass('unvisited', !this.model.get('visited'));
@@ -334,6 +345,8 @@ $(function() {
 			bg.items.on('reset', this.addItems, this);
 			bg.items.on('add', this.addItem, this);
 			bg.settings.on('change:lines', this.handleChangeLines, this);
+			bg.sources.on('clear-events', this.handleClearEvents, this);
+
 			window.addEventListener('message', function(e) {
 				if (e.data.action == 'new-select') {
 					window.focus();
@@ -351,6 +364,17 @@ $(function() {
 			setTimeout(function() {
 				that.addItems(bg.items);
 			}, 0);
+		},
+		handleClearEvents: function(id) {
+			if (window == null || id == window.top.tabID) {
+				bg.items.off('reset', this.addItems, this);
+				bg.items.off('add', this.addItem, this);
+				bg.settings.off('change:lines', this.handleChangeLines, this);
+				if (this.currentSource) {
+					this.currentSource.off('destroy', this.handleDestroyedSource, this);
+				}
+				bg.sources.off('clear-events', this.handleClearEvents, this);
+			}
 		},
 		handleChangeLines: function(settings) {
 			this.$el.removeClass('lines-' + settings.previous('lines'));
@@ -476,6 +500,7 @@ $(function() {
 				this.selectAfterDelete(view);
 			}
 
+			view.clearEvents();
 			view.undelegateEvents();
 			view.$el.removeData().unbind(); 
 			view.off();

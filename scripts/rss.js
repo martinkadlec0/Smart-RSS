@@ -4,6 +4,14 @@
 	});
 });*/
 
+var tabID = -1;
+
+chrome.extension.sendMessage({ action: 'get-tab-id'}, function(response) {
+	if (response.action == 'response-tab-id') {
+		tabID = response.value;	
+	}
+});
+
 
 chrome.runtime.getBackgroundPage(function(bg) {
 	//var ls = parseInt(localStorage.getItem('vertical-layout')) || 0;
@@ -31,13 +39,24 @@ chrome.runtime.getBackgroundPage(function(bg) {
 	
 	// might not happen!!!!!!!!
 	
-
-	bg.settings.on('change:layout', function() {
+	function handleLayoutChange() {
 		if (bg.settings.get('layout') == 'vertical') {
 			layoutToVertical();
 		} else {
 			layoutToHorizontal();
 		}
-	});
+	}
+
+	function handleClearEvents(id) {
+		if (window == null || id == tabID) {
+			bg.settings.off('change:layout', handleLayoutChange);
+			bg.sources.off('clear-events', handleClearEvents);			
+		}
+	}
+
+	bg.settings.on('change:layout', handleLayoutChange);
+	bg.sources.on('clear-events', handleClearEvents);
+
+
 
 });

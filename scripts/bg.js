@@ -4,6 +4,7 @@ if (!Element.prototype.hasOwnProperty('matchesSelector')) {
 
 
 
+
 var sourceIdIndex = localStorage.getItem('sourceIdIndex') || 1;
 $.ajaxSetup({ cache: false });
 
@@ -304,10 +305,33 @@ function openRSS(closeIfActive) {
 				chrome.tabs.update(tabs[0].id, { active: true });
 			}
 		} else {
-			chrome.tabs.create({'url': url }, function(tab) {});
+			chrome.tabs.create({'url': url }, function(tab) { });
 		}
 	});
 }
+
+/**
+ * Remove events from closed tabs
+ */
+
+var rssTabs = [];
+chrome.tabs.onCreated.addListener(function(tab) {
+	if (/chrome-extension:\/\/\w+\/rss.html/.test(tab.url)) {
+		rssTabs.push(tab.id);
+	}
+});
+
+chrome.tabs.onRemoved.addListener(function(tabID) {
+	var index = rssTabs.indexOf(tabID);
+	if (index >= 0) {
+		rssTabs.splice(index, 1);
+		sources.trigger('clear-events', tabID);
+	}
+});
+
+/**
+ * Downlaoding
+ */
 
 function downloadOne(source) {
 	loader.set('maxSources', 1);
@@ -571,5 +595,11 @@ chrome.runtime.onMessageExternal.addListener(function(message, sender, sendRespo
 
 		openRSS();
 
+	}
+});
+
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+	if (message.action == 'get-tab-id') {
+		sendResponse({ action: 'response-tab-id', value: sender.tab.id });
 	}
 });

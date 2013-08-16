@@ -138,6 +138,13 @@ $(function() {
 			});
 
 			bg.items.on('change:pinned', this.handleItemsPin, this);
+			bg.sources.on('clear-events', this.handleClearEvents, this);
+		},
+		handleClearEvents: function(id) {
+			if (window == null || id == window.top.tabID) {
+				bg.items.off('change:pinned', this.handleItemsPin, this);
+				bg.sources.off('clear-events', this.handleClearEvents, this);
+			}
 		},
 		handleItemsPin: function(model) {
 			if (model == this.model) {
@@ -232,6 +239,13 @@ $(function() {
 		},
 		initialize: function() {
 			bg.logs.on('add', this.addItem, this);
+			bg.sources.on('clear-events', this.handleClearEvents, this);
+		},
+		handleClearEvents: function(id) {
+			if (window == null || id == window.top.tabID) {
+				bg.logs.off('add', this.addItem, this);
+				bg.sources.off('clear-events', this.handleClearEvents, this);
+			}
 		},
 		addItem: function(model) {
 			this.$el.css('display', 'block');

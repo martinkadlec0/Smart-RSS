@@ -93,7 +93,18 @@ $(function() {
 		initialize: function() {
 			this.model.on('change', this.render, this);
 			this.model.on('destroy', this.handleModelDestroy, this);
+			bg.sources.on('clear-events', this.handleClearEvents, this);
 			this.el.view = this;
+		},
+		handleClearEvents: function(id) {
+			if (window == null || id == window.top.tabID) {
+				this.clearEvents();
+			}
+		},
+		clearEvents: function() {
+			this.model.off('change', this.render, this);
+			this.model.off('destroy', this.handleModelDestroy, this);
+			bg.sources.off('clear-events', this.handleClearEvents, this);
 		},
 		handleModelDestroy: function(e) {
 			list.destroySource(this);
@@ -267,8 +278,7 @@ $(function() {
 			'click #advanced-switch' : 'handleSwitchClick',
 		},
 		initialize: function() {
-			//$('#prop-cancel').on('click', this.hide);
-			//$('#prop-cancel').on('keydown', this.handleKeyDown);
+			
 		},
 		handleClick: function(e) {
 			var t = e.currentTarget;
@@ -349,11 +359,19 @@ $(function() {
 
 			bg.sources.on('reset', this.addSources, this);
 			bg.sources.on('add', this.addSource, this);
+			bg.sources.on('clear-events', this.handleClearEvents, this);
+		},
+		handleClearEvents: function(id) {
+			if (window == null || id == window.top.tabID) {
+				bg.sources.off('reset', this.addSources, this);
+				bg.sources.off('add', this.addSource, this);
+				bg.sources.off('clear-events', this.handleClearEvents, this);
+			}
 		},
 		addSpecial: function(special) {
 
 			var view = new SpecialView({ model: special });
-			if (view.model.psoition == 'top') {
+			if (view.model.position == 'top') {
 				this.$el.prepend(view.render().el);
 			} else {
 				this.$el.append(view.render().el);
@@ -389,6 +407,7 @@ $(function() {
 			view.remove();*/
 		},
 		destroySource: function(view) {
+			view.clearEvents();
 			view.undelegateEvents();
 			view.$el.removeData().unbind(); 
 			view.off();
@@ -412,7 +431,15 @@ $(function() {
 		initialize: function() {
 			bg.loader.on('change:loading', this.handleLoadingChange, this);
 			bg.loader.on('change:loaded', this.renderIndicator, this);
+			bg.sources.on('clear-events', this.handleClearEvents, this);
 			this.handleLoadingChange();
+		},
+		handleClearEvents: function(id) {
+			if (window == null || id == window.top.tabID) {
+				bg.loader.off('change:loading', this.handleLoadingChange, this);
+				bg.loader.off('change:loaded', this.renderIndicator, this);
+				bg.sources.off('clear-events', this.handleClearEvents, this);
+			}
 		},
 		handleMouseDown: function(e) {
 			if (sourcesContextMenu.el.parentNode && !e.target.matchesSelector('.context-menu, .context-menu *')) {
