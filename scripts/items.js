@@ -350,6 +350,7 @@ $(function() {
 			window.addEventListener('message', function(e) {
 				if (e.data.action == 'new-select') {
 					window.focus();
+					$('#input-search').val('');
 					if (typeof e.data.value == 'object') {
 						that.handleNewSpecialSelected(e.data.value, e.data.name);
 					} else {
