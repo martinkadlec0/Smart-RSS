@@ -356,6 +356,7 @@ $(function() {
 			this.$el.addClass('lines-' + bg.settings.get('lines'));
 			bg.items.on('reset', this.addItems, this);
 			bg.items.on('add', this.addItem, this);
+			bg.items.on('sort', this.handleSort, this);
 			bg.settings.on('change:lines', this.handleChangeLines, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 
@@ -384,13 +385,22 @@ $(function() {
 		},
 		handleClearEvents: function(id) {
 			if (window == null || id == window.top.tabID) {
-				bg.items.off('reset', this.addItems, this);
-				bg.items.off('add', this.addItem, this);
-				bg.settings.off('change:lines', this.handleChangeLines, this);
+				bg.items.off('reset', this.addItems);
+				bg.items.off('add', this.addItem);
+				bg.items.off('sort', this.handleSort);
+				bg.settings.off('change:lines', this.handleChangeLines);
 				if (this.currentSource) {
-					this.currentSource.off('destroy', this.handleDestroyedSource, this);
+					this.currentSource.off('destroy', this.handleDestroyedSource);
 				}
-				bg.sources.off('clear-events', this.handleClearEvents, this);
+				bg.sources.off('clear-events', this.handleClearEvents);
+			}
+		},
+		handleSort: function(items) {
+			$('#input-search').val('');
+			if (this.specialName) {
+				this.handleNewSpecialSelected(this.specialFilter, this.specialName);
+			} else {
+				this.handleNewSelected(bg.sources.findWhere({ id: this.currentSource.id }));	
 			}
 		},
 		handleChangeLines: function(settings) {
@@ -422,9 +432,8 @@ $(function() {
 				var after = null;
 				if (noManualSort !== true) {
 					$.makeArray($('#list .item')).some(function(itemEl) {
-						alert(bg.items.comparator);
-						//if (bg.items.comparator(itemEl.view.model, item) == 1||-1) {
-						if (itemEl.view.model.get('date') < item.get('date')) {
+						if (bg.items.comparator(itemEl.view.model, item) === 1) {
+						//if (itemEl.view.model.get('date') < item.get('date')) {
 							after =  itemEl;
 							return true;
 						}

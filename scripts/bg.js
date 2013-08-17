@@ -13,6 +13,25 @@ $.ajaxSetup({ cache: false });
  * Items
  */
 
+var settings = new (Backbone.Model.extend({
+	defaults: {
+		id: 'settings-id',
+		lang: 'en', // or cs,sk,tr,de
+		layout: 'horizontal', // or vertical
+		lines: 'auto', // one-line, two-lines
+		posA: '250,*',
+		posB: '350,*',
+		posC: '50%,*',
+		sortOrder: 'desc'
+	},
+	localStorage: new Backbone.LocalStorage('settings-backbone'),
+	initialize: function() {
+		this.fetch();
+	}
+}));
+
+
+
 var Source = Backbone.Model.extend({
 	defaults: {
 		id: null,
@@ -64,11 +83,16 @@ var items = new (Backbone.Collection.extend({
 	batch: false,
 	localStorage: new Backbone.LocalStorage('items-backbone'),
 	comparator: function(a, b) {
-		return a.get('date') < b.get('date') ? 1 : -1;
+		var val = a.get('date') < b.get('date') ? 1 : -1;
+		if (settings.get('sortOrder') == 'asc') {
+			val = -val;
+		}
+		return val;
 	},
 	initialize: function() {
 		var that = this;
 		this.fetch({ silent: true });
+		settings.on('change:sortOrder', this.sort, this);
 	}
 }));
 
@@ -81,21 +105,6 @@ var loader = new (Backbone.Model.extend({
 	}
 }));
 
-var settings = new (Backbone.Model.extend({
-	defaults: {
-		id: 'settings-id',
-		lang: 'en', // or cs,sk,tr,de
-		layout: 'horizontal', // or vertical
-		lines: 'auto', // one-line, two-lines
-		posA: '250,*',
-		posB: '350,*',
-		posC: '50%,*'
-	},
-	localStorage: new Backbone.LocalStorage('settings-backbone'),
-	initialize: function() {
-		this.fetch();
-	}
-}));
 
 
 var log = Backbone.Model.extend({

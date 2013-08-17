@@ -63,7 +63,7 @@ $(function() {
 		el: '.overlay',
 		events: {
 			'click #config-layout input[type=image]': 'handleLayoutChange',
-			'change #config-lines': 'handleLinesChange'
+			'change select': 'handleSelectChange',
 		},
 		initialize: function() {
 			window.addEventListener('blur', this.hide.bind(this));
@@ -79,10 +79,11 @@ $(function() {
 				$('#config-layout input[value=vertical]').attr('src', '/images/layout_vertical.png');
 			}
 			this.$el.find('#config-lines').val(bg.settings.get('lines'));
+			this.$el.find('#config-sort-order').val(bg.settings.get('sortOrder'));
 			return this;
 		},
-		handleLinesChange: function(e) {
-			bg.settings.save('lines', e.currentTarget.value);
+		handleSelectChange: function(e) {
+			bg.settings.save(e.currentTarget.dataset.name, e.currentTarget.value);
 		},
 		handleLayoutChange: function(e) {
 			var layout = e.currentTarget.value;
