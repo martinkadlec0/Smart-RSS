@@ -342,6 +342,7 @@ $(function() {
 	var list = new (Backbone.View.extend({
 		el: '#list',
 		selectedItems: [],
+		selectPivot: null,
 		views: [],
 		currentSource: null,
 		specialName: null,
@@ -588,7 +589,7 @@ $(function() {
 		selectNext: function(e) {
 			var e = e || {};
 			var q = e.selectUnread ? '.unread:not(.invisible):first' : '.item:not(.invisible):first';
-			var next = $('.last-selected').nextAll(q);
+			var next =  e.selectUnread &&  list.selectPivot ? list.selectPivot.$el.nextAll(q) : $('.last-selected').nextAll(q);
 			if (!next.length && !e.shiftKey && !e.ctrlKey) {
 				next = $(q);
 				if (e.currentIsRemoved && next.length && $('.last-selected').get(0) == next.get(0)) {
