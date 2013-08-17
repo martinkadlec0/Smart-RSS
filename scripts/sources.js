@@ -433,6 +433,8 @@ $(function() {
 			bg.loader.on('change:loaded', this.renderIndicator, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 			this.handleLoadingChange();
+
+			window.addEventListener('resize', this.handleResize.bind(this));
 		},
 		handleClearEvents: function(id) {
 			if (window == null || id == window.top.tabID) {
@@ -440,6 +442,10 @@ $(function() {
 				bg.loader.off('change:loaded', this.renderIndicator, this);
 				bg.sources.off('clear-events', this.handleClearEvents, this);
 			}
+		},
+		handleResize: function() {
+			var wid = $(window).width();
+			bg.settings.save({ posA: wid + ',*' });
 		},
 		handleMouseDown: function(e) {
 			if (sourcesContextMenu.el.parentNode && !e.target.matchesSelector('.context-menu, .context-menu *')) {

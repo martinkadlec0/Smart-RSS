@@ -20,20 +20,30 @@ chrome.runtime.getBackgroundPage(function(bg) {
 	function layoutToVertical() {
 		var fs = document.querySelectorAll('frameset');
 		fs[1].cols = '*';
-		fs[1].rows = '50%,*';
+		fs[1].rows = bg.settings.get('posC');
 	}
 
 	function layoutToHorizontal() {
 		var fs = document.querySelectorAll('frameset');
-		fs[1].cols = '350,*';
+		fs[1].cols = bg.settings.get('posB');
 		fs[1].rows = '';
 	}
 
-	if (ls == 'vertical') {
-		if (document.querySelectorAll('frameset').length > 1) {
-			 layoutToVertical();
+	
+	if (document.querySelectorAll('frameset').length > 1) {
+		init();
+	} else {
+		document.addEventListener('DOMContentLoaded', init);	
+	}
+	
+
+	function init() {
+		var fs = document.querySelectorAll('frameset');
+		fs[0].cols = bg.settings.get('posA');
+		if (ls == 'vertical') {
+			layoutToVertical();
 		} else {
-			document.addEventListener('DOMContentLoaded', layoutToVertical);	
+			layoutToHorizontal();
 		}
 	}
 	

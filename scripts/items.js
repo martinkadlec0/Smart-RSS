@@ -591,6 +591,16 @@ $(function() {
 			'mousedown': 'handleMouseDown'
 		},
 		initialize: function() {
+			window.addEventListener('resize', this.handleResize.bind(this));
+		},
+		handleResize: function() {
+			if (bg.settings.get('layout') == 'horizontal') {
+				var wid = $(window).width();
+				bg.settings.save({ posB: wid + ',*' });
+			} else {
+				var hei = $(window).height();
+				bg.settings.save({ posC: hei + ',*' });
+			}
 		},
 		handleMouseDown: function(e) {
 			if (itemsContextMenu.el.parentNode && !e.target.matchesSelector('.context-menu, .context-menu *')) {
