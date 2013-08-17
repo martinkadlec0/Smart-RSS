@@ -132,6 +132,8 @@ $(function() {
 				} else if (e.data.action == 'no-items') {
 					that.model = null;
 					that.hide();
+				} else if (e.data.action == 'space-pressed') {
+					that.handleSpace();
 				}
 			});
 
@@ -200,6 +202,15 @@ $(function() {
 		show: function() {
 			$('header,iframe').css('display', 'block');
 		},
+		handleSpace: function() {
+			var cw = $('iframe').get(0).contentWindow;
+			var d = $('iframe').get(0).contentWindow.document;
+			if (d.documentElement.clientHeight + $(d.body).scrollTop() >= d.body.offsetHeight ) {
+				topWindow.frames[1].postMessage({ action: 'give-me-next' }, '*');
+			} else {
+				cw.scrollBy(0, d.documentElement.clientHeight * 0.85);
+			}
+		},
 		handleKeyDown: function(e) {
 			if (document.activeElement && document.activeElement.tagName == 'INPUT') {
 				return;
@@ -220,13 +231,7 @@ $(function() {
 				cw.scrollBy(0, 40);
 				e.preventDefault();
 			} else if (e.keyCode == 32) {
-				var cw = $('iframe').get(0).contentWindow;
-				var d = $('iframe').get(0).contentWindow.document;
-				if (d.documentElement.clientHeight + $(d.body).scrollTop() >= d.body.offsetHeight ) {
-					topWindow.frames[1].postMessage({ action: 'give-me-next' }, '*');
-				} else {
-					cw.scrollBy(0, d.documentElement.clientHeight * 0.85);
-				}
+				this.handleSpace();
 				e.preventDefault();
 			} else if (e.keyCode == 68 || e.keyCode == 46) {
 				toolbar.handleButtonDelete(e);

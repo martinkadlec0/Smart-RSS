@@ -111,7 +111,7 @@ $(function() {
 
 				if (!e.preventLoading) {
 					//bg.items.trigger('new-selected', this.model);
-					topWindow.frames[2].postMessage({ action: 'new-select', value: this.model.id }, '*');	
+					topWindow.frames[2].postMessage({ action: 'new-select', value: this.model.id }, '*');
 				}
 
 				if (!this.model.get('visited')) {
@@ -403,9 +403,9 @@ $(function() {
 			if (view == list.selectedItems[0]) {
 				var last = $('.item:not(.invisible):last').get(0);
 				if (last && view == last.view) {
-					app.selectPrev();
+					app.selectPrev({ currentIsRemoved: true });
 				} else {
-					app.selectNext();
+					app.selectNext({ currentIsRemoved: true });
 				}
 			}
 		},
@@ -587,7 +587,7 @@ $(function() {
 			var next = $('.last-selected').nextAll(q);
 			if (!next.length && !e.shiftKey && !e.ctrlKey) {
 				next = $(q);
-				if (next.length > 1 && $('.last-selected').get(0) == next.get(0)) {
+				if (e.currentIsRemoved && next.length && $('.last-selected').get(0) == next.get(0)) {
 					next = [];
 					topWindow.frames[2].postMessage({ action: 'no-items' }, '*');
 				}
@@ -604,9 +604,9 @@ $(function() {
 			var e = e || {};
 			var q = e.selectUnread ? '.unread:not(.invisible)' : '.item:not(.invisible)';
 			var prev = $('.last-selected').prevAll(q + ':first');
-			if (!prev.length > 1 && !e.shiftKey && !e.ctrlKey) {
+			if (!prev.length && !e.shiftKey && !e.ctrlKey) {
 				prev = $(q + ':last');
-				if (prev.length && $('.last-selected').get(0) == prev.get(0)) {
+				if (e.currentIsRemoved && prev.length && $('.last-selected').get(0) == prev.get(0)) {
 					prev = [];
 					topWindow.frames[2].postMessage({ action: 'no-items' }, '*');
 				}
@@ -703,6 +703,10 @@ $(function() {
 			} else if (e.keyCode == 85) { // U = Undelete item
 				if (!list.selectedItems || !list.selectedItems.length) return;
 				list.selectedItems.forEach(list.undeleteItem, list);
+				e.preventDefault();
+			} else if (e.keyCode == 32) { // U = Undelete item
+				if (!list.selectedItems || !list.selectedItems.length) return;
+				topWindow.frames[2].postMessage({ action: 'space-pressed' }, '*');
 				e.preventDefault();
 			}
 
