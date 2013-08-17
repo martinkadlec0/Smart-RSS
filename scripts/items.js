@@ -676,7 +676,14 @@ $(function() {
 				if (itemsContextMenu.el.parentNode) {
 					// make sure the action gets executed
 					itemsContextMenu.hide();
+					e.preventDefault();
 				}
+			} else if (e.keyCode == 85) { // U = Undelete item
+				if (!list.selectedItems || !list.selectedItems.length) return;
+				list.selectedItems.forEach(function(item) {
+					list.undeleteItem(item);
+				});
+				e.preventDefault();
 			}
 
 			
