@@ -183,6 +183,16 @@ $(function() {
 		}
 	});
 
+	/*var Group = Backbone.Model.extend({
+		defaults: {
+			title: '<no title>'
+		}
+	});
+
+	var GroupView = Backbone.View.extend({
+
+	});*/
+
 	var toolbar = new (Backbone.View.extend({
 		el: '#toolbar',
 		events: {
@@ -345,8 +355,8 @@ $(function() {
 		selectPivot: null,
 		views: [],
 		currentSource: null,
-		specialName: null,
-		specialFilter: null,
+		specialName: 'all-feeds',
+		specialFilter: { trashed: false },
 		noFocus: false,
 		events: {
 			'dragstart .item': 'handleDragStart'
@@ -465,6 +475,8 @@ $(function() {
 			items.forEach(function(item) {
 				this.addItem(item, true);
 			}, this);
+
+			//this.$el.prepend($('<div class="date-group">YESTERDAY</div>'));
 
 			/*setTimeout(function() {
 				//if (list.views[0]) list.views[0].select();
