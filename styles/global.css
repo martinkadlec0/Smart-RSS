@@ -60,6 +60,9 @@ body {
 	background: url('/images/delete_selected.png') no-repeat center center;
 	display: none;
 }
+#context-undelete {
+	display: none;
+}
 #button-print {
 	background: url('/images/print.png') no-repeat center center;
 }

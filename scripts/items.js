@@ -21,6 +21,8 @@ Array.prototype.first = function() {
 	return this[0];
 };
 
+HTMLCollection.prototype.indexOf = Array.prototype.indexOf;
+
 if (!Element.prototype.hasOwnProperty('matchesSelector')) {
 	Element.prototype.matchesSelector = Element.prototype.webkitMatchesSelector;
 }
@@ -121,8 +123,7 @@ $(function() {
 				list.selectedItems[0].$el.addClass('selected');
 
 				if (list.selectedItems[0] != this) {
-
-					if (list.selectedItems[0].model.get('date') > this.model.get('date')) {
+					if (list.selectedItems[0].$el.index() < this.$el.index() ) {
 						list.selectedItems[0].$el.nextUntil(this.$el).not('.invisible').each(function(i, el) {
 							$(el).addClass('selected');
 							list.selectedItems.push(el.view);
@@ -290,6 +291,16 @@ $(function() {
 			}
 		},
 		{
+			title: 'Undelete (U)',
+			id: 'context-undelete',
+			icon: 'delete_selected.png',
+			action: function(e) {
+				if (list.specialName == 'trash') {
+					list.selectedItems.forEach(list.undeleteItem, list);
+				}
+			}
+		},
+		{
 			title: 'Next Unread (H)',
 			action: function() {
 				app.selectNext({ selectUnread: true });
@@ -406,6 +417,8 @@ $(function() {
 				var after = null;
 				if (noManualSort !== true) {
 					$.makeArray($('#list .item')).some(function(itemEl) {
+						alert(bg.items.comparator);
+						//if (bg.items.comparator(itemEl.view.model, item) == 1||-1) {
 						if (itemEl.view.model.get('date') < item.get('date')) {
 							after =  itemEl;
 							return true;
@@ -446,7 +459,10 @@ $(function() {
 				this.currentSource.off('destroy', this.handleDestroyedSource, this);
 			}
 			this.currentSource = source;
-			if (this.specialName == 'trash') $('#button-undelete').css('display', 'none');
+			if (this.specialName == 'trash') {
+				$('#button-undelete').css('display', 'none');
+				$('#context-undelete').css('display', 'none');
+			}
 			this.specialName = null;
 			this.specialFilter = null;
 			source.on('destroy', this.handleDestroyedSource, this);
@@ -457,10 +473,16 @@ $(function() {
 				this.currentSource.off('destroy', this.handleDestroyedSource, this);
 			}
 			this.currentSource = null;
-			if (this.specialName == 'trash') $('#button-undelete').css('display', 'none');
+			if (this.specialName == 'trash') {
+				$('#button-undelete').css('display', 'none');	
+				$('#context-undelete').css('display', 'none');
+			} 
 			this.specialName = name;
 			this.specialFilter = filter;
-			if (this.specialName == 'trash') $('#button-undelete').css('display', 'block');
+			if (this.specialName == 'trash') {
+				$('#button-undelete').css('display', 'block');
+				$('#context-undelete').css('display', 'block');
+			}
 			this.addItems(bg.items.where( filter ));
 		},
 		handleDestroyedSource: function() {
@@ -680,9 +702,7 @@ $(function() {
 				}
 			} else if (e.keyCode == 85) { // U = Undelete item
 				if (!list.selectedItems || !list.selectedItems.length) return;
-				list.selectedItems.forEach(function(item) {
-					list.undeleteItem(item);
-				});
+				list.selectedItems.forEach(list.undeleteItem, list);
 				e.preventDefault();
 			}
 
