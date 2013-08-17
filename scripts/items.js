@@ -404,7 +404,10 @@ $(function() {
 			}
 		},
 		handleChangeLines: function(settings) {
-			this.$el.removeClass('lines-' + settings.previous('lines'));
+			this.$el.removeClass('lines-auto');
+			this.$el.removeClass('lines-one-line');
+			this.$el.removeClass('lines-two-lines');
+			// this.$el.removeClass('lines-' + settings.previous('lines')); // does not work for some reason
 			this.$el.addClass('lines-' + settings.get('lines'));
 		},
 		handleDragStart: function(e) {
