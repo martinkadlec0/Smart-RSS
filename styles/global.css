@@ -91,7 +91,8 @@ input[type=search]:not(:focus):not(:valid) {
 	min-width: 150px;
 	max-width: 200px;
 	border: 1px solid rgb(160, 160, 160);
-	background: linear-gradient(to right, rgb(240, 240, 240) 27px, rgb(174, 207, 247) 27px, rgb(240, 240, 240) 28px);
+	/*background: linear-gradient(to right, rgb(240, 240, 240) 27px, rgb(174, 207, 247) 27px, rgb(240, 240, 240) 28px);*/
+	background: url('/images/context-border.png') repeat-y 27px top rgb(240, 240, 240);
 	position: absolute;
 	top: 300px;
 	left: 10px;

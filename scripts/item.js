@@ -175,6 +175,7 @@ $(function() {
 			if (fr.contentDocument.readyState == 'complete') {
 				fr.contentDocument.documentElement.innerHTML = content;	
 			} else {
+				// load event from some reason isn't enough
 				setTimeout(function() {
 					fr.contentDocument.documentElement.innerHTML = content;
 				}, 500);
