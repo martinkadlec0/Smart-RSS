@@ -369,6 +369,10 @@ $(function() {
 					}
 					
 				} if (e.data.action == 'give-me-next') {
+					if (list.selectedItems[0] && list.selectedItems[0].model.get('unread') == true) {
+						list.selectedItems[0].model.save({ unread: false });
+					}
+					
 					app.selectNext({ selectUnread: true });
 				}
 			});
