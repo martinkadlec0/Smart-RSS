@@ -369,7 +369,7 @@ $(function() {
 					}
 					
 				} if (e.data.action == 'give-me-next') {
-					app.selectNext();
+					app.selectNext({ selectUnread: true });
 				}
 			});
 
@@ -587,7 +587,7 @@ $(function() {
 			var next = $('.last-selected').nextAll(q);
 			if (!next.length && !e.shiftKey && !e.ctrlKey) {
 				next = $(q);
-				if (next.length && $('.last-selected').get(0) == next.get(0)) {
+				if (next.length > 1 && $('.last-selected').get(0) == next.get(0)) {
 					next = [];
 					topWindow.frames[2].postMessage({ action: 'no-items' }, '*');
 				}
@@ -604,7 +604,7 @@ $(function() {
 			var e = e || {};
 			var q = e.selectUnread ? '.unread:not(.invisible)' : '.item:not(.invisible)';
 			var prev = $('.last-selected').prevAll(q + ':first');
-			if (!prev.length && !e.shiftKey && !e.ctrlKey) {
+			if (!prev.length > 1 && !e.shiftKey && !e.ctrlKey) {
 				prev = $(q + ':last');
 				if (prev.length && $('.last-selected').get(0) == prev.get(0)) {
 					prev = [];
