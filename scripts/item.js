@@ -156,7 +156,7 @@ $(function() {
 
 			this.show();
 
-			var date = bg.formatDate.call(new Date(this.model.get('date')), 'DD.MM.YYYY hh:mm:ss');
+			var date = bg.formatDate(new Date(this.model.get('date')), 'DD.MM.YYYY hh:mm:ss');
 
 			var source = bg.sources.findWhere({ id: this.model.get('sourceID') });
 
@@ -262,7 +262,7 @@ $(function() {
 		},
 		addItem: function(model) {
 			this.$el.css('display', 'block');
-			$('<div class="log">' + bg.formatDate.call(new Date, 'hh:mm:ss') + ': ' + model.get('message') + '</div>').insertAfter(this.$el.find('#button-hide-log'));
+			$('<div class="log">' + bg.formatDate(new Date, 'hh:mm:ss') + ': ' + model.get('message') + '</div>').insertAfter(this.$el.find('#button-hide-log'));
 		},
 		hide: function() {
 			this.$el.css('display', 'none');

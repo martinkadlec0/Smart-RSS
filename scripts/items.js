@@ -40,9 +40,43 @@ window.addEventListener('blur', function() {
 	document.documentElement.classList.remove('focused');
 });
 
+
+
+
 chrome.runtime.getBackgroundPage(function(bg) {
 
 $(function() {
+
+
+	function getGroup(date) {
+		var dt = new Date(date);
+		var dc = new Date();
+
+		var dtt = parseInt(bg.formatDate(date, 'T') / 86400000);
+		var dct = parseInt(bg.formatDate(dc, 'T') / 86400000);
+
+		var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+		var months = ['January', 'February', 'March', 'April', 'May', 'Juny', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+
+		if (dtt == dct) {
+			return 'TODAY';
+		} else if (dtt + 1 == dct) {
+			return 'YESTERDAY';
+		} else if (bg.formatDate(dt, 'w') == bg.formatDate(dc, 'w') && dtt + 7 >= dct) {
+			return days[dt.getDay()].toUpperCase();
+		} else if (parseInt(bg.formatDate(dt, 'w')) + 1 == bg.formatDate(dc, 'w') &&  dtt + 14 >= dct) {
+			return 'LAST WEEK';
+		} else if (dt.getMonth() == dc.getMonth() && dt.getFullYear() == dc.getFullYear()) {
+			return 'EARLIER THIS MONTH';
+		} else if (dt.getFullYear() == dc.getFullYear() ) {
+			return months[dt.getMonth()];
+		} else {
+			return dt.getFullYear();
+		}
+
+	}
+
 	var ItemView = Backbone.View.extend({
 		tagName: 'div',
 		className: 'item',
@@ -75,12 +109,12 @@ $(function() {
 			this.$el.toggleClass('unread', this.model.get('unread'));
 			var data = this.model.toJSON();
 			if (data.date) {
-				if (parseInt(data.date / 86400000) == parseInt(Date.now() / 86400000)) {
-					data.date = bg.formatDate.call(new Date(data.date), 'hh:mm');
-				} else if ((new Date(data.date)).getYear() == (new Date()).getYear() ) {
-					data.date = bg.formatDate.call(new Date(data.date), 'DD.MM');	
+				if (parseInt(bg.formatDate(data.date, 'T') / 86400000) == parseInt(bg.formatDate(Date.now(), 'T') / 86400000)) {
+					data.date = bg.formatDate(new Date(data.date), 'hh:mm');
+				} else if ((new Date(data.date)).getFullYear() == (new Date()).getFullYear() ) {
+					data.date = bg.formatDate(new Date(data.date), 'DD.MM.');	
 				} else {
-					data.date = bg.formatDate.call(new Date(data.date), 'DD.MM.YYYY');	
+					data.date = bg.formatDate(new Date(data.date), 'DD.MM.YYYY');	
 				}
 			}
 			
@@ -124,12 +158,12 @@ $(function() {
 
 				if (list.selectedItems[0] != this) {
 					if (list.selectedItems[0].$el.index() < this.$el.index() ) {
-						list.selectedItems[0].$el.nextUntil(this.$el).not('.invisible').each(function(i, el) {
+						list.selectedItems[0].$el.nextUntil(this.$el).not('.invisible,.date-group').each(function(i, el) {
 							$(el).addClass('selected');
 							list.selectedItems.push(el.view);
 						});
 					} else {
-						this.$el.nextUntil(list.selectedItems[0].$el).not('.invisible').each(function(i, el) {
+						this.$el.nextUntil(list.selectedItems[0].$el).not('.invisible,.date-group').each(function(i, el) {
 							$(el).addClass('selected');
 							list.selectedItems.push(el.view);
 						});
@@ -183,15 +217,37 @@ $(function() {
 		}
 	});
 
-	/*var Group = Backbone.Model.extend({
+
+	/**
+	 * Today, Yesterday, Monday-Sunday, Last Week, January-December, Last Year, 2011-1960
+	 */
+	var Group = Backbone.Model.extend({
 		defaults: {
 			title: '<no title>'
 		}
 	});
 
-	var GroupView = Backbone.View.extend({
+	var groups = new (Backbone.Collection.extend({
+		model: Group
+	}));
 
-	});*/
+	var GroupView = Backbone.View.extend({
+		tagName: 'div',
+		className: 'date-group',
+		initialize: function() {
+			groups.on('reset', this.handleRemove, this);
+			this.model.on('destroy', this.handleRemove, this);
+		},
+		render: function() {
+			this.$el.html(this.model.get('title'));
+			return this;
+		},
+		handleRemove: function() {
+			groups.off('reset', this.handleRemove);
+			this.model.off('destroy', this.handleRemove);
+			this.$el.remove();
+		}
+	});
 
 	var toolbar = new (Backbone.View.extend({
 		el: '#toolbar',
@@ -370,6 +426,8 @@ $(function() {
 			bg.settings.on('change:lines', this.handleChangeLines, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 
+			groups.on('add', this.addGroup, this);
+
 			window.addEventListener('message', function(e) {
 				if (e.data.action == 'new-select') {
 					window.focus();
@@ -409,8 +467,11 @@ $(function() {
 			$('#input-search').val('');
 			if (this.specialName) {
 				this.handleNewSpecialSelected(this.specialFilter, this.specialName);
-			} else {
+			} else if (this.currentSource) {
 				this.handleNewSelected(bg.sources.findWhere({ id: this.currentSource.id }));	
+			} else {
+				alert('E1: This should not happen. Please report it!');
+				debugger;
 			}
 		},
 		handleChangeLines: function(settings) {
@@ -453,6 +514,11 @@ $(function() {
 					});
 				}
 
+				var groupTitle = getGroup(view.model.get('date'));
+				if (!groups.findWhere({ title: groupTitle })) {
+					groups.add({ title: groupTitle });
+				}
+
 				if (!after) {
 					this.$el.append(view.render().$el);	
 					if (!this.selectedItems.length) view.select();
@@ -461,20 +527,37 @@ $(function() {
 					view.render().$el.insertBefore($(after));
 				}
 
+				
+
 				this.views.push(view);
 			}
 		},
+		addGroup: function(model) {
+			var view = new GroupView({ model: model });
+			this.$el.append(view.render().el);
+		},
 		addItems: function(items) {
-			// better solution?
+			// better solution?	
 			this.noFocus = true;
-			this.views.forEach(this.destroyItem, this);
+			while (this.views.length) {
+				this.destroyItem(this.views[0]);
+			}
 			this.noFocus = false;
-			this.views = [];
 
-			$('#list').html('');
+			groups.reset();
+
+			if (this.$el.find('.item:first-of-type').length > 0) {
+				alert('E2: This should not happen. Please report it!');
+				debugger;
+				this.$el.html('');
+			}
+
 			items.forEach(function(item) {
 				this.addItem(item, true);
 			}, this);
+			
+
+			
 
 			//this.$el.prepend($('<div class="date-group">YESTERDAY</div>'));
 

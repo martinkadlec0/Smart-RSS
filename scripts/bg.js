@@ -560,12 +560,17 @@ var formatDate = function(){
         return n%z;
     };
     var getDOY = function() {
-        var onejan = new Date(that.getFullYear(),0,1);
-        return Math.ceil((that - onejan) / 86400000);
+    	var dt = new Date(that);
+    	dt.setHours(0,0,0);
+        var onejan = new Date(dt.getFullYear(),0,1);
+        return Math.ceil((dt - onejan) / 86400000);
     };
     var getWOY = function() {
-        var onejan = new Date(that.getFullYear(),0,1);
-        return Math.ceil((((that - onejan) / 86400000) + onejan.getDay()+1)/7);
+    	var dt = new Date(that);
+    	dt.setHours(0,0,0);
+    	dt.setDate(dt.getDate() + 4 - (dt.getDay() || 7));
+        var onejan = new Date(dt.getFullYear(),0,1);
+        return Math.ceil((((dt - onejan) / 86400000) + onejan.getDay() + 1)/7);
     };
     var dateVal = function(all, found) {
         switch (found) {
@@ -585,6 +590,7 @@ var formatDate = function(){
             case "s":    return that.getSeconds();
             case "u":    return that.getMilliseconds();
             case "U":    return that.getTime();
+            case "T":    return that.getTime() - that.getTimezoneOffset() * 60000;
             case "W":    return that.getDay();
             case "y":    return getDOY();
             case "w":    return getWOY();
@@ -593,9 +599,10 @@ var formatDate = function(){
             default:     return "";
         }
     };
-    return function(str){
-    	that = this;
-        str = str.replace(/(DD|D|MM|M|YYYY|YY|hh|h|HH|H|mm|m|ss|s|u|U|W|y|w|G|a)/g, dateVal);
+    return function(date, str){
+    	if (typeof date == 'number') date = new Date(date);
+    	that = date;
+        str = str.replace(/(DD|D|MM|M|YYYY|YY|hh|h|HH|H|mm|m|ss|s|u|U|W|y|w|G|a|T)/g, dateVal);
         return str;
     };
 }();
