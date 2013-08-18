@@ -293,14 +293,14 @@ $(function() {
 		},
 		handleButtonDelete: function(e) {
 			if (list.specialName == 'trash' || e.shiftKey) {
-				list.selectedItems.forEach(list.removeItemCompletely, list);
+				list.destroyBatch(list.selectedItems, list.removeItemCompletely);
 			} else {
-				list.selectedItems.forEach(list.removeItem, list);	
+				list.destroyBatch(list.selectedItems, list.removeItem);
 			}
 		},
 		handleButtonUndelete: function() {
 			if (list.specialName == 'trash') {
-				list.selectedItems.forEach(list.undeleteItem, list);
+				list.destroyBatch(list.selectedItems, list.undeleteItem);
 			} 
 		}
 	}));
@@ -350,9 +350,9 @@ $(function() {
 			action: function(e) {
 				e = e || {};
 				if (list.specialName == 'trash' || e.shiftKey) {
-					list.selectedItems.forEach(list.removeItemCompletely, list);
+					list.destroyBatch(list.selectedItems, list.removeItemCompletely);
 				} else {
-					list.selectedItems.forEach(list.removeItem, list);	
+					list.destroyBatch(list.selectedItems, list.removeItem);
 				}
 			}
 		},
@@ -362,7 +362,7 @@ $(function() {
 			icon: 'delete_selected.png',
 			action: function(e) {
 				if (list.specialName == 'trash') {
-					list.selectedItems.forEach(list.undeleteItem, list);
+					list.destroyBatch(list.selectedItems, list.undeleteItem);
 				}
 			}
 		},
@@ -630,6 +630,12 @@ $(function() {
 			});
 			this.destroyItem(view);
 		},
+		destroyBatch: function(arr, fn) {
+			this.noFocus = true;
+			while (arr.length > 1) fn.call(this, arr[0]);
+			this.noFocus = false;
+			if (arr.length) fn.call(this, arr[0]);
+		},
 		destroyItem: function(view) {
 			if (!this.noFocus) {
 				this.selectAfterDelete(view);
@@ -747,9 +753,9 @@ $(function() {
 
 			if (e.keyCode == 68 || e.keyCode == 46) {
 				if (list.specialName == 'trash' || e.shiftKey) {
-					list.selectedItems.forEach(list.removeItemCompletely, list);
+					list.destroyBatch(list.selectedItems, list.removeItemCompletely);
 				} else {
-					list.selectedItems.forEach(list.removeItem, list);	
+					list.destroyBatch(list.selectedItems, list.removeItem);
 				}
 				e.preventDefault();
 			} else if (e.keyCode == 49) {
@@ -824,7 +830,7 @@ $(function() {
 				}
 			} else if (e.keyCode == 85) { // U = Undelete item
 				if (!list.selectedItems || !list.selectedItems.length) return;
-				list.selectedItems.forEach(list.undeleteItem, list);
+				list.destroyBatch(list.selectedItems, list.undeleteItem);				
 				e.preventDefault();
 			} else if (e.keyCode == 32) { // U = Undelete item
 				if (!list.selectedItems || !list.selectedItems.length) return;
