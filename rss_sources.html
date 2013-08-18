@@ -12,31 +12,30 @@
 </head>
 <body>
 	<div id="toolbar">
-		<div class="button" id="button-add" title="Add RSS Source"></div>
-		<div class="button" id="button-reload" title="Update All"></div>
+		<div class="button" id="button-add" title="{{ADD_RSS_SOURCE}}"></div>
+		<div class="button" id="button-reload" title="{{UPDATE_ALL}}"></div>
 	</div>
 	<div id="properties">
-		<label>Name: <input type="text" id="prop-title" placeholder="If empty, it will be fetched." /></label>
-		<label>Address: <input type="url" id="prop-url" /></label>
-		<label>Update: <select id="prop-update-every">
-			<option value="0">Never</option>
-			<option value="5">Every 5 minutes</option>
-			<option value="15">Every 15 minutes</option>
-			<option value="30">Every 30 minutes</option>
-			<option value="60">Every hour</option>
-			<option value="120">Every 2 hours</option>
-			<option value="180">Every 3 hours</option>
-			<option value="300">Every 5 hours</option>
-			<option value="600">Every 10 hours</option>
-			<option value="1440">Every 24 hours</option>
-			<option value="1080">Every week</option>
+		<label>{{NAME}}: <input type="text" id="prop-title" placeholder="{{FETCH_TITLE_TIP}}" /></label>
+		<label>{{ADDRESS}}: <input type="url" id="prop-url" /></label>
+		<label>{{UPDATE}}: <select id="prop-update-every">
+			<option value="0">{{NEVER}}</option>
+			<option value="15">{{EVERY_15_MINUTES}}</option>
+			<option value="30">{{EVERY_30_MINUTES}}</option>
+			<option value="60">{{EVERY_HOUR}}</option>
+			<option value="120">{{EVERY_2_HOURS}}</option>
+			<option value="180">{{EVERY_3_HOURS}}</option>
+			<option value="300">{{EVERY_5_HOURS}}</option>
+			<option value="600">{{EVERY_10_HOURS}}</option>
+			<option value="1440">{{EVERY_24_HOURS}}</option>
+			<option value="1080">{{EVERY_WEEK}}</option>
 		</select></label>
-		<div id="advanced-switch">More</div>
+		<div id="advanced-switch">{{MORE}}</div>
 		<div id="properties-advanced">
-			<label>Username: <input type="text" id="prop-username" /></label>
-			<label>Password: <input type="password" id="prop-password" /></label>
+			<label>{{USERNAME}}: <input type="text" id="prop-username" /></label>
+			<label>{{PASSWORD}}: <input type="password" id="prop-password" /></label>
 		</div>
-		<button id="prop-ok">Ok</button><button id="prop-cancel">Cancel</button>
+		<button id="prop-ok">{{OK}}</button><button id="prop-cancel">{{CANCEL}}</button>
 	</div>
 	<div id="list">
 

@@ -47,6 +47,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 
 $(function() {
 
+	$('body').html( bg.translate($('body').html()) );
 
 	function getGroup(date) {
 		var dt = new Date(date);
@@ -60,17 +61,17 @@ $(function() {
 
 
 		if (dtt == dct) {
-			return 'TODAY';
+			return bg.lang.c.TODAY.toUpperCase();
 		} else if (dtt + 1 == dct) {
-			return 'YESTERDAY';
+			return bg.lang.c.YESTERDAY.toUpperCase();
 		} else if (bg.formatDate(dt, 'w') == bg.formatDate(dc, 'w') && dtt + 7 >= dct) {
-			return days[dt.getDay()].toUpperCase();
+			return bg.lang.c[days[dt.getDay()].toUpperCase()].toUpperCase();
 		} else if (parseInt(bg.formatDate(dt, 'w')) + 1 == bg.formatDate(dc, 'w') &&  dtt + 14 >= dct) {
-			return 'LAST WEEK';
+			return bg.lang.c.LAST_WEEK.toUpperCase();
 		} else if (dt.getMonth() == dc.getMonth() && dt.getFullYear() == dc.getFullYear()) {
-			return 'EARLIER THIS MONTH';
+			return bg.lang.c.EARLIER_THIS_MONTH.toUpperCase();
 		} else if (dt.getFullYear() == dc.getFullYear() ) {
-			return months[dt.getMonth()].toUpperCase();
+			return bg.lang.c[months[dt.getMonth()].toUpperCase()].toUpperCase();
 		} else {
 			return dt.getFullYear();
 		}
@@ -351,14 +352,14 @@ $(function() {
 
 	var itemsContextMenu = new ContextMenu([
 		{
-			title: 'Mark As Un/Read (K)',
+			title: bg.lang.c.MARK_AS_READ + ' (K)',
 			icon: 'read.png',
 			action: function() {
 				list.changeUnreadState();
 			}
 		},
 		{
-			title: 'Delete (D)',
+			title: bg.lang.c.DELETE + ' (D)',
 			icon: 'delete.png',
 			action: function(e) {
 				e = e || {};
@@ -370,7 +371,7 @@ $(function() {
 			}
 		},
 		{
-			title: 'Undelete (U)',
+			title: bg.lang.c.UNDELETE + ' (U)',
 			id: 'context-undelete',
 			icon: 'delete_selected.png',
 			action: function(e) {
@@ -380,33 +381,33 @@ $(function() {
 			}
 		},
 		{
-			title: 'Next Unread (H)',
+			title: bg.lang.c.NEXT_UNREAD + ' (H)',
 			action: function() {
 				app.selectNext({ selectUnread: true });
 			}
 		},
 		{
-			title: 'Previous Unread (Y)',
+			title: bg.lang.c.PREV_UNREAD + ' (Y)',
 			action: function() {
 				app.selectPrev({ selectUnread: true });
 			}
 		},
 		{
-			title: 'Mark And Next Unread (G)',
+			title: bg.lang.c.MARK_AND_NEXT_UNREAD + ' (G)',
 			action: function() {
 				list.changeUnreadState({ onlyToRead: true });
 				app.selectNext({ selectUnread: true });
 			}
 		},
 		{
-			title: 'Mark And Prev Unread (T)',
+			title: bg.lang.c.MARK_AND_PREV_UNREAD + ' (T)',
 			action: function() {
 				list.changeUnreadState({ onlyToRead: true });
 				this.selectPrev({ selectUnread: true });
 			}
 		},
 		{
-			title: 'Un/Pin (P)',
+			title: bg.lang.c.PIN + ' (P)',
 			icon: 'mail_pinned.png',
 			action: function() {
 				if (!list.selectedItems || !list.selectedItems.length) return;

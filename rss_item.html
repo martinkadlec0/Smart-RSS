@@ -12,9 +12,9 @@
 </head>
 <body>
 	<div id="toolbar">
-		<div class="button" id="button-read" title="Mark as read"></div>
-		<div class="button" id="button-delete" title="Delete"></div>
-		<div class="button" id="button-print" title="Print"></div>
+		<div class="button" id="button-read" title="{{MARK_AS_READ}}"></div>
+		<div class="button" id="button-delete" title="{{DELETE}}"></div>
+		<div class="button" id="button-print" title="{{PRINT}}"></div>
 
 		<div class="button" id="button-config"></div>
 	</div>
@@ -23,7 +23,7 @@
 		<div id="below-h1">
 			<p class="author"></p>
 			<p class="date"></p>
-			<p class="pin-button" title="(Un)pin"></p>
+			<p class="pin-button" title="{{PIN}}"></p>
 		</div>
 		
 	</header>
@@ -38,16 +38,16 @@
 			<input type="image" src="images/layout_horizontal.png" value="horizontal" />
 			<input type="image" src="images/layout_vertical.png" value="vertical" />
 		</div>
-		<label for="config-lines">Lines:</label>
+		<label for="config-lines">{{LINES}}:</label>
 		<select id="config-lines" data-name="lines">
-			<option value="auto">Auto</option>
-			<option value="one-line">One-Line</option>
-			<option value="two-lines">Two-Lines</option>
+			<option value="auto">{{AUTO}}</option>
+			<option value="one-line">{{ONE_LINE}}</option>
+			<option value="two-lines">{{TWO_LINES}}</option>
 		</select>
-		<label for="config-sort-order">Sort Order:</label>
+		<label for="config-sort-order">{{SORT_ORDER}}:</label>
 		<select id="config-sort-order" data-name="sortOrder">
-			<option value="desc">Descending</option>
-			<option value="asc">Ascending</option>
+			<option value="desc">{{DESCENDING}}</option>
+			<option value="asc">{{ASCENDING}}</option>
 		</select>
 	
 		<!--<select id="config-layout">
@@ -77,7 +77,7 @@
 			<%= content %>
 			<div style="clear: both"></div>
 			<footer>
-				<a href="<%- url %>">Full article</a>
+				<a href="<%- url %>">{{FULL_ARTICLE}}</a>
 			</footer>
 		</body>
 	</script>

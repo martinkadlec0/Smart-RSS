@@ -29,6 +29,8 @@ chrome.runtime.getBackgroundPage(function(bg) {
 
 $(function() {
 
+	$('body').html( bg.translate($('body').html()) );
+
 	var TopView = Backbone.View.extend({
 		tagName: 'div',
 		className: 'source',
@@ -152,7 +154,7 @@ $(function() {
 	});
 
 	var trash = new Special({
-		title: 'Trash',
+		title: bg.lang.c.TRASH,
 		icon: 'trashsource.png',
 		filter: { trashed: true, deleted: false },
 		position: 'bottom',
@@ -230,14 +232,14 @@ $(function() {
 
 	var sourcesContextMenu = new ContextMenu([
 		{
-			title: 'Update',
+			title: bg.lang.c.UPDATE,
 			icon: 'reload.png',
 			action: function() {
 				bg.downloadOne(sourcesContextMenu.currentSource);
 			}
 		},
 		{ 
-			title: 'Mark All As Read',
+			title: bg.lang.c.MARK_ALL_AS_READ,
 			icon: 'read.png',
 			action: function() { 
 				var id = sourcesContextMenu.currentSource.get('id');
@@ -250,7 +252,7 @@ $(function() {
 			}
 		},
 		{ 
-			title: 'Delete',
+			title: bg.lang.c.DELETE,
 			icon: 'delete.png',
 			action: function() { 
 				if (confirm('Do you really want to delete this feed?')) {
@@ -260,7 +262,7 @@ $(function() {
 			}
 		},
 		{ 
-			title: 'Properties',
+			title: bg.lang.c.PROPERTIES,
 			icon: 'properties.png',
 			action: function() {
 				properties.show(sourcesContextMenu.currentSource);
@@ -338,7 +340,7 @@ $(function() {
 		},
 		initialize: function() {
 			this.addSpecial(new Special({
-				title: 'All feeds',
+				title: bg.lang.c.ALL_FEEDS,
 				icon: 'icon16_v2.png',
 				filter: { trashed: false },
 				position: 'top',
@@ -346,7 +348,7 @@ $(function() {
 			}));
 
 			this.addSpecial(new Special({
-				title: 'Pinned',
+				title: bg.lang.c.PINNED,
 				icon: 'pinsource.png',
 				filter: { trashed: false, pinned: true },
 				position: 'bottom',

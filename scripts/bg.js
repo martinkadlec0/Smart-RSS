@@ -3,7 +3,15 @@ if (!Element.prototype.hasOwnProperty('matchesSelector')) {
 }
 
 
+/**
+ * Localization
+ */
 
+function translate(str) {
+	return str.replace(/\{\{(\w+)\}\}/gm, function(all, str) {
+		return lang.c[str];
+	});
+}
 
 var sourceIdIndex = localStorage.getItem('sourceIdIndex') || 1;
 $.ajaxSetup({ cache: false });

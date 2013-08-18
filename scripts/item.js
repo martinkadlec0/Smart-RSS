@@ -13,6 +13,8 @@ chrome.runtime.getBackgroundPage(function(bg) {
 
 $(function() {
 
+	$('body').html( bg.translate($('body').html()) );
+
 	var toolbar = new (Backbone.View.extend({
 		el: '#toolbar',
 		events: {
