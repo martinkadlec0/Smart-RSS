@@ -70,7 +70,7 @@ $(function() {
 		} else if (dt.getMonth() == dc.getMonth() && dt.getFullYear() == dc.getFullYear()) {
 			return 'EARLIER THIS MONTH';
 		} else if (dt.getFullYear() == dc.getFullYear() ) {
-			return months[dt.getMonth()];
+			return months[dt.getMonth()].toUpperCase();
 		} else {
 			return dt.getFullYear();
 		}
@@ -100,9 +100,9 @@ $(function() {
 			} 
 		},
 		clearEvents: function() {
-			this.model.off('change', this.handleModelChange);
-			this.model.off('destroy', this.handleModelDestroy);
-			bg.sources.off('clear-events', this.handleClearEvents);
+			this.model.off('change', this.handleModelChange, this);
+			this.model.off('destroy', this.handleModelDestroy, this);
+			bg.sources.off('clear-events', this.handleClearEvents, this);
 		},
 		render: function() {
 			this.$el.toggleClass('unvisited', !this.model.get('visited'));
@@ -235,16 +235,22 @@ $(function() {
 		tagName: 'div',
 		className: 'date-group',
 		initialize: function() {
-			groups.on('reset', this.handleRemove, this);
-			this.model.on('destroy', this.handleRemove, this);
+			this.el.view = this;
+			groups.on('reset', this.handleReset, this);
+			groups.on('remove', this.handleRemove, this);
 		},
 		render: function() {
 			this.$el.html(this.model.get('title'));
 			return this;
 		},
-		handleRemove: function() {
-			groups.off('reset', this.handleRemove);
-			this.model.off('destroy', this.handleRemove);
+		handleRemove: function(model) {
+			if (model == this.model) {
+				this.handleReset();
+			}
+		},
+		handleReset: function() {
+			groups.off('reset', this.handleRemove, this);
+			groups.off('remove', this.handleRemove, this);
 			this.$el.remove();
 		}
 	});
@@ -275,6 +281,13 @@ $(function() {
 		},
 		handleSearch: function(e) {
 			var str = e.currentTarget.value || '';
+
+			if (str == '') {
+				$('.date-group').css('display', 'block');
+			} else {
+				$('.date-group').css('display', 'none');
+			}
+
 			var searchInContent = false;
 			if (str[0] && str[0] == ':') {
 				str = str.replace(/^:/, '', str);
@@ -453,14 +466,14 @@ $(function() {
 		},
 		handleClearEvents: function(id) {
 			if (window == null || id == window.top.tabID) {
-				bg.items.off('reset', this.addItems);
-				bg.items.off('add', this.addItem);
-				bg.items.off('sort', this.handleSort);
-				bg.settings.off('change:lines', this.handleChangeLines);
+				bg.items.off('reset', this.addItems, this);
+				bg.items.off('add', this.addItem, this);
+				bg.items.off('sort', this.handleSort, this);
+				bg.settings.off('change:lines', this.handleChangeLines, this);
 				if (this.currentSource) {
-					this.currentSource.off('destroy', this.handleDestroyedSource);
+					this.currentSource.off('destroy', this.handleDestroyedSource, this);
 				}
-				bg.sources.off('clear-events', this.handleClearEvents);
+				bg.sources.off('clear-events', this.handleClearEvents, this);
 			}
 		},
 		handleSort: function(items) {
@@ -640,6 +653,17 @@ $(function() {
 			if (!this.noFocus) {
 				this.selectAfterDelete(view);
 			}
+
+
+			// START: REMOVE DATE GROUP
+			var prev = view.el.previousElementSibling;
+			var next = view.el.nextElementSibling;
+			if (prev && prev.classList.contains('date-group')) {
+				if (!next || next.classList.contains('date-group')) {
+					groups.remove(prev.view.model);
+				}
+			}
+			// END: REMOVE DATE GROUP
 
 			view.clearEvents();
 			view.undelegateEvents();

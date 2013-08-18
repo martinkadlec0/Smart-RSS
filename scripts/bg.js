@@ -600,7 +600,7 @@ var formatDate = function(){
         }
     };
     return function(date, str){
-    	if (typeof date == 'number') date = new Date(date);
+    	if (!(date instanceof Date)) date = new Date(date);
     	that = date;
         str = str.replace(/(DD|D|MM|M|YYYY|YY|hh|h|HH|H|mm|m|ss|s|u|U|W|y|w|G|a|T)/g, dateVal);
         return str;
