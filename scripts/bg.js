@@ -25,6 +25,7 @@ var settings = new (Backbone.Model.extend({
 	defaults: {
 		id: 'settings-id',
 		lang: 'en', // or cs,sk,tr,de
+		dateType: 'normal', // normal = DD.MM.YYYY, ISO = YYYY-MM-DD, US = MM/DD/YYYY
 		layout: 'horizontal', // or vertical
 		lines: 'auto', // one-line, two-lines
 		posA: '250,*',
