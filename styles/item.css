@@ -138,3 +138,15 @@ footer .log:not(:last-of-type) {
 .overlay select {
 	width: 100%;
 }
+
+.overlay a {
+	display: block;
+	text-align: right;
+	margin: 3px;
+	margin-top: 8px;
+	padding-top: 8px;
+	font-size: 0.8rem;
+	font-family: sans-serif;
+	color: black;
+	border-top: 1px solid #a6a6a6;
+}
