@@ -287,7 +287,7 @@ $(function() {
 				// need to add listener for source destroy to prevent loading deleted source
 				bg.downloadOne(list.currentSource);	
 			} else {
-				bg.downloadAll();
+				bg.downloadAll(true); // true = force
 			}
 			
 		},

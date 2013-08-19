@@ -244,9 +244,12 @@ $(function() {
 		if (sourceID) {
 			var source = sources.findWhere({ id: sourceID });
 			if (source) {
-				downloadOne(source);
+				if (!downloadOne(source)) {
+					setTimeout(downloadOne, 30000, source);
+				}
 			} else {
 				console.log('No source with ID: ' + sourceID);
+				chrome.alarms.clear(alarm.name);
 				debugger;
 			}
 			
@@ -363,6 +366,8 @@ chrome.tabs.onUpdated.addListener(function(tabID, changed, tab) {
  */
 
 function downloadOne(source) {
+	if (loader.get('loading') == true) return false;
+
 	loader.set('maxSources', 1);
 	loader.set('loading', true);
 	loader.set('loaded', 0);
@@ -370,9 +375,12 @@ function downloadOne(source) {
 		loader.set('loaded', 1);
 		loader.set('loading', false);
 	});
+	return true;
 }
 
 function downloadAll(force) {
+	if (loader.get('loading') == true) return;
+
 	var urls = sources.clone();
 
 	if (!force) {
