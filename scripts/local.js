@@ -76,7 +76,8 @@ var lang = {
 		YESTERDAY: 'Yesterday',
 		LAST_WEEK: 'Last Week',
 		EARLIER_THIS_MONTH: 'Earlier This Month',
-		MORE: 'More'
+		MORE: 'More',
+		SETTINGS: 'Settings'
 	},
 	cs: {
 		MARK_AS_READ: 'Označit jako (Ne)Přečtené',
@@ -152,6 +153,7 @@ var lang = {
 		YESTERDAY: 'Včera',
 		LAST_WEEK: 'Minulý týden',
 		EARLIER_THIS_MONTH: 'Dříve v tomto měsící',
-		MORE: 'Více'
+		MORE: 'Více',
+		SETTINGS: 'Nastavení'
 	},
 };
