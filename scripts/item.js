@@ -105,6 +105,7 @@ $(function() {
 
 	var itemView = new (Backbone.View.extend({
 		el: 'body',
+		frameLoaded: false,
 		contentTemplate: _.template($('#template-content').html()),
 		events: {
 			'mousedown': 'handleMouseDown',
@@ -180,15 +181,18 @@ $(function() {
 			// first load might be too soon
 			var fr = this.$el.find('iframe').get(0);
 			fr.contentWindow.scrollTo(0, 0);
+
 			if (fr.contentDocument.readyState == 'complete') {
-				fr.contentDocument.documentElement.innerHTML = content;	
-			} else {
-				// load event from some reason isn't enough
-				setTimeout(function() {
-					fr.contentDocument.documentElement.innerHTML = content;
-				}, 500);
+				fr.contentDocument.documentElement.innerHTML = content;
+			} 
+			if (!this.frameLoaded) {
+				if (!fr.contentDocument.documentElement || fr.contentDocument.documentElement.innerHTML != content) {
+					fr.onload = function() {
+						itemView.frameLoaded = true;
+						this.contentDocument.documentElement.innerHTML = content;
+					};
+				}
 			}
-			
 
 			return this;
 		},
