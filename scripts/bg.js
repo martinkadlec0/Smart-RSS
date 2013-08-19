@@ -31,7 +31,8 @@ var settings = new (Backbone.Model.extend({
 		posA: '250,*',
 		posB: '350,*',
 		posC: '50%,*',
-		sortOrder: 'desc'
+		sortOrder: 'desc',
+		icon: 'orange'
 	},
 	localStorage: new Backbone.LocalStorage('settings-backbone'),
 	initialize: function() {
@@ -65,7 +66,7 @@ var sources = new (Backbone.Collection.extend({
 		var that = this;
 		this.fetch({ silent: true }).then(function() {
 			if (that.findWhere({ hasNew: true })) {
-				chrome.browserAction.setIcon({ path: '/images/icon19_new.png' });
+				chrome.browserAction.setIcon({ path: '/images/icon19-' + settings.get('icon') + '.png' });
 			}
 		});
 	}
@@ -268,13 +269,16 @@ $(function() {
 		}
 	});
 
-	sources.on('change:hasNew', function(source) {
+	function handleIconChange() {
 		if (sources.findWhere({ hasNew: true })) {
-			chrome.browserAction.setIcon({ path: '/images/icon19_new.png' });
+			chrome.browserAction.setIcon({ path: '/images/icon19-' + settings.get('icon') + '.png' });
 		} else {
 			chrome.browserAction.setIcon({ path: '/images/icon19.png' });
 		}
-	});
+	}
+
+	sources.on('change:hasNew', handleIconChange);
+	settings.on('change:icon', handleIconChange);
 
 	sources.on('destroy', function(source) {
 		items.where({ sourceID: source.get('id') }).forEach(function(item) {
