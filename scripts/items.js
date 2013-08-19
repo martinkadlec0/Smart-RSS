@@ -363,35 +363,6 @@ $(function() {
 
 	var itemsContextMenu = new ContextMenu([
 		{
-			title: bg.lang.c.MARK_AS_READ + ' (K)',
-			icon: 'read.png',
-			action: function() {
-				list.changeUnreadState();
-			}
-		},
-		{
-			title: bg.lang.c.DELETE + ' (D)',
-			icon: 'delete.png',
-			action: function(e) {
-				e = e || {};
-				if (list.specialName == 'trash' || e.shiftKey) {
-					list.destroyBatch(list.selectedItems, list.removeItemCompletely);
-				} else {
-					list.destroyBatch(list.selectedItems, list.removeItem);
-				}
-			}
-		},
-		{
-			title: bg.lang.c.UNDELETE + ' (U)',
-			id: 'context-undelete',
-			icon: 'delete_selected.png',
-			action: function(e) {
-				if (list.specialName == 'trash') {
-					list.destroyBatch(list.selectedItems, list.undeleteItem);
-				}
-			}
-		},
-		{
 			title: bg.lang.c.NEXT_UNREAD + ' (H)',
 			action: function() {
 				app.selectNext({ selectUnread: true });
@@ -401,6 +372,13 @@ $(function() {
 			title: bg.lang.c.PREV_UNREAD + ' (Y)',
 			action: function() {
 				app.selectPrev({ selectUnread: true });
+			}
+		},
+		{
+			title: bg.lang.c.MARK_AS_READ + ' (K)',
+			icon: 'read.png',
+			action: function() {
+				list.changeUnreadState();
 			}
 		},
 		{
@@ -426,6 +404,28 @@ $(function() {
 				list.selectedItems.forEach(function(item) {
 					item.model.save({ pinned: val });
 				});
+			}
+		},
+		{
+			title: bg.lang.c.DELETE + ' (D)',
+			icon: 'delete.png',
+			action: function(e) {
+				e = e || {};
+				if (list.specialName == 'trash' || e.shiftKey) {
+					list.destroyBatch(list.selectedItems, list.removeItemCompletely);
+				} else {
+					list.destroyBatch(list.selectedItems, list.removeItem);
+				}
+			}
+		},
+		{
+			title: bg.lang.c.UNDELETE + ' (U)',
+			id: 'context-undelete',
+			icon: 'delete_selected.png',
+			action: function(e) {
+				if (list.specialName == 'trash') {
+					list.destroyBatch(list.selectedItems, list.undeleteItem);
+				}
 			}
 		}
 	]);
