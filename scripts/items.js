@@ -109,13 +109,17 @@ $(function() {
 			this.$el.toggleClass('unvisited', !this.model.get('visited'));
 			this.$el.toggleClass('unread', this.model.get('unread'));
 			var data = this.model.toJSON();
+
+			var dateFormats = { normal: 'DD.MM.YYYY', iso: 'YYYY-MM-DD', us: 'MM/DD/YYYY' };
+			var pickedFormat = dateFormats[bg.settings.get('dateType') || 'normal'] || dateFormats['normal'];
+
 			if (data.date) {
 				if (parseInt(bg.formatDate(data.date, 'T') / 86400000) == parseInt(bg.formatDate(Date.now(), 'T') / 86400000)) {
 					data.date = bg.formatDate(new Date(data.date), 'hh:mm');
 				} else if ((new Date(data.date)).getFullYear() == (new Date()).getFullYear() ) {
-					data.date = bg.formatDate(new Date(data.date), 'DD.MM.');	
+					data.date = bg.formatDate(new Date(data.date), pickedFormat.replace(/\/?YYYY-?/, ''));	
 				} else {
-					data.date = bg.formatDate(new Date(data.date), 'DD.MM.YYYY');	
+					data.date = bg.formatDate(new Date(data.date), pickedFormat);	
 				}
 			}
 			

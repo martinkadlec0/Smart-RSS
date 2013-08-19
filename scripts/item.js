@@ -158,7 +158,10 @@ $(function() {
 
 			this.show();
 
-			var date = bg.formatDate(new Date(this.model.get('date')), 'DD.MM.YYYY hh:mm:ss');
+			var dateFormats = { normal: 'DD.MM.YYYY', iso: 'YYYY-MM-DD', us: 'MM/DD/YYYY' };
+			var pickedFormat = dateFormats[bg.settings.get('dateType') || 'normal'] || dateFormats['normal'];
+
+			var date = bg.formatDate(new Date(this.model.get('date')), pickedFormat + ' hh:mm:ss');
 
 			var source = bg.sources.findWhere({ id: this.model.get('sourceID') });
 
