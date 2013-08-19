@@ -126,9 +126,6 @@ var logs = new (Backbone.Collection.extend({
 	model: log,
 	initialze: function() {
 		var that = this;
-		window.onerror = function(a, b, c) {
-			
-		}
 	}
 }));
 
@@ -337,12 +334,7 @@ function openRSS(closeIfActive) {
  * Remove events from closed tabs
  */
 
-var rssTabs = [];
-/*chrome.tabs.onCreated.addListener(function(tab) {
-	if (/chrome-extension:\/\/\w+\/rss.html/.test(tab.url)) {
-		rssTabs.push(tab.id);
-	}
-});*/
+/*var rssTabs = [];
 
 chrome.tabs.onRemoved.addListener(function(tabID) {
 	var index = rssTabs.indexOf(tabID);
@@ -364,7 +356,7 @@ chrome.tabs.onUpdated.addListener(function(tabID, changed, tab) {
 			rssTabs.push(tabID);
 		}
 	} 
-});
+});*/
 
 /**
  * Downlaoding
@@ -408,8 +400,6 @@ function downloadURL(urls, cb) {
 
 		// IF DOWNLOADING FINISHED, DELETED ITEMS WITH DELETED SOURCE (should not really happen)
 		var sourceIDs = sources.pluck('id');
-		console.log('SOURCE IDS');
-		console.log(sourceIDs);
 		items.where({ deleted: true }).forEach(function(item) {
 			if (sourceIDs.indexOf(item.get('sourceID')) == -1) {
 				console.log('DELETING OLD CONTENT BECAUSE OF MISSING SOURCE ');				
@@ -673,4 +663,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 	if (message.action == 'get-tab-id') {
 		sendResponse({ action: 'response-tab-id', value: sender.tab.id });
 	}
+});
+
+chrome.runtime.onConnect.addListener(function(port) {
+	port.onDisconnect.addListener(function(port) {
+		sources.trigger('clear-events', port.sender.tab.id);
+	});
 });

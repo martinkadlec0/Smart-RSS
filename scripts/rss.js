@@ -12,9 +12,10 @@ chrome.extension.sendMessage({ action: 'get-tab-id'}, function(response) {
 	}
 });
 
+chrome.runtime.connect();
 
 chrome.runtime.getBackgroundPage(function(bg) {
-	//var ls = parseInt(localStorage.getItem('vertical-layout')) || 0;
+
 	var ls = bg.settings.get('layout');
 
 	function layoutToVertical() {

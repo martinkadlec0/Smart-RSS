@@ -151,6 +151,12 @@ $(function() {
 
 				if (!e.preventLoading) {
 					//bg.items.trigger('new-selected', this.model);
+					if (!topWindow || !topWindow.frames) {
+						bg.logs.add({ message: 'Event duplication bug! Clearing events now...' });
+						bg.console.log('Event duplication bug! Clearing events now...');
+						bg.sources.trigger('clear-events', -1);
+						return;
+					}
 					topWindow.frames[2].postMessage({ action: 'new-select', value: this.model.id }, '*');
 				}
 
