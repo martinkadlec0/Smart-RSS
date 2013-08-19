@@ -3,12 +3,12 @@
 <head>
 	<meta charset="utf-8" />
 	<title>Smart RSS - items</title>
+	<link rel="stylesheet" type="text/css" href="styles/global.css" />
+	<link rel="stylesheet" type="text/css" href="styles/items.css" />
 	<script src="libs/jquery.min.js"></script>
 	<script src="libs/underscore.min.js"></script>
 	<script src="libs/backbone.min.js"></script>
 	<script src="scripts/items.js"></script>
-	<link rel="stylesheet" type="text/css" href="styles/global.css" />
-	<link rel="stylesheet" type="text/css" href="styles/items.css" />
 </head>
 <body>
 	<div id="toolbar">
@@ -17,7 +17,7 @@
 		<div class="button" id="button-undelete" title="{{UNDELETE}} (U)"></div>
 		<div class="button" id="button-reload" title="{{UPDATE}}"></div>
 
-		<input type="search" id="input-search" placeholder="{{SEARCH}}" required title="{{SEARCH_TIP}}">
+		<input type="search" id="input-search" required title="{{SEARCH_TIP}}">
 	</div>
 	<div id="list">
 

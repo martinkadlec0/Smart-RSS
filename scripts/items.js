@@ -48,6 +48,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 $(function() {
 
 	$('body').html( bg.translate($('body').html()) );
+	$('#input-search').attr('placeholder', bg.lang.c.SEARCH);
 
 	function getGroup(date) {
 		var dt = new Date(date);
