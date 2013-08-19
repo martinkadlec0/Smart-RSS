@@ -15,6 +15,10 @@ $(function() {
 
 	$('body').html( bg.translate($('body').html()) );
 
+	$('iframe').load(function() {
+		$('iframe').get(0).contentDocument.querySelector('#smart-rss-url').innerHTML = bg.lang.c.FULL_ARTICLE;
+	});
+
 	var toolbar = new (Backbone.View.extend({
 		el: '#toolbar',
 		events: {
@@ -106,7 +110,6 @@ $(function() {
 	var itemView = new (Backbone.View.extend({
 		el: 'body',
 		frameLoaded: false,
-		contentTemplate: _.template($('#template-content').html()),
 		events: {
 			'mousedown': 'handleMouseDown',
 			'click .pin-button': 'handlePinClick',
@@ -163,14 +166,9 @@ $(function() {
 			var pickedFormat = dateFormats[bg.settings.get('dateType') || 'normal'] || dateFormats['normal'];
 
 			var date = bg.formatDate(new Date(this.model.get('date')), pickedFormat + ' hh:mm:ss');
-
 			var source = bg.sources.findWhere({ id: this.model.get('sourceID') });
+			var content = this.model.get('content');
 
-			var content = this.contentTemplate({ 
-				content: this.model.get('content'),
-				url: this.model.get('url'),
-				sourceUrl: source ? source.get('url') : '#'
-			});
 
 			this.$el.find('h1').html(this.model.escape('title'));
 			this.$el.find('.author').html(this.model.escape('author'));
@@ -183,13 +181,20 @@ $(function() {
 			fr.contentWindow.scrollTo(0, 0);
 
 			if (fr.contentDocument.readyState == 'complete') {
-				fr.contentDocument.documentElement.innerHTML = content;
+				try {
+					fr.contentDocument.querySelector('base').href = source ? source.get('url') : '#';
+					fr.contentDocument.querySelector('#smart-rss-content').innerHTML = content;
+					fr.contentDocument.querySelector('#smart-rss-url').href = this.model.get('url');
+				} catch(e) {}
 			} 
 			if (!this.frameLoaded) {
 				if (!fr.contentDocument.documentElement || fr.contentDocument.documentElement.innerHTML != content) {
+					var that = this;
 					fr.onload = function() {
 						itemView.frameLoaded = true;
-						this.contentDocument.documentElement.innerHTML = content;
+						fr.contentDocument.querySelector('base').href = source ? source.get('url') : '#';
+						fr.contentDocument.querySelector('#smart-rss-content').innerHTML = content;
+						fr.contentDocument.querySelector('#smart-rss-url').href = that.model.get('url');
 					};
 				}
 			}
