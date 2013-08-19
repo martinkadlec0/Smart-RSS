@@ -255,7 +255,7 @@ $(function() {
 			title: bg.lang.c.DELETE,
 			icon: 'delete.png',
 			action: function() { 
-				if (confirm('Do you really want to delete this feed?')) {
+				if (confirm(bg.lang.c.REALLY_DELETE)) {
 					sourcesContextMenu.currentSource.destroy();	
 				}
 				

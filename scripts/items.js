@@ -629,7 +629,7 @@ $(function() {
 		},
 		removeItemCompletely: function(view) {
 			if (view.model.get('pinned')) {
-				var conf = confirm('Item "' + view.model.escape('title') + '" is pinned. Do you really want to delete it?');
+				var conf = confirm(bg.lang.c.PIN_QUESTION_A + view.model.escape('title') + bg.lang.c.PIN_QUESTION_B);
 				if (!conf) {
 					return;
 				}
@@ -819,10 +819,12 @@ $(function() {
 					bg.items.where({ sourceID: id }).forEach(function(item) {
 						item.save({ unread: false, visited: true });
 					});
-				} else if (list.specialName == 'all-feeds' && confirm('Do you really want to mark ALL items as read?')) {
-					bg.items.forEach(function(item) {
-						item.save({ unread: false, visited: true });
-					});
+				} else if (list.specialName == 'all-feeds') {
+					if (confirm(bg.lang.c.MARK_ALL_QUESTION)) {
+						bg.items.forEach(function(item) {
+							item.save({ unread: false, visited: true });
+						});	
+					}
 				} else if (list.specialName) {
 					bg.items.where(list.specialFilter).forEach(function(item) {
 						item.save({ unread: false, visited: true });
