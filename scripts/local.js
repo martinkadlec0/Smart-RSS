@@ -77,7 +77,8 @@ var lang = {
 		LAST_WEEK: 'Last Week',
 		EARLIER_THIS_MONTH: 'Earlier This Month',
 		MORE: 'More',
-		SETTINGS: 'Settings'
+		SETTINGS: 'Settings',
+		EMPTY_TRASH: 'Empty Trash'
 	},
 	cs: {
 		MARK_AS_READ: 'Označit jako (Ne)Přečtené',
@@ -154,7 +155,8 @@ var lang = {
 		LAST_WEEK: 'Minulý týden',
 		EARLIER_THIS_MONTH: 'Dříve v tomto měsíci',
 		MORE: 'Více',
-		SETTINGS: 'Nastavení'
+		SETTINGS: 'Nastavení',
+		EMPTY_TRASH: 'Vyprázdnit Koš'
 	},
 	de: {
 		MARK_AS_READ: 'Als (un)gelesen markieren',
@@ -231,7 +233,8 @@ var lang = {
 		LAST_WEEK: 'Letzte Woche',
 		EARLIER_THIS_MONTH: 'Früher in diesem Monat',
 		MORE: 'Mehr',
-		SETTINGS: 'Einstellungen'
+		SETTINGS: 'Einstellungen',
+		EMPTY_TRASH: 'Papierkorb leeren'
 	},
 	pl: {
 		MARK_AS_READ: 'Oznacz jako (nie)przeczytane',
@@ -308,7 +311,8 @@ var lang = {
 		LAST_WEEK: 'Ostatni tydzień',
 		EARLIER_THIS_MONTH: 'Wcześniej w tym miesiącu',
 		MORE: 'Więcej',
-		SETTINGS: 'Ustawienia'
+		SETTINGS: 'Ustawienia',
+		EMPTY_TRASH: 'Opróżnij kosz'
 	},
 };
 

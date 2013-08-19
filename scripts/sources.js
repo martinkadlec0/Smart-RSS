@@ -131,7 +131,14 @@ $(function() {
 	var SpecialView = TopView.extend({
 		className: 'source special',
 		events: {
+			'mouseup': 'handleMouseUp',
 			'mousedown': 'handleMouseDown'
+		},
+		showContextMenu: function(e) {
+			if (this.model.get('name') != 'trash') return;
+			this.select(e);
+			trashContextMenu.currentSource = this.model;
+			trashContextMenu.show(e.clientX, e.clientY);
 		},
 		initialize: function() {
 			this.el.view = this;
@@ -242,6 +249,7 @@ $(function() {
 			title: bg.lang.c.MARK_ALL_AS_READ,
 			icon: 'read.png',
 			action: function() { 
+				if (!sourcesContextMenu.currentSource) return;
 				var id = sourcesContextMenu.currentSource.get('id');
 				bg.items.where({ sourceID: id }).forEach(function(item) {
 					item.save({
@@ -249,6 +257,8 @@ $(function() {
 						visited: true
 					});
 				});
+
+				sourcesContextMenu.currentSource.save({ hasNew: false });
 			}
 		},
 		{ 
@@ -270,6 +280,45 @@ $(function() {
 			}
 		}
 	]);
+
+	var trashContextMenu = new ContextMenu([
+		{ 
+			title: bg.lang.c.MARK_ALL_AS_READ,
+			icon: 'read.png',
+			action: function() { 
+				bg.items.where({ trashed: true, deleted: false }).forEach(function(item) {
+					item.save({
+						unread: false,
+						visited: true
+					});
+				});
+			}
+		},
+		{ 
+			title: bg.lang.c.EMPTY_TRASH,
+			icon: 'delete.png',
+			action: function() { 
+				if (confirm(bg.lang.c.REALLY_DELETE)) {
+					bg.items.where({ trashed: true, deleted: false }).forEach(function(item) {
+						item.markAsDeleted();
+					});
+				}
+			}
+		}
+	]);
+
+	var contextMenus = new (Backbone.View.extend({
+		list: [],
+		initialize: function() {
+			this.list = [sourcesContextMenu, trashContextMenu];
+		},
+		hideAll: function() {
+			this.list.forEach(function(item) {
+				item.hide();
+			});
+		}
+	}));
+
 
 	var properties = new (Backbone.View.extend({
 		el: '#properties',
@@ -452,7 +501,8 @@ $(function() {
 		handleMouseDown: function(e) {
 			if (sourcesContextMenu.el.parentNode && !e.target.matchesSelector('.context-menu, .context-menu *')) {
 				// make sure the action gets executed
-				sourcesContextMenu.hide();
+				contextMenus.hideAll();
+				//sourcesContextMenu.hide();
 			}
 		},
 		handleKeyDown: function(e) {
@@ -498,7 +548,8 @@ $(function() {
 			} else if (e.keyCode == 27) {
 				if (sourcesContextMenu.el.parentNode) {
 					// make sure the action gets executed
-					sourcesContextMenu.hide();
+					contextMenus.hideAll();
+					//sourcesContextMenu.hide();
 				}
 			}
 		},

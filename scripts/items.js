@@ -645,14 +645,7 @@ $(function() {
 					return;
 				}
 			}
-			view.model.save({
-				'deleted': true,
-				'trashed': true,
-				'pinned': false,
-				'content': '',
-				'author': '',
-				'title': ''
-			});
+			view.model.markAsDeleted();
 			this.destroyItem(view);
 		},
 		destroyBatch: function(arr, fn) {

@@ -85,6 +85,16 @@ var Item = Backbone.Model.extend({
 		deleted: false,
 		trashed: false,
 		pinned: false
+	},
+	markAsDeleted: function() {
+		this.save({
+			trashed: true,
+			deleted: true,
+			'pinned': false,
+			'content': '',
+			'author': '',
+			'title': ''
+		});
 	}
 });
 

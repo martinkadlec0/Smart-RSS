@@ -44,14 +44,7 @@ $(function() {
 		handleButtonDelete: function(e) {
 			if (!itemView.model) return;
 			if (e.shiftKey) {
-				itemView.model.save({
-					trashed: true,
-					deleted: true,
-					'pinned': false,
-					'content': '',
-					'author': '',
-					'title': ''
-				});
+				itemView.model.markAsDeleted();
 			} else {
 				itemView.model.save({
 					trashed: true
@@ -203,7 +196,7 @@ $(function() {
 		},
 		handleNewSelected: function(model) {
 			this.model = model;
-			if (!this.model) {
+		if (!this.model) {
 				// should not happen but happens
 				this.hide();
 			} else {
