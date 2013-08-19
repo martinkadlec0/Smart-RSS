@@ -403,6 +403,20 @@ function downloadAll(force) {
 
 function downloadURL(urls, cb) {
 	if (!urls.length) {
+
+
+		// IF DOWNLOADING FINISHED, DELETED ITEMS WITH DELETED SOURCE (should not really happen)
+		var sourceIDs = sources.pluck('id');
+		console.log('SOURCE IDS');
+		console.log(sourceIDs);
+		items.where({ deleted: true }).forEach(function(item) {
+			if (sourceIDs.indexOf(item.get('sourceID')) == -1) {
+				console.log('DELETING OLD CONTENT BECAUSE OF MISSING SOURCE ');				
+				item.destroy();
+			}
+		});
+
+
 		cb();
 		return;
 	}
@@ -432,8 +446,12 @@ function downloadURL(urls, cb) {
 			});
 
 			// remove old deleted content
-			//var fetchedIDs = _.pluck(parsedData, id);
-			//items.where({ sourceID: url.get('id'),  })
+			var fetchedIDs = _.pluck(parsedData, 'id');
+			items.where({ sourceID: url.get('id'), deleted: true }).forEach(function(item) {
+				if (fetchedIDs.indexOf(item.id) == -1) {
+					item.destroy();
+				}
+			});
 
 			// too many wheres and stuff .. optimize?
 			var count = items.where({ sourceID: url.get('id'), unread: true, trashed: false  }).length;
