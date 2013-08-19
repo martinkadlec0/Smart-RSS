@@ -413,6 +413,8 @@ function downloadURL(urls, cb) {
 		dataType: 'xml',
 		success: function(r) {
 
+			// will url.get('id') be still the right id?
+
 			loader.set('loaded', loader.get('loaded') + 1);
 			
 			// parsedData step needed for debugging
@@ -420,11 +422,18 @@ function downloadURL(urls, cb) {
 
 			var hasNew = false;
 			parsedData.forEach(function(item) {
-				if (!items.get(item.id)) {
+				var existingItem = items.get(item.id);
+				if (!existingItem) {
 					hasNew = true;
 					items.create(item);	
+				} else if (existingItem.get('deleted') == false && existingItem.get('content') != item.content) {
+					existingItem.save({ content: item.content });
 				}
 			});
+
+			// remove old deleted content
+			//var fetchedIDs = _.pluck(parsedData, id);
+			//items.where({ sourceID: url.get('id'),  })
 
 			// too many wheres and stuff .. optimize?
 			var count = items.where({ sourceID: url.get('id'), unread: true, trashed: false  }).length;
@@ -448,7 +457,7 @@ function downloadURL(urls, cb) {
 	if (url.get('username') || url.get('password')) {
 		options.username = url.get('username') || '';
 		options.password = url.get('password') || '';
-	}
+	} 
 
 	$.ajax(options);
 }
@@ -489,7 +498,7 @@ function parseRSS(xml, sourceID) {
 		});
 
 		var last = items[items.length-1];
-		last.id = CryptoJS.MD5(last.sourceID + last.title + last.date + last.content).toString();
+		last.id = CryptoJS.MD5(last.sourceID + last.title + last.date).toString();
 	});
 
 
