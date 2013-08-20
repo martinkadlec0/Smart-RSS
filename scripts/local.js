@@ -80,7 +80,8 @@ var lang = {
 		SETTINGS: 'Settings',
 		EMPTY_TRASH: 'Empty Trash',
 		RSS_FEED_URL: 'RSS Feed URL: ',
-		OPTIONS: 'Options'
+		OPTIONS: 'Options',
+		UPDATING_FEEDS: 'Updating feeds'
 	},
 	cs: {
 		MARK_AS_READ: 'Označit jako (Ne)Přečtené',
@@ -160,7 +161,8 @@ var lang = {
 		SETTINGS: 'Nastavení',
 		EMPTY_TRASH: 'Vyprázdnit Koš',
 		RSS_FEED_URL: 'Zadjete adresu RSS zdroje: ',
-		OPTIONS: 'Další možnosti'
+		OPTIONS: 'Další možnosti',
+		UPDATING_FEEDS: 'Aktualizuji zdroje'
 	},
 	de: {
 		MARK_AS_READ: 'Als (un)gelesen markieren',
@@ -240,7 +242,8 @@ var lang = {
 		SETTINGS: 'Einstellungen',
 		EMPTY_TRASH: 'Papierkorb leeren',
 		RSS_FEED_URL: 'Feed: ',
-		OPTIONS: 'Einstellungen'
+		OPTIONS: 'Einstellungen',
+		UPDATING_FEEDS: 'Feeds aktualisierens'
 	},
 	pl: {
 		MARK_AS_READ: 'Oznacz jako (nie)przeczytane',
@@ -320,7 +323,8 @@ var lang = {
 		SETTINGS: 'Ustawienia',
 		EMPTY_TRASH: 'Opróżnij kosz',
 		RSS_FEED_URL: 'Feed URL: ',
-		OPTIONS: 'Opcje'
+		OPTIONS: 'Opcje',
+		UPDATING_FEEDS: 'Aktualizacja kanałów'
 	},
 	tr: {
 		MARK_AS_READ: 'Okunmadı Olarak İşaretle',
@@ -400,7 +404,8 @@ var lang = {
 		SETTINGS: 'Ayarlar',
 		EMPTY_TRASH: 'Çöp Kutusunu Boşalt',
 		RSS_FEED_URL: 'RSS Bildirim Adresi: ',
-		OPTIONS: 'Seçenekleri'
+		OPTIONS: 'Seçenekleri',
+		UPDATING_FEEDS: 'Beslemeler güncelleniyor'
 	},
 	sk: {
 		MARK_AS_READ: 'Označiť ako (Ne)Prečítané',
@@ -480,7 +485,8 @@ var lang = {
 		SETTINGS: 'Nastavenie',
 		EMPTY_TRASH: 'Vysypať kôš',
 		RSS_FEED_URL: 'Adresa RSS zdroja: ',
-		OPTIONS: 'Ďalšie možnosti'
+		OPTIONS: 'Ďalšie možnosti',
+		UPDATING_FEEDS: 'Aktualizácija zdrojov'
 	},
 };
 
