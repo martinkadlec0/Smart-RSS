@@ -383,7 +383,7 @@ var lang = {
 		THURSDAY: 'Perşembe',
 		FRIDAY: 'Cuma',
 		SATURDAY: 'Cumartesi',
-		SUNDAY: 'Pazar,
+		SUNDAY: 'Pazar',
 		TODAY: 'Bugün',
 		YESTERDAY: 'Dün',
 		LAST_WEEK: 'Geçen Hafta',
