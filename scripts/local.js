@@ -435,7 +435,7 @@ var lang = {
 		FULL_ARTICLE: 'Celý článok',
 		REALLY_DELETE: 'Skutočne chcete vymazať tento zdroj?',
 		ALL_FEEDS: 'Všetky zdroje',
-		PINNED: 'Označiť',
+		PINNED: 'Označené',
 		TRASH: 'Kôš',
 		MARK_ALL_AS_READ: 'Označiť všetko ako prečítané',
 		PROPERTIES: 'Nastavenia',
