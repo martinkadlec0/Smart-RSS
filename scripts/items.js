@@ -364,12 +364,14 @@ $(function() {
 	var itemsContextMenu = new ContextMenu([
 		{
 			title: bg.lang.c.NEXT_UNREAD + ' (H)',
+			icon: 'forward.png',
 			action: function() {
 				app.selectNext({ selectUnread: true });
 			}
 		},
 		{
 			title: bg.lang.c.PREV_UNREAD + ' (Y)',
+			icon: 'back.png',
 			action: function() {
 				app.selectPrev({ selectUnread: true });
 			}
@@ -383,6 +385,7 @@ $(function() {
 		},
 		{
 			title: bg.lang.c.MARK_AND_NEXT_UNREAD + ' (G)',
+			icon: 'find_next.png',
 			action: function() {
 				list.changeUnreadState({ onlyToRead: true });
 				app.selectNext({ selectUnread: true });
@@ -390,6 +393,7 @@ $(function() {
 		},
 		{
 			title: bg.lang.c.MARK_AND_PREV_UNREAD + ' (T)',
+			icon: 'find_previous.png',
 			action: function() {
 				list.changeUnreadState({ onlyToRead: true });
 				this.selectPrev({ selectUnread: true });
