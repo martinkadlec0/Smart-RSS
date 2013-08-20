@@ -240,7 +240,7 @@ var lang = {
 		SETTINGS: 'Einstellungen',
 		EMPTY_TRASH: 'Papierkorb leeren',
 		RSS_FEED_URL: 'Feed: ',
-		OPTIONS: 'Optionen'
+		OPTIONS: 'Einstellungen'
 	},
 	pl: {
 		MARK_AS_READ: 'Oznacz jako (nie)przeczytane',
@@ -354,8 +354,8 @@ var lang = {
 		AUTO: 'Otomatik',
 		FULL_ARTICLE: 'Tüm makale',
 		REALLY_DELETE: 'Bu beslemeyi gerçekten silmek istiyor musunuz?',
-		ALL_FEEDS: 'Tüm başlıklar',
-		PINNED: 'Sabitlendi',
+		ALL_FEEDS: 'Tüm Beslemeler',
+		PINNED: 'Sabitlenmiş',
 		TRASH: 'Çöp Kutusu',
 		MARK_ALL_AS_READ: 'Tümünü Okundu Olarak İşaretle',
 		PROPERTIES: 'Özellikler',
@@ -424,7 +424,7 @@ var lang = {
 		PASSWORD: 'Heslo',
 		CANCEL: 'Zrušiť',
 		OK: 'OK',
-		LAYOUT: 'Výzor',
+		LAYOUT: 'Zobrazenie správ',
 		LINES: 'Počet riadkov',
 		SORT_ORDER: 'Zoradenie',
 		DESCENDING: 'Zostupne',
