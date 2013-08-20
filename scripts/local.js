@@ -78,7 +78,8 @@ var lang = {
 		EARLIER_THIS_MONTH: 'Earlier This Month',
 		MORE: 'More',
 		SETTINGS: 'Settings',
-		EMPTY_TRASH: 'Empty Trash'
+		EMPTY_TRASH: 'Empty Trash',
+		RSS_FEED_URL: 'RSS Feed URL: '
 	},
 	cs: {
 		MARK_AS_READ: 'Označit jako (Ne)Přečtené',
@@ -156,7 +157,8 @@ var lang = {
 		EARLIER_THIS_MONTH: 'Dříve v tomto měsíci',
 		MORE: 'Více',
 		SETTINGS: 'Nastavení',
-		EMPTY_TRASH: 'Vyprázdnit Koš'
+		EMPTY_TRASH: 'Vyprázdnit Koš',
+		RSS_FEED_URL: 'Zadjete adresu RSS zdroje: '
 	},
 	de: {
 		MARK_AS_READ: 'Als (un)gelesen markieren',
@@ -234,7 +236,8 @@ var lang = {
 		EARLIER_THIS_MONTH: 'Früher in diesem Monat',
 		MORE: 'Mehr',
 		SETTINGS: 'Einstellungen',
-		EMPTY_TRASH: 'Papierkorb leeren'
+		EMPTY_TRASH: 'Papierkorb leeren',
+		RSS_FEED_URL: 'Feed: '
 	},
 	pl: {
 		MARK_AS_READ: 'Oznacz jako (nie)przeczytane',
@@ -312,7 +315,8 @@ var lang = {
 		EARLIER_THIS_MONTH: 'Wcześniej w tym miesiącu',
 		MORE: 'Więcej',
 		SETTINGS: 'Ustawienia',
-		EMPTY_TRASH: 'Opróżnij kosz'
+		EMPTY_TRASH: 'Opróżnij kosz',
+		RSS_FEED_URL: 'Feed URL: '
 	},
 	tr: {
 		MARK_AS_READ: 'Okunmadı Olarak İşaretle',
@@ -390,7 +394,8 @@ var lang = {
 		EARLIER_THIS_MONTH: 'Bu Ay Başı',
 		MORE: 'Daha fazla',
 		SETTINGS: 'Ayarlar',
-		EMPTY_TRASH: 'Çöp Kutusunu Boşalt'
+		EMPTY_TRASH: 'Çöp Kutusunu Boşalt',
+		RSS_FEED_URL: 'RSS Bildirim Adresi: '
 	},
 };
 
