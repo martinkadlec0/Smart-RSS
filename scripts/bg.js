@@ -452,7 +452,7 @@ function downloadURL(urls, cb) {
 				var existingItem = items.get(item.id);
 				if (!existingItem) {
 					hasNew = true;
-					items.create(item);	
+					items.create(item, { sort: false });	
 				} else if (existingItem.get('deleted') == false && existingItem.get('content') != item.content) {
 					existingItem.save({ content: item.content });
 				}
