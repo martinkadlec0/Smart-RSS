@@ -864,10 +864,10 @@ $(function() {
 					e.preventDefault();
 				}
 			} else if (e.keyCode == 85) { // U = Undelete item
-				if (!list.selectedItems || !list.selectedItems.length) return;
+				if (!list.selectedItems || !list.selectedItems.length || list.specialName != 'trash') return;
 				list.destroyBatch(list.selectedItems, list.undeleteItem);				
 				e.preventDefault();
-			} else if (e.keyCode == 32) { // U = Undelete item
+			} else if (e.keyCode == 32) { // Space = Space through items
 				if (!list.selectedItems || !list.selectedItems.length) return;
 				topWindow.frames[2].postMessage({ action: 'space-pressed' }, '*');
 				e.preventDefault();
