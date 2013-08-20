@@ -458,6 +458,8 @@ function downloadURL(urls, cb) {
 				}
 			});
 
+			items.sort({ silent: true });
+
 			// remove old deleted content
 			var fetchedIDs = _.pluck(parsedData, 'id');
 			items.where({ sourceID: url.get('id'), deleted: true }).forEach(function(item) {
