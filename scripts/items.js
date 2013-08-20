@@ -83,12 +83,6 @@ $(function() {
 		tagName: 'div',
 		className: 'item',
 		template: _.template($('#template-item').html()),
-		events: {
-			'mousedown': 'handleMouseDown',
-			'mousedown .item-pin': 'handleClickPin',
-			'mousedown .item-pinned': 'handleClickPin',
-			'mouseup': 'handleMouseUp'
-		},
 		initialize: function() {
 			this.el.setAttribute('draggable', 'true');
 			this.model.on('change', this.handleModelChange, this);
@@ -125,6 +119,7 @@ $(function() {
 			}
 			
 			this.$el.html(this.template(data));
+
 			return this;
 		},
 		handleMouseUp: function(e) {
@@ -444,7 +439,19 @@ $(function() {
 		specialFilter: { trashed: false },
 		noFocus: false,
 		events: {
-			'dragstart .item': 'handleDragStart'
+			'dragstart .item': 'handleDragStart',
+			'mousedown .item': 'handleMouseDown',
+			'mouseup .item': 'handleMouseUp',
+			'mousedown .item-pin,.item-pinned': 'handleClickPin',
+		},
+		handleClickPin: function(e) {
+			e.currentTarget.parentNode.view.handleClickPin(e);
+		},
+		handleMouseDown: function(e) {
+			e.currentTarget.view.handleMouseDown(e);
+		},
+		handleMouseUp: function(e) {
+			e.currentTarget.view.handleMouseUp(e);
 		},
 		initialize: function() {
 			var that = this;
@@ -536,8 +543,7 @@ $(function() {
 				if (noManualSort !== true) {
 					$.makeArray($('#list .item')).some(function(itemEl) {
 						if (bg.items.comparator(itemEl.view.model, item) === 1) {
-						//if (itemEl.view.model.get('date') < item.get('date')) {
-							after =  itemEl;
+							after = itemEl;
 							return true;
 						}
 					});
@@ -561,7 +567,7 @@ $(function() {
 				this.views.push(view);
 			}
 		},
-		addGroup: function(model) {
+		addGroup: function(model, coll, opt) {
 			var view = new GroupView({ model: model });
 			this.$el.append(view.render().el);
 		},
@@ -575,25 +581,20 @@ $(function() {
 
 			groups.reset();
 
+			
+
 			if (this.$el.find('.item:first-of-type').length > 0) {
 				alert('E2: This should not happen. Please report it!');
 				debugger;
 				this.$el.html('');
 			}
 
+			//var st = Date.now();
 			items.forEach(function(item) {
 				this.addItem(item, true);
 			}, this);
-			
+			//alert(Date.now() - st);
 
-			
-
-			//this.$el.prepend($('<div class="date-group">YESTERDAY</div>'));
-
-			/*setTimeout(function() {
-				//if (list.views[0]) list.views[0].select();
-				list.selectFirst();
-			}, 0);*/
 		},
 		handleNewSelected: function(source) {
 			if (this.currentSource) {
