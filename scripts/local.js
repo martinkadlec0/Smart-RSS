@@ -80,8 +80,7 @@ var lang = {
 		SETTINGS: 'Settings',
 		EMPTY_TRASH: 'Empty Trash',
 		RSS_FEED_URL: 'RSS Feed URL: ',
-		OPTIONS: 'Options',
-		UPDATING_FEEDS: 'Updating feeds'
+		OPTIONS: 'Options'
 	},
 	cs: {
 		MARK_AS_READ: 'Označit jako (Ne)Přečtené',
@@ -161,8 +160,7 @@ var lang = {
 		SETTINGS: 'Nastavení',
 		EMPTY_TRASH: 'Vyprázdnit Koš',
 		RSS_FEED_URL: 'Zadjete adresu RSS zdroje: ',
-		OPTIONS: 'Další možnosti',
-		UPDATING_FEEDS: 'Aktualizuji zdroje'
+		OPTIONS: 'Další možnosti'
 	},
 	de: {
 		MARK_AS_READ: 'Als (un)gelesen markieren',
@@ -242,8 +240,7 @@ var lang = {
 		SETTINGS: 'Einstellungen',
 		EMPTY_TRASH: 'Papierkorb leeren',
 		RSS_FEED_URL: 'Feed: ',
-		OPTIONS: 'Einstellungen',
-		UPDATING_FEEDS: 'Feeds aktualisierens'
+		OPTIONS: 'Einstellungen'
 	},
 	pl: {
 		MARK_AS_READ: 'Oznacz jako (nie)przeczytane',
@@ -323,8 +320,7 @@ var lang = {
 		SETTINGS: 'Ustawienia',
 		EMPTY_TRASH: 'Opróżnij kosz',
 		RSS_FEED_URL: 'Feed URL: ',
-		OPTIONS: 'Opcje',
-		UPDATING_FEEDS: 'Aktualizacja kanałów'
+		OPTIONS: 'Opcje'
 	},
 	tr: {
 		MARK_AS_READ: 'Okunmadı Olarak İşaretle',
@@ -351,8 +347,8 @@ var lang = {
 		LAYOUT: 'Görünüm',
 		LINES: 'Satırlar',
 		SORT_ORDER: 'Sıralama Düzeni',
-		DESCENDING: 'Azalarak',
-		ASCENDING: 'Artarak',
+		DESCENDING: 'Azalan',
+		ASCENDING: 'Artan',
 		ONE_LINE: 'Tek satır',
 		TWO_LINES: 'İki satır',
 		AUTO: 'Otomatik',
@@ -376,7 +372,7 @@ var lang = {
 		UPDATE_ALL: 'Tümünü Güncelle',
 		FETCH_TITLE_TIP: 'Eğer bu alan boş bırakılırsa, otomatik olarak RSS başlığı kullanılacaktır.',
 		NAME: 'İsim',
-		ADDRESS: 'Adres',
+		ADDRESS: 'URL Adresi',
 		JANUARY: 'Ocak',
 		FEBRUARY: 'Şubat',
 		MARCH: 'Mart',
@@ -404,8 +400,7 @@ var lang = {
 		SETTINGS: 'Ayarlar',
 		EMPTY_TRASH: 'Çöp Kutusunu Boşalt',
 		RSS_FEED_URL: 'RSS Bildirim Adresi: ',
-		OPTIONS: 'Seçenekleri',
-		UPDATING_FEEDS: 'Beslemeler güncelleniyor'
+		OPTIONS: 'Seçenekler'
 	},
 	sk: {
 		MARK_AS_READ: 'Označiť ako (Ne)Prečítané',
@@ -485,8 +480,7 @@ var lang = {
 		SETTINGS: 'Nastavenie',
 		EMPTY_TRASH: 'Vysypať kôš',
 		RSS_FEED_URL: 'Adresa RSS zdroja: ',
-		OPTIONS: 'Ďalšie možnosti',
-		UPDATING_FEEDS: 'Aktualizácija zdrojov'
+		OPTIONS: 'Ďalšie možnosti'
 	},
 };
 
