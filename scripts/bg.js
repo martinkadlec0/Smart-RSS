@@ -60,7 +60,7 @@ var sources = new (Backbone.Collection.extend({
 	model: Source,
 	localStorage: new Backbone.LocalStorage('sources-backbone'),
 	comparator: function(a, b) {
-		return a.get('tile') < b.get('title') ? -1 : 1;
+		return (a.get('title') || '').trim() < (b.get('title') || '').trim() ? -1 : 1;
 	},
 	initialize: function() {
 		var that = this;
