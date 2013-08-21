@@ -437,6 +437,7 @@ $(function() {
 		currentSource: null,
 		specialName: 'all-feeds',
 		specialFilter: { trashed: false },
+		unreadOnly: false,
 		noFocus: false,
 		events: {
 			'dragstart .item': 'handleDragStart',
@@ -468,6 +469,7 @@ $(function() {
 				if (e.data.action == 'new-select') {
 					window.focus();
 					$('#input-search').val('');
+					that.unreadOnly = e.data.unreadOnly;
 					if (typeof e.data.value == 'object') {
 						that.handleNewSpecialSelected(e.data.value, e.data.name);
 					} else {
@@ -484,7 +486,7 @@ $(function() {
 			});
 
 			setTimeout(function() {
-				that.addItems(bg.items);
+				that.addItems(bg.items.where({ trashed: false, unread: true }));
 			}, 0);
 		},
 		handleClearEvents: function(id) {
@@ -608,7 +610,10 @@ $(function() {
 			this.specialName = null;
 			this.specialFilter = null;
 			source.on('destroy', this.handleDestroyedSource, this);
-			this.addItems(bg.items.where({ sourceID: source.id }));
+
+			var completeFilter = { sourceID: source.id };
+			if (this.unreadOnly) completeFilter.unread = true;
+			this.addItems( bg.items.where(completeFilter) );
 		},
 		handleNewSpecialSelected: function(filter, name) {
 			if (this.currentSource) {
@@ -625,7 +630,9 @@ $(function() {
 				$('#button-undelete').css('display', 'block');
 				$('#context-undelete').css('display', 'block');
 			}
-			this.addItems(bg.items.where( filter ));
+			var completeFilter = filter;
+			if (this.unreadOnly) completeFilter.unread = true;
+			this.addItems( bg.items.where(completeFilter) );
 		},
 		handleDestroyedSource: function() {
 			this.currentSource = null;
