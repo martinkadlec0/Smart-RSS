@@ -131,12 +131,16 @@ section div {
 	cursor: pointer;
 }
 
-select{
+select {
 	cursor: pointer;
 	min-width: 100px;
 }
 
-.twitter{
+.twitter {
 	display: block;
 	margin-top: 25px;
+}
+
+button {
+	padding: 2px 12px;
 }
