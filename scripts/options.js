@@ -42,7 +42,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 
 
 		setTimeout(function() {
-			var expr = JSON.stringify(data, null, '\t');
+			var expr = encodeURIComponent(JSON.stringify(data));
 			$('#smart-exported').attr('href', 'data:text/plain;charset=UTF-8;text,' + expr);
 			$('#smart-exported').attr('download', 'exported-rss.smart');
 			$('#smart-exported').html('Click to download exported data');
