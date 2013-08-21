@@ -524,7 +524,7 @@ function downloadURL(urls, cb) {
 		error: function(e) {
 			loader.set('loaded', loader.get('loaded') + 1);
 
-			console.log('Failed load RSS: url');
+			console.log('Failed load RSS: ' + sourceToLoad.get('url'));
 			downloadURL();
 		}
 	};
@@ -737,6 +737,7 @@ chrome.runtime.onMessageExternal.addListener(function(message, sender, sendRespo
 	}
 
 	if (message.action == 'new-rss' && message.value) {
+		message.value = message.value.replace(/^feed:/i, 'http:');
 		sources.create({
 			id: sourceIdIndex++,
 			title: message.value,
