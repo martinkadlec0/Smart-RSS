@@ -13,7 +13,10 @@ chrome.runtime.getBackgroundPage(function(bg) {
 
 $(function() {
 
-	$('body').html( bg.translate($('body').html()) );
+	// Do not transalte whole body at once to prevent iframe readd
+	$('#toolbar').html( bg.translate($('#toolbar').html()) );
+	$('header').html( bg.translate($('header').html()) );
+	$('.overlay').html( bg.translate($('.overlay').html()) );
 
 	$('iframe').load(function() {
 		$('iframe').get(0).contentDocument.querySelector('#smart-rss-url').innerHTML = bg.lang.c.FULL_ARTICLE;
