@@ -140,9 +140,11 @@ $(function() {
 				} else if ((new Date(data.date)).getFullYear() == (new Date()).getFullYear() ) {
 					data.date = bg.formatDate(new Date(data.date), pickedFormat.replace(/\/?YYYY(?!-)/, ''));	
 				} else {
-					data.date = bg.formatDate(new Date(data.date), pickedFormat);	
+					data.date = bg.formatDate(new Date(data.date), pickedFormat);
 				}
 			}
+
+			this.el.title = data.title + '\n' + bg.formatDate(this.model.get('date'), pickedFormat + ' hh:mm:ss');
 			
 			this.$el.html(this.template(data));
 
