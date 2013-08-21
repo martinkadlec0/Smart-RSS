@@ -60,22 +60,48 @@ $(function() {
 		var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 		var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
+		var todayMidnight = new Date(bg.formatDate(dc, 'YYYY-MM-DD 00:00:00'));
+
+		var group = new Group();
 
 		if (dtt == dct) {
-			return bg.lang.c.TODAY.toUpperCase();
+			group.set({
+				title: bg.lang.c.TODAY.toUpperCase(),
+				date: todayMidnight.getTime() + 86400000
+			}); 
 		} else if (dtt + 1 == dct) {
-			return bg.lang.c.YESTERDAY.toUpperCase();
+			group.set({
+				title: bg.lang.c.YESTERDAY.toUpperCase(),
+				date: todayMidnight.getTime()
+			});
 		} else if (bg.formatDate(dt, 'w') == bg.formatDate(dc, 'w') && dtt + 7 >= dct) {
-			return bg.lang.c[days[dt.getDay()].toUpperCase()].toUpperCase();
+			group.set({
+				title: bg.lang.c[days[dt.getDay()].toUpperCase()].toUpperCase(),
+				date: (new Date(bg.formatDate(dt, 'YYYY-MM-DD 00:00:00'))).getTime() + 86400000
+			});
 		} else if (parseInt(bg.formatDate(dt, 'w')) + 1 == bg.formatDate(dc, 'w') &&  dtt + 14 >= dct) {
-			return bg.lang.c.LAST_WEEK.toUpperCase();
+			group.set({
+				title: bg.lang.c.LAST_WEEK.toUpperCase(),
+				date: todayMidnight.getTime() - 86400000 * ((todayMidnight.getDay() || 7) - 1)
+			});
 		} else if (dt.getMonth() == dc.getMonth() && dt.getFullYear() == dc.getFullYear()) {
-			return bg.lang.c.EARLIER_THIS_MONTH.toUpperCase();
+			group.set({
+				title: bg.lang.c.EARLIER_THIS_MONTH.toUpperCase(),
+				date: todayMidnight.getTime() - 86400000 * ((todayMidnight.getDay() || 7) - 1) - 7 * 86400000
+			});
 		} else if (dt.getFullYear() == dc.getFullYear() ) {
-			return bg.lang.c[months[dt.getMonth()].toUpperCase()].toUpperCase();
+			group.set({
+				title: bg.lang.c[months[dt.getMonth()].toUpperCase()].toUpperCase(),
+				date: (new Date(dt.getFullYear(), dt.getMonth() + 1, 1)).getTime()
+			});
 		} else {
-			return dt.getFullYear();
+			group.set({
+				title: dt.getFullYear(),
+				date: (new Date(dt.getFullYear() + 1, 0, 1)).getTime()
+			});
 		}
+
+		return group;
 
 	}
 
@@ -230,7 +256,8 @@ $(function() {
 	 */
 	var Group = Backbone.Model.extend({
 		defaults: {
-			title: '<no title>'
+			title: '<no title>',
+			date: 0
 		}
 	});
 
@@ -548,9 +575,14 @@ $(function() {
 				var view = new ItemView({ model: item });
 
 
+				var group = getGroup(view.model.get('date'));
+				if (!groups.findWhere({ title: group.get('title') })) {
+					groups.add(group);
+				}
+
 				var after = null;
 				if (noManualSort !== true) {
-					$.makeArray($('#list .item')).some(function(itemEl) {
+					$.makeArray($('#list .item, #list .date-group')).some(function(itemEl) {
 						if (bg.items.comparator(itemEl.view.model, item) === 1) {
 							after = itemEl;
 							return true;
@@ -558,10 +590,7 @@ $(function() {
 					});
 				}
 
-				var groupTitle = getGroup(view.model.get('date'));
-				if (!groups.findWhere({ title: groupTitle })) {
-					groups.add({ title: groupTitle });
-				}
+				
 
 				if (!after) {
 					this.$el.append(view.render().$el);	
@@ -578,7 +607,21 @@ $(function() {
 		},
 		addGroup: function(model, coll, opt) {
 			var view = new GroupView({ model: model });
-			this.$el.append(view.render().el);
+			
+			var after = null;
+			$.makeArray($('#list .item, #list .date-group')).some(function(itemEl) {
+				if (bg.items.comparator(itemEl.view.model, model) === 1) {
+					after = itemEl;
+					return true;
+				}
+			});
+
+			if (!after) {
+				this.$el.append(view.render().el);				
+			} else {
+				view.render().$el.insertBefore($(after));
+			}
+
 		},
 		addItems: function(items) {
 			// better solution?	
