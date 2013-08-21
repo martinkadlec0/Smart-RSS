@@ -159,7 +159,7 @@ $(function() {
 			var pickedFormat = dateFormats[bg.settings.get('dateType') || 'normal'] || dateFormats['normal'];
 
 			var date = bg.formatDate(new Date(this.model.get('date')), pickedFormat + ' hh:mm:ss');
-			var source = bg.sources.findWhere({ id: this.model.get('sourceID') });
+			var source = this.model.getSource(); 
 			var content = this.model.get('content');
 
 

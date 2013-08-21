@@ -504,7 +504,7 @@ $(function() {
 			if (this.specialName) {
 				this.handleNewSpecialSelected(this.specialFilter, this.specialName);
 			} else if (this.currentSource) {
-				this.handleNewSelected(bg.sources.findWhere({ id: this.currentSource.id }));	
+				this.handleNewSelected(this.currentSource);
 			} else {
 				alert('E1: This should not happen. Please report it!');
 				debugger;

@@ -95,6 +95,13 @@ var Item = Backbone.Model.extend({
 			'author': '',
 			'title': ''
 		});
+	},
+	_source: null,
+	getSource: function() {
+		if (!this._source) {
+			this._source = sources.findWhere({ id: this.get('sourceID') });
+		} 
+		return this._source;
 	}
 });
 
@@ -299,7 +306,7 @@ $(function() {
 
 	items.on('change:unread', function(model) {
 		if (!model.get('trashed')) {
-			var source = sources.findWhere({ id: model.get('sourceID') });
+			var source = model.getSource();
 			if (source && model.get('unread') == true) {
 				source.save({ 'count': source.get('count') + 1 });
 			} else {
@@ -309,7 +316,7 @@ $(function() {
 	});
 
 	items.on('change:trashed', function(model) {
-		var source = sources.findWhere({ id: model.get('sourceID') });
+		var source = model.getSource();
 		if (source && model.get('unread') == true) {
 			if (model.get('trashed') == true) {
 				source.save({ 'count': source.get('count') - 1 });
