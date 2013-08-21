@@ -14,14 +14,16 @@ function translate(str) {
 }
 
 var sourceIdIndex = localStorage.getItem('sourceIdIndex') || 1;
-$.ajaxSetup({ cache: false });
+$.ajaxSetup({
+	cache: false
+});
 
 
 /**
  * Items
  */
 
-var settings = new (Backbone.Model.extend({
+var settings = new(Backbone.Model.extend({
 	defaults: {
 		id: 'settings-id',
 		lang: 'en', // or cs,sk,tr,de
@@ -56,7 +58,7 @@ var Source = Backbone.Model.extend({
 	}
 });
 
-var sources = new (Backbone.Collection.extend({
+var sources = new(Backbone.Collection.extend({
 	model: Source,
 	localStorage: new Backbone.LocalStorage('sources-backbone'),
 	comparator: function(a, b) {
@@ -64,9 +66,15 @@ var sources = new (Backbone.Collection.extend({
 	},
 	initialize: function() {
 		var that = this;
-		this.fetch({ silent: true }).then(function() {
-			if (that.findWhere({ hasNew: true })) {
-				chrome.browserAction.setIcon({ path: '/images/icon19-' + settings.get('icon') + '.png' });
+		this.fetch({
+			silent: true
+		}).then(function() {
+			if (that.findWhere({
+				hasNew: true
+			})) {
+				chrome.browserAction.setIcon({
+					path: '/images/icon19-' + settings.get('icon') + '.png'
+				});
 			}
 		});
 	}
@@ -99,13 +107,15 @@ var Item = Backbone.Model.extend({
 	_source: null,
 	getSource: function() {
 		if (!this._source) {
-			this._source = sources.findWhere({ id: this.get('sourceID') });
-		} 
+			this._source = sources.findWhere({
+				id: this.get('sourceID')
+			});
+		}
 		return this._source;
 	}
 });
 
-var items = new (Backbone.Collection.extend({
+var items = new(Backbone.Collection.extend({
 	model: Item,
 	batch: false,
 	localStorage: new Backbone.LocalStorage('items-backbone'),
@@ -118,17 +128,30 @@ var items = new (Backbone.Collection.extend({
 	},
 	initialize: function() {
 		var that = this;
-		this.fetch({ silent: true });
+		this.fetch({
+			silent: true
+		});
 		settings.on('change:sortOrder', this.sort, this);
 	}
 }));
 
 
-var loader = new (Backbone.Model.extend({
+var loader = new(Backbone.Model.extend({
 	defaults: {
 		maxSources: 0,
 		loaded: 0,
 		loading: false
+	},
+	sourcesToLoad: [],
+	sourceLoading: null,
+	addSources: function(s) {
+		if (s instanceof Source) {
+			this.sourcesToLoad.push(s);
+			this.set('maxSources', this.get('maxSources') + 1);
+		} else if (Array.isArray(s)) {
+			this.sourcesToLoad = this.sourcesToLoad.concat(s);
+			this.set('maxSources', this.get('maxSources') + s.length);
+		}
 	}
 }));
 
@@ -140,7 +163,7 @@ var log = Backbone.Model.extend({
 	}
 });
 
-var logs = new (Backbone.Collection.extend({
+var logs = new(Backbone.Collection.extend({
 	model: log,
 	initialze: function() {
 		var that = this;
@@ -150,7 +173,9 @@ var logs = new (Backbone.Collection.extend({
 
 window.onerror = function(a, b, c) {
 	var msg = a.toString() + ' (Line: ' + c.toString() + ')';
-	logs.add({ message: msg });
+	logs.add({
+		message: msg
+	});
 }
 
 
@@ -178,7 +203,7 @@ var MenuItemView = Backbone.View.extend({
 	},
 	initialize: function() {
 		if (this.model.id) {
-			this.el.id = this.model.id;	
+			this.el.id = this.model.id;
 		}
 	},
 	render: function() {
@@ -203,7 +228,9 @@ var ContextMenu = Backbone.View.extend({
 	className: 'context-menu',
 	menuCollection: null,
 	addItem: function(item) {
-		var v = new MenuItemView({ model: item });
+		var v = new MenuItemView({
+			model: item
+		});
 		v.contextMenu = this;
 		this.$el.append(v.render().$el);
 	},
@@ -255,7 +282,9 @@ $(function() {
 	chrome.alarms.onAlarm.addListener(function(alarm) {
 		var sourceID = parseInt(alarm.name.replace('source-', ''));
 		if (sourceID) {
-			var source = sources.findWhere({ id: sourceID });
+			var source = sources.findWhere({
+				id: sourceID
+			});
 			if (source) {
 				if (!downloadOne(source)) {
 					setTimeout(downloadOne, 30000, source);
@@ -265,9 +294,9 @@ $(function() {
 				chrome.alarms.clear(alarm.name);
 				debugger;
 			}
-			
+
 		}
-		
+
 	});
 
 	sources.on('change:url', function(source) {
@@ -282,10 +311,16 @@ $(function() {
 	});
 
 	function handleIconChange() {
-		if (sources.findWhere({ hasNew: true })) {
-			chrome.browserAction.setIcon({ path: '/images/icon19-' + settings.get('icon') + '.png' });
+		if (sources.findWhere({
+			hasNew: true
+		})) {
+			chrome.browserAction.setIcon({
+				path: '/images/icon19-' + settings.get('icon') + '.png'
+			});
 		} else {
-			chrome.browserAction.setIcon({ path: '/images/icon19.png' });
+			chrome.browserAction.setIcon({
+				path: '/images/icon19.png'
+			});
 		}
 	}
 
@@ -293,8 +328,12 @@ $(function() {
 	settings.on('change:icon', handleIconChange);
 
 	sources.on('destroy', function(source) {
-		items.where({ sourceID: source.get('id') }).forEach(function(item) {
-			item.destroy({ noFocus: true });
+		items.where({
+			sourceID: source.get('id')
+		}).forEach(function(item) {
+			item.destroy({
+				noFocus: true
+			});
 		});
 		chrome.alarms.clear('source-' + source.get('id'));
 	});
@@ -303,9 +342,13 @@ $(function() {
 		if (!model.get('trashed')) {
 			var source = model.getSource();
 			if (source && model.get('unread') == true) {
-				source.save({ 'count': source.get('count') + 1 });
+				source.save({
+					'count': source.get('count') + 1
+				});
 			} else {
-				source.save({ 'count': source.get('count') - 1 });
+				source.save({
+					'count': source.get('count') - 1
+				});
 			}
 		}
 	});
@@ -314,9 +357,13 @@ $(function() {
 		var source = model.getSource();
 		if (source && model.get('unread') == true) {
 			if (model.get('trashed') == true) {
-				source.save({ 'count': source.get('count') - 1 });
+				source.save({
+					'count': source.get('count') - 1
+				});
 			} else {
-				source.save({ 'count': source.get('count') + 1 });
+				source.save({
+					'count': source.get('count') + 1
+				});
 			}
 		}
 	});
@@ -336,15 +383,21 @@ $(function() {
 
 function openRSS(closeIfActive) {
 	var url = chrome.extension.getURL('rss.html');
-	chrome.tabs.query({ url: url }, function(tabs) {
+	chrome.tabs.query({
+		url: url
+	}, function(tabs) {
 		if (tabs[0]) {
 			if (tabs[0].active && closeIfActive) {
 				chrome.tabs.remove(tabs[0].id);
 			} else {
-				chrome.tabs.update(tabs[0].id, { active: true });
+				chrome.tabs.update(tabs[0].id, {
+					active: true
+				});
 			}
 		} else {
-			chrome.tabs.create({'url': url }, function(tab) { });
+			chrome.tabs.create({
+				'url': url
+			}, function(tab) {});
 		}
 	});
 }
@@ -355,117 +408,131 @@ function openRSS(closeIfActive) {
  */
 
 function downloadOne(source) {
-	if (loader.get('loading') == true) return false;
+	if (loader.sourceLoading == source || loader.sourcesToLoad.indexOf(source) >= 0) {
+		return false;
+	}
 
-	loader.set('maxSources', 1);
-	loader.set('loading', true);
-	loader.set('loaded', 0);
-	downloadURL([source], function() {
-		loader.set('loaded', 1);
-		loader.set('loading', false);
-	});
+	loader.addSources(source);
+	if (loader.get('loading') == false) downloadURL();
+
 	return true;
 }
 
 function downloadAll(force) {
 	if (loader.get('loading') == true) return;
 
-	var urls = sources.clone();
+	var sourcesArr = sources.toArray();
 
 	if (!force) {
-		urls.toArray().forEach(function(url) {
-			if (!url.get('lastUpdate') || url.get('lastUpdate') > Date.now() - url.get('updateEvery') * 60 * 1000) {
-				urls.remove(url);
+		sourcesArr = sourcesArr.filter(function(source) {
+			if (!source.get('lastUpdate') || source.get('lastUpdate') > Date.now() - source.get('updateEvery') * 60 * 1000) {
+				return false;
 			}
+			return true;
 		});
 	}
 
-	if (urls.length) {
-		loader.set('maxSources', urls.length);
-		loader.set('loaded', 0);
-		loader.set('loading', true);
-		downloadURL(urls, function() {
-			loader.set('loading', false);
-		});
+	if (sourcesArr.length) {
+		loader.addSources(sourcesArr);
+		downloadURL();
 	}
-	
+
 }
 
 function downloadURL(urls, cb) {
-	if (!urls.length) {
-
-
+	if (!loader.sourcesToLoad.length) {
 		// IF DOWNLOADING FINISHED, DELETED ITEMS WITH DELETED SOURCE (should not really happen)
 		var sourceIDs = sources.pluck('id');
-		items.where({ deleted: true }).forEach(function(item) {
+		items.where({
+			deleted: true
+		}).forEach(function(item) {
 			if (sourceIDs.indexOf(item.get('sourceID')) == -1) {
-				console.log('DELETING OLD CONTENT BECAUSE OF MISSING SOURCE ');				
+				console.log('DELETING OLD CONTENT BECAUSE OF MISSING SOURCE');
 				item.destroy();
 			}
 		});
 
+		loader.set('maxSources', 0);
+		loader.set('loaded', 0);
+		loader.set('loading', false);
+		loader.sourceLoading = null;
 
-		cb();
 		return;
 	}
-	var url =  urls.pop();
+
+	loader.set('loading', true);
+	var sourceToLoad = loader.sourceLoading = loader.sourcesToLoad.pop();
 
 	var options = {
-		url: url.get('url'),
+		url: sourceToLoad.get('url'),
 		dataType: 'xml',
 		success: function(r) {
 
 			// will url.get('id') be still the right id?
 
 			loader.set('loaded', loader.get('loaded') + 1);
-			
+
 			// parsedData step needed for debugging
-			var parsedData = parseRSS(r, url.get('id'));
+			var parsedData = parseRSS(r, sourceToLoad.get('id'));
 
 			var hasNew = false;
 			parsedData.forEach(function(item) {
 				var existingItem = items.get(item.id);
 				if (!existingItem) {
 					hasNew = true;
-					items.create(item, { sort: false });	
+					items.create(item, {
+						sort: false
+					});
 				} else if (existingItem.get('deleted') == false && existingItem.get('content') != item.content) {
-					existingItem.save({ content: item.content });
+					existingItem.save({
+						content: item.content
+					});
 				}
 			});
 
-			items.sort({ silent: true });
+			items.sort({
+				silent: true
+			});
 
 			// remove old deleted content
 			var fetchedIDs = _.pluck(parsedData, 'id');
-			items.where({ sourceID: url.get('id'), deleted: true }).forEach(function(item) {
+			items.where({
+				sourceID: sourceToLoad.get('id'),
+				deleted: true
+			}).forEach(function(item) {
 				if (fetchedIDs.indexOf(item.id) == -1) {
 					item.destroy();
 				}
 			});
 
 			// too many wheres and stuff .. optimize?
-			var count = items.where({ sourceID: url.get('id'), unread: true, trashed: false  }).length;
-			sources.findWhere({ id: url.get('id') }).save({
+			var count = items.where({
+				sourceID: sourceToLoad.get('id'),
+				unread: true,
+				trashed: false
+			}).length;
+
+			sourceToLoad.save({
 				'count': count,
 				'lastUpdate': Date.now(),
 				'hasNew': hasNew
 			});
 
 
-			downloadURL(urls, cb);
+			downloadURL();
 		},
 		error: function(e) {
 			loader.set('loaded', loader.get('loaded') + 1);
 
 			console.log('Failed load RSS: url');
-			downloadURL(urls, cb);
+			downloadURL();
 		}
 	};
 
-	if (url.get('username') || url.get('password')) {
-		options.username = url.get('username') || '';
-		options.password = url.get('password') || '';
-	} 
+	if (sourceToLoad.get('username') || sourceToLoad.get('password')) {
+		options.username = sourceToLoad.get('username') || '';
+		options.password = sourceToLoad.get('password') || '';
+	}
 
 	$.ajax(options);
 }
@@ -474,18 +541,21 @@ function downloadURL(urls, cb) {
 /**
  * RSS Parser
  */
+
 function parseRSS(xml, sourceID) {
 	var items = [];
 
-	
+
 	var nodes = xml.querySelectorAll('item');
 	if (!nodes.length) {
 		nodes = xml.querySelectorAll('entry');
 	}
 
 	var title = xml.querySelector('channel > title, feed > title');
-	var source = sources.findWhere({ id: sourceID });
-	if (title && (source.get('title') == source.get('url') || !source.get('title')) ) {
+	var source = sources.findWhere({
+		id: sourceID
+	});
+	if (title && (source.get('title') == source.get('url') || !source.get('title'))) {
 		source.set('title', title.textContent);
 		source.save();
 	}
@@ -505,7 +575,7 @@ function parseRSS(xml, sourceID) {
 			pinned: false
 		});
 
-		var last = items[items.length-1];
+		var last = items[items.length - 1];
 		last.id = CryptoJS.MD5(last.sourceID + last.title + last.date).toString();
 	});
 
@@ -557,79 +627,102 @@ function rssGetTitle(node) {
 
 function rssGetContent(node) {
 	var desc = node.querySelector('encoded');
-	if (desc) return desc.textContent; 
-
-	desc = node.querySelector('description'); 
 	if (desc) return desc.textContent;
 
-	desc = node.querySelector('summary'); 
+	desc = node.querySelector('description');
 	if (desc) return desc.textContent;
 
-	desc = node.querySelector('content'); 
+	desc = node.querySelector('summary');
 	if (desc) return desc.textContent;
 
-	return  '&nbsp;'
+	desc = node.querySelector('content');
+	if (desc) return desc.textContent;
+
+	return '&nbsp;'
 }
 
 /**
  * Date parser
  */
 
-var formatDate = function(){
+var formatDate = function() {
 	var that;
-    var addZero = function(num){
-        if (num<10) num = "0"+num;
-        return num;
-    };
-    var na = function(n,z){
-        return n%z;
-    };
-    var getDOY = function() {
-    	var dt = new Date(that);
-    	dt.setHours(0,0,0);
-        var onejan = new Date(dt.getFullYear(),0,1);
-        return Math.ceil((dt - onejan) / 86400000);
-    };
-    var getWOY = function() {
-    	var dt = new Date(that);
-    	dt.setHours(0,0,0);
-    	dt.setDate(dt.getDate() + 4 - (dt.getDay() || 7));
-        var onejan = new Date(dt.getFullYear(),0,1);
-        return Math.ceil((((dt - onejan) / 86400000) + onejan.getDay() + 1)/7);
-    };
-    var dateVal = function(all, found) {
-        switch (found) {
-            case "DD":   return addZero(that.getDate());
-            case "D":    return that.getDate();
-            case "MM":   return addZero(that.getMonth()+1);
-            case "M":    return that.getMonth()+1;
-            case "YYYY": return that.getFullYear();
-            case "YY":   return that.getFullYear().toString().substr(2,2);
-            case "hh":   return addZero(that.getHours());
-            case "h":    return that.getHours();
-            case "HH":   return addZero(na(that.getHours(),12));
-            case "H":    return na(that.getHours(),12);
-            case "mm":   return addZero(that.getMinutes());
-            case "m":    return that.getMinutes();
-            case "ss":   return addZero(that.getSeconds());
-            case "s":    return that.getSeconds();
-            case "u":    return that.getMilliseconds();
-            case "U":    return that.getTime();
-            case "T":    return that.getTime() - that.getTimezoneOffset() * 60000;
-            case "W":    return that.getDay();
-            case "y":    return getDOY();
-            case "w":    return getWOY();
-            case "G":    return that.getTimezoneOffset();
-            case "a":    return that.getHours()>12?"pm":"am";
-            default:     return "";
-        }
-    };
-    return function(date, str){
-    	if (!(date instanceof Date)) date = new Date(date);
-    	that = date;
-        str = str.replace(/(DD|D|MM|M|YYYY|YY|hh|h|HH|H|mm|m|ss|s|u|U|W|y|w|G|a|T)/g, dateVal);
-        return str;
-    };
+	var addZero = function(num) {
+		if (num < 10) num = "0" + num;
+		return num;
+	};
+	var na = function(n, z) {
+		return n % z;
+	};
+	var getDOY = function() {
+		var dt = new Date(that);
+		dt.setHours(0, 0, 0);
+		var onejan = new Date(dt.getFullYear(), 0, 1);
+		return Math.ceil((dt - onejan) / 86400000);
+	};
+	var getWOY = function() {
+		var dt = new Date(that);
+		dt.setHours(0, 0, 0);
+		dt.setDate(dt.getDate() + 4 - (dt.getDay() || 7));
+		var onejan = new Date(dt.getFullYear(), 0, 1);
+		return Math.ceil((((dt - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+	};
+	var dateVal = function(all, found) {
+		switch (found) {
+			case "DD":
+				return addZero(that.getDate());
+			case "D":
+				return that.getDate();
+			case "MM":
+				return addZero(that.getMonth() + 1);
+			case "M":
+				return that.getMonth() + 1;
+			case "YYYY":
+				return that.getFullYear();
+			case "YY":
+				return that.getFullYear().toString().substr(2, 2);
+			case "hh":
+				return addZero(that.getHours());
+			case "h":
+				return that.getHours();
+			case "HH":
+				return addZero(na(that.getHours(), 12));
+			case "H":
+				return na(that.getHours(), 12);
+			case "mm":
+				return addZero(that.getMinutes());
+			case "m":
+				return that.getMinutes();
+			case "ss":
+				return addZero(that.getSeconds());
+			case "s":
+				return that.getSeconds();
+			case "u":
+				return that.getMilliseconds();
+			case "U":
+				return that.getTime();
+			case "T":
+				return that.getTime() - that.getTimezoneOffset() * 60000;
+			case "W":
+				return that.getDay();
+			case "y":
+				return getDOY();
+			case "w":
+				return getWOY();
+			case "G":
+				return that.getTimezoneOffset();
+			case "a":
+				return that.getHours() > 12 ? "pm" : "am";
+			default:
+				return "";
+		}
+	};
+	return function(date, str) {
+		if (!(date instanceof Date)) date = new Date(date);
+		that = date;
+		str = str.replace(/(DD|D|MM|M|YYYY|YY|hh|h|HH|H|mm|m|ss|s|u|U|W|y|w|G|a|T)/g, dateVal);
+		return str;
+	};
 }();
 
 
@@ -660,7 +753,10 @@ chrome.runtime.onMessageExternal.addListener(function(message, sender, sendRespo
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 	if (message.action == 'get-tab-id') {
-		sendResponse({ action: 'response-tab-id', value: sender.tab.id });
+		sendResponse({
+			action: 'response-tab-id',
+			value: sender.tab.id
+		});
 	}
 });
 

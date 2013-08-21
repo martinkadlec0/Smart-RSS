@@ -482,6 +482,7 @@ $(function() {
 		initialize: function() {
 			bg.loader.on('change:loading', this.handleLoadingChange, this);
 			bg.loader.on('change:loaded', this.renderIndicator, this);
+			bg.loader.on('change:maxSources', this.renderIndicator, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 			this.handleLoadingChange();
 
@@ -491,6 +492,7 @@ $(function() {
 			if (window == null || id == window.top.tabID) {
 				bg.loader.off('change:loading', this.handleLoadingChange, this);
 				bg.loader.off('change:loaded', this.renderIndicator, this);
+				bg.loader.off('change:maxSources', this.renderIndicator, this);
 				bg.sources.off('clear-events', this.handleClearEvents, this);
 			}
 		},
@@ -564,8 +566,8 @@ $(function() {
 			}
 		},
 		renderIndicator: function() {
-			// should ount and show failed
 			var l = bg.loader;
+			if (l.get('maxSources') == 0) return;
 			var perc = Math.round(l.get('loaded') * 100 / l.get('maxSources'));
 			$('#indicator').css('background', 'linear-gradient(to right,  #c5c5c5 ' + perc + '%, #eee ' + perc + '%)');
 			$('#indicator').html(bg.lang.c.UPDATING_FEEDS + ' (' + l.get('loaded') + '/' + l.get('maxSources') + ')');
