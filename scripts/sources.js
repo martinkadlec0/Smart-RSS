@@ -194,7 +194,7 @@ $(function() {
 			
 		},
 		addSourceDialog: function() {
-			var url = prompt(bg.lang.c.RSS_FEED_URL).trim();
+			var url = (prompt(bg.lang.c.RSS_FEED_URL) || '').trim();
 			if (url) {
 				url = fixURL(url);
 				bg.sources.create({

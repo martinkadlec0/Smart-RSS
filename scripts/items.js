@@ -537,6 +537,13 @@ $(function() {
 			}
 		},
 		addItem: function(item, noManualSort) {
+			if (noManualSort !== true) {
+				if (this.currentSource && this.currentSource.id != item.get('sourceID')) {
+					return;	
+				} else if (this.specialName && this.specialName != 'all-feeds') {
+					return;
+				}
+			} 
 			if (!item.get('deleted') && (!item.get('trashed') || this.specialName == 'trash') ) {
 				var view = new ItemView({ model: item });
 
@@ -635,8 +642,12 @@ $(function() {
 			this.addItems( bg.items.where(completeFilter) );
 		},
 		handleDestroyedSource: function() {
+			var that = this;
 			this.currentSource = null;
-			this.addItems(bg.items);	
+			this.specialName = 'all-feeds';
+			setTimeout(function() {
+				that.addItems(bg.items.where({ trashed: false, unread: true }));
+			}, 0);	
 		},
 		undeleteItem: function(view) {
 			view.model.save({
