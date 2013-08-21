@@ -62,10 +62,6 @@ chrome.runtime.getBackgroundPage(function(bg) {
 				return;
 			}
 
-			alert('Starting import');
-
-			alert(data.sources.length);
-
 			for (var i=0; i<data.sources.length; i++) {
 				if (!bg.sources.get(data.sources[i].id)) {
 					bg.sources.create(data.sources[i]);	
