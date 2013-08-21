@@ -543,7 +543,7 @@ $(function() {
 			} else if (e.keyCode == 13) {
 				var cs = $('.selected:first');
 				if (cs.length) {
-					cs.get(0).view.showSourceItems({ noSelect: true });
+					cs.get(0).view.showSourceItems({ noSelect: true, shiftKey: e.shiftKey });
 				}
 				e.preventDefault();
 			} else if (e.keyCode == 27) {
