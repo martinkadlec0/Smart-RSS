@@ -231,11 +231,6 @@ $.support.cors = true;
 
 $(function() {
 
-	/*sources.reset([
-		{ title: 'Zero Code', url: 'http://shincodezeroblog.wordpress.com/feed/', count: 10, id: 1 },
-		{ title: 'Buni', url: 'http://www.bunicomic.com/feed/', count: 8, id: 2 },
-	]);*/
-
 	sources.on('add', function(source) {
 		if (source.get('updateEvery') > 0) {
 			chrome.alarms.create('source-' + source.get('id'), {
@@ -354,33 +349,6 @@ function openRSS(closeIfActive) {
 	});
 }
 
-/**
- * Remove events from closed tabs
- */
-
-/*var rssTabs = [];
-
-chrome.tabs.onRemoved.addListener(function(tabID) {
-	var index = rssTabs.indexOf(tabID);
-	if (index >= 0) {
-		rssTabs.splice(index, 1);
-		sources.trigger('clear-events', tabID);
-	}
-});
-
-chrome.tabs.onUpdated.addListener(function(tabID, changed, tab) {
-	if (changed.status == 'loading') {
-		var index = rssTabs.indexOf(tabID);
-		if (index >= 0) {
-			rssTabs.splice(index, 1);
-			sources.trigger('clear-events', tabID);
-		} 
-	} else if (changed.status == 'complete') {
-		 if (/chrome-extension:\/\/\w+\/rss.html/.test(tab.url)) {
-			rssTabs.push(tabID);
-		}
-	} 
-});*/
 
 /**
  * Downlaoding
