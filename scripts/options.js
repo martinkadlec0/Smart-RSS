@@ -65,8 +65,8 @@ chrome.runtime.getBackgroundPage(function(bg) {
 
 
 		setTimeout(function() {
-			var expr = encodeURIComponent(JSON.stringify(data));
-			$('#smart-exported').attr('href', 'data:text/plain;charset=UTF-8;text,' + expr);
+			var expr = new Blob([JSON.stringify(data)]);
+			$('#smart-exported').attr('href', URL.createObjectURL(expr));
 			$('#smart-exported').attr('download', 'exported-rss.smart');
 			$('#smart-exported').html('Click to download exported data');
 		}, 20);
@@ -88,8 +88,8 @@ chrome.runtime.getBackgroundPage(function(bg) {
 				middle += '\n\t<outline text="' + escapeHtml(source.get('title')) + '" title="' + escapeHtml(source.get('title')) + '" type="rss" xmlUrl="' + escapeHtml(source.get('url')) + '" />';
 			});
 
-			var expr = encodeURIComponent(start + middle + end);
-			$('#opml-exported').attr('href', 'data:text/plain;charset=UTF-8;text,' + expr);
+			var expr = new Blob([start + middle + end]);
+			$('#opml-exported').attr('href', URL.createObjectURL(expr));
 			$('#opml-exported').attr('download', 'exported-rss.opml');
 			$('#opml-exported').html('Click to download exported data');
 		}, 20);
