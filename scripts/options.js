@@ -188,6 +188,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 		if (!c) return;
 
 		localStorage.clear();
+		chrome.alarms.clearAll()
 		chrome.runtime.reload();
 	}
 });
