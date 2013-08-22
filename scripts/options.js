@@ -15,7 +15,7 @@ var entityMap = {
 };
 
 function escapeHtml(string) {
-	var str = String(string).replace(/[&<>"'\/]/gm, function (s) {
+	var str = String(string).replace(/[&<>"']/gm, function (s) {
 	  return entityMap[s];
 	});
 	str = str.replace(/\s/, function(f) {
@@ -24,6 +24,7 @@ function escapeHtml(string) {
 	});
 	return str;
 }
+
 
 JSON.safeParse = function(str) {
 	try {
@@ -84,7 +85,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 
 		setTimeout(function() {
 			bg.sources.forEach(function(source) {
-				middle += '\n\t<outline text="' + escapeHtml(source.get('title')) + '" title="' + escapeHtml(source.get('title')) + '" type="rss" xmlUrl="' + source.get('url') + '" />';
+				middle += '\n\t<outline text="' + escapeHtml(source.get('title')) + '" title="' + escapeHtml(source.get('title')) + '" type="rss" xmlUrl="' + escapeHtml(source.get('url')) + '" />';
 			});
 
 			var expr = encodeURIComponent(start + middle + end);
