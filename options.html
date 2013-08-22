@@ -76,7 +76,8 @@
 					<div class="settings-row learn-more" title="You can use OPML format to export feeds from Smart RSS to Opera 12.">
 						<label class="web-content-select-label">
 							<span class="selectLabel">OPML:</span>
-							<button>Export</button>
+							<button id="export-opml">Export</button>
+							<a href="" id="opml-exported"></a>
 						</label>
 					</div>
 				</section>
@@ -87,12 +88,14 @@
 						<label class="web-content-select-label">
 							<span class="selectLabel">SMART:</span>
 							<input type="file" id="import-smart">
+							<span id="smart-imported"></span>
 						</label>
 					</div>
 					<div class="settings-row learn-more" title="You can use OPML format to import feeds from Opera 12 to Smart RSS.">
 						<label class="web-content-select-label">
 							<span class="selectLabel">OPML:</span>
-							<input type="file">
+							<input type="file" id="import-opml">
+							<span id="opml-imported"></span>
 						</label>
 					</div>
 				</section>

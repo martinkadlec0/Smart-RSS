@@ -22,7 +22,9 @@ chrome.runtime.getBackgroundPage(function(bg) {
 		});
 
 		$('#export-smart').click(handleExportSmart);
+		$('#export-opml').click(handleExportOPML);
 		$('#import-smart').change(handleImportSmart);
+		$('#import-opml').change(handleImportOPML);
 	});
 
 	function handleChange(e) {
@@ -49,16 +51,42 @@ chrome.runtime.getBackgroundPage(function(bg) {
 		}, 20);
 	}
 
+	function handleExportOPML() {
+		alert('Not implemented yet');
+		return;
+		var data = {
+			sources: bg.sources.toJSON(),
+			items: bg.items.toJSON(),
+		};
+
+		$('#smart-exported').attr('href', '#');
+		$('#smart-exported').removeAttr('download');
+		$('#smart-exported').html('Exporting, please wait');
+
+
+		setTimeout(function() {
+			var expr = encodeURIComponent(JSON.stringify(data));
+			$('#smart-exported').attr('href', 'data:text/plain;charset=UTF-8;text,' + expr);
+			$('#smart-exported').attr('download', 'exported-rss.smart');
+			$('#smart-exported').html('Click to download exported data');
+		}, 20);
+	}
+
 	function handleImportSmart(e) {
 		var file = e.currentTarget.files[0];
-		if (!file || file.size == 0) return;
+		if (!file || file.size == 0) {
+			$('#smart-imported').html('Wrong file');
+			return;
+		}
+
+		$('#smart-imported').html('Importing, please wait!');
 
 		var reader = new FileReader();
 		reader.onload = function(e) {
 			var data = JSON.safeParse(this.result);
 
 			if (!data || !data.items || !data.sources) {
-				alert('Wrong file');
+				$('#smart-imported').html('Wrong file');
 				return;
 			}
 
@@ -74,8 +102,49 @@ chrome.runtime.getBackgroundPage(function(bg) {
 				}
 			}
 
-			alert('Import completed');
+			$('#smart-imported').html('Import completed!');
 		}
+
+		reader.readAsText(file);
+	}
+
+	function handleImportOPML(e) {
+		var file = e.currentTarget.files[0];
+		if (!file || file.size == 0) {
+			$('#opml-imported').html('Wrong file');
+			return;
+		}
+
+		$('#opml-imported').html('Importing, please wait!');
+
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			var parser = new DOMParser();
+        	var doc = parser.parseFromString(this.result, 'application/xml');
+
+			if (!doc) {
+				$('#opml-imported').html('Wrong file');
+				return;
+			}
+
+			var feeds = doc.querySelectorAll('outline[type=rss]');
+
+			for (var i=0; i<feeds.length; i++) {
+				bg.sources.create({
+					id: bg.sourceIdIndex++,
+					title: feeds[i].getAttribute('title'),
+					url: feeds[i].getAttribute('xmlUrl'),
+					updateEvery: 180
+				});
+			}
+
+			$('#opml-imported').html('Import completed!');
+
+			setTimeout(function() {
+				bg.downloadAll();
+			}, 10);
+		}
+
 
 		reader.readAsText(file);
 	}
