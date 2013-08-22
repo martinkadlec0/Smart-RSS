@@ -103,6 +103,8 @@ chrome.runtime.getBackgroundPage(function(bg) {
 
 		$('#smart-imported').html('Importing, please wait!');
 
+		
+
 		var reader = new FileReader();
 		reader.onload = function(e) {
 			var data = JSON.safeParse(this.result);
@@ -127,7 +129,17 @@ chrome.runtime.getBackgroundPage(function(bg) {
 			$('#smart-imported').html('Import completed!');
 		}
 
-		reader.readAsText(file);
+		var url = chrome.extension.getURL('rss.html');
+		chrome.tabs.query({ url: url }, function(tabs) {
+			for (var i=0; i < tabs.length; i++) {
+				chrome.tabs.remove(tabs[i].id);
+			} 
+
+			// wait for clear events to happen
+			setTimeout(function() {
+				reader.readAsText(file);
+			}, 1000);
+		});
 	}
 
 	function handleImportOPML(e) {
