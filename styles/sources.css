@@ -64,7 +64,7 @@ body {
 	flex: 1 1;
 	padding: 0 5px;
 	line-height: 16px;
-	font-size: 0.9rem;
+	font-size: 0.8rem;
 }
 
 .source-counter {
@@ -76,6 +76,10 @@ body {
 	height: 100%;
 	max-width: 50px;
 	overflow: hidden;
+}
+
+.has-unread .source-title {
+	font-weight: bold;
 }
 
 #indicator {

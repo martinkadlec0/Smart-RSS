@@ -111,6 +111,7 @@ $(function() {
 			list.destroySource(this);
 		},
 		render: function() {
+			this.$el.toggleClass('has-unread', !!this.model.get('count'));
 			this.$el.html(this.template(this.model.toJSON()));
 			return this;
 		}
