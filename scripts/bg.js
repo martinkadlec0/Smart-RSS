@@ -465,6 +465,7 @@ function downloadURL(urls, cb) {
 
 	var options = {
 		url: sourceToLoad.get('url'),
+		timeout: 20000,
 		dataType: 'xml',
 		success: function(r) {
 
