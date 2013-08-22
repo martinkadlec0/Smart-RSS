@@ -6,6 +6,25 @@ function b64_to_utf8( str ) {
 	return atob(str);
 }
 
+var entityMap = {
+	"&": "&amp;",
+	"<": "&lt;",
+	">": "&gt;",
+	'"': '&quot;',
+	"'": '&#39;'
+};
+
+function escapeHtml(string) {
+	var str = String(string).replace(/[&<>"'\/]/gm, function (s) {
+	  return entityMap[s];
+	});
+	str = str.replace(/\s/, function(f) {
+		if (f == ' ') return ' ';
+		return '';
+	});
+	return str;
+}
+
 JSON.safeParse = function(str) {
 	try {
 		return JSON.parse(str);	
@@ -23,6 +42,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 
 		$('#export-smart').click(handleExportSmart);
 		$('#export-opml').click(handleExportOPML);
+		$('#clear-data').click(handleClearData);
 		$('#import-smart').change(handleImportSmart);
 		$('#import-opml').change(handleImportOPML);
 	});
@@ -52,23 +72,25 @@ chrome.runtime.getBackgroundPage(function(bg) {
 	}
 
 	function handleExportOPML() {
-		alert('Not implemented yet');
-		return;
-		var data = {
-			sources: bg.sources.toJSON(),
-			items: bg.items.toJSON(),
-		};
 
-		$('#smart-exported').attr('href', '#');
-		$('#smart-exported').removeAttr('download');
-		$('#smart-exported').html('Exporting, please wait');
+		$('#opml-exported').attr('href', '#');
+		$('#opml-exported').removeAttr('download');
+		$('#opml-exported').html('Exporting, please wait');
+
+		var start = '<?xml version="1.0" encoding="utf-8"?>\n<opml version="1.0">\n<head>\n\t<title>Newsfeeds exported from Smart RSS</title>\n</head>\n<body>';
+		var middle = '';
+		var end = '\n</body>\n</opml>';
 
 
 		setTimeout(function() {
-			var expr = encodeURIComponent(JSON.stringify(data));
-			$('#smart-exported').attr('href', 'data:text/plain;charset=UTF-8;text,' + expr);
-			$('#smart-exported').attr('download', 'exported-rss.smart');
-			$('#smart-exported').html('Click to download exported data');
+			bg.sources.forEach(function(source) {
+				middle += '\n\t<outline text="' + escapeHtml(source.get('title')) + '" title="' + escapeHtml(source.get('title')) + '" type="rss" xmlUrl="' + source.get('url') + '" />';
+			});
+
+			var expr = encodeURIComponent(start + middle + end);
+			$('#opml-exported').attr('href', 'data:text/plain;charset=UTF-8;text,' + expr);
+			$('#opml-exported').attr('download', 'exported-rss.opml');
+			$('#opml-exported').html('Click to download exported data');
 		}, 20);
 	}
 
@@ -147,5 +169,13 @@ chrome.runtime.getBackgroundPage(function(bg) {
 
 
 		reader.readAsText(file);
+	}
+
+	function handleClearData() {
+		var c = confirm('Do you really want to remove all extension data?');
+		if (!c) return;
+
+		localStorage.clear();
+		chrome.runtime.reload();
 	}
 });
