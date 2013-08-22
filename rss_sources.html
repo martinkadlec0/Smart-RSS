@@ -44,7 +44,7 @@
 		0/10
 	</div>
 	<script id="template-source" type="template">
-		<img src="opera://favicon/<%= url %>" class="source-icon" />
+		<img src="http://www.google.com/s2/favicons?domain=<%= encodeURIComponent(url) %>" class="source-icon" /> 
 		<div class="source-title"><%- title %></div>
 		<% if (count > 0) { %>
 			<div class="source-counter"><%- count %></div>
