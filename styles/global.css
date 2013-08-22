@@ -53,6 +53,9 @@ body {
 #button-read {
 	background: url('/images/read.png') no-repeat center center;
 }
+#button-download {
+	background: url('/images/save.png') no-repeat center center;
+}
 #button-delete {
 	background: url('/images/delete.png') no-repeat center center;
 }

@@ -29,8 +29,22 @@ $(function() {
 			'click #button-read': 'handleButtonRead',
 			'click #button-delete': 'handleButtonDelete',
 			'click #button-config': 'handleButtonConfig',
+			'click #button-download': 'handleButtonDownload',
 		},
 		initialize: function() {
+			
+		},
+		handleButtonDownload: function() {
+			if (!itemView.model) return;
+			var tpl = _.template($('#template-download').html());
+			var attrs = Object.create(itemView.model.attributes);
+			attrs.date = itemView.getFormatedDate(attrs.date);
+			var blob = new Blob([ tpl(attrs) ], { type: 'text\/html' });
+			var url = URL.createObjectURL(blob);
+			window.open(url);
+			setTimeout(function() {
+				URL.revokeObjectURL(url);	
+			}, 30000);
 			
 		},
 		handleButtonPrint: function() {
@@ -154,14 +168,17 @@ $(function() {
 				this.$el.find('.pin-button').toggleClass('pinned', this.model.get('pinned'));
 			}
 		},
+		getFormatedDate: function(unixtime) {
+			var dateFormats = { normal: 'DD.MM.YYYY', iso: 'YYYY-MM-DD', us: 'MM/DD/YYYY' };
+			var pickedFormat = dateFormats[bg.settings.get('dateType') || 'normal'] || dateFormats['normal'];
+
+			return bg.formatDate(new Date(unixtime), pickedFormat + ' hh:mm:ss');
+		},
 		render: function() {
 
 			this.show();
 
-			var dateFormats = { normal: 'DD.MM.YYYY', iso: 'YYYY-MM-DD', us: 'MM/DD/YYYY' };
-			var pickedFormat = dateFormats[bg.settings.get('dateType') || 'normal'] || dateFormats['normal'];
-
-			var date = bg.formatDate(new Date(this.model.get('date')), pickedFormat + ' hh:mm:ss');
+			var date = this.getFormatedDate(this.model.get('date'));
 			var source = this.model.getSource(); 
 			var content = this.model.get('content');
 
