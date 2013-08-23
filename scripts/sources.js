@@ -33,7 +33,7 @@ $(function() {
 
 	var TopView = Backbone.View.extend({
 		tagName: 'div',
-		className: 'source',
+		className: 'list-item',
 		template: _.template($('#template-source').html()),
 		handleMouseDown: function(e) {
 			if (e.which == 1) {
@@ -91,10 +91,13 @@ $(function() {
 			'mouseup': 'handleMouseUp',
 			'mousedown': 'handleMouseDown',
 		},
+		className: 'list-item source',
 		initialize: function() {
+			this.el.setAttribute('draggable', 'true');
 			this.model.on('change', this.render, this);
 			this.model.on('destroy', this.handleModelDestroy, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
+			this.el.dataset.id = this.model.get('id');
 			this.el.view = this;
 		},
 		handleClearEvents: function(id) {
@@ -112,10 +115,60 @@ $(function() {
 		},
 		render: function() {
 			this.$el.toggleClass('has-unread', !!this.model.get('count'));
+
+			if (this.model.get('folderID') > 0) {
+				this.el.dataset.inFolder = this.model.get('folderID');
+			} else {
+				delete this.el.dataset.inFolder;
+			}
+
+			
 			this.$el.attr('title', 
 				this.model.get('title') + ' (' + this.model.get('count') + ' unread, ' + this.model.get('countAll') + ' total'
 			);
 			this.$el.html(this.template(this.model.toJSON()));
+			return this;
+		}
+	});
+
+	var FolderView = TopView.extend({
+		className: 'list-item folder',
+		events: {
+			'mouseup': 'handleMouseUp',
+			'mousedown': 'handleMouseDown'
+		},
+		showContextMenu: function(e) {
+			this.select(e);
+			/*trashContextMenu.currentSource = this.model;
+			trashContextMenu.show(e.clientX, e.clientY);*/
+		},
+		initialize: function() {
+			this.el.view = this;
+
+			this.el.dataset.id = this.model.get('id');
+			this.el.addEventListener('dragover', this.handleDragOver.bind(this));
+			this.el.addEventListener('drop', this.handleDrop.bind(this));
+		},
+		handleDragOver: function(e) {
+			e.preventDefault();
+		},
+		handleDrop: function(e) {
+			e.preventDefault();
+			var id = parseInt(e.dataTransfer.getData('dnd-sources') || 0);
+			if (!id) return;
+
+			var item = bg.sources.findWhere({ id: id });
+			if (!item) return;
+
+			item.save({ folderID: this.model.get('id') });
+
+			e.stopPropagation();
+		},
+		template: _.template($('#template-special').html()),
+		render: function() {
+			var data = Object.create(this.model.attributes);
+			data.icon = 'folder.png';
+			this.$el.html(this.template(data));
 			return this;
 		}
 	});
@@ -132,7 +185,7 @@ $(function() {
 	});
 
 	var SpecialView = TopView.extend({
-		className: 'source special',
+		className: 'list-item special',
 		events: {
 			'mouseup': 'handleMouseUp',
 			'mousedown': 'handleMouseDown'
@@ -185,24 +238,36 @@ $(function() {
 		el: '#toolbar',
 		events: {
 			'click #button-add': 'addSourceDialog',
+			'click #button-add-folder': 'addFolderDialog',
 			'click #button-reload': 'reloadSources'
 		},
 		initialize: function() {
 			
 		},
+		addFolderDialog: function() {
+			var title = (prompt('Folder name: ') || '').trim();
+			if (!title) return;
+
+			bg.folders.create({
+				id: bg.folderIdIndex++,
+				title: title
+			});
+
+		},
 		addSourceDialog: function() {
 			var url = (prompt(bg.lang.c.RSS_FEED_URL) || '').trim();
-			if (url) {
-				url = fixURL(url);
-				bg.sources.create({
-					id: bg.sourceIdIndex++,
-					title: url,
-					url: url,
-					updateEvery: 180
-				}).fetch();
+			if (!url)  return;
 
-				localStorage.setItem('sourceIdIndex', bg.sourceIdIndex);
-			}
+			url = fixURL(url);
+			bg.sources.create({
+				id: bg.sourceIdIndex++,
+				title: url,
+				url: url,
+				updateEvery: 180
+			}).fetch();
+
+			localStorage.setItem('sourceIdIndex', bg.sourceIdIndex);
+		
 		},
 		reloadSources: function() {
 			bg.downloadAll(true);
@@ -381,9 +446,12 @@ $(function() {
 		el: '#list',
 		selectedItems: [],
 		events: {
-			
+			'dragstart .source': 'handleDragStart'
 		},
 		initialize: function() {
+
+			this.addFolders(bg.folders);
+
 			this.addSpecial(new Special({
 				title: bg.lang.c.ALL_FEEDS,
 				icon: 'icon16_v2.png',
@@ -406,30 +474,109 @@ $(function() {
 
 			bg.sources.on('reset', this.addSources, this);
 			bg.sources.on('add', this.addSource, this);
+			bg.sources.on('change:folderID', this.handleChangeFolder, this);
+			bg.folders.on('add', this.addFolder, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
+
+			this.el.addEventListener('dragover', this.handleDragOver.bind(this));
+			this.el.addEventListener('drop', this.handleDrop.bind(this));
+		},
+		handleDragOver: function(e) {
+			e.preventDefault();
+		},
+		handleDrop: function(e) {
+			e.preventDefault();
+			var id = parseInt(e.dataTransfer.getData('dnd-sources') || 0);
+			if (!id) return;
+
+			var item = bg.sources.findWhere({ id: id });
+			if (!item) return;
+
+			item.save({ folderID: 0 });
+
+			e.stopPropagation();
+		},
+		handleDragStart: function(e) {
+			var id = e.currentTarget.view.model.get('id');
+
+			e.originalEvent.dataTransfer.setData('dnd-sources', id);
+		},
+		handleChangeFolder: function(source) {
+			var source = $('.source[data-id=' + source.get('id') + ']').get(0);
+			if (!source) return;
+
+			this.placeSource(source.view)
 		},
 		handleClearEvents: function(id) {
 			if (window == null || id == window.top.tabID) {
 				bg.sources.off('reset', this.addSources, this);
 				bg.sources.off('add', this.addSource, this);
+				bg.sources.off('change:folderID', this.handleChangeFolder, this);
+				bg.folders.off('add', this.addFolder, this);
 				bg.sources.off('clear-events', this.handleClearEvents, this);
 			}
 		},
 		addSpecial: function(special) {
 
 			var view = new SpecialView({ model: special });
-			if (view.model.position == 'top') {
+			if (view.model.get('position') == 'top') {
 				this.$el.prepend(view.render().el);
 			} else {
 				this.$el.append(view.render().el);
 			}
 			
 		},
-		addSource: function(source) {
-			var view = new SourceView({ model: source });
-			var last = $('.source:not(.special):last');
+		addFolder: function(folder) {
+			var view = new FolderView({ model: folder });
+			var last = $('.folder:not(.special):last');
 			if (last.length) {
 				view.render().$el.insertAfter(last);	
+			} else if ($('.special:first').length) {
+				// .special-first = all feeds, with more "top" specials this will have to be changed
+				view.render().$el.insertAfter($('.special:first'));
+			} else {
+				this.$el.append(view.render().$el);
+			}
+		},
+		addFolders: function(folders) {
+			$('.folder').each(function(i, folder) {
+				if (!folder.view || !(folder instanceof FolderView)) return;
+				list.destroySource(folder.view);
+			});
+			folders.forEach(function(folder) {
+				this.addFolder(folder);
+			}, this);
+		},
+		addSource: function(source) {
+			var view = new SourceView({ model: source });
+			this.placeSource(view);
+		},
+		placeSource: function(view) {
+			var folder = null;
+			var source = view.model;
+			if (source.get('folderID') > 0) {
+				folder = $('.folder[data-id=' + source.get('folderID') + ']');
+				if (!folder.length) folder = null;
+			}
+			
+			var last;
+				
+			if (folder) {
+				last = $('.source[data-in-folder=' + source.get('folderID') + ']:last');
+				if (last.length) {
+					view.render().$el.insertAfter(last);
+				} else {
+					view.render().$el.insertAfter(folder);	
+				}
+				return;
+			}
+
+
+			last = $('.source:last');
+			if (last.length) {
+				view.render().$el.insertAfter(last);	
+			} else if ($('.folder:last').length) {
+				view.render().$el.insertAfter($('.folder:last'));
 			} else if ($('.special:first').length) {
 				// .special-first = all feeds, with more "top" specials this will have to be changed
 				view.render().$el.insertAfter($('.special:first'));

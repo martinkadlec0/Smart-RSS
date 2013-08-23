@@ -14,6 +14,8 @@ function translate(str) {
 }
 
 var sourceIdIndex = localStorage.getItem('sourceIdIndex') || 1;
+var folderIdIndex = localStorage.getItem('folderIdIndex') || 1;
+
 $.ajaxSetup({
 	cache: false
 });
@@ -137,26 +139,50 @@ var items = new(Backbone.Collection.extend({
 }));
 
 
-var loader = new(Backbone.Model.extend({
+/**
+ *  Folders
+ */
+
+var Folder = Backbone.Model.extend({
 	defaults: {
-		maxSources: 0,
-		loaded: 0,
-		loading: false
-	},
-	sourcesToLoad: [],
-	sourceLoading: null,
-	addSources: function(s) {
-		if (s instanceof Source) {
-			this.sourcesToLoad.push(s);
-			this.set('maxSources', this.get('maxSources') + 1);
-		} else if (Array.isArray(s)) {
-			this.sourcesToLoad = this.sourcesToLoad.concat(s);
-			this.set('maxSources', this.get('maxSources') + s.length);
-		}
+		id: -1,
+		title: '<no title',
+		opened: false
+	}
+});
+
+var folders = new (Backbone.Collection.extend({
+	model: Folder,
+	localStorage: new Backbone.LocalStorage('folders-backbone'),
+	initialize: function() {
+		var that = this;
+		this.fetch({ silent: true });
 	}
 }));
 
 
+/**
+ * Non-db models & collections
+ */
+
+ var loader = new(Backbone.Model.extend({
+ 	defaults: {
+ 		maxSources: 0,
+ 		loaded: 0,
+ 		loading: false
+ 	},
+ 	sourcesToLoad: [],
+ 	sourceLoading: null,
+ 	addSources: function(s) {
+ 		if (s instanceof Source) {
+ 			this.sourcesToLoad.push(s);
+ 			this.set('maxSources', this.get('maxSources') + 1);
+ 		} else if (Array.isArray(s)) {
+ 			this.sourcesToLoad = this.sourcesToLoad.concat(s);
+ 			this.set('maxSources', this.get('maxSources') + s.length);
+ 		}
+ 	}
+ }));
 
 var log = Backbone.Model.extend({
 	defaults: {

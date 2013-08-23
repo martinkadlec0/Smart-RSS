@@ -47,6 +47,9 @@ body {
 #button-add {
 	background: url('/images/add.png') no-repeat center center;
 }
+#button-add-folder {
+	background: url('/images/add_folder.png') no-repeat center center;
+}
 #button-reload {
 	background: url('/images/reload.png') no-repeat center center;
 }

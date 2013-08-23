@@ -25,7 +25,7 @@ body {
 	flex-flow: column;
 }
 
-.source {
+.list-item {
 	-webkit-flex: 0 0 auto;
 	flex: 0 0 auto;
 	width: 100%;
@@ -41,11 +41,11 @@ body {
 	background: rgb(148, 198, 248);
 }
 
-.source:active {
+.list-item:active {
 	background: rgb(51, 153, 255);	
 }
 
-.source:hover .source-title {
+.list-item:hover .source-title {
 	color: rgb(40, 80, 120);
 	text-decoration: underline;
 }
@@ -80,6 +80,10 @@ body {
 
 .has-unread .source-title {
 	font-weight: bold;
+}
+
+[data-in-folder] {
+	padding-left: 30px;
 }
 
 #indicator {
