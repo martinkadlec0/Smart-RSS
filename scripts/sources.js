@@ -133,9 +133,11 @@ $(function() {
 
 	var FolderView = TopView.extend({
 		className: 'list-item folder',
+		template: _.template($('#template-folder').html()),
 		events: {
 			'mouseup': 'handleMouseUp',
-			'mousedown': 'handleMouseDown'
+			'mousedown': 'handleMouseDown',
+			'click .folder-arrow': 'handleClickArrow'
 		},
 		showContextMenu: function(e) {
 			this.select(e);
@@ -148,6 +150,12 @@ $(function() {
 			this.el.dataset.id = this.model.get('id');
 			this.el.addEventListener('dragover', this.handleDragOver.bind(this));
 			this.el.addEventListener('drop', this.handleDrop.bind(this));
+		},
+		handleClickArrow: function(e) {
+			this.model.set('opened', !this.model.get('opened'));
+			$('.source[data-in-folder=' + this.model.get('id') + ']').css('display', this.model.get('opened') ? 'flex' : 'none');
+			this.render();
+			e.stopPropagation();
 		},
 		handleDragOver: function(e) {
 			e.preventDefault();
@@ -164,10 +172,11 @@ $(function() {
 
 			e.stopPropagation();
 		},
-		template: _.template($('#template-special').html()),
+		template: _.template($('#template-folder').html()),
 		render: function() {
+			this.model.set('opened', this.model.get('opened'));
 			var data = Object.create(this.model.attributes);
-			data.icon = 'folder.png';
+			this.$el.toggleClass('opened', this.model.get('opened'));
 			this.$el.html(this.template(data));
 			return this;
 		},
@@ -540,7 +549,7 @@ $(function() {
 		},
 		addFolder: function(folder) {
 			var view = new FolderView({ model: folder });
-			var last = $('.folder:not(.special):last');
+			var last = $('.folder:last');
 			if (last.length) {
 				view.render().$el.insertAfter(last);	
 			} else if ($('.special:first').length) {
@@ -580,13 +589,18 @@ $(function() {
 				} else {
 					view.render().$el.insertAfter(folder);	
 				}
+
+				if (!folder.get(0).view.model.get('opened')) {
+					view.$el.css('display', 'none');
+				}
 				return;
 			}
 
 
-			last = $('.source:last');
+
+			last = $('.source:not([data-in-folder]):last');
 			if (last.length) {
-				view.render().$el.insertAfter(last);	
+				view.render().$el.insertAfter(last);
 			} else if ($('.folder:last').length) {
 				view.render().$el.insertAfter($('.folder:last'));
 			} else if ($('.special:first').length) {
