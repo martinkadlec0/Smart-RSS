@@ -119,6 +119,7 @@ $(function() {
 			if (this.model.get('folderID') > 0) {
 				this.el.dataset.inFolder = this.model.get('folderID');
 			} else {
+				this.$el.css('display', 'flex');
 				delete this.el.dataset.inFolder;
 			}
 
@@ -141,15 +142,24 @@ $(function() {
 		},
 		showContextMenu: function(e) {
 			this.select(e);
-			/*trashContextMenu.currentSource = this.model;
-			trashContextMenu.show(e.clientX, e.clientY);*/
+			folderContextMenu.currentSource = this.model;
+			folderContextMenu.show(e.clientX, e.clientY);
 		},
 		initialize: function() {
 			this.el.view = this;
 
+			this.model.on('destroy', this.handleModelDestroy, this);
+			bg.sources.on('clear-events', this.handleClearEvents, this);
 			this.el.dataset.id = this.model.get('id');
 			this.el.addEventListener('dragover', this.handleDragOver.bind(this));
 			this.el.addEventListener('drop', this.handleDrop.bind(this));
+		},
+		clearEvents: function() {
+			this.model.off('destroy', this.handleModelDestroy, this);
+			bg.sources.off('clear-events', this.handleClearEvents, this);
+		},
+		handleModelDestroy: function(e) {
+			list.destroySource(this);
 		},
 		handleClickArrow: function(e) {
 			this.model.set('opened', !this.model.get('opened'));
@@ -389,10 +399,24 @@ $(function() {
 		}
 	]);
 
+	var folderContextMenu = new ContextMenu([
+		{ 
+			title: bg.lang.c.DELETE,
+			icon: 'delete.png',
+			action: function() { 
+				var folder = list.selectedItems[0].model;
+				bg.sources.where({ folderID: folder.get('id') }).forEach(function(item) {
+					item.save({ folderID: 0 });
+				});
+				folder.destroy();
+			}
+		}
+	]);
+
 	var contextMenus = new (Backbone.View.extend({
 		list: [],
 		initialize: function() {
-			this.list = [sourcesContextMenu, trashContextMenu];
+			this.list = [sourcesContextMenu, trashContextMenu, folderContextMenu];
 		},
 		hideAll: function() {
 			this.list.forEach(function(item) {
