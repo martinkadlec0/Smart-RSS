@@ -52,6 +52,7 @@ var Source = Backbone.Model.extend({
 		updateEvery: 0,
 		lastUpdate: 0,
 		count: 0,
+		countAll: 0,
 		username: '',
 		password: '',
 		hasNew: false
@@ -358,13 +359,19 @@ $(function() {
 		if (source && model.get('unread') == true) {
 			if (model.get('trashed') == true) {
 				source.save({
-					'count': source.get('count') - 1
+					'count': source.get('count') - 1,
+					'countAll': source.get('countAll') - 1
 				});
 			} else {
 				source.save({
-					'count': source.get('count') + 1
+					'count': source.get('count') + 1,
+					'countAll': source.get('countAll') + 1
 				});
 			}
+		} else if (source) {
+			source.save({ 
+				'countAll': source.get('countAll') + (model.get('trashed') ? - 1 : 1) 
+			});
 		}
 	});
 
@@ -506,15 +513,13 @@ function downloadURL(urls, cb) {
 				}
 			});
 
-			// too many wheres and stuff .. optimize?
-			var count = items.where({
-				sourceID: sourceToLoad.get('id'),
-				unread: true,
-				trashed: false
-			}).length;
+			// tip to optimize: var count = items.where.call(countAll, {unread: true }).length
+			var countAll = items.where({ sourceID: sourceToLoad.get('id'), trashed: false }).length;
+			var count = items.where({ sourceID: sourceToLoad.get('id'),	unread: true, trashed: false }).length;
 
 			sourceToLoad.save({
 				'count': count,
+				'countAll': countAll,
 				'lastUpdate': Date.now(),
 				'hasNew': hasNew
 			});

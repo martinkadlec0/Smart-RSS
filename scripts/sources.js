@@ -112,6 +112,9 @@ $(function() {
 		},
 		render: function() {
 			this.$el.toggleClass('has-unread', !!this.model.get('count'));
+			this.$el.attr('title', 
+				this.model.get('title') + ' (' + this.model.get('count') + ' unread, ' + this.model.get('countAll') + ' total'
+			);
 			this.$el.html(this.template(this.model.toJSON()));
 			return this;
 		}
