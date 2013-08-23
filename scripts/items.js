@@ -54,13 +54,17 @@ $(function() {
 		var dt = new Date(date);
 		var dc = new Date();
 
-		var dtt = parseInt(bg.formatDate(date, 'T') / 86400000);
-		var dct = parseInt(bg.formatDate(dc, 'T') / 86400000);
+		var dtt = parseInt(formatDate(date, 'T') / 86400000);
+		var dct = parseInt(formatDate(dc, 'T') / 86400000);
 
 		var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 		var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-		var todayMidnight = new Date(bg.formatDate(dc, 'YYYY-MM-DD 00:00:00'));
+		var todayMidnight = new Date(dc);
+		todayMidnight.setHours(0,0,0);
+
+		var itemMidnight = new Date(dt);
+		itemMidnight.setHours(0,0,0);
 
 		var group = new Group();
 
@@ -74,12 +78,12 @@ $(function() {
 				title: bg.lang.c.YESTERDAY.toUpperCase(),
 				date: todayMidnight.getTime()
 			});
-		} else if (bg.formatDate(dt, 'w') == bg.formatDate(dc, 'w') && dtt + 7 >= dct) {
+		} else if (formatDate(dt, 'w') == formatDate(dc, 'w') && dtt + 7 >= dct) {
 			group.set({
 				title: bg.lang.c[days[dt.getDay()].toUpperCase()].toUpperCase(),
-				date: (new Date(bg.formatDate(dt, 'YYYY-MM-DD 00:00:00'))).getTime() + 86400000
+				date: itemMidnight.getTime() + 86400000
 			});
-		} else if (parseInt(bg.formatDate(dt, 'w')) + 1 == bg.formatDate(dc, 'w') &&  dtt + 14 >= dct) {
+		} else if (parseInt(formatDate(dt, 'w')) + 1 == formatDate(dc, 'w') &&  dtt + 14 >= dct) {
 			group.set({
 				title: bg.lang.c.LAST_WEEK.toUpperCase(),
 				date: todayMidnight.getTime() - 86400000 * ((todayMidnight.getDay() || 7) - 1)
@@ -135,16 +139,16 @@ $(function() {
 			var pickedFormat = dateFormats[bg.settings.get('dateType') || 'normal'] || dateFormats['normal'];
 
 			if (data.date) {
-				if (parseInt(bg.formatDate(data.date, 'T') / 86400000) >= parseInt(bg.formatDate(Date.now(), 'T') / 86400000)) {
-					data.date = bg.formatDate(new Date(data.date), 'hh:mm');
+				if (parseInt(formatDate(data.date, 'T') / 86400000) >= parseInt(formatDate(Date.now(), 'T') / 86400000)) {
+					data.date = formatDate(new Date(data.date), 'hh:mm');
 				} else if ((new Date(data.date)).getFullYear() == (new Date()).getFullYear() ) {
-					data.date = bg.formatDate(new Date(data.date), pickedFormat.replace(/\/?YYYY(?!-)/, ''));	
+					data.date = formatDate(new Date(data.date), pickedFormat.replace(/\/?YYYY(?!-)/, ''));	
 				} else {
-					data.date = bg.formatDate(new Date(data.date), pickedFormat);
+					data.date = formatDate(new Date(data.date), pickedFormat);
 				}
 			}
 
-			this.el.title = data.title + '\n' + bg.formatDate(this.model.get('date'), pickedFormat + ' hh:mm:ss');
+			this.el.title = data.title + '\n' + formatDate(this.model.get('date'), pickedFormat + ' hh:mm:ss');
 			
 			this.$el.html(this.template(data));
 
