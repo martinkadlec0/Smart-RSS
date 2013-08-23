@@ -584,6 +584,7 @@ function parseRSS(xml, sourceID) {
 
 		var last = items[items.length - 1];
 		last.id = CryptoJS.MD5(last.sourceID + last.title + last.date).toString();
+		if (last.date == '0') last.date = Date.now();
 	});
 
 
