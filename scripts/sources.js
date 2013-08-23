@@ -170,6 +170,18 @@ $(function() {
 			data.icon = 'folder.png';
 			this.$el.html(this.template(data));
 			return this;
+		},
+		showSourceItems: function(e) {
+			e = e || {};
+			if (!e.noSelect) this.select(e);
+			
+			
+			window.top.frames[1].postMessage({
+				action: 'new-folder-select',
+				value: this.model.id,
+				unreadOnly: !!e.shiftKey
+			}, '*');
+			
 		}
 	});
 

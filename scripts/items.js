@@ -468,6 +468,7 @@ $(function() {
 		selectPivot: null,
 		views: [],
 		currentSource: null,
+		currentFolder: null,
 		specialName: 'all-feeds',
 		specialFilter: { trashed: false },
 		unreadOnly: false,
@@ -499,17 +500,21 @@ $(function() {
 			groups.on('add', this.addGroup, this);
 
 			window.addEventListener('message', function(e) {
-				if (e.data.action == 'new-select') {
+				if (e.data.action == 'new-select' || e.data.action == 'new-folderselect') {
 					window.focus();
 					$('#input-search').val('');
 					that.unreadOnly = e.data.unreadOnly;
+				}
+
+				if (e.data.action == 'new-select') {
 					if (typeof e.data.value == 'object') {
 						that.handleNewSpecialSelected(e.data.value, e.data.name);
 					} else {
 						that.handleNewSelected(bg.sources.findWhere({ id: e.data.value }));	
 					}
-					
-				} if (e.data.action == 'give-me-next') {
+				} else if (e.data.action == 'new-folder-select') {
+					that.handleNewFolderSelected(e.data.value);	
+				} else if (e.data.action == 'give-me-next') {
 					if (list.selectedItems[0] && list.selectedItems[0].model.get('unread') == true) {
 						list.selectedItems[0].model.save({ unread: false });
 					}
@@ -654,17 +659,29 @@ $(function() {
 			//alert(Date.now() - st);
 
 		},
-		handleNewSelected: function(source) {
+		clearOnSelect: function() {
 			if (this.currentSource) {
 				this.currentSource.off('destroy', this.handleDestroyedSource, this);
 			}
-			this.currentSource = source;
+
 			if (this.specialName == 'trash') {
 				$('#button-undelete').css('display', 'none');
 				$('#context-undelete').css('display', 'none');
 			}
+
+			if (this.currentFolder) {
+				this.currentFolder.off('destroy', this.handleDestroyedSource, this);
+			}
+
 			this.specialName = null;
 			this.specialFilter = null;
+			this.currentSource = null;
+			this.currentFolder = null;
+		},
+		handleNewSelected: function(source) {
+			this.clearOnSelect();
+			this.currentSource = source;
+			
 			source.on('destroy', this.handleDestroyedSource, this);
 
 			var completeFilter = { sourceID: source.id };
@@ -672,16 +689,11 @@ $(function() {
 			this.addItems( bg.items.where(completeFilter) );
 		},
 		handleNewSpecialSelected: function(filter, name) {
-			if (this.currentSource) {
-				this.currentSource.off('destroy', this.handleDestroyedSource, this);
-			}
-			this.currentSource = null;
-			if (this.specialName == 'trash') {
-				$('#button-undelete').css('display', 'none');	
-				$('#context-undelete').css('display', 'none');
-			} 
+			this.clearOnSelect();
+
 			this.specialName = name;
 			this.specialFilter = filter;
+
 			if (this.specialName == 'trash') {
 				$('#button-undelete').css('display', 'block');
 				$('#context-undelete').css('display', 'block');
@@ -689,6 +701,27 @@ $(function() {
 			var completeFilter = filter;
 			if (this.unreadOnly) completeFilter.unread = true;
 			this.addItems( bg.items.where(completeFilter) );
+		},
+		handleNewFolderSelected: function(folderID) {
+			this.clearOnSelect();
+
+			this.currentFolder = bg.folders.findWhere({ id: folderID });
+			this.currentFolder.on('destroy', this.handleDestroyedSource, this);
+
+			var feeds = _.pluck(bg.sources.where({ folderID: folderID }), 'id');
+
+			if (!feeds.length) return;
+
+			this.addItems( bg.items.filter(function(item) {
+				if (this.unreadOnly && item.get('unread') == true) {
+					if (feeds.indexOf(item.get('sourceID')) >= 0) {
+						return true;	
+					}
+				} else if (feeds.indexOf(item.get('sourceID')) >= 0) {
+					return true;	
+				} 
+				
+			}, this) );
 		},
 		handleDestroyedSource: function() {
 			var that = this;
