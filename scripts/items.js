@@ -536,6 +536,9 @@ $(function() {
 				if (this.currentSource) {
 					this.currentSource.off('destroy', this.handleDestroyedSource, this);
 				}
+				if (this.currentFolder) {
+					this.currentFolder.off('destroy', this.handleDestroyedSource, this);
+				}
 				bg.sources.off('clear-events', this.handleClearEvents, this);
 			}
 		},
