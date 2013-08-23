@@ -64,7 +64,7 @@ $(function() {
 
 		var group = new Group();
 
-		if (dtt == dct) {
+		if (dtt >= dct) {
 			group.set({
 				title: bg.lang.c.TODAY.toUpperCase(),
 				date: todayMidnight.getTime() + 86400000
@@ -135,7 +135,7 @@ $(function() {
 			var pickedFormat = dateFormats[bg.settings.get('dateType') || 'normal'] || dateFormats['normal'];
 
 			if (data.date) {
-				if (parseInt(bg.formatDate(data.date, 'T') / 86400000) == parseInt(bg.formatDate(Date.now(), 'T') / 86400000)) {
+				if (parseInt(bg.formatDate(data.date, 'T') / 86400000) >= parseInt(bg.formatDate(Date.now(), 'T') / 86400000)) {
 					data.date = bg.formatDate(new Date(data.date), 'hh:mm');
 				} else if ((new Date(data.date)).getFullYear() == (new Date()).getFullYear() ) {
 					data.date = bg.formatDate(new Date(data.date), pickedFormat.replace(/\/?YYYY(?!-)/, ''));	
