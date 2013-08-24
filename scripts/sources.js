@@ -24,8 +24,9 @@ function fixURL(url) {
 	return url;
 }
 
-Array.prototype.last = function() {
+Array.prototype.last = function(val) {
 	if (!this.length) return null;
+	if (val) this[this.length - 1] = val;
 	return this[this.length - 1];
 };
 
@@ -571,9 +572,9 @@ $(function() {
 		},
 		addFolder: function(folder) {
 			var view = new FolderView({ model: folder });
-			var last = $('.folder:last');
-			if (last.length) {
-				view.render().$el.insertAfter(last);	
+			var folderViews = $('.folder').toArray();
+			if (folderViews.length) {
+				this.insertBefore(view.render(), folderViews);
 			} else if ($('.special:first').length) {
 				// .special-first = all feeds, with more "top" specials this will have to be changed
 				view.render().$el.insertAfter($('.special:first'));
@@ -628,10 +629,8 @@ $(function() {
 				view.render().$el.insertAfter(sourceViews.last());
 			} else if (sourceViews.length) {
 				this.insertBefore(view.render(), sourceViews);
-			} else if ($('[data-in-folder]:last').length) {
-				view.render().$el.insertAfter($('[data-in-folder]:last'));
-			} else if ($('.folder:last').length) {
-				view.render().$el.insertAfter($('.folder:last'));
+			} else if ((fls = $('[data-in-folder],.folder')).length) {
+				view.render().$el.insertAfter(fls.last());
 			} else if ($('.special:first').length) {
 				// .special-first = all feeds, with more "top" specials this will have to be changed
 				view.render().$el.insertAfter($('.special:first'));
@@ -649,6 +648,13 @@ $(function() {
 			if (before) {
 				what.$el.insertBefore(before);	
 			} else {
+				if (what instanceof FolderView) {
+					var folderSources = $('[data-in-folder=' + where.last().view.model.get('id') + ']');
+					if (folderSources.length) {
+
+						where.last(folderSources.last());	
+					}
+				} 
 				what.$el.insertAfter(where.last());
 			}
 		},
