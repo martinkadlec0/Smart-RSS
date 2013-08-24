@@ -500,7 +500,7 @@ $(function() {
 			groups.on('add', this.addGroup, this);
 
 			window.addEventListener('message', function(e) {
-				if (e.data.action == 'new-select' || e.data.action == 'new-folderselect') {
+				if (e.data.action == 'new-select' || e.data.action == 'new-folder-select') {
 					window.focus();
 					$('#input-search').val('');
 					that.unreadOnly = e.data.unreadOnly;
@@ -720,7 +720,7 @@ $(function() {
 					if (feeds.indexOf(item.get('sourceID')) >= 0) {
 						return true;	
 					}
-				} else if (feeds.indexOf(item.get('sourceID')) >= 0) {
+				} else if (!this.unreadOnly && feeds.indexOf(item.get('sourceID')) >= 0) {
 					return true;	
 				} 
 				
