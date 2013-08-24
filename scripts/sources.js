@@ -496,7 +496,9 @@ $(function() {
 		el: '#list',
 		selectedItems: [],
 		events: {
-			'dragstart .source': 'handleDragStart'
+			'dragstart .source': 'handleDragStart',
+			'drop': 'handleDrop',
+			'drop [data-in-folder]': 'handleDrop',
 		},
 		initialize: function() {
 
@@ -529,20 +531,23 @@ $(function() {
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 
 			this.el.addEventListener('dragover', this.handleDragOver.bind(this));
-			this.el.addEventListener('drop', this.handleDrop.bind(this));
+			//this.el.addEventListener('drop', this.handleDrop.bind(this));
 		},
 		handleDragOver: function(e) {
 			e.preventDefault();
 		},
 		handleDrop: function(e) {
+			var oe = e.originalEvent;
 			e.preventDefault();
-			var id = parseInt(e.dataTransfer.getData('dnd-sources') || 0);
+			var id = parseInt(oe.dataTransfer.getData('dnd-sources') || 0);
 			if (!id) return;
 
 			var item = bg.sources.findWhere({ id: id });
 			if (!item) return;
 
-			item.save({ folderID: 0 });
+			var folderID = parseInt(e.currentTarget.dataset.inFolder || 0);
+
+			item.save({ folderID: folderID });
 
 			e.stopPropagation();
 		},
@@ -609,12 +614,14 @@ $(function() {
 				if (!folder.length) folder = null;
 			}
 			
-			var last;
+			var sourceViews;
 				
 			if (folder) {
-				last = $('.source[data-in-folder=' + source.get('folderID') + ']:last');
-				if (last.length) {
-					view.render().$el.insertAfter(last);
+				sourceViews = $('.source[data-in-folder=' + source.get('folderID') + ']').toArray();
+				if (sourceViews.length && noManualSort) {
+					view.render().$el.insertAfter(sourceViews.last());
+				} else if (sourceViews.length) {
+					this.insertBefore(view.render(), sourceViews);
 				} else {
 					view.render().$el.insertAfter(folder);	
 				}
@@ -622,27 +629,19 @@ $(function() {
 				if (!folder.get(0).view.model.get('opened')) {
 					view.$el.css('display', 'none');
 				}
+
 				return;
 			}
 
 
 
-			var sourceViews = $('.source:not([data-in-folder])').toArray();
+			sourceViews = $('.source:not([data-in-folder])').toArray();
 			if (sourceViews.length && noManualSort) {
 				view.render().$el.insertAfter(sourceViews.last());
 			} else if (sourceViews.length) {
-				var before = null;
-				sourceViews.some(function(el) {
-					if (bg.sources.comparator(el.view.model, view.model) == 1) {
-						return before = el;
-					}
-				});
-				if (before) {
-					view.render().$el.insertBefore($(before));	
-				} else {
-					view.render().$el.insertAfter(sourceViews.last());
-				}
-				
+				this.insertBefore(view.render(), sourceViews);
+			} else if ($('[data-in-folder]:last').length) {
+				view.render().$el.insertAfter($('[data-in-folder]:last'));
 			} else if ($('.folder:last').length) {
 				view.render().$el.insertAfter($('.folder:last'));
 			} else if ($('.special:first').length) {
@@ -650,6 +649,19 @@ $(function() {
 				view.render().$el.insertAfter($('.special:first'));
 			} else {
 				this.$el.append(view.render().$el);
+			}
+		},
+		insertBefore: function(what, where){
+			var before = null;
+			where.some(function(el) {
+				if (bg.sources.comparator(el.view.model, what.model) == 1) {
+					return before = el;
+				}
+			});
+			if (before) {
+				what.$el.insertBefore(before);	
+			} else {
+				what.$el.insertAfter(where.last());
 			}
 		},
 		addSources: function(sources) {
