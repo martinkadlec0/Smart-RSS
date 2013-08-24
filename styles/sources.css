@@ -79,7 +79,7 @@ body {
 }
 
 .folder {
-	padding-left: 4px !important;
+	padding-left: 1px !important;
 }
 
 .drag-over {
@@ -87,13 +87,13 @@ body {
 }
 
 .folder-arrow {
-	width: 11px;
-	flex: 0 0 11px;
-	background: url('/images/arrow-right.png') no-repeat left center;
+	width: 14px;
+	flex: 0 0 14px;
+	background: url('/images/arrow-right.png') no-repeat center center;
 }
 
 .opened .folder-arrow {
-	background: url('/images/arrow-down.png') no-repeat left center;
+	background: url('/images/arrow-down.png') no-repeat center center;
 }
 
 .has-unread .source-title {
