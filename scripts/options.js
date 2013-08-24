@@ -75,21 +75,74 @@ chrome.runtime.getBackgroundPage(function(bg) {
 
 	function handleExportOPML() {
 
+		function addFolder(doc, title, id) {
+			var tmp = doc.createElement('outline');
+			tmp.setAttribute('text', escapeHtml(title));
+			tmp.setAttribute('title', escapeHtml(title));
+			tmp.setAttribute('id', id);
+			return tmp;
+		}
+
+		function addSource(doc, title, url) {
+			var tmp = doc.createElement('outline');
+			tmp.setAttribute('text', escapeHtml(title));
+			tmp.setAttribute('title', escapeHtml(title));
+			tmp.setAttribute('type', 'rss');
+			tmp.setAttribute('xmlUrl', escapeHtml(url));
+			return tmp;
+		}
+
+		function addLine(doc, to, ctn) {
+			var line = doc.createTextNode(ctn || '\n\t');
+			to.appendChild(line);
+		}
+
 		$('#opml-exported').attr('href', '#');
 		$('#opml-exported').removeAttr('download');
 		$('#opml-exported').html('Exporting, please wait');
 
 		var start = '<?xml version="1.0" encoding="utf-8"?>\n<opml version="1.0">\n<head>\n\t<title>Newsfeeds exported from Smart RSS</title>\n</head>\n<body>';
-		var middle = '';
 		var end = '\n</body>\n</opml>';
+
+		var parser = new DOMParser();
+        var doc = parser.parseFromString(start + end, 'application/xml');
 
 
 		setTimeout(function() {
-			bg.sources.forEach(function(source) {
-				middle += '\n\t<outline text="' + escapeHtml(source.get('title')) + '" title="' + escapeHtml(source.get('title')) + '" type="rss" xmlUrl="' + escapeHtml(source.get('url')) + '" />';
+			var body = doc.querySelector('body');
+
+			bg.folders.forEach(function(folder) {
+				addLine(doc, body);
+				body.appendChild( addFolder(doc, folder.get('title'), folder.get('id')) );
 			});
 
-			var expr = new Blob([start + middle + end]);
+
+			bg.sources.forEach(function(source) {
+				//middle += '\n\t<outline text="' + escapeHtml(source.get('title')) + '" title="' + escapeHtml(source.get('title')) + '" type="rss" xmlUrl="' + escapeHtml(source.get('url')) + '" />';
+
+				if (source.get('folderID')) {
+					var folder = body.querySelector('[id="' + source.get('folderID') + '"]');
+					if (folder) {
+						addLine(doc, folder, '\n\t\t');
+						folder.appendChild( addSource(doc, source.get('title'), source.get('url')) );
+					} else {
+						addLine(doc, body);
+						body.appendChild( addSource(doc, source.get('title'), source.get('url')) );
+						
+					}
+					
+				} else {
+					addLine(doc, body);
+					body.appendChild( addSource(doc, source.get('title'), source.get('url')) );
+				}
+			});
+
+			var folders = body.querySelectorAll('[id]');
+			[].forEach.call(folders, function(folder) {
+				folder.removeAttribute('id');
+			});
+
+			var expr = new Blob([ (new XMLSerializer()).serializeToString(doc) ]);
 			$('#opml-exported').attr('href', URL.createObjectURL(expr));
 			$('#opml-exported').attr('download', 'exported-rss.opml');
 			$('#opml-exported').html('Click to download exported data');
