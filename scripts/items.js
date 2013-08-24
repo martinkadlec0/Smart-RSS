@@ -300,7 +300,8 @@ $(function() {
 		defaults: {
 			title: '<no title>',
 			date: 0
-		}
+		},
+		idAttribute: 'date'
 	});
 
 	var groups = new (Backbone.Collection.extend({
@@ -624,11 +625,6 @@ $(function() {
 			} 
 			if (!item.get('deleted') && (!item.get('trashed') || this.specialName == 'trash') ) {
 
-				var group = getGroup(item.get('date'));
-				/*if (!groups.findWhere({ title: group.get('title') })) {
-					groups.add(group);
-				}*/
-
 				var after = null;
 				if (noManualSort !== true) {
 					$.makeArray($('#list .item, #list .date-group')).some(function(itemEl) {
@@ -658,16 +654,25 @@ $(function() {
 					this.views.push(view);
 				}
 
+
+
+				var group = getGroup(item.get('date'));
+				if (!groups.findWhere({ title: group.title })) {
+					debugger;
+					groups.add(new Group(group), { before: view.el });
+				}
+
 				this.reuseIndex++;
 				
 
 				
 			}
 		},
-		addGroup: function(model, coll, opt) {
+		addGroup: function(model, col, opt) {
+			var before = opt.before;
 			var view = new GroupView({ model: model });
 			
-			var after = null;
+			/*var after = null;
 			$.makeArray($('#list .item, #list .date-group')).some(function(itemEl) {
 				if (bg.items.comparator(itemEl.view.model, model) === 1) {
 					after = itemEl;
@@ -675,12 +680,16 @@ $(function() {
 				}
 			});
 
-			if (!after) {
-				this.$el.append(view.render().el);				
+			var first = $('.unpluged:first-of-type');
+
+			if (!after && first.length) {
+				view.render().$el.insertBefore(first);
+			} else if (!after) {
+				this.$el.append(view.render().el);
 			} else {
 				view.render().$el.insertBefore($(after));
-			}
-
+			}*/
+			view.render().$el.insertBefore(before);
 		},
 		addItems: function(items) {
 			// better solution?	
@@ -702,7 +711,7 @@ $(function() {
 			this.selectPivot = null;
 			/* --- */
 
-			var st = Date.now();
+			//var st = Date.now();
 
 			for (var i=items.length; i < this.reuseIndex; i++) {
 				this.views[i].unplugModel();
@@ -717,7 +726,7 @@ $(function() {
 			}, this);
 
 			
-			alert(Date.now() - st);
+			//alert(Date.now() - st);
 
 		},
 		clearOnSelect: function() {
