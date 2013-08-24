@@ -82,6 +82,14 @@ var formatDate = function() {
 	};
 }();
 
+var _unixutcoff = (new Date).getTimezoneOffset() * 60000;
 function unixutc(date) {
-	return date.getTime() - date.getTimezoneOffset() * 60000;
+	return date.getTime() - _unixutcoff;
+}
+
+function getWOY(dt) {
+	dt.setHours(0, 0, 0);
+	dt.setDate(dt.getDate() + 4 - (dt.getDay() || 7));
+	var onejan = new Date(dt.getFullYear(), 0, 1);
+	return Math.ceil((((dt - onejan) / 86400000) + onejan.getDay() + 1) / 7);
 }

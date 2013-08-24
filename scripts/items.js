@@ -53,26 +53,33 @@ $(function() {
 	var getGroup = (function() {
 		var days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
 		var months = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+		var dc = null;
+		var todayMidnight = null;
+		var dct = null;
 
 		return function(date) {
 			var dt = new Date(date);
-			var dc = new Date();
+			dc = dc || new Date();
 
 			
 			var dtt = parseInt(unixutc(dt) / 86400000);
-			var dct = parseInt(unixutc(dc) / 86400000);
+			dct = dct || parseInt(unixutc(dc) / 86400000);
 
-			var todayMidnight = new Date(dc);
-			todayMidnight.setHours(0,0,0);
-
+			if (!todayMidnight) {
+				todayMidnight = new Date(dc);
+				todayMidnight.setHours(0,0,0);
+				setTimeout(function() {
+					todayMidnight = null;
+					dc = null;
+					dct = null;
+				}, 10000);
+			}
+			
 			var itemMidnight = new Date(dt);
 			itemMidnight.setHours(0,0,0);
 
-
-
-			var group = { title: '', date: 0 };
-
-			
+			var group;
+			var dtwoy, dcwoy;
 
 			if (dtt >= dct) {
 				group = {
@@ -84,12 +91,12 @@ $(function() {
 					title: bg.lang.c.YESTERDAY.toUpperCase(),
 					date: todayMidnight.getTime()
 				};
-			} else if (formatDate(dt, 'w') == formatDate(dc, 'w') && dtt + 7 >= dct) {
+			} else if ((dtwoy = getWOY(dt)) == (dtwoy = getWOY(dc)) && dtt + 7 >= dct) {
 				group = {
 					title: bg.lang.c[days[dt.getDay()]].toUpperCase(),
 					date: itemMidnight.getTime() + 86400000
 				};
-			} else if (parseInt(formatDate(dt, 'w')) + 1 == formatDate(dc, 'w') &&  dtt + 14 >= dct) {
+			} else if (dtwoy + 1 == dcwoy &&  dtt + 14 >= dct) {
 				group = {
 					title: bg.lang.c.LAST_WEEK.toUpperCase(),
 					date: todayMidnight.getTime() - 86400000 * ((todayMidnight.getDay() || 7) - 1)
