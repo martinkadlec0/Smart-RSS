@@ -25,6 +25,17 @@ function escapeHtml(string) {
 	return str;
 }
 
+function decodeHTML(str) {
+    var map = {"gt":">" /* , … */};
+    return str.replace(/&(#(?:x[0-9a-f]+|\d+)|[a-z]+);?/gi, function($0, $1) {
+        if ($1[0] === "#") {
+            return String.fromCharCode($1[1].toLowerCase() === "x" ? parseInt($1.substr(2), 16)  : parseInt($1.substr(1), 10));
+        } else {
+            return map.hasOwnProperty($1) ? map[$1] : $0;
+        }
+    });
+}
+
 
 JSON.safeParse = function(str) {
 	try {
@@ -244,13 +255,13 @@ chrome.runtime.getBackgroundPage(function(bg) {
 
 					var folder = bg.folders.create({
 						id: bg.folderIdIndex++,
-						title: feeds[i].getAttribute('title')
+						title: decodeHTML(feeds[i].getAttribute('title'))
 					});
 
 					for (var n=0; n<subfeeds.length; n++) {
 						bg.sources.create({
 							id: bg.sourceIdIndex++,
-							title: subfeeds[n].getAttribute('title'),
+							title: decodeHTML(subfeeds[n].getAttribute('title')),
 							url: subfeeds[n].getAttribute('xmlUrl'),
 							updateEvery: 180,
 							folderID: folder.get('id')
@@ -259,7 +270,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 				} else {
 					bg.sources.create({
 						id: bg.sourceIdIndex++,
-						title: feeds[i].getAttribute('title'),
+						title: decodeHTML(feeds[i].getAttribute('title')),
 						url: feeds[i].getAttribute('xmlUrl'),
 						updateEvery: 180
 					});
