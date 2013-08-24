@@ -69,15 +69,9 @@ var sources = new(Backbone.Collection.extend({
 	},
 	initialize: function() {
 		var that = this;
-		this.fetch({
-			silent: true
-		}).then(function() {
-			if (that.findWhere({
-				hasNew: true
-			})) {
-				chrome.browserAction.setIcon({
-					path: '/images/icon19-' + settings.get('icon') + '.png'
-				});
+		this.fetch({ silent: true }).then(function() {
+			if (that.findWhere({ hasNew: true })) {
+				chrome.browserAction.setIcon({ path: '/images/icon19-' + settings.get('icon') + '.png' 	});
 			}
 		});
 	}
@@ -157,6 +151,9 @@ var folders = new (Backbone.Collection.extend({
 	initialize: function() {
 		var that = this;
 		this.fetch({ silent: true });
+	},
+ 	comparator: function(a, b) {
+		return (a.get('title') || '').trim() < (b.get('title') || '').trim() ? -1 : 1;
 	}
 }));
 

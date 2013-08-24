@@ -24,6 +24,11 @@ function fixURL(url) {
 	return url;
 }
 
+Array.prototype.last = function() {
+	if (!this.length) return null;
+	return this[this.length - 1];
+};
+
 
 chrome.runtime.getBackgroundPage(function(bg) {
 
@@ -592,11 +597,11 @@ $(function() {
 				this.addFolder(folder);
 			}, this);
 		},
-		addSource: function(source) {
+		addSource: function(source, noManualSort) {
 			var view = new SourceView({ model: source });
-			this.placeSource(view);
+			this.placeSource(view, noManualSort === true ? true : false);
 		},
-		placeSource: function(view) {
+		placeSource: function(view, noManualSort) {
 			var folder = null;
 			var source = view.model;
 			if (source.get('folderID') > 0) {
@@ -622,9 +627,22 @@ $(function() {
 
 
 
-			last = $('.source:not([data-in-folder]):last');
-			if (last.length) {
-				view.render().$el.insertAfter(last);
+			var sourceViews = $('.source:not([data-in-folder])').toArray();
+			if (sourceViews.length && noManualSort) {
+				view.render().$el.insertAfter(sourceViews.last());
+			} else if (sourceViews.length) {
+				var before = null;
+				sourceViews.some(function(el) {
+					if (bg.sources.comparator(el.view.model, view.model) == 1) {
+						return before = el;
+					}
+				});
+				if (before) {
+					view.render().$el.insertBefore($(before));	
+				} else {
+					view.render().$el.insertAfter(sourceViews.last());
+				}
+				
 			} else if ($('.folder:last').length) {
 				view.render().$el.insertAfter($('.folder:last'));
 			} else if ($('.special:first').length) {
@@ -640,7 +658,7 @@ $(function() {
 				list.destroySource(source.view);
 			});
 			sources.forEach(function(source) {
-				this.addSource(source);
+				this.addSource(source, true);
 			}, this);
 		},	
 		removeSource: function(view) {
