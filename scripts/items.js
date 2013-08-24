@@ -712,7 +712,7 @@ $(function() {
 
 			//var st = Date.now();
 
-			for (var i=items.length; i < this.reuseIndex; i++) {
+			for (var i=items.length; i < this.reuseIndex && i < this.views.length; i++) {
 				this.views[i].unplugModel();
 			}
 
