@@ -115,10 +115,29 @@ $(function() {
 		template: _.template($('#template-item').html()),
 		initialize: function() {
 			this.el.setAttribute('draggable', 'true');
+			this.el.view = this;
+			this.setEvents();
+		},
+		setEvents: function() {
 			this.model.on('change', this.handleModelChange, this);
 			this.model.on('destroy', this.handleModelDestroy, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
-			this.el.view = this;
+		},
+		swapModel: function(newModel) {
+			if (this.model) {
+				this.clearEvents();
+			}
+			this.el.className = 'item';
+			this.model = newModel;
+			this.setEvents();
+			this.render();
+		},
+		unplugModel: function() {
+			if (this.model) {
+				this.el.className = 'unpluged';
+				this.clearEvents();
+				this.model = null;
+			}
 		},
 		handleClearEvents: function(id) {
 			if (window == null || id == window.top.tabID) {
@@ -473,6 +492,7 @@ $(function() {
 		specialFilter: { trashed: false },
 		unreadOnly: false,
 		noFocus: false,
+		reuseIndex: 0,
 		events: {
 			'dragstart .item': 'handleDragStart',
 			'mousedown .item': 'handleMouseDown',
@@ -586,13 +606,11 @@ $(function() {
 				}
 			} 
 			if (!item.get('deleted') && (!item.get('trashed') || this.specialName == 'trash') ) {
-				var view = new ItemView({ model: item });
 
-
-				var group = getGroup(view.model.get('date'));
+				/*var group = getGroup(view.model.get('date'));
 				if (!groups.findWhere({ title: group.get('title') })) {
 					groups.add(group);
-				}
+				}*/
 
 				var after = null;
 				if (noManualSort !== true) {
@@ -604,19 +622,29 @@ $(function() {
 					});
 				}
 
-				
+				var view;
 
 				if (!after) {
-					this.$el.append(view.render().$el);	
+					if (this.reuseIndex >= this.views.length) {
+						view = new ItemView({ model: item });
+						this.$el.append(view.render().$el);	
+						this.views.push(view);
+					} else {
+						view = this.views[this.reuseIndex];
+						view.swapModel(item);
+					}
+					
 					if (!this.selectedItems.length) view.select();
 				} else {
-					//$(after).insertBefore(view.render().$el);
+					view = new ItemView({ model: item });
 					view.render().$el.insertBefore($(after));
+					this.views.push(view);
 				}
 
+				this.reuseIndex++;
 				
 
-				this.views.push(view);
+				
 			}
 		},
 		addGroup: function(model, coll, opt) {
@@ -639,26 +667,41 @@ $(function() {
 		},
 		addItems: function(items) {
 			// better solution?	
-			this.noFocus = true;
+			/*this.noFocus = true;
 			while (this.views.length) {
 				this.destroyItem(this.views[0]);
 			}
-			this.noFocus = false;
+			this.noFocus = false;*/
 
 			groups.reset();
+			this.reuseIndex = 0;
+
+			/**
+			 * Select removal
+			 */
+			this.selectedItems = [];
+			$('.selected').removeClass('.selected');
+			$('.last-selected').removeClass('.last-selected');
+			this.selectPivot = null;
+			/* --- */
 
 			
 
-			if (this.$el.find('.item:first-of-type').length > 0) {
+			/*if (this.$el.find('.item:first-of-type').length > 0) {
 				alert('E2: This should not happen. Please report it!');
 				debugger;
 				this.$el.html('');
-			}
+			}*/
 
 			//var st = Date.now();
+
 			items.forEach(function(item) {
 				this.addItem(item, true);
 			}, this);
+
+			while (this.reuseIndex < this.views.length) {
+				this.views[this.reuseIndex++].unplugModel();
+			}
 			//alert(Date.now() - st);
 
 		},
