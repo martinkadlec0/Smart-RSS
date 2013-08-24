@@ -397,6 +397,27 @@ $(function() {
 
 	var folderContextMenu = new ContextMenu([
 		{ 
+			title: bg.lang.c.MARK_ALL_AS_READ,
+			icon: 'read.png',
+			action: function() { 
+				var folder = list.selectedItems[0].model;
+				if (!folder || !(folder instanceof bg.Folder)) return;
+
+				var sources = bg.sources.where({ folderID: folder.get('id') });
+				if (!sources.length) return;
+
+				for (var i=0; i<sources.length; i++) {
+					bg.items.where({ sourceID: sources[i].get('id') }).forEach(function(item) {
+						item.save({
+							unread: false,
+							visited: true
+						});
+					});
+					sources[i].save({ hasNew: false });
+				}
+			}
+		},
+		{ 
 			title: bg.lang.c.DELETE,
 			icon: 'delete.png',
 			action: function() { 
