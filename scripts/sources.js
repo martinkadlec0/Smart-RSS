@@ -285,12 +285,18 @@ $(function() {
 			var url = (prompt(bg.lang.c.RSS_FEED_URL) || '').trim();
 			if (!url)  return;
 
+			var folderID = 0;
+			if (list.selectedItems.length && list.selectedItems[0] instanceof FolderView) {
+				folderID = list.selectedItems[0].model.get('id');
+			}
+
 			url = fixURL(url);
 			bg.sources.create({
 				id: bg.sourceIdIndex++,
 				title: url,
 				url: url,
-				updateEvery: 180
+				updateEvery: 180,
+				folderID: folderID
 			}).fetch();
 
 			localStorage.setItem('sourceIdIndex', bg.sourceIdIndex);
