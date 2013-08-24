@@ -168,14 +168,14 @@ $(function() {
 			list.destroySource(this);
 		},
 		handleClickArrow: function(e) {
-			this.model.set('opened', !this.model.get('opened'));
+			this.model.save('opened', !this.model.get('opened'));
 			$('.source[data-in-folder=' + this.model.get('id') + ']').css('display', this.model.get('opened') ? 'flex' : 'none');
 			this.render();
 			e.stopPropagation();
 		},
 		template: _.template($('#template-folder').html()),
 		render: function() {
-			this.model.set('opened', this.model.get('opened'));
+			this.model.save('opened', this.model.get('opened'));
 			var data = Object.create(this.model.attributes);
 			this.$el.toggleClass('opened', this.model.get('opened'));
 			this.$el.html(this.template(data));
