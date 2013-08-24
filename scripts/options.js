@@ -116,8 +116,13 @@ chrome.runtime.getBackgroundPage(function(bg) {
 				return;
 			}
 
+			var ifindex = 1;
+			var isindex = 1;
+
+
 			if (data.folders) {
 				for (var i=0; i<data.folders.length; i++) {
+					ifindex = Math.max(ifindex, data.folders[i].id);
 					if (!bg.folders.get(data.folders[i].id)) {
 						bg.folders.create(data.folders[i]);	
 					}
@@ -125,6 +130,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 			}
 
 			for (var i=0; i<data.sources.length; i++) {
+				csindex = Math.max(csindex, data.sources[i].id);
 				if (!bg.sources.get(data.sources[i].id)) {
 					bg.sources.create(data.sources[i]);	
 				}
@@ -135,6 +141,12 @@ chrome.runtime.getBackgroundPage(function(bg) {
 					bg.items.create(data.items[i]);	
 				}
 			}
+
+			bg.folderIdIndex = Math.max(bg.folderIdIndex, ifindex) + 1;
+			bg.sourceIdIndex = Math.max(bg.sourceIdIndex, isindex) + 1;
+
+			localStorage.setItem('folderIdIndex', bg.folderIdIndex);
+			localStorage.setItem('sourceIdIndex', bg.sourceIdIndex);
 
 			$('#smart-imported').html('Import completed!');
 		}
