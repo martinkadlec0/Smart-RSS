@@ -156,8 +156,6 @@ $(function() {
 			this.model.on('destroy', this.handleModelDestroy, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 			this.el.dataset.id = this.model.get('id');
-			this.el.addEventListener('dragover', this.handleDragOver.bind(this));
-			this.el.addEventListener('drop', this.handleDrop.bind(this));
 		},
 		clearEvents: function() {
 			this.model.off('destroy', this.handleModelDestroy, this);
@@ -170,21 +168,6 @@ $(function() {
 			this.model.set('opened', !this.model.get('opened'));
 			$('.source[data-in-folder=' + this.model.get('id') + ']').css('display', this.model.get('opened') ? 'flex' : 'none');
 			this.render();
-			e.stopPropagation();
-		},
-		handleDragOver: function(e) {
-			e.preventDefault();
-		},
-		handleDrop: function(e) {
-			e.preventDefault();
-			var id = parseInt(e.dataTransfer.getData('dnd-sources') || 0);
-			if (!id) return;
-
-			var item = bg.sources.findWhere({ id: id });
-			if (!item) return;
-
-			item.save({ folderID: this.model.get('id') });
-
 			e.stopPropagation();
 		},
 		template: _.template($('#template-folder').html()),
@@ -499,6 +482,7 @@ $(function() {
 			'dragstart .source': 'handleDragStart',
 			'drop': 'handleDrop',
 			'drop [data-in-folder]': 'handleDrop',
+			'drop .folder': 'handleDrop',
 		},
 		initialize: function() {
 
@@ -545,7 +529,11 @@ $(function() {
 			var item = bg.sources.findWhere({ id: id });
 			if (!item) return;
 
-			var folderID = parseInt(e.currentTarget.dataset.inFolder || 0);
+			if ($(e.currentTarget).hasClass('folder')) {
+				var folderID = parseInt(e.currentTarget.dataset.id || 0);
+			} else {
+				var folderID = parseInt(e.currentTarget.dataset.inFolder || 0);	
+			}
 
 			item.save({ folderID: folderID });
 
