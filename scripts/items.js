@@ -91,7 +91,7 @@ $(function() {
 					title: bg.lang.c.YESTERDAY.toUpperCase(),
 					date: todayMidnight.getTime()
 				};
-			} else if ((dtwoy = getWOY(dt)) == (dtwoy = getWOY(dc)) && dtt + 7 >= dct) {
+			} else if ((dtwoy = getWOY(dt)) == (dcwoy = getWOY(dc)) && dtt + 7 >= dct) {
 				group = {
 					title: bg.lang.c[days[dt.getDay()]].toUpperCase(),
 					date: itemMidnight.getTime() + 86400000
@@ -658,7 +658,6 @@ $(function() {
 
 				var group = getGroup(item.get('date'));
 				if (!groups.findWhere({ title: group.title })) {
-					debugger;
 					groups.add(new Group(group), { before: view.el });
 				}
 
