@@ -82,6 +82,10 @@ body {
 	padding-left: 4px !important;
 }
 
+.drag-over {
+	background: #e3e3ff;
+}
+
 .folder-arrow {
 	width: 11px;
 	flex: 0 0 11px;

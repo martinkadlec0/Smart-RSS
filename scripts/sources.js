@@ -155,11 +155,13 @@ $(function() {
 			this.el.view = this;
 
 			this.model.on('destroy', this.handleModelDestroy, this);
+			this.model.on('change:title', this.render, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 			this.el.dataset.id = this.model.get('id');
 		},
 		clearEvents: function() {
 			this.model.off('destroy', this.handleModelDestroy, this);
+			this.model.off('change:title', this.render, this);
 			bg.sources.off('clear-events', this.handleClearEvents, this);
 		},
 		handleModelDestroy: function(e) {
@@ -401,6 +403,15 @@ $(function() {
 				});
 				folder.destroy();
 			}
+		},
+		{ 
+			title: 'Rename',
+			action: function() { 
+				var newTitle = prompt('Title: ', list.selectedItems[0].model.get('title'));
+				if (!newTitle) return;
+
+				list.selectedItems[0].model.save({ title: newTitle });
+			}
 		}
 	]);
 
@@ -486,6 +497,9 @@ $(function() {
 			'drop': 'handleDrop',
 			'drop [data-in-folder]': 'handleDrop',
 			'drop .folder': 'handleDrop',
+			'dragover': 'handleDragOver',
+			'dragover .folder,[data-in-folder]': 'handleDragOver',
+			'dragleave .folder,[data-in-folder]': 'handleDragLeave'
 		},
 		initialize: function() {
 
@@ -516,16 +530,31 @@ $(function() {
 			bg.sources.on('change:folderID', this.handleChangeFolder, this);
 			bg.folders.on('add', this.addFolder, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
-
-			this.el.addEventListener('dragover', this.handleDragOver.bind(this));
-			//this.el.addEventListener('drop', this.handleDrop.bind(this));
+			
 		},
 		handleDragOver: function(e) {
+			var f = e.currentTarget.dataset.inFolder;
+			if (f) {
+				$('.folder[data-id=' + f + ']').addClass('drag-over');
+			} else if ($(e.currentTarget).hasClass('folder')) {
+				$(e.currentTarget).addClass('drag-over');
+			}
 			e.preventDefault();
+		},
+		handleDragLeave: function(e) {
+			var f = e.currentTarget.dataset.inFolder;
+			if (f) {
+				$('.folder[data-id=' + f + ']').removeClass('drag-over');
+			} else if ($(e.currentTarget).hasClass('folder')) {
+				$(e.currentTarget).removeClass('drag-over');
+			}
 		},
 		handleDrop: function(e) {
 			var oe = e.originalEvent;
 			e.preventDefault();
+
+			$('.drag-over').removeClass('drag-over');
+
 			var id = parseInt(oe.dataTransfer.getData('dnd-sources') || 0);
 			if (!id) return;
 
