@@ -130,7 +130,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 			}
 
 			for (var i=0; i<data.sources.length; i++) {
-				csindex = Math.max(csindex, data.sources[i].id);
+				isindex = Math.max(isindex, data.sources[i].id);
 				if (!bg.sources.get(data.sources[i].id)) {
 					bg.sources.create(data.sources[i]);	
 				}

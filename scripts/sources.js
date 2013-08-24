@@ -131,7 +131,7 @@ $(function() {
 
 			
 			this.$el.attr('title', 
-				this.model.get('title') + ' (' + this.model.get('count') + ' unread, ' + this.model.get('countAll') + ' total'
+				this.model.get('title') + ' (' + this.model.get('count') + ' unread, ' + this.model.get('countAll') + ' total)'
 			);
 			this.$el.html(this.template(this.model.toJSON()));
 			return this;
@@ -155,13 +155,13 @@ $(function() {
 			this.el.view = this;
 
 			this.model.on('destroy', this.handleModelDestroy, this);
-			this.model.on('change:title', this.render, this);
+			this.model.on('change', this.render, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 			this.el.dataset.id = this.model.get('id');
 		},
 		clearEvents: function() {
 			this.model.off('destroy', this.handleModelDestroy, this);
-			this.model.off('change:title', this.render, this);
+			this.model.off('change', this.render, this);
 			bg.sources.off('clear-events', this.handleClearEvents, this);
 		},
 		handleModelDestroy: function(e) {
@@ -170,15 +170,18 @@ $(function() {
 		handleClickArrow: function(e) {
 			this.model.save('opened', !this.model.get('opened'));
 			$('.source[data-in-folder=' + this.model.get('id') + ']').css('display', this.model.get('opened') ? 'flex' : 'none');
-			this.render();
 			e.stopPropagation();
 		},
 		template: _.template($('#template-folder').html()),
 		render: function() {
-			this.model.save('opened', this.model.get('opened'));
+			this.$el.toggleClass('has-unread', !!this.model.get('count'));
 			var data = Object.create(this.model.attributes);
 			this.$el.toggleClass('opened', this.model.get('opened'));
 			this.$el.html(this.template(data));
+
+			this.$el.attr('title', 
+				this.model.get('title') + ' (' + this.model.get('count') + ' unread, ' + this.model.get('countAll') + ' total)'
+			);
 			return this;
 		},
 		showSourceItems: function(e) {

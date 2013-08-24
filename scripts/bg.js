@@ -53,7 +53,7 @@ var Source = Backbone.Model.extend({
 		url: 'rss.rss',
 		updateEvery: 0,
 		lastUpdate: 0,
-		count: 0,
+		count: 0, // unread
 		countAll: 0,
 		username: '',
 		password: '',
@@ -141,7 +141,9 @@ var Folder = Backbone.Model.extend({
 	defaults: {
 		id: -1,
 		title: '<no title',
-		opened: false
+		opened: false,
+		count: 0, // unread
+		countAll: 0
 	}
 });
 
@@ -352,14 +354,23 @@ $(function() {
 	settings.on('change:icon', handleIconChange);
 
 	sources.on('destroy', function(source) {
-		items.where({
-			sourceID: source.get('id')
-		}).forEach(function(item) {
+		items.where({ sourceID: source.get('id') }).forEach(function(item) {
 			item.destroy({
 				noFocus: true
 			});
 		});
 		chrome.alarms.clear('source-' + source.get('id'));
+
+		if (source.get('folderID') > 0) {
+
+			var folder = folders.findWhere({ id: source.get('folderID') });
+			if (!folder) return;
+
+			folder.save({ 
+				count: folder.get('count') - source.get('count'),
+				countAll: folder.get('countAll') - source.get('countAll')
+			});
+		}
 	});
 
 	items.on('change:unread', function(model) {
@@ -397,6 +408,53 @@ $(function() {
 			});
 		}
 	});
+
+	/**
+	 * Folder counts
+	 */
+
+	sources.on('change:count', function(source) {
+		if (!(source.get('folderID') > 0)) return;
+
+		var folder = folders.findWhere({ id: source.get('folderID') });
+		if (!folder) return;
+
+		folder.save({ count: folder.get('count') + source.get('count') - source.previous('count') });
+	});
+
+	sources.on('change:countAll', function(source) {
+		if (!(source.get('folderID') > 0)) return;
+
+		var folder = folders.findWhere({ id: source.get('folderID') });
+		if (!folder) return;
+
+		folder.save({ countAll: folder.get('countAll') + source.get('countAll') - source.previous('countAll') });
+	});
+
+	sources.on('change:folderID', function(source) {
+		if (source.get('folderID') > 0) {
+
+			var folder = folders.findWhere({ id: source.get('folderID') });
+			if (!folder) return;
+
+			folder.save({ 
+				count: folder.get('count') + source.get('count'),
+				countAll: folder.get('countAll') + source.get('countAll')
+			});
+		} else if (source.previous('folderID') > 0) {
+			var folder = folders.findWhere({ id: source.previous('folderID') });
+			if (!folder) return;
+
+			folder.save({ 
+				count: Math.max(folder.get('count') - source.get('count'), 0),
+				countAll: Math.max(folder.get('countAll') - source.get('countAll'), 0)
+			});
+		}
+	});
+
+	/**
+	 * Init
+	 */
 
 
 	// I should make sure all items are fetched before downloadAll is called .. ideas?
