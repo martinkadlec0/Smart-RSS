@@ -183,16 +183,39 @@ chrome.runtime.getBackgroundPage(function(bg) {
 				return;
 			}
 
-			var feeds = doc.querySelectorAll('outline[type=rss]');
+			var feeds = doc.querySelectorAll('body > outline[text]');
 
 			for (var i=0; i<feeds.length; i++) {
-				bg.sources.create({
-					id: bg.sourceIdIndex++,
-					title: feeds[i].getAttribute('title'),
-					url: feeds[i].getAttribute('xmlUrl'),
-					updateEvery: 180
-				});
+				if (feeds[i].getAttribute('type') != 'rss' ) {
+					var subfeeds = feeds[i].querySelectorAll('outline[type=rss]');
+
+					var folder = bg.folders.create({
+						id: bg.folderIdIndex++,
+						title: feeds[i].getAttribute('title')
+					});
+
+					for (var n=0; n<subfeeds.length; n++) {
+						bg.sources.create({
+							id: bg.sourceIdIndex++,
+							title: subfeeds[n].getAttribute('title'),
+							url: subfeeds[n].getAttribute('xmlUrl'),
+							updateEvery: 180,
+							folderID: folder.get('id')
+						});
+					}
+				} else {
+					bg.sources.create({
+						id: bg.sourceIdIndex++,
+						title: feeds[i].getAttribute('title'),
+						url: feeds[i].getAttribute('xmlUrl'),
+						updateEvery: 180
+					});
+				}
 			}
+
+			localStorage.setItem('folderIdIndex', bg.folderIdIndex);
+			localStorage.setItem('sourceIdIndex', bg.sourceIdIndex);
+
 
 			$('#opml-imported').html('Import completed!');
 
