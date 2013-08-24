@@ -275,6 +275,8 @@ $(function() {
 				title: title
 			});
 
+			localStorage.setItem('folderIdIndex', bg.folderIdIndex);
+
 		},
 		addSourceDialog: function() {
 			var url = (prompt(bg.lang.c.RSS_FEED_URL) || '').trim();
