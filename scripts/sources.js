@@ -393,9 +393,11 @@ $(function() {
 			title: bg.lang.c.DELETE,
 			icon: 'delete.png',
 			action: function() { 
+				if (!confirm(bg.lang.c.REALLY_DELETE)) return;
+
 				var folder = list.selectedItems[0].model;
 				bg.sources.where({ folderID: folder.get('id') }).forEach(function(item) {
-					item.save({ folderID: 0 });
+					item.destroy();
 				});
 				folder.destroy();
 			}
