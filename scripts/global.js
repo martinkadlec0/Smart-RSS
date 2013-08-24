@@ -81,3 +81,7 @@ var formatDate = function() {
 		return str;
 	};
 }();
+
+function unixutc(date) {
+	return date.getTime() - date.getTimezoneOffset() * 60000;
+}

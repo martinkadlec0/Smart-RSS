@@ -50,64 +50,73 @@ $(function() {
 	$('body').html( bg.translate($('body').html()) );
 	$('#input-search').attr('placeholder', bg.lang.c.SEARCH);
 
-	function getGroup(date) {
-		var dt = new Date(date);
-		var dc = new Date();
+	var getGroup = (function() {
+		var days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+		var months = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
 
-		var dtt = parseInt(formatDate(date, 'T') / 86400000);
-		var dct = parseInt(formatDate(dc, 'T') / 86400000);
+		return function(date) {
+			var dt = new Date(date);
+			var dc = new Date();
 
-		var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-		var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+			
+			var dtt = parseInt(unixutc(dt) / 86400000);
+			var dct = parseInt(unixutc(dc) / 86400000);
 
-		var todayMidnight = new Date(dc);
-		todayMidnight.setHours(0,0,0);
+			var todayMidnight = new Date(dc);
+			todayMidnight.setHours(0,0,0);
 
-		var itemMidnight = new Date(dt);
-		itemMidnight.setHours(0,0,0);
+			var itemMidnight = new Date(dt);
+			itemMidnight.setHours(0,0,0);
 
-		var group = new Group();
 
-		if (dtt >= dct) {
-			group.set({
-				title: bg.lang.c.TODAY.toUpperCase(),
-				date: todayMidnight.getTime() + 86400000
-			}); 
-		} else if (dtt + 1 == dct) {
-			group.set({
-				title: bg.lang.c.YESTERDAY.toUpperCase(),
-				date: todayMidnight.getTime()
-			});
-		} else if (formatDate(dt, 'w') == formatDate(dc, 'w') && dtt + 7 >= dct) {
-			group.set({
-				title: bg.lang.c[days[dt.getDay()].toUpperCase()].toUpperCase(),
-				date: itemMidnight.getTime() + 86400000
-			});
-		} else if (parseInt(formatDate(dt, 'w')) + 1 == formatDate(dc, 'w') &&  dtt + 14 >= dct) {
-			group.set({
-				title: bg.lang.c.LAST_WEEK.toUpperCase(),
-				date: todayMidnight.getTime() - 86400000 * ((todayMidnight.getDay() || 7) - 1)
-			});
-		} else if (dt.getMonth() == dc.getMonth() && dt.getFullYear() == dc.getFullYear()) {
-			group.set({
-				title: bg.lang.c.EARLIER_THIS_MONTH.toUpperCase(),
-				date: todayMidnight.getTime() - 86400000 * ((todayMidnight.getDay() || 7) - 1) - 7 * 86400000
-			});
-		} else if (dt.getFullYear() == dc.getFullYear() ) {
-			group.set({
-				title: bg.lang.c[months[dt.getMonth()].toUpperCase()].toUpperCase(),
-				date: (new Date(dt.getFullYear(), dt.getMonth() + 1, 1)).getTime()
-			});
-		} else {
-			group.set({
-				title: dt.getFullYear(),
-				date: (new Date(dt.getFullYear() + 1, 0, 1)).getTime()
-			});
+
+			var group = { title: '', date: 0 };
+
+			
+
+			if (dtt >= dct) {
+				group = {
+					title: bg.lang.c.TODAY.toUpperCase(),
+					date: todayMidnight.getTime() + 86400000
+				}; 
+			} else if (dtt + 1 == dct) {
+				group = {
+					title: bg.lang.c.YESTERDAY.toUpperCase(),
+					date: todayMidnight.getTime()
+				};
+			} else if (formatDate(dt, 'w') == formatDate(dc, 'w') && dtt + 7 >= dct) {
+				group = {
+					title: bg.lang.c[days[dt.getDay()]].toUpperCase(),
+					date: itemMidnight.getTime() + 86400000
+				};
+			} else if (parseInt(formatDate(dt, 'w')) + 1 == formatDate(dc, 'w') &&  dtt + 14 >= dct) {
+				group = {
+					title: bg.lang.c.LAST_WEEK.toUpperCase(),
+					date: todayMidnight.getTime() - 86400000 * ((todayMidnight.getDay() || 7) - 1)
+				};
+			} else if (dt.getMonth() == dc.getMonth() && dt.getFullYear() == dc.getFullYear()) {
+				group = {
+					title: bg.lang.c.EARLIER_THIS_MONTH.toUpperCase(),
+					date: todayMidnight.getTime() - 86400000 * ((todayMidnight.getDay() || 7) - 1) - 7 * 86400000
+				};
+			} else if (dt.getFullYear() == dc.getFullYear() ) {
+				group = {
+					title: bg.lang.c[months[dt.getMonth()]].toUpperCase(),
+					date: (new Date(dt.getFullYear(), dt.getMonth() + 1, 1)).getTime()
+				};
+			} else {
+				group = {
+					title: dt.getFullYear(),
+					date: (new Date(dt.getFullYear() + 1, 0, 1)).getTime()
+				};
+			}
+
+			return group;
+
 		}
+	})();
 
-		return group;
-
-	}
+	
 
 	var ItemView = Backbone.View.extend({
 		tagName: 'div',
@@ -124,6 +133,7 @@ $(function() {
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 		},
 		swapModel: function(newModel) {
+			if (this.model == newModel) return;
 			if (this.model) {
 				this.clearEvents();
 			}
@@ -607,8 +617,8 @@ $(function() {
 			} 
 			if (!item.get('deleted') && (!item.get('trashed') || this.specialName == 'trash') ) {
 
-				/*var group = getGroup(view.model.get('date'));
-				if (!groups.findWhere({ title: group.get('title') })) {
+				var group = getGroup(item.get('date'));
+				/*if (!groups.findWhere({ title: group.get('title') })) {
 					groups.add(group);
 				}*/
 
@@ -674,7 +684,7 @@ $(function() {
 			this.noFocus = false;*/
 
 			groups.reset();
-			this.reuseIndex = 0;
+			
 
 			/**
 			 * Select removal
@@ -685,24 +695,22 @@ $(function() {
 			this.selectPivot = null;
 			/* --- */
 
+			var st = Date.now();
+
+			for (var i=items.length; i < this.reuseIndex; i++) {
+				this.views[i].unplugModel();
+			}
+
+			this.reuseIndex = 0;
+
 			
-
-			/*if (this.$el.find('.item:first-of-type').length > 0) {
-				alert('E2: This should not happen. Please report it!');
-				debugger;
-				this.$el.html('');
-			}*/
-
-			//var st = Date.now();
 
 			items.forEach(function(item) {
 				this.addItem(item, true);
 			}, this);
 
-			while (this.reuseIndex < this.views.length) {
-				this.views[this.reuseIndex++].unplugModel();
-			}
-			//alert(Date.now() - st);
+			
+			alert(Date.now() - st);
 
 		},
 		clearOnSelect: function() {
