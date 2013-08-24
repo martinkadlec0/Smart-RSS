@@ -55,6 +55,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 
 	function handleExportSmart() {
 		var data = {
+			folders: bg.folders.toJSON(),
 			sources: bg.sources.toJSON(),
 			items: bg.items.toJSON(),
 		};
@@ -113,6 +114,14 @@ chrome.runtime.getBackgroundPage(function(bg) {
 			if (!data || !data.items || !data.sources) {
 				$('#smart-imported').html('Wrong file');
 				return;
+			}
+
+			if (data.folders) {
+				for (var i=0; i<data.folders.length; i++) {
+					if (!bg.folders.get(data.folders[i].id)) {
+						bg.folders.create(data.folders[i]);	
+					}
+				}
 			}
 
 			for (var i=0; i<data.sources.length; i++) {

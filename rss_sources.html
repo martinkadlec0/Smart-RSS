@@ -57,7 +57,7 @@
 	</script>
 	<script id="template-folder" type="template">
 		<div class="folder-arrow"></div>
-		<img src="/images/folder.png" class="source-icon" />
+		<img src="/images/folder<%= opened ? '_opened' : '' %>.png" class="source-icon" />
 		<div class="source-title"><%- title %></div>
 	</script>
 </body>

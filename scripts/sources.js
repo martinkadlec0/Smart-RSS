@@ -95,7 +95,7 @@ $(function() {
 	var SourceView = TopView.extend({
 		events: {
 			'mouseup': 'handleMouseUp',
-			'mousedown': 'handleMouseDown',
+			'click': 'handleMouseDown',
 		},
 		className: 'list-item source',
 		initialize: function() {
@@ -143,7 +143,7 @@ $(function() {
 		template: _.template($('#template-folder').html()),
 		events: {
 			'mouseup': 'handleMouseUp',
-			'mousedown': 'handleMouseDown',
+			'click': 'handleMouseDown',
 			'click .folder-arrow': 'handleClickArrow'
 		},
 		showContextMenu: function(e) {
@@ -210,7 +210,7 @@ $(function() {
 		className: 'list-item special',
 		events: {
 			'mouseup': 'handleMouseUp',
-			'mousedown': 'handleMouseDown'
+			'click': 'handleMouseDown'
 		},
 		showContextMenu: function(e) {
 			if (this.model.get('name') != 'trash') return;
