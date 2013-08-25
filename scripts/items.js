@@ -154,6 +154,7 @@ $(function() {
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 		},
 		swapModel: function(newModel) {
+			list.viewsToRender.push(this);
 			if (this.model == newModel) return;
 			if (this.model) {
 				this.clearEvents();
@@ -161,8 +162,6 @@ $(function() {
 			this.el.className = 'item';
 			this.model = newModel;
 			this.setEvents();
-
-			list.viewsToRender.push(this);
 			
 		},
 		unplugModel: function() {
@@ -700,7 +699,6 @@ $(function() {
 					view = new ItemView({ model: item });
 					view.render().$el.insertBefore($(after));
 					
-
 					// weee, this is definitelly not working 100% right :D or is it?
 					var indexElement = after.view instanceof ItemView ? after : after.nextElementSibling;
 					var index = indexElement ? this.views.indexOf(indexElement.view) : -1;
