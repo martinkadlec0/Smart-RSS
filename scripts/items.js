@@ -67,6 +67,7 @@ $(function() {
 		var dc = null;
 		var todayMidnight = null;
 		var dct = null;
+		var _itemHeight = 0;
 
 		return function(date) {
 			var dt = new Date(date);
@@ -170,6 +171,8 @@ $(function() {
 				this.el.className = 'unpluged';
 				this.clearEvents();
 				this.model = null;
+				this.el.innerHTML = '';
+				if (_itemHeight) this.$el.css('height', _itemHeight + 'px');
 			}
 		},
 		handleClearEvents: function(id) {
@@ -183,6 +186,7 @@ $(function() {
 			bg.sources.off('clear-events', this.handleClearEvents, this);
 		},
 		render: function() {
+			this.$el.css('height','');
 			this.$el.toggleClass('unvisited', !this.model.get('visited'));
 			this.$el.toggleClass('unread', this.model.get('unread'));
 			var data = this.model.toJSON();
@@ -599,7 +603,6 @@ $(function() {
 				}
 			}
 			if (start >= 0 && count > 0) {
-				console.log('splicing now');
 				this.viewsToRender.splice(start, count);
 			}
 			//console.log('after: ' + this.viewsToRender.length);
@@ -750,11 +753,19 @@ $(function() {
 			this.selectPivot = null;
 			/* --- */
 
-			//var st = Date.now();
+			var st = Date.now();
 
-			for (var i=items.length; i < this.reuseIndex && i < this.views.length; i++) {
-				this.views[i].unplugModel();
+			var firstItem = $('.item:not(.invisible):first-of-type');
+			if (firstItem.length) {
+				_itemHeight = firstItem.height();
 			}
+
+			
+
+			/*for (var i=items.length, j = this.views.length; i < this.reuseIndex && i < j; i++) {
+				alert('unplug: ' + this.views[i].model.get('title'));
+				this.views[i].unplugModel();
+			}*/
 
 			this.reuseIndex = 0;
 
@@ -763,6 +774,12 @@ $(function() {
 			items.forEach(function(item) {
 				this.addItem(item, true);
 			}, this);
+
+			for (var i=this.reuseIndex, j = this.views.length; i < j; i++) {
+				if (!this.views[i].model) return;
+				this.views[i].unplugModel();
+			}
+
 			this.handleScroll();
 
 			
