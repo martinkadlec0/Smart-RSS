@@ -691,7 +691,12 @@ $(function() {
 				} else {
 					view = new ItemView({ model: item });
 					view.render().$el.insertBefore($(after));
-					this.views.push(view);
+					//this.views.push(view);
+					var indexElement = after.view instanceof ItemView ? after : after.previousElementSibling;
+					var index = indexElement ? this.views.indexOf(indexElement.view) : -1;
+					if (index == -1) index = this.reuseIndex;
+
+					this.views.splice(index, 0, view);
 				}
 
 
@@ -711,32 +716,11 @@ $(function() {
 			var before = opt.before;
 			var view = new GroupView({ model: model });
 			
-			/*var after = null;
-			$.makeArray($('#list .item, #list .date-group')).some(function(itemEl) {
-				if (bg.items.comparator(itemEl.view.model, model) === 1) {
-					after = itemEl;
-					return true;
-				}
-			});
-
-			var first = $('.unpluged:first-of-type');
-
-			if (!after && first.length) {
-				view.render().$el.insertBefore(first);
-			} else if (!after) {
-				this.$el.append(view.render().el);
-			} else {
-				view.render().$el.insertBefore($(after));
-			}*/
+	
 			view.render().$el.insertBefore(before);
 		},
 		addItems: function(items) {
-			// better solution?	
-			/*this.noFocus = true;
-			while (this.views.length) {
-				this.destroyItem(this.views[0]);
-			}
-			this.noFocus = false;*/
+
 
 			groups.reset();
 			
@@ -774,7 +758,7 @@ $(function() {
 			}, this);
 
 			for (var i=this.reuseIndex, j = this.views.length; i < j; i++) {
-				if (!this.views[i].model) return;
+				if (!this.views[i].model) break;
 				this.views[i].unplugModel();
 			}
 
