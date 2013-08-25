@@ -50,6 +50,17 @@ $(function() {
 	$('body').html( bg.translate($('body').html()) );
 	$('#input-search').attr('placeholder', bg.lang.c.SEARCH);
 
+	function isScrolledIntoView(elem) {
+		var docViewTop = list.$el.scrollTop();
+		var docViewBottom = docViewTop + list.$el.height() + 40;
+
+		var elemTop = elem.offset().top;
+		var elemBottom = elemTop + elem.height();
+
+		return (elemBottom >= docViewTop) && (elemTop <= docViewBottom);
+		/*  && (elemBottom <= docViewBottom) &&  (elemTop >= docViewTop) ;*/
+	}
+
 	var getGroup = (function() {
 		var days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
 		var months = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
@@ -147,7 +158,12 @@ $(function() {
 			this.el.className = 'item';
 			this.model = newModel;
 			this.setEvents();
-			this.render();
+
+			/*if (isScrolledIntoView(this.$el)) {
+				this.render();
+			} else {*/
+				list.viewsToRender.push(this);
+			//}
 		},
 		unplugModel: function() {
 			if (this.model) {
@@ -504,6 +520,7 @@ $(function() {
 		selectedItems: [],
 		selectPivot: null,
 		views: [],
+		viewsToRender: [],
 		currentSource: null,
 		currentFolder: null,
 		specialName: 'all-feeds',
@@ -561,9 +578,31 @@ $(function() {
 				}
 			});
 
+			this.el.addEventListener('scroll', this.handleScroll.bind(this));
+
 			setTimeout(function() {
 				that.addItems(bg.items.where({ trashed: false, unread: true }));
 			}, 0);
+		},
+		handleScroll: function() {
+			//console.log('before: ' + this.viewsToRender.length);
+			var start = -1;
+			var count = 0;
+			for (var i=0,j=this.viewsToRender.length; i<j; i++) {
+				if (start >= 0 && (count < 10) || isScrolledIntoView(this.viewsToRender[i].$el)) {
+					this.viewsToRender[i].render();
+					count++;
+					if (start == -1) start = i;
+				} else if (start >= 0) {
+					end = i;
+					break;
+				}
+			}
+			if (start >= 0 && count > 0) {
+				console.log('splicing now');
+				this.viewsToRender.splice(start, count);
+			}
+			//console.log('after: ' + this.viewsToRender.length);
 		},
 		handleClearEvents: function(id) {
 			if (window == null || id == window.top.tabID) {
@@ -705,6 +744,7 @@ $(function() {
 			 * Select removal
 			 */
 			this.selectedItems = [];
+			this.viewsToRender = [];
 			$('.selected').removeClass('.selected');
 			$('.last-selected').removeClass('.last-selected');
 			this.selectPivot = null;
@@ -723,6 +763,7 @@ $(function() {
 			items.forEach(function(item) {
 				this.addItem(item, true);
 			}, this);
+			this.handleScroll();
 
 			
 			//alert(Date.now() - st);
