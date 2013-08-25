@@ -160,11 +160,8 @@ $(function() {
 			this.model = newModel;
 			this.setEvents();
 
-			/*if (isScrolledIntoView(this.$el)) {
-				this.render();
-			} else {*/
-				list.viewsToRender.push(this);
-			//}
+			list.viewsToRender.push(this);
+			
 		},
 		unplugModel: function() {
 			if (this.model) {
@@ -391,7 +388,8 @@ $(function() {
 				searchInContent = true;
 			}
 			var rg = new RegExp(RegExp.escape(str), 'i');
-			list.views.forEach(function(view) {
+			list.views.some(function(view) {
+				if (!view.model) return true;
 				if (rg.test(view.model.get('title')) || rg.test(view.model.get('author')) || (searchInContent && rg.test(view.model.get('content')) )) {
 					view.$el.removeClass('invisible');
 				} else {
