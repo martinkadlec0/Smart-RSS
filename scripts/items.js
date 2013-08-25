@@ -51,11 +51,12 @@ $(function() {
 	$('#input-search').attr('placeholder', bg.lang.c.SEARCH);
 
 	function isScrolledIntoView(elem) {
-		var docViewTop = list.$el.scrollTop();
-		var docViewBottom = docViewTop + list.$el.height() + 40;
+		var docViewTop = 0;
+		var docViewBottom = screen.height;
 
-		var elemTop = elem.offset().top;
-		var elemBottom = elemTop + elem.height();
+		var rect = elem.getBoundingClientRect();
+		var elemTop = rect.top;
+		var elemBottom = elemTop + rect.height;
 
 		return (elemBottom >= docViewTop) && (elemTop <= docViewBottom);
 		/*  && (elemBottom <= docViewBottom) &&  (elemTop >= docViewTop) ;*/
@@ -517,7 +518,7 @@ $(function() {
 		}
 	]);
 
-	var list = new (Backbone.View.extend({
+	var list = window.list = new (Backbone.View.extend({
 		el: '#list',
 		selectedItems: [],
 		selectPivot: null,
@@ -591,15 +592,17 @@ $(function() {
 			var start = -1;
 			var count = 0;
 			for (var i=0,j=this.viewsToRender.length; i<j; i++) {
-				if (start >= 0 && (count < 10) || isScrolledIntoView(this.viewsToRender[i].$el)) {
+				if ((start >= 0 && count % 10 != 0) || isScrolledIntoView(this.viewsToRender[i].el)) {
 					this.viewsToRender[i].render();
 					count++;
 					if (start == -1) start = i;
 				} else if (start >= 0) {
-					end = i;
 					break;
 				}
 			}
+
+			//alert(start + " : " + count + " //// " + this.viewsToRender.length + " : " + i);
+
 			if (start >= 0 && count > 0) {
 				this.viewsToRender.splice(start, count);
 			}
