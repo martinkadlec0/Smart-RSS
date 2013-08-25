@@ -60,6 +60,7 @@ $(function() {
 	$('body').html( bg.translate($('body').html()) );
 	$('#input-search').attr('placeholder', bg.lang.c.SEARCH);
 
+	var _itemHeight = 0;
 	
 
 	var getGroup = (function() {
@@ -68,7 +69,7 @@ $(function() {
 		var dc = null;
 		var todayMidnight = null;
 		var dct = null;
-		var _itemHeight = 0;
+		
 
 		return function(date) {
 			var dt = new Date(date);
@@ -680,7 +681,13 @@ $(function() {
 				if (!after) {
 					if (this.reuseIndex >= this.views.length) {
 						view = new ItemView({ model: item });
-						this.$el.append(view.render().$el);	
+						if (noManualSort !== true || !_itemHeight) {
+							view.render();
+						} else {
+							view.$el.css('height', _itemHeight + 'px');
+							list.viewsToRender.push(view);
+						}
+						this.$el.append(view.$el);	
 						this.views.push(view);
 					} else {
 						view = this.views[this.reuseIndex];
@@ -691,7 +698,9 @@ $(function() {
 				} else {
 					view = new ItemView({ model: item });
 					view.render().$el.insertBefore($(after));
-					//this.views.push(view);
+					
+
+					// weee, this is definitelly not working 100% right :D or is it?
 					var indexElement = after.view instanceof ItemView ? after : after.previousElementSibling;
 					var index = indexElement ? this.views.indexOf(indexElement.view) : -1;
 					if (index == -1) index = this.reuseIndex;
@@ -756,9 +765,6 @@ $(function() {
 			}
 
 			this.handleScroll();
-
-			
-			//alert(Date.now() - st);
 
 		},
 		clearOnSelect: function() {
