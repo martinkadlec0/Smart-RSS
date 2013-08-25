@@ -40,7 +40,17 @@ window.addEventListener('blur', function() {
 	document.documentElement.classList.remove('focused');
 });
 
+function isScrolledIntoView(elem) {
+	var docViewTop = 0;
+	var docViewBottom = screen.height;
 
+	var rect = elem.getBoundingClientRect();
+	var elemTop = rect.top;
+	var elemBottom = elemTop + rect.height;
+
+	return (elemBottom >= docViewTop) && (elemTop <= docViewBottom);
+	/*  && (elemBottom <= docViewBottom) &&  (elemTop >= docViewTop) ;*/
+}
 
 
 chrome.runtime.getBackgroundPage(function(bg) {
@@ -50,17 +60,7 @@ $(function() {
 	$('body').html( bg.translate($('body').html()) );
 	$('#input-search').attr('placeholder', bg.lang.c.SEARCH);
 
-	function isScrolledIntoView(elem) {
-		var docViewTop = 0;
-		var docViewBottom = screen.height;
-
-		var rect = elem.getBoundingClientRect();
-		var elemTop = rect.top;
-		var elemBottom = elemTop + rect.height;
-
-		return (elemBottom >= docViewTop) && (elemTop <= docViewBottom);
-		/*  && (elemBottom <= docViewBottom) &&  (elemTop >= docViewTop) ;*/
-	}
+	
 
 	var getGroup = (function() {
 		var days = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
@@ -588,7 +588,6 @@ $(function() {
 			}, 0);
 		},
 		handleScroll: function() {
-			//console.log('before: ' + this.viewsToRender.length);
 			var start = -1;
 			var count = 0;
 			for (var i=0,j=this.viewsToRender.length; i<j; i++) {
@@ -601,12 +600,10 @@ $(function() {
 				}
 			}
 
-			//alert(start + " : " + count + " //// " + this.viewsToRender.length + " : " + i);
 
 			if (start >= 0 && count > 0) {
 				this.viewsToRender.splice(start, count);
 			}
-			//console.log('after: ' + this.viewsToRender.length);
 		},
 		handleClearEvents: function(id) {
 			if (window == null || id == window.top.tabID) {
@@ -742,15 +739,8 @@ $(function() {
 
 			var firstItem = $('.item:not(.invisible):first-of-type');
 			if (firstItem.length) {
-				_itemHeight = firstItem.height();
+				_itemHeight = firstItem.get(0).getBoundingClientRect().height;
 			}
-
-			
-
-			/*for (var i=items.length, j = this.views.length; i < this.reuseIndex && i < j; i++) {
-				alert('unplug: ' + this.views[i].model.get('title'));
-				this.views[i].unplugModel();
-			}*/
 
 			this.reuseIndex = 0;
 
