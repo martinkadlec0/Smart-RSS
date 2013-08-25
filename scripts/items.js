@@ -113,7 +113,7 @@ $(function() {
 			} else if (dtwoy + 1 == dcwoy &&  dtt + 14 >= dct) {
 				group = {
 					title: bg.lang.c.LAST_WEEK.toUpperCase(),
-					date: todayMidnight.getTime() - 86400000 * ((todayMidnight.getDay() || 7) - 1)
+					date: todayMidnight.getTime() - 86400000 * ( ((todayMidnight.getDay() || 7) - 1) || 1)
 				};
 			} else if (dt.getMonth() == dc.getMonth() && dt.getFullYear() == dc.getFullYear()) {
 				group = {
@@ -702,7 +702,7 @@ $(function() {
 					
 
 					// weee, this is definitelly not working 100% right :D or is it?
-					var indexElement = after.view instanceof ItemView ? after : after.previousElementSibling;
+					var indexElement = after.view instanceof ItemView ? after : after.nextElementSibling;
 					var index = indexElement ? this.views.indexOf(indexElement.view) : -1;
 					if (index == -1) index = this.reuseIndex;
 
@@ -747,7 +747,7 @@ $(function() {
 
 			//var st = Date.now();
 
-			var firstItem = $('.item:not(.invisible):first-of-type');
+			var firstItem = $('.item:not(.invisible):first');
 			if (firstItem.length) {
 				_itemHeight = firstItem.get(0).getBoundingClientRect().height;
 			}
@@ -843,13 +843,19 @@ $(function() {
 				
 			}, this) );
 		},
-		handleDestroyedSource: function() {
+		handleDestroyedSource: function(model) {
 			var that = this;
-			this.currentSource = null;
-			this.specialName = 'all-feeds';
-			setTimeout(function() {
-				that.addItems(bg.items.where({ trashed: false, unread: true }));
-			}, 0);	
+			if (this.currentFolder && !(model instanceof bg.Folder)) {
+				setTimeout(function() {
+					that.handleNewFolderSelected(that.currentFolder);
+				}, 0);
+			} else {
+				this.clearOnSelect();
+				this.specialName = 'all-feeds';
+				setTimeout(function() {
+					that.addItems(bg.items.where({ trashed: false, unread: true }));
+				}, 0);	
+			}
 		},
 		undeleteItem: function(view) {
 			view.model.save({
@@ -878,6 +884,7 @@ $(function() {
 			while (arr.length > 1) fn.call(this, arr[0]);
 			this.noFocus = false;
 			if (arr.length) fn.call(this, arr[0]);
+			this.handleScroll();
 		},
 		destroyItem: function(view) {
 			if (!this.noFocus) {
@@ -905,6 +912,12 @@ $(function() {
 			if (io >= 0) list.selectedItems.splice(io, 1);
 			io = list.views.indexOf(view);
 			if (io >= 0) list.views.splice(io, 1);
+			io = list.viewsToRender.indexOf(view);
+			if (io >= 0) list.viewsToRender.splice(io, 1);
+
+			if (!this.noFocus) {
+				this.handleScroll();
+			}
 		},
 		restartSelection: function() {
 			if (this.selectedItems.length) {
