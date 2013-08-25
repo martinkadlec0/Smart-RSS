@@ -561,7 +561,6 @@ $(function() {
 			window.addEventListener('message', function(e) {
 				if (e.data.action == 'new-select' || e.data.action == 'new-folder-select') {
 					window.focus();
-					$('#input-search').val('');
 					that.unreadOnly = e.data.unreadOnly;
 				}
 
@@ -627,6 +626,8 @@ $(function() {
 				this.handleNewSpecialSelected(this.specialFilter, this.specialName);
 			} else if (this.currentSource) {
 				this.handleNewSelected(this.currentSource);
+			} else if (this.currentFolder) {
+				this.handleNewFolderSelected(this.currentFolder);
 			} else {
 				alert('E1: This should not happen. Please report it!');
 				debugger;
@@ -744,7 +745,7 @@ $(function() {
 			this.selectPivot = null;
 			/* --- */
 
-			var st = Date.now();
+			//var st = Date.now();
 
 			var firstItem = $('.item:not(.invisible):first-of-type');
 			if (firstItem.length) {
@@ -768,6 +769,8 @@ $(function() {
 
 		},
 		clearOnSelect: function() {
+			$('#input-search').val('');
+
 			if (this.currentSource) {
 				this.currentSource.off('destroy', this.handleDestroyedSource, this);
 			}
@@ -813,8 +816,17 @@ $(function() {
 		handleNewFolderSelected: function(folderID) {
 			this.clearOnSelect();
 
-			this.currentFolder = bg.folders.findWhere({ id: folderID });
+			if (folderID instanceof bg.Folder) {
+				this.currentFolder = folderID;
+				folderID = this.currentFolder.get('id');
+			} else {
+				this.currentFolder = bg.folders.findWhere({ id: folderID });
+			}
+
+			
 			this.currentFolder.on('destroy', this.handleDestroyedSource, this);
+
+
 
 			var feeds = _.pluck(bg.sources.where({ folderID: folderID }), 'id');
 
