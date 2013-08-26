@@ -338,9 +338,7 @@ $(function() {
 	});
 
 	function handleIconChange() {
-		if (sources.findWhere({
-			hasNew: true
-		})) {
+		if ( sources.findWhere({ hasNew: true }) ) {
 			chrome.browserAction.setIcon({
 				path: '/images/icon19-' + settings.get('icon') + '.png'
 			});
@@ -372,6 +370,10 @@ $(function() {
 				countAll: folder.get('countAll') - source.get('countAll')
 			});
 		}
+
+		if (source.get('hasNew')) {
+			handleIconChange();
+		}
 	});
 
 	items.on('change:unread', function(model) {
@@ -381,7 +383,7 @@ $(function() {
 				source.save({
 					'count': source.get('count') + 1
 				});
-			} else {
+			} else if (source) {
 				source.save({
 					'count': source.get('count') - 1
 				});
