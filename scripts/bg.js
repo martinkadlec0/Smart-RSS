@@ -385,6 +385,10 @@ $(function() {
 				source.save({
 					'count': source.get('count') - 1
 				});
+
+				if (source.get('count') == 0 && source.get('hasNew') == true) {
+					source.save('hasNew', false);
+				}
 			}
 		}
 	});
@@ -397,6 +401,11 @@ $(function() {
 					'count': source.get('count') - 1,
 					'countAll': source.get('countAll') - 1
 				});
+
+				if (source.get('count') == 0 && source.get('hasNew') == true) {
+					source.save('hasNew', false);
+				}
+
 			} else {
 				source.save({
 					'count': source.get('count') + 1,
