@@ -552,6 +552,7 @@ $(function() {
 			bg.items.on('reset', this.addItems, this);
 			bg.items.on('add', this.addItem, this);
 			bg.items.on('sort', this.handleSort, this);
+			bg.items.on('new-items', this.handleScroll, this);
 			bg.settings.on('change:lines', this.handleChangeLines, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 
@@ -609,6 +610,7 @@ $(function() {
 				bg.items.off('reset', this.addItems, this);
 				bg.items.off('add', this.addItem, this);
 				bg.items.off('sort', this.handleSort, this);
+				bg.items.off('new-items', this.handleScroll, this);
 				bg.settings.off('change:lines', this.handleChangeLines, this);
 				if (this.currentSource) {
 					this.currentSource.off('destroy', this.handleDestroyedSource, this);

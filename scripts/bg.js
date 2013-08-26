@@ -569,9 +569,7 @@ function downloadURL(urls, cb) {
 				var existingItem = items.get(item.id);
 				if (!existingItem) {
 					hasNew = true;
-					items.create(item, {
-						sort: false
-					});
+					items.create(item, { sort: false });
 				} else if (existingItem.get('deleted') == false && existingItem.get('content') != item.content) {
 					existingItem.save({
 						content: item.content
@@ -579,9 +577,8 @@ function downloadURL(urls, cb) {
 				}
 			});
 
-			items.sort({
-				silent: true
-			});
+			items.sort({ silent: true });
+			if (hasNew) items.trigger('new-items');
 
 			// remove old deleted content
 			var fetchedIDs = _.pluck(parsedData, 'id');
@@ -602,7 +599,7 @@ function downloadURL(urls, cb) {
 				'count': count,
 				'countAll': countAll,
 				'lastUpdate': Date.now(),
-				'hasNew': hasNew
+				'hasNew': hasNew || sourceToLoad.get('hasNew')
 			});
 
 
