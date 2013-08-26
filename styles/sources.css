@@ -171,3 +171,7 @@ body {
 #advanced-switch.switched {
 	background: url('/images/down.png') no-repeat left 37%;
 }
+
+.in-closed-folder {
+	display: none !important;
+}
