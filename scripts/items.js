@@ -159,8 +159,8 @@ $(function() {
 			if (this.model) {
 				this.clearEvents();
 			}
-			this.el.className = 'item';
 			this.model = newModel;
+			this.el.className = this.model.get('unread') ? 'item unread' : 'item';
 			this.setEvents();
 			
 		},
