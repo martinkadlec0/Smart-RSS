@@ -154,15 +154,20 @@ $(function() {
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 		},
 		swapModel: function(newModel) {
-			list.viewsToRender.push(this);
-			if (this.model == newModel) return;
+			if (this.model == newModel) {
+				this.prerender();
+				return;
+			}
 			if (this.model) {
 				this.clearEvents();
 			}
 			this.model = newModel;
-			this.el.className = this.model.get('unread') ? 'item unread' : 'item';
 			this.setEvents();
-			
+			this.prerender();
+		},
+		prerender: function() {
+			list.viewsToRender.push(this);
+			this.el.className = this.model.get('unread') ? 'item unread' : 'item';
 		},
 		unplugModel: function() {
 			if (this.model) {
@@ -687,7 +692,7 @@ $(function() {
 							view.render();
 						} else {
 							view.$el.css('height', _itemHeight + 'px');
-							list.viewsToRender.push(view);
+							view.prerender();
 						}
 						this.$el.append(view.$el);	
 						this.views.push(view);
