@@ -52,6 +52,11 @@ chrome.runtime.getBackgroundPage(function(bg) {
 			$(item).change(handleChange);
 		});
 
+		$('input[type=checkbox]').each(function(i, item) {
+			$(item).get(0).checked = !!bg.settings.get(item.id);
+			$(item).change(handleCheck);
+		});
+
 		$('#export-smart').click(handleExportSmart);
 		$('#export-opml').click(handleExportOPML);
 		$('#clear-data').click(handleClearData);
@@ -62,6 +67,11 @@ chrome.runtime.getBackgroundPage(function(bg) {
 	function handleChange(e) {
 		var t = e.target;
 		bg.settings.save(t.id, t.value);
+	}
+
+	function handleCheck(e) {
+		var t = e.target;
+		bg.settings.save(t.id, t.checked);
 	}
 
 	function handleExportSmart() {

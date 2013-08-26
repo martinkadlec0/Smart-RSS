@@ -127,7 +127,7 @@ section div {
 	display: none!important;
 }
 
-.checkbox span, input{
+.checkbox span, input {
 	cursor: pointer;
 }
 
@@ -143,4 +143,8 @@ select {
 
 button {
 	padding: 2px 12px;
+}
+
+input[type=checkbox] {
+	vertical-align: sub;
 }

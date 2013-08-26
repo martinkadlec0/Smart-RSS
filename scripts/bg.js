@@ -36,7 +36,8 @@ var settings = new(Backbone.Model.extend({
 		posB: '350,*',
 		posC: '50%,*',
 		sortOrder: 'desc',
-		icon: 'orange'
+		icon: 'orange',
+		readOnVisit: 'false'
 	},
 	localStorage: new Backbone.LocalStorage('settings-backbone'),
 	initialize: function() {

@@ -246,9 +246,16 @@ $(function() {
 					topWindow.frames[2].postMessage({ action: 'new-select', value: this.model.id }, '*');
 				}
 
-				if (!this.model.get('visited')) {
-					this.model.set('visited', true);
+				
+				if (this.model.get('unread') && bg.settings.get('readOnVisit')) {
+					this.model.save({
+						visited: true,
+						unread: false
+					});
+				} else if (!this.model.get('visited')) {
+					this.model.save('visited', true);
 				}
+				
 			} else if (e.shiftKey && list.selectPivot) {
 				$('.selected').removeClass('selected');
 				list.selectedItems = [list.selectPivot];
@@ -583,7 +590,7 @@ $(function() {
 				} else if (e.data.action == 'give-me-next') {
 					if (list.selectedItems[0] && list.selectedItems[0].model.get('unread') == true) {
 						list.selectedItems[0].model.save({ unread: false });
-					}
+					} 
 					
 					app.selectNext({ selectUnread: true });
 				}
