@@ -879,10 +879,8 @@ $(function() {
 			this.destroyItem(view);
 		},
 		removeItem: function(view) {
-			view.model.save({
-				'trashed': true
-			});
-			this.destroyItem(view);
+			view.model.save({ 'trashed': true });
+			//this.destroyItem(view);
 		},
 		removeItemCompletely: function(view) {
 			if (view.model.get('pinned')) {
@@ -892,7 +890,7 @@ $(function() {
 				}
 			}
 			view.model.markAsDeleted();
-			this.destroyItem(view);
+			//this.destroyItem(view);
 		},
 		destroyBatch: function(arr, fn) {
 			this.noFocus = true;
@@ -908,11 +906,13 @@ $(function() {
 
 
 			// START: REMOVE DATE GROUP
-			var prev = view.el.previousElementSibling;
-			var next = view.el.nextElementSibling;
-			if (prev && prev.classList.contains('date-group')) {
-				if (!next || next.classList.contains('date-group')) {
-					groups.remove(prev.view.model);
+			/*var prev = view.el.previousElementSibling;
+			var next = view.el.nextElementSibling;*/
+			var prev = view.$el.prevAll(':not(.unpluged):first');
+			var next = view.$el.nextAll(':not(.unpluged):first');
+			if (prev.length && prev.hasClass('date-group')) {
+				if (!next.length || next.hasClass('date-group')) {
+					groups.remove(prev.get(0).view.model);
 				}
 			}
 			// END: REMOVE DATE GROUP
@@ -929,6 +929,9 @@ $(function() {
 			if (io >= 0) list.views.splice(io, 1);
 			io = list.viewsToRender.indexOf(view);
 			if (io >= 0) list.viewsToRender.splice(io, 1);
+
+			// not really sure what would happen if this wouldn't be here :P (too tired to think about it)
+			this.reuseIndex--;
 
 			if (!this.noFocus) {
 				this.handleScroll();
