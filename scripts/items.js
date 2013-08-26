@@ -403,6 +403,8 @@ $(function() {
 				}
 			});
 
+			list.handleScroll();
+
 			list.restartSelection();
 		},
 		handleButtonDelete: function(e) {
