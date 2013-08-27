@@ -69,7 +69,7 @@ var formatDate = function() {
 			case "G":
 				return that.getTimezoneOffset();
 			case "a":
-				return that.getHours() > 12 ? "pm" : "am";
+				return that.getHours() > 12 ? "PM" : "AM";
 			default:
 				return "";
 		}

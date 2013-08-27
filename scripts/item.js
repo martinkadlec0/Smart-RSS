@@ -172,7 +172,9 @@ $(function() {
 			var dateFormats = { normal: 'DD.MM.YYYY', iso: 'YYYY-MM-DD', us: 'MM/DD/YYYY' };
 			var pickedFormat = dateFormats[bg.settings.get('dateType') || 'normal'] || dateFormats['normal'];
 
-			return bg.formatDate(new Date(unixtime), pickedFormat + ' hh:mm:ss');
+			var timeFormat = bg.settings.get('hoursFormat') == '12h' ? 'HH:mm a' : 'hh:mm:ss';
+
+			return bg.formatDate(new Date(unixtime), pickedFormat + ' ' + timeFormat);
 		},
 		render: function() {
 

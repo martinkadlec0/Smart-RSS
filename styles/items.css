@@ -181,8 +181,8 @@ html:not(.focused) .last-selected {
 	}
 
 	.lines-auto .item-date {
-		-webkit-flex: 0 0 5rem;
-		flex: 0 0 5rem;
+		-webkit-flex: 0 0 auto;
+		flex: 0 0 auto;
 		padding-right: 5px;
 	}
 }
@@ -216,8 +216,8 @@ html:not(.focused) .last-selected {
 }
 
 .lines-one-line .item-date {
-	-webkit-flex: 0 0 5rem;
-	flex: 0 0 5rem;
+	-webkit-flex: 0 0 auto;
+	flex: 0 0 auto;
 	padding-right: 5px;
 }
 
@@ -237,7 +237,13 @@ html:not(.focused) .last-selected {
 		display: none;
 	}
 	.lines-one-line .item-date {
-		-webkit-flex: 0 0 5rem;
+		-webkit-flex: 0 0 auto;
 		flex: 0 0 auto;
+	}
+}
+
+@media all and (max-width: 20rem) {
+	.lines-one-line .item-date { 
+		display: none;
 	}
 }
