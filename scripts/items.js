@@ -498,6 +498,18 @@ $(function() {
 			}
 		},
 		{
+			title: 'Open article link' + '',
+			action: function() {
+				if (!list.selectedItems || !list.selectedItems.length) return;
+				if (list.selectedItems.length > 10 && !confirm('Do you really want to open ' + list.selectedItems.length + ' articles?')) {
+					return;
+				}
+				list.selectedItems.forEach(function(item) {
+					chrome.tabs.create({ url: item.model.get('url') });
+				});
+			}
+		},
+		{
 			title: bg.lang.c.PIN + ' (P)',
 			icon: 'mail_pinned.png',
 			action: function() {
@@ -781,6 +793,8 @@ $(function() {
 			}
 
 			this.handleScroll();
+
+			//alert(Date.now() - st);
 
 		},
 		clearOnSelect: function() {
