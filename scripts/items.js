@@ -499,7 +499,7 @@ $(function() {
 		},
 		{
 			title: 'Open article link' + '',
-			action: function() {
+			action: function(e) {
 				if (!list.selectedItems || !list.selectedItems.length) return;
 				if (list.selectedItems.length > 10 && bg.settings.get('askOnOpening')) {
 					if (!confirm('Do you really want to open ' + list.selectedItems.length + ' articles?')) {
@@ -507,7 +507,7 @@ $(function() {
 					}
 				}
 				list.selectedItems.forEach(function(item) {
-					chrome.tabs.create({ url: item.model.get('url') });
+					chrome.tabs.create({ url: item.model.get('url'), active: !e.shiftKey });
 				});
 			}
 		},
