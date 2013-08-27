@@ -37,11 +37,12 @@ var settings = new(Backbone.Model.extend({
 		posC: '50%,*',
 		sortOrder: 'desc',
 		icon: 'orange',
-		readOnVisit: 'false'
+		readOnVisit: false,
+		askOnOpening: true
 	},
 	localStorage: new Backbone.LocalStorage('settings-backbone'),
 	initialize: function() {
-		this.fetch();
+		this.fetch({ merge: true });
 	}
 }));
 
