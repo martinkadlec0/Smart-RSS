@@ -574,7 +574,7 @@ $(function() {
 		handleItemDblClick: function(e) {
 			var t = e.currentTarget;
 			if (t.view.model) {
-				chrome.tabs.create({ url: t.view.model.get('url') });
+				chrome.tabs.create({ url: t.view.model.get('url'), active: !e.shiftKey });
 			}
 		},
 		handleClickPin: function(e) {
@@ -1076,7 +1076,7 @@ $(function() {
 				e.preventDefault();
 			} else if (e.keyCode == 13) {
 				if (!list.selectedItems.length) return;
-				list.handleItemDblClick({ currentTarget: list.selectedItems[0].el });
+				list.handleItemDblClick({ currentTarget: list.selectedItems[0].el, shiftKey: e.shiftKey });
 				e.preventDefault();
 			} else if (e.keyCode == 51) {
 				topWindow.frames[2].focus();
