@@ -152,6 +152,10 @@ input[type=search]:not(:focus):not(:valid) {
 	display: block !important;
 }
 
+.hidden {
+	display: none !important;
+}
+
 label {
 	font-family: serif;
 	font-size: 0.8rem;

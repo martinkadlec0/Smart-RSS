@@ -37,10 +37,21 @@ chrome.runtime.getBackgroundPage(function(bg) {
 		document.addEventListener('DOMContentLoaded', init);	
 	}
 	
+	function setFirstFrameSize() {
+		var fs = document.querySelectorAll('frameset');
+		if (!bg.settings.get('panelToggled')) {
+			fs[0].cols = '4,*';
+			fs[0].firstElementChild.setAttribute('noresize', true);
+			fs[0].firstElementChild.setAttribute('scrolling', 'no');
+		} else {
+			fs[0].cols = bg.settings.get('posA');
+			fs[0].firstElementChild.removeAttribute('noresize');
+			fs[0].firstElementChild.setAttribute('scrolling', 'yes');
+		}
+	}
 
 	function init() {
-		var fs = document.querySelectorAll('frameset');
-		fs[0].cols = bg.settings.get('posA');
+		setFirstFrameSize();
 		if (ls == 'vertical') {
 			layoutToVertical();
 		} else {
@@ -61,11 +72,13 @@ chrome.runtime.getBackgroundPage(function(bg) {
 	function handleClearEvents(id) {
 		if (window == null || id == tabID) {
 			bg.settings.off('change:layout', handleLayoutChange);
+			bg.settings.off('change:panelToggled', setFirstFrameSize);
 			bg.sources.off('clear-events', handleClearEvents);			
 		}
 	}
 
 	bg.settings.on('change:layout', handleLayoutChange);
+	bg.settings.on('change:panelToggled', setFirstFrameSize);
 	bg.sources.on('clear-events', handleClearEvents);
 
 

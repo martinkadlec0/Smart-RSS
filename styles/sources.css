@@ -1,9 +1,27 @@
 body {
 	display: -webkit-flex;
 	display: flex;
+	-webkit-flex-flow: row;
+	flex-flow: row;
+}
+
+#panel-toggle {
+	display: none;
+	-webkit-flex: 0 0 4px;
+	flex: 0 0 4px;
+	background: url('/images/toggle_left.png') no-repeat center center #d3daed;
+}
+#panel-toggle:not(.toggled) {
+	background-image: url('/images/toggle_right.png');
+}
+
+#panel {
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
+	display: -webkit-flex;
+	display: flex;
 	-webkit-flex-flow: column;
 	flex-flow: column;
-	
 }
 
 #toolbar {

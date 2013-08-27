@@ -38,7 +38,9 @@ var settings = new(Backbone.Model.extend({
 		sortOrder: 'desc',
 		icon: 'orange',
 		readOnVisit: false,
-		askOnOpening: true
+		askOnOpening: true,
+		panelToggled: true,
+		enablePanelToggle: false
 	},
 	localStorage: new Backbone.LocalStorage('settings-backbone'),
 	initialize: function() {

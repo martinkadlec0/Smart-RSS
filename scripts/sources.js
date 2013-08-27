@@ -757,14 +757,20 @@ $(function() {
 		el: 'body',
 		events: {
 			'keydown': 'handleKeyDown',
-			'mousedown': 'handleMouseDown'
+			'mousedown': 'handleMouseDown',
+			'click #panel-toggle': 'handleClickToggle'
 		},
 		initialize: function() {
 			bg.loader.on('change:loading', this.handleLoadingChange, this);
 			bg.loader.on('change:loaded', this.renderIndicator, this);
 			bg.loader.on('change:maxSources', this.renderIndicator, this);
+			bg.settings.on('change:panelToggled', this.handleToggleChange, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 			this.handleLoadingChange();
+			this.handleToggleChange();
+			if (bg.settings.get('enablePanelToggle')) {
+				$('#panel-toggle').css('display', 'block');
+			}
 
 			window.addEventListener('resize', this.handleResize.bind(this));
 		},
@@ -773,12 +779,22 @@ $(function() {
 				bg.loader.off('change:loading', this.handleLoadingChange, this);
 				bg.loader.off('change:loaded', this.renderIndicator, this);
 				bg.loader.off('change:maxSources', this.renderIndicator, this);
+				bg.settings.off('change:panelToggled', this.handleToggleChange, this);
 				bg.sources.off('clear-events', this.handleClearEvents, this);
 			}
 		},
+		handleClickToggle: function() {
+			bg.settings.save('panelToggled', !bg.settings.get('panelToggled'));
+		},
+		handleToggleChange: function() {
+			$('#panel').toggleClass('hidden', !bg.settings.get('panelToggled'));
+			$('#panel-toggle').toggleClass('toggled', bg.settings.get('panelToggled'));
+		},
 		handleResize: function() {
-			var wid = $(window).width();
-			bg.settings.save({ posA: wid + ',*' });
+			if (bg.settings.get('panelToggled')) {
+				var wid = $(window).width();
+				bg.settings.save({ posA: wid + ',*' });
+			}
 		},
 		handleMouseDown: function(e) {
 			if (sourcesContextMenu.el.parentNode && !e.target.matchesSelector('.context-menu, .context-menu *')) {
