@@ -562,8 +562,15 @@ $(function() {
 		events: {
 			'dragstart .item': 'handleDragStart',
 			'mousedown .item': 'handleMouseDown',
+			'dblclick .item': 'handleItemDblClick',
 			'mouseup .item': 'handleMouseUp',
 			'mousedown .item-pin,.item-pinned': 'handleClickPin',
+		},
+		handleItemDblClick: function(e) {
+			var t = e.currentTarget;
+			if (t.view.model) {
+				chrome.tabs.create({ url: t.view.model.get('url') });
+			}
 		},
 		handleClickPin: function(e) {
 			e.currentTarget.parentNode.view.handleClickPin(e);
@@ -1061,6 +1068,10 @@ $(function() {
 				e.preventDefault();
 			} else if (e.keyCode == 49) {
 				topWindow.frames[0].focus();
+				e.preventDefault();
+			} else if (e.keyCode == 13) {
+				if (!list.selectedItems.length) return;
+				list.handleItemDblClick({ currentTarget: list.selectedItems[0].el });
 				e.preventDefault();
 			} else if (e.keyCode == 51) {
 				topWindow.frames[2].focus();
