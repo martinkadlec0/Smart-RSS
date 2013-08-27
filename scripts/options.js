@@ -47,6 +47,10 @@ JSON.safeParse = function(str) {
 
 chrome.runtime.getBackgroundPage(function(bg) {
 	$(function() {
+
+		$('#version').html(bg.version || 'dev build');
+
+
 		$('select[id]').each(function(i, item) {
 			$(item).val(bg.settings.get(item.id));
 			$(item).change(handleChange);
