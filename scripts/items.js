@@ -197,9 +197,14 @@ $(function() {
 			var dateFormats = { normal: 'DD.MM.YYYY', iso: 'YYYY-MM-DD', us: 'MM/DD/YYYY' };
 			var pickedFormat = dateFormats[bg.settings.get('dateType') || 'normal'] || dateFormats['normal'];
 
+			var timeFormat = bg.settings.get('hoursFormat') == '12h' ? 'H:mm a' : 'hh:mm';
+			var timeFormatTitle = bg.settings.get('hoursFormat') == '12h' ? 'H:mm a' : 'hh:mm:ss';
+
 			if (data.date) {
-				if (parseInt(formatDate(data.date, 'T') / 86400000) >= parseInt(formatDate(Date.now(), 'T') / 86400000)) {
-					data.date = formatDate(new Date(data.date), 'hh:mm');
+				if (bg.settings.get('fullDate')) {
+					data.date = formatDate(new Date(data.date), pickedFormat + ' ' + timeFormat);
+				} else if (parseInt(formatDate(data.date, 'T') / 86400000) >= parseInt(formatDate(Date.now(), 'T') / 86400000)) {
+					data.date = formatDate(new Date(data.date), timeFormat);
 				} else if ((new Date(data.date)).getFullYear() == (new Date()).getFullYear() ) {
 					data.date = formatDate(new Date(data.date), pickedFormat.replace(/\/?YYYY(?!-)/, ''));	
 				} else {
@@ -207,7 +212,7 @@ $(function() {
 				}
 			}
 
-			this.el.title = data.title + '\n' + formatDate(this.model.get('date'), pickedFormat + ' hh:mm:ss');
+			this.el.title = data.title + '\n' + formatDate(this.model.get('date'), pickedFormat + ' ' + timeFormatTitle);
 			
 			this.$el.html(this.template(data));
 

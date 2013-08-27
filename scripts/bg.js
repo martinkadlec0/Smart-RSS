@@ -40,7 +40,9 @@ var settings = new(Backbone.Model.extend({
 		readOnVisit: false,
 		askOnOpening: true,
 		panelToggled: true,
-		enablePanelToggle: false
+		enablePanelToggle: false,
+		fullDate: false,
+		hoursFormat: '24h'
 	},
 	localStorage: new Backbone.LocalStorage('settings-backbone'),
 	initialize: function() {
