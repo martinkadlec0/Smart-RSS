@@ -651,7 +651,7 @@ function parseRSS(xml, sourceID) {
 		nodes = xml.querySelectorAll('entry');
 	}
 
-	var title = xml.querySelector('channel > title, feed > title');
+	var title = xml.querySelector('channel > title, feed > title, rss > title');
 	var source = sources.findWhere({
 		id: sourceID
 	});
@@ -659,6 +659,27 @@ function parseRSS(xml, sourceID) {
 		source.set('title', title.textContent);
 		source.save();
 	}
+
+	/**
+	 * TTL check
+	 */
+	var ttl = xml.querySelector('channel > ttl, feed > ttl, rss > ttl');
+	if (ttl && source.get('lastUpdate') == 0) {
+		ttl = parseInt(ttl.textContent);
+		var vals = [300, 600, 1440, 10080];
+		if (ttl > 10080) {
+			source.save({ updateEvery: 10080 });
+		} else if (ttl > 180) {
+			for (var i=0; i<vals.length; i++) {
+				if (ttl <= vals[i]) {
+					ttl = vals[i];
+					break;
+				}
+			}
+			source.save({ updateEvery: ttl });
+		}
+	}
+	/* END: ttl check */
 
 	[].forEach.call(nodes, function(node) {
 		items.push({
