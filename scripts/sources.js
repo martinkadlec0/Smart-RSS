@@ -237,14 +237,15 @@ $(function() {
 			if (this.model.get('name') == 'all-feeds') {
 				this.$el.attr('title', this.model.get('title') + ' (' + bg.info.get('allCountUnread') + ' unread, ' + bg.info.get('allCountTotal') + ' total)');
 			} else if (this.model.get('name') == 'trash') {
-				this.$el.attr('title', this.model.get('title') + ' (' + bg.info.get('trashCountUnread') + ' unread, ' + bg.info.get('trashCountTotal') + ' total)');
-				if (bg.info.get('trashCountTotal') == 0 && this.model.get('icon') != 'trashsource.png') {
+				var tot = bg.info.get('trashCountTotal');
+				this.$el.attr('title', this.model.get('title') + ' (' + bg.info.get('trashCountUnread') + ' unread, ' + tot + ' total)');
+				if (tot <= 0 && this.model.get('icon') != 'trashsource.png') {
 					this.model.set('icon', 'trashsource.png');
 					this.render(true);
-				} else if (bg.info.get('trashCountTotal') < 100 && this.model.get('icon') != 'trash_full.png') {
+				} else if (tot > 0 && tot < 100 && this.model.get('icon') != 'trash_full.png') {
 					this.model.set('icon', 'trash_full.png');
 					this.render(true);
-				} else if (bg.info.get('trashCountTotal') >= 100 && this.model.get('icon') != 'trash_really_full.png') {
+				} else if (tot >= 100 && this.model.get('icon') != 'trash_really_full.png') {
 					this.model.set('icon', 'trash_really_full.png');
 					this.render(true);
 				}
