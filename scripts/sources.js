@@ -216,10 +216,10 @@ $(function() {
 			'click': 'handleMouseDown'
 		},
 		showContextMenu: function(e) {
-			if (this.model.get('name') != 'trash') return;
+			if (!this.contextMenu) return;
 			this.select(e);
-			trashContextMenu.currentSource = this.model;
-			trashContextMenu.show(e.clientX, e.clientY);
+			this.contextMenu.currentSource = this.model;
+			this.contextMenu.show(e.clientX, e.clientY);
 		},
 		initialize: function() {
 			this.el.view = this;
@@ -241,6 +241,7 @@ $(function() {
 		position: 'bottom',
 		name: 'trash',
 		onReady: function() {
+			this.contextMenu = trashContextMenu;
 			this.el.addEventListener('dragover', function(e) {
 				e.preventDefault();
 			});
@@ -401,6 +402,39 @@ $(function() {
 		}
 	]);
 
+	var allFeedsContextMenu = new ContextMenu([
+		{
+			title: bg.lang.c.UPDATE_ALL,
+			icon: 'reload.png',
+			action: function() {
+				bg.downloadAll(true);
+			}
+		},
+		{ 
+			title: bg.lang.c.MARK_ALL_AS_READ,
+			icon: 'read.png',
+			action: function() { 
+				if (confirm(bg.lang.c.MARK_ALL_QUESTION)) {
+					bg.items.forEach(function(item) {
+						item.save({ unread: false, visited: true });
+					});	
+				}
+			}
+		},
+		{ 
+			title: 'Remove All Articles',
+			icon: 'delete.png',
+			action: function() { 
+				if (confirm('Do you really want to comletelly remove ALL articles?')) {
+					bg.items.forEach(function(item) {
+						if (item.get('deleted') == true) return;
+						item.markAsDeleted();
+					});
+				}
+			}
+		}
+	]);
+
 	var folderContextMenu = new ContextMenu([
 		{ 
 			title: bg.lang.c.MARK_ALL_AS_READ,
@@ -450,7 +484,7 @@ $(function() {
 	var contextMenus = new (Backbone.View.extend({
 		list: [],
 		initialize: function() {
-			this.list = [sourcesContextMenu, trashContextMenu, folderContextMenu];
+			this.list = [sourcesContextMenu, trashContextMenu, folderContextMenu, allFeedsContextMenu];
 		},
 		hideAll: function() {
 			this.list.forEach(function(item) {
@@ -542,7 +576,10 @@ $(function() {
 				icon: 'icon16_v2.png',
 				filter: { trashed: false },
 				position: 'top',
-				name: 'all-feeds'
+				name: 'all-feeds',
+				onReady: function() {
+					this.contextMenu = allFeedsContextMenu;
+				}
 			}));
 
 			this.addSpecial(new Special({
