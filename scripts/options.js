@@ -226,6 +226,14 @@ chrome.runtime.getBackgroundPage(function(bg) {
 			localStorage.setItem('folderIdIndex', bg.folderIdIndex);
 			localStorage.setItem('sourceIdIndex', bg.sourceIdIndex);
 
+			bg.info.save({
+				allCountUnread: bg.items.where({ trashed: false, deleted: false, unread: true }).length,
+				allCountTotal: bg.items.where({ trashed: false, deleted: false }).length,
+				trashCountUnread: bg.items.where({ trashed: true, deleted: false, unread: true }).length,
+				trashCountTotal: bg.items.where({ trashed: true, deleted: false }).length
+
+			});
+
 			$('#smart-imported').html('Import completed!');
 		}
 
