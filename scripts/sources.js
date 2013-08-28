@@ -226,10 +226,21 @@ $(function() {
 			if (this.model.get('onReady')) {
 				this.model.get('onReady').call(this);
 			}
+			bg.info.on('change', this.render, this);
+			bg.sources.on('clear-events', this.clearEvents, this);
+		},
+		clearEvents: function() {
+			bg.info.off('change', this.render, this);
+			bg.sources.off('clear-events', this.clearEvents, this);
 		},
 		template: _.template($('#template-special').html()),
 		render: function() {
 			this.$el.html(this.template(this.model.toJSON()));
+			if (this.model.get('name') == 'all-feeds') {
+				this.$el.attr('title', this.model.get('title') + ' (' + bg.info.get('allCountUnread') + ' unread, ' + bg.info.get('allCountTotal') + ' total)');
+			} else if (this.model.get('name') == 'trash') {
+				this.$el.attr('title', this.model.get('title') + ' (' + bg.info.get('trashCountUnread') + ' unread, ' + bg.info.get('trashCountTotal') + ' total)');
+			}
 			return this;
 		}
 	});

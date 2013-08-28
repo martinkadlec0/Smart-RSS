@@ -50,6 +50,20 @@ var settings = new(Backbone.Model.extend({
 	}
 }));
 
+var info = new(Backbone.Model.extend({
+	defaults: {
+		id: 'info-id',
+		allCountUnread: 0,
+		allCountTotal: 0,
+		trashCountUnread: 0,
+		trashCountTotal: 0
+	},
+	localStorage: new Backbone.LocalStorage('info-backbone'),
+	initialize: function() {
+		this.fetch({ merge: true });
+	}
+}));
+
 
 
 var Source = Backbone.Model.extend({
@@ -164,6 +178,7 @@ var folders = new (Backbone.Collection.extend({
 		return (a.get('title') || '').trim() < (b.get('title') || '').trim() ? -1 : 1;
 	}
 }));
+
 
 
 /**
@@ -358,12 +373,25 @@ $(function() {
 	settings.on('change:icon', handleIconChange);
 
 	sources.on('destroy', function(source) {
+		var trashUnread = 0;
+		var trashAll = 0;
 		items.where({ sourceID: source.get('id') }).forEach(function(item) {
+			if (!item.get('deleted')) {
+				if (item.get('trashed')) trashAll++;
+				if (item.get('trashed') && item.get('unread')) trashUnread++;
+			}
 			item.destroy({
 				noFocus: true
 			});
 		});
 		chrome.alarms.clear('source-' + source.get('id'));
+
+		info.save({
+			allCountUnread: info.get('allCountUnread') - source.get('count'),
+			allCountTotal: info.get('allCountTotal') - source.get('countAll'),
+			trashCountUnread: info.get('trashCountUnread') - trashUnread,
+			trashCountTotal: info.get('trashCountTotal') - trashAll
+		});
 
 		if (source.get('folderID') > 0) {
 
@@ -382,13 +410,13 @@ $(function() {
 	});
 
 	items.on('change:unread', function(model) {
-		if (!model.get('trashed')) {
-			var source = model.getSource();
-			if (source && model.get('unread') == true) {
+		var source = model.getSource();
+		if (!model.get('trashed') && source) {
+			if (model.get('unread') == true) {
 				source.save({
 					'count': source.get('count') + 1
 				});
-			} else if (source) {
+			} else {
 				source.save({
 					'count': source.get('count') - 1
 				});
@@ -397,6 +425,10 @@ $(function() {
 					source.save('hasNew', false);
 				}
 			}
+		} else if (!model.get('deleted') && source) {
+			info.save({
+				trashCountUnread: info.get('trashCountUnread') + (model.get('unread') ? 1 : -1)
+			});
 		}
 	});
 
@@ -419,18 +451,47 @@ $(function() {
 					'countAll': source.get('countAll') + 1
 				});
 			}
+
+			if (!model.get('deleted')) {
+				info.save({
+					'trashCountTotal': info.get('trashCountTotal') + (model.get('trashed') ? 1 : -1),
+					'trashCountUnread': info.get('trashCountUnread') + (model.get('trashed') ? 1 : -1)
+				});
+			}
 		} else if (source) {
 			source.save({ 
 				'countAll': source.get('countAll') + (model.get('trashed') ? - 1 : 1) 
 			});
+
+
+			if (!model.get('deleted')) {
+				info.save({ 
+					'trashCountTotal': info.get('trashCountTotal') + (model.get('trashed') ? 1 : -1) 
+				});
+			}
 		}
 	});
+	
 
+	items.on('change:deleted', function(model) {
+		if (model.previous('trashed') == true) {
+			info.save({
+				'trashCountTotal': info.get('trashCountTotal') - 1,
+				'trashCountUnread': !model.previous('unread') ?  info.get('trashCountUnread') : info.get('trashCountUnread') - 1
+			});
+		}
+	});
 	/**
 	 * Folder counts
 	 */
 
 	sources.on('change:count', function(source) {
+		// SPECIALS
+		info.save({ 
+			'allCountUnread': info.get('allCountUnread') + source.get('count') - source.previous('count')
+		});
+
+		// FOLDER
 		if (!(source.get('folderID') > 0)) return;
 
 		var folder = folders.findWhere({ id: source.get('folderID') });
@@ -440,6 +501,12 @@ $(function() {
 	});
 
 	sources.on('change:countAll', function(source) {
+		// SPECIALS
+		info.save({ 
+			'allCountTotal': info.get('allCountTotal') + source.get('countAll') - source.previous('countAll')
+		});
+
+		// FOLDER
 		if (!(source.get('folderID') > 0)) return;
 
 		var folder = folders.findWhere({ id: source.get('folderID') });
