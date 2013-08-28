@@ -700,13 +700,19 @@ $(function() {
 			}
 		},
 		addItem: function(item, noManualSort) {
+			/**
+			 * Don't add newly fetched items to middle column, when they shouldn't be
+			 */
 			if (noManualSort !== true) {
 				if (this.currentSource && this.currentSource.id != item.get('sourceID')) {
 					return;	
 				} else if (this.specialName && this.specialName != 'all-feeds') {
 					return;
+				} else if (this.currentFolder && this.currentFolder.id != item.getSource().get('folderID')) {
+					return;
 				}
 			} 
+
 			if (!item.get('deleted') && (!item.get('trashed') || this.specialName == 'trash') ) {
 
 				var after = null;
