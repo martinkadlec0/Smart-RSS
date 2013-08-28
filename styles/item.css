@@ -36,6 +36,13 @@ h1 {
 	text-overflow: ellipsis;
 }
 
+h1 a {
+	color: inherit;
+	font-size: inherit;
+	text-decoration: none;
+	font-weight: inherit;
+}
+
 #below-h1 {
 	display: -webkit-flex;
 	display: flex;

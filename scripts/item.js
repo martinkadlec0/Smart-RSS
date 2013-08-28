@@ -9,6 +9,8 @@ if (!Element.prototype.hasOwnProperty('matchesSelector')) {
 	Element.prototype.matchesSelector = Element.prototype.webkitMatchesSelector;
 }
 
+
+
 chrome.runtime.getBackgroundPage(function(bg) {
 
 $(function() {
@@ -174,7 +176,7 @@ $(function() {
 
 			var timeFormat = bg.settings.get('hoursFormat') == '12h' ? 'H:mm a' : 'hh:mm:ss';
 
-			return bg.formatDate(new Date(unixtime), pickedFormat + ' ' + timeFormat);
+			return formatDate(new Date(unixtime), pickedFormat + ' ' + timeFormat);
 		},
 		render: function() {
 
@@ -185,7 +187,8 @@ $(function() {
 			var content = this.model.get('content');
 
 
-			this.$el.find('h1').html(this.model.escape('title'));
+			this.$el.find('h1 a').html(this.model.escape('title'));
+			this.$el.find('h1 a').attr('href', escapeHtml(this.model.get('url')) );
 			this.$el.find('.author').html(this.model.escape('author'));
 			this.$el.find('.date').html(date);
 			this.$el.find('.pin-button').toggleClass('pinned', this.model.get('pinned'));
@@ -291,7 +294,7 @@ $(function() {
 		},
 		addItem: function(model) {
 			this.$el.css('display', 'block');
-			$('<div class="log">' + bg.formatDate(new Date, 'hh:mm:ss') + ': ' + model.get('message') + '</div>').insertAfter(this.$el.find('#button-hide-log'));
+			$('<div class="log">' + formatDate(new Date, 'hh:mm:ss') + ': ' + model.get('message') + '</div>').insertAfter(this.$el.find('#button-hide-log'));
 		},
 		hide: function() {
 			this.$el.css('display', 'none');

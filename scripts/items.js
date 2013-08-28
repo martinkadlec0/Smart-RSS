@@ -512,7 +512,7 @@ $(function() {
 					}
 				}
 				list.selectedItems.forEach(function(item) {
-					chrome.tabs.create({ url: item.model.get('url'), active: !e.shiftKey });
+					chrome.tabs.create({ url: escapeHtml(item.model.get('url')), active: !e.shiftKey });
 				});
 			}
 		},
@@ -574,7 +574,7 @@ $(function() {
 		handleItemDblClick: function(e) {
 			var t = e.currentTarget;
 			if (t.view.model) {
-				chrome.tabs.create({ url: t.view.model.get('url'), active: !e.shiftKey });
+				chrome.tabs.create({ url: escapeHtml(t.view.model.get('url')), active: !e.shiftKey });
 			}
 		},
 		handleClickPin: function(e) {

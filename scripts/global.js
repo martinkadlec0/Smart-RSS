@@ -94,3 +94,22 @@ function getWOY(pdate) {
 	var onejan = new Date(pdate.getFullYear(), 0, 1);
 	return Math.ceil((((pdate - onejan) / 86400000) + onejan.getDay() + 1) / 7);
 }
+
+var entityMap = {
+	"&": "&amp;",
+	"<": "&lt;",
+	">": "&gt;",
+	'"': '&quot;',
+	"'": '&#39;'
+};
+
+function escapeHtml(string) {
+	var str = String(string).replace(/[&<>"']/gm, function (s) {
+	  return entityMap[s];
+	});
+	str = str.replace(/\s/, function(f) {
+		if (f == ' ') return ' ';
+		return '';
+	});
+	return str;
+}
