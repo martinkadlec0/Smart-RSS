@@ -503,7 +503,8 @@ $(function() {
 			}
 		},
 		{
-			title: 'Open article link' + '',
+			title: bg.lang.c.FULL_ARTICLE,
+			icon: 'full_article.png',
 			action: function(e) {
 				if (!list.selectedItems || !list.selectedItems.length) return;
 				if (list.selectedItems.length > 10 && bg.settings.get('askOnOpening')) {
@@ -518,7 +519,7 @@ $(function() {
 		},
 		{
 			title: bg.lang.c.PIN + ' (P)',
-			icon: 'mail_pinned.png',
+			icon: 'pinsource_context.png',
 			action: function() {
 				if (!list.selectedItems || !list.selectedItems.length) return;
 				var val = !list.selectedItems[0].model.get('pinned');
@@ -592,7 +593,7 @@ $(function() {
 			bg.items.on('reset', this.addItems, this);
 			bg.items.on('add', this.addItem, this);
 			bg.items.on('sort', this.handleSort, this);
-			bg.items.on('new-items', this.handleScroll, this);
+			bg.items.on('render-screen', this.handleScroll, this);
 			bg.settings.on('change:lines', this.handleChangeLines, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 
@@ -651,7 +652,7 @@ $(function() {
 				bg.items.off('reset', this.addItems, this);
 				bg.items.off('add', this.addItem, this);
 				bg.items.off('sort', this.handleSort, this);
-				bg.items.off('new-items', this.handleScroll, this);
+				bg.items.off('render-screen', this.handleScroll, this);
 				bg.settings.off('change:lines', this.handleChangeLines, this);
 				if (this.currentSource) {
 					this.currentSource.off('destroy', this.handleDestroyedSource, this);
@@ -825,6 +826,7 @@ $(function() {
 			}
 
 			if (this.specialName == 'trash') {
+				$('#button-reload').css('display', 'block');
 				$('#button-undelete').css('display', 'none');
 				$('#context-undelete').css('display', 'none');
 			}
@@ -855,6 +857,7 @@ $(function() {
 			this.specialFilter = filter;
 
 			if (this.specialName == 'trash') {
+				$('#button-reload').css('display', 'none');
 				$('#button-undelete').css('display', 'block');
 				$('#context-undelete').css('display', 'block');
 			}

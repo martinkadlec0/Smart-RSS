@@ -131,7 +131,7 @@ $(function() {
 
 			
 			this.$el.attr('title', 
-				this.model.get('title') + ' (' + this.model.get('count') + ' unread, ' + this.model.get('countAll') + ' total)'
+				this.model.get('title') + ' (' + this.model.get('count') + ' ' + bg.lang.c.UNREAD + ', ' + this.model.get('countAll') + ' ' + bg.lang.c.TOTAL + ')'
 			);
 			this.$el.html(this.template(this.model.toJSON()));
 			return this;
@@ -180,7 +180,7 @@ $(function() {
 			this.$el.html(this.template(data));
 
 			this.$el.attr('title', 
-				this.model.get('title') + ' (' + this.model.get('count') + ' unread, ' + this.model.get('countAll') + ' total)'
+				this.model.get('title') + ' (' + this.model.get('count') + ' ' + bg.lang.c.UNREAD + ', ' + this.model.get('countAll') + ' ' + bg.lang.c.TOTAL + ')'
 			);
 			return this;
 		},
@@ -235,10 +235,10 @@ $(function() {
 		},
 		changeInfo: function() {
 			if (this.model.get('name') == 'all-feeds') {
-				this.$el.attr('title', this.model.get('title') + ' (' + bg.info.get('allCountUnread') + ' unread, ' + bg.info.get('allCountTotal') + ' total)');
+				this.$el.attr('title', this.model.get('title') + ' (' + bg.info.get('allCountUnread') + ' ' + bg.lang.c.UNREAD + ', ' + bg.info.get('allCountTotal') + ' ' + bg.lang.c.TOTAL + ')');
 			} else if (this.model.get('name') == 'trash') {
 				var tot = bg.info.get('trashCountTotal');
-				this.$el.attr('title', this.model.get('title') + ' (' + bg.info.get('trashCountUnread') + ' unread, ' + tot + ' total)');
+				this.$el.attr('title', this.model.get('title') + ' (' + bg.info.get('trashCountUnread') + ' ' + bg.lang.c.UNREAD + ', ' + tot + ' ' + bg.lang.c.TOTAL + ')');
 				if (tot <= 0 && this.model.get('icon') != 'trashsource.png') {
 					this.model.set('icon', 'trashsource.png');
 					this.render(true);
@@ -418,7 +418,7 @@ $(function() {
 			title: bg.lang.c.EMPTY_TRASH,
 			icon: 'delete.png',
 			action: function() { 
-				if (confirm(bg.lang.c.REALLY_DELETE)) {
+				if (confirm(bg.lang.c.REALLY_EMPTY_TRASH)) {
 					bg.items.where({ trashed: true, deleted: false }).forEach(function(item) {
 						item.markAsDeleted();
 					});
@@ -447,10 +447,10 @@ $(function() {
 			}
 		},
 		{ 
-			title: 'Remove All Articles',
+			title: bg.lang.c.DELETE_ALL_ARTICLES,
 			icon: 'delete.png',
 			action: function() { 
-				if (confirm('Do you really want to comletelly remove ALL articles?')) {
+				if (confirm(bg.lang.c.DELETE_ALL_Q)) {
 					bg.items.forEach(function(item) {
 						if (item.get('deleted') == true) return;
 						item.markAsDeleted();
@@ -496,7 +496,7 @@ $(function() {
 			}
 		},
 		{ 
-			title: 'Rename',
+			title: bg.lang.c.RENAME,
 			action: function() { 
 				var newTitle = prompt('Title: ', list.selectedItems[0].model.get('title'));
 				if (!newTitle) return;

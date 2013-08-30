@@ -81,7 +81,16 @@ var lang = {
 		EMPTY_TRASH: 'Empty Trash',
 		RSS_FEED_URL: 'RSS Feed URL: ',
 		OPTIONS: 'Options',
-		UPDATING_FEEDS: 'Updating feeds'
+		UPDATING_FEEDS: 'Updating feeds',
+
+		UNREAD: 'unread',
+		TOTAL: 'total',
+		NEW_FOLDER: 'New Folder',
+		DOWNLOAD: 'Download',
+		DELETE_ALL_ARTICLES: 'Delete All Articles',
+		DELETE_ALL_Q: 'Do you really want to comletelly delete ALL articles?',
+		REALLY_EMPTY_TRASH: 'Do you really want to completly delete all articles from trash?',
+		RENAME: 'Rename'
 	},
 	cs: {
 		MARK_AS_READ: 'Označit jako (Ne)Přečtené',
@@ -159,10 +168,19 @@ var lang = {
 		EARLIER_THIS_MONTH: 'Dříve v tomto měsíci',
 		MORE: 'Více',
 		SETTINGS: 'Nastavení',
-		EMPTY_TRASH: 'Vyprázdnit Koš',
-		RSS_FEED_URL: 'Zadjete adresu RSS zdroje: ',
+		EMPTY_TRASH: 'Vysypat Koš',
+		RSS_FEED_URL: 'Zadejte adresu RSS zdroje: ',
 		OPTIONS: 'Další možnosti',
-		UPDATING_FEEDS: 'Aktualizuji zdroje'
+		UPDATING_FEEDS: 'Aktualizuji zdroje',
+
+		UNREAD: 'nepřečtených',
+		TOTAL: 'celkem',
+		NEW_FOLDER: 'Nová Složka',
+		DOWNLOAD: 'Stánout',
+		DELETE_ALL_ARTICLES: 'Odstranit Všechny Články',
+		DELETE_ALL_Q: 'Určitě chcete odstranit VŠECHNY články?',
+		REALLY_EMPTY_TRASH: 'Určitě chcete vysypat koš?',
+		RENAME: 'Přejmenovat'
 	},
 	de: {
 		MARK_AS_READ: 'Als (un)gelesen markieren',
@@ -243,7 +261,16 @@ var lang = {
 		EMPTY_TRASH: 'Papierkorb leeren',
 		RSS_FEED_URL: 'Feed: ',
 		OPTIONS: 'Einstellungen',
-		UPDATING_FEEDS: 'Feeds aktualisierens'
+		UPDATING_FEEDS: 'Feeds aktualisierens',
+
+		UNREAD: 'ungelesen',
+		TOTAL: 'gesamt',
+		NEW_FOLDER: 'Neuer Ordner',
+		DOWNLOAD: 'Download',
+		DELETE_ALL_ARTICLES: 'Alle Artikel löschen',
+		DELETE_ALL_Q: 'Möchten sie wirklich ALLE Artikel löschen?',
+		REALLY_EMPTY_TRASH: 'Möchten sie alle Artikel im Papierkorb endgültig löschen?',
+		RENAME: 'Umbenennen'
 	},
 	pl: {
 		MARK_AS_READ: 'Oznacz jako (nie)przeczytane',
@@ -324,7 +351,16 @@ var lang = {
 		EMPTY_TRASH: 'Opróżnij kosz',
 		RSS_FEED_URL: 'Adres kanału RSS: ',
 		OPTIONS: 'Opcje',
-		UPDATING_FEEDS: 'Aktualizacja kanałów'
+		UPDATING_FEEDS: 'Aktualizacja kanałów',
+
+		UNREAD: 'unread',
+		TOTAL: 'total',
+		NEW_FOLDER: 'New Folder',
+		DOWNLOAD: 'Download',
+		DELETE_ALL_ARTICLES: 'Delete All Articles',
+		DELETE_ALL_Q: 'Do you really want to comletelly delete ALL articles?',
+		REALLY_EMPTY_TRASH: 'Do you really want to completly delete all articles from trash?',
+		RENAME: 'Rename'
 	},
 	tr: {
 		MARK_AS_READ: 'Okunmadı Olarak İşaretle',
@@ -405,7 +441,16 @@ var lang = {
 		EMPTY_TRASH: 'Çöp Kutusunu Boşalt',
 		RSS_FEED_URL: 'RSS Bildirim Adresi: ',
 		OPTIONS: 'Seçenekleri',
-		UPDATING_FEEDS: 'Beslemeler güncelleniyor'
+		UPDATING_FEEDS: 'Beslemeler güncelleniyor',
+
+		UNREAD: 'okunmamış',
+		TOTAL: 'tottoplamal',
+		NEW_FOLDER: 'Yeni Klasör',
+		DOWNLOAD: 'İndir',
+		DELETE_ALL_ARTICLES: 'Delete All Articles',
+		DELETE_ALL_Q: 'Do you really want to comletelly delete ALL articles?',
+		REALLY_EMPTY_TRASH: 'Do you really want to completly delete all articles from trash?',
+		RENAME: 'Rename'
 	},
 	sk: {
 		MARK_AS_READ: 'Označiť ako (Ne)Prečítané',
@@ -486,7 +531,16 @@ var lang = {
 		EMPTY_TRASH: 'Vysypať kôš',
 		RSS_FEED_URL: 'Adresa RSS zdroja: ',
 		OPTIONS: 'Ďalšie možnosti',
-		UPDATING_FEEDS: 'Aktualizácija zdrojov'
+		UPDATING_FEEDS: 'Aktualizácija zdrojov',
+
+		UNREAD: 'neprečítaných', 
+		TOTAL: 'celkom', 
+		NEW_FOLDER: 'Nová zložka', 
+		DOWNLOAD: 'Stiahnúť', 
+		DELETE_ALL_ARTICLES: 'Zmazať všetky správy',
+		DELETE_ALL_Q: 'Naozaj chcete zmazať VŠETKY správy?',
+		REALLY_EMPTY_TRASH: 'Chcete vymazať všetky spávy z koša?',
+		RENAME: 'Premenovať'
 	},
 	ru: {
 		MARK_AS_READ: 'Отметить прочтённой',
@@ -567,7 +621,16 @@ var lang = {
 		EMPTY_TRASH: 'Очистить корзину',
 		RSS_FEED_URL: 'Адрес RSS рассылки:',
 		OPTIONS: 'Опции',
-		UPDATING_FEEDS: 'Обновление рассылок'
+		UPDATING_FEEDS: 'Обновление рассылок',
+
+		UNREAD: 'unread',
+		TOTAL: 'total',
+		NEW_FOLDER: 'New Folder',
+		DOWNLOAD: 'Download',
+		DELETE_ALL_ARTICLES: 'Delete All Articles',
+		DELETE_ALL_Q: 'Do you really want to comletelly delete ALL articles?',
+		REALLY_EMPTY_TRASH: 'Do you really want to completly delete all articles from trash?',
+		RENAME: 'Rename'
 	},
 };
 

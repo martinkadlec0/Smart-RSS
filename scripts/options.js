@@ -318,6 +318,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 		var c = confirm('Do you really want to remove all extension data?');
 		if (!c) return;
 
+		bg.indexedDB.deleteDatabase('backbone-indexeddb');
 		localStorage.clear();
 		chrome.alarms.clearAll()
 		chrome.runtime.reload();

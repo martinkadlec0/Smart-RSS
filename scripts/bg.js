@@ -1,3 +1,29 @@
+/**
+ * IndexedDB preps.
+ */
+
+Backbone.LocalStorage.prepare = function(db) {
+	if (!db.objectStoreNames.contains('settings-backbone'))
+		db.createObjectStore('settings-backbone', { keyPath: 'id' });
+
+	if (!db.objectStoreNames.contains('items-backbone'))
+		db.createObjectStore('items-backbone',    { keyPath: 'id' });
+
+	if (!db.objectStoreNames.contains('sources-backbone'))
+		db.createObjectStore('sources-backbone',  { keyPath: 'id' });
+
+	if (!db.objectStoreNames.contains('folders-backbone'))
+		db.createObjectStore('folders-backbone', { keyPath: 'id' });
+
+	if (!db.objectStoreNames.contains('info-backbone'))
+		db.createObjectStore('info-backbone', { keyPath: 'id' });
+
+}
+Backbone.LocalStorage.version = 3;
+
+/**
+ * matchesselector might be important because of ContextMenu views .. not sure tho.
+ */
 if (!Element.prototype.hasOwnProperty('matchesSelector')) {
 	Element.prototype.matchesSelector = Element.prototype.webkitMatchesSelector;
 }
@@ -384,6 +410,9 @@ $(function() {
 				noFocus: true
 			});
 		});
+
+		items.trigger('render-screen');
+		
 		chrome.alarms.clear('source-' + source.get('id'));
 
 		info.save({
@@ -662,7 +691,7 @@ function downloadURL(urls, cb) {
 			});
 
 			items.sort({ silent: true });
-			if (hasNew) items.trigger('new-items');
+			if (hasNew) items.trigger('render-screen');
 
 			// remove old deleted content
 			var fetchedIDs = _.pluck(parsedData, 'id');
