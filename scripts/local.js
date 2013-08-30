@@ -447,10 +447,10 @@ var lang = {
 		TOTAL: 'tottoplamal',
 		NEW_FOLDER: 'Yeni Klasör',
 		DOWNLOAD: 'İndir',
-		DELETE_ALL_ARTICLES: 'Delete All Articles',
-		DELETE_ALL_Q: 'Do you really want to comletely delete ALL articles?',
-		REALLY_EMPTY_TRASH: 'Do you really want to completely delete all articles from trash?',
-		RENAME: 'Rename'
+		DELETE_ALL_ARTICLES: 'Tüm Başlıkları Sil',
+		DELETE_ALL_Q: 'Gerçekten TÜM başlıkları silmek istiyor musunuz?',
+		REALLY_EMPTY_TRASH: 'Çöp kutusundaki TÜM başlıkları gerçekten silmek istiyor musunuz?',
+		RENAME: 'Yeniden Adlandır'
 	},
 	sk: {
 		MARK_AS_READ: 'Označiť ako (Ne)Prečítané',
