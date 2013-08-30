@@ -353,14 +353,14 @@ var lang = {
 		OPTIONS: 'Opcje',
 		UPDATING_FEEDS: 'Aktualizacja kanałów',
 
-		UNREAD: 'unread',
-		TOTAL: 'total',
-		NEW_FOLDER: 'New Folder',
-		DOWNLOAD: 'Download',
-		DELETE_ALL_ARTICLES: 'Delete All Articles',
-		DELETE_ALL_Q: 'Do you really want to comletely delete ALL articles?',
-		REALLY_EMPTY_TRASH: 'Do you really want to completely delete all articles from trash?',
-		RENAME: 'Rename'
+		UNREAD: 'nieprzeczytane',
+		TOTAL: 'łącznie',
+		NEW_FOLDER: 'Nowy folder',
+		DOWNLOAD: 'Pobierz',
+		DELETE_ALL_ARTICLES: 'Usuń wszystkie wiadomości',
+		DELETE_ALL_Q: 'Czy na pewno chcesz całkowicie usunąć WSZYSTKIE wiadomości?',
+		REALLY_EMPTY_TRASH: 'Czy na pewno chcesz opróżnić kosz?',
+		RENAME: 'Zmień nazwę'
 	},
 	tr: {
 		MARK_AS_READ: 'Okunmadı Olarak İşaretle',
