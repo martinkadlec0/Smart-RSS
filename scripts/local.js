@@ -88,8 +88,8 @@ var lang = {
 		NEW_FOLDER: 'New Folder',
 		DOWNLOAD: 'Download',
 		DELETE_ALL_ARTICLES: 'Delete All Articles',
-		DELETE_ALL_Q: 'Do you really want to comletelly delete ALL articles?',
-		REALLY_EMPTY_TRASH: 'Do you really want to completly delete all articles from trash?',
+		DELETE_ALL_Q: 'Do you really want to comletely delete ALL articles?',
+		REALLY_EMPTY_TRASH: 'Do you really want to completely delete all articles from trash?',
 		RENAME: 'Rename'
 	},
 	cs: {
@@ -358,8 +358,8 @@ var lang = {
 		NEW_FOLDER: 'New Folder',
 		DOWNLOAD: 'Download',
 		DELETE_ALL_ARTICLES: 'Delete All Articles',
-		DELETE_ALL_Q: 'Do you really want to comletelly delete ALL articles?',
-		REALLY_EMPTY_TRASH: 'Do you really want to completly delete all articles from trash?',
+		DELETE_ALL_Q: 'Do you really want to comletely delete ALL articles?',
+		REALLY_EMPTY_TRASH: 'Do you really want to completely delete all articles from trash?',
 		RENAME: 'Rename'
 	},
 	tr: {
@@ -448,8 +448,8 @@ var lang = {
 		NEW_FOLDER: 'Yeni Klasör',
 		DOWNLOAD: 'İndir',
 		DELETE_ALL_ARTICLES: 'Delete All Articles',
-		DELETE_ALL_Q: 'Do you really want to comletelly delete ALL articles?',
-		REALLY_EMPTY_TRASH: 'Do you really want to completly delete all articles from trash?',
+		DELETE_ALL_Q: 'Do you really want to comletely delete ALL articles?',
+		REALLY_EMPTY_TRASH: 'Do you really want to completely delete all articles from trash?',
 		RENAME: 'Rename'
 	},
 	sk: {
@@ -628,8 +628,8 @@ var lang = {
 		NEW_FOLDER: 'New Folder',
 		DOWNLOAD: 'Download',
 		DELETE_ALL_ARTICLES: 'Delete All Articles',
-		DELETE_ALL_Q: 'Do you really want to comletelly delete ALL articles?',
-		REALLY_EMPTY_TRASH: 'Do you really want to completly delete all articles from trash?',
+		DELETE_ALL_Q: 'Do you really want to comletely delete ALL articles?',
+		REALLY_EMPTY_TRASH: 'Do you really want to completely delete all articles from trash?',
 		RENAME: 'Rename'
 	},
 };
