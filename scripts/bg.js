@@ -785,7 +785,7 @@ function parseRSS(xml, sourceID) {
 	[].forEach.call(nodes, function(node) {
 		items.push({
 			title: rssGetTitle(node),
-			url: node.querySelector('link') ? node.querySelector('link').textContent : false,
+			url: rssGetLink(node),
 			date: rssGetDate(node),
 			author: rssGetAuthor(node, title),
 			content: rssGetContent(node),
@@ -806,6 +806,14 @@ function parseRSS(xml, sourceID) {
 	return items;
 }
 
+function rssGetLink(node) {
+	var link = node.querySelector('link');
+	if (link) {
+		return link.textContent || link.getAttribute('href');
+	} 
+
+	return false;
+}
 
 function getFeedTitle(xml) {
 	var title = xml.querySelector('channel > title, feed > title, rss > title');
