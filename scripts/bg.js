@@ -42,9 +42,9 @@ function translate(str) {
 var sourceIdIndex = localStorage.getItem('sourceIdIndex') || 1;
 var folderIdIndex = localStorage.getItem('folderIdIndex') || 1;
 
-$.ajaxSetup({
+/*$.ajaxSetup({
 	cache: false
-});
+});*/
 
 
 /**
@@ -723,6 +723,10 @@ function downloadURL(urls, cb) {
 
 			console.log('Failed load RSS: ' + sourceToLoad.get('url'));
 			downloadURL();
+		},
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader('If-Modified-Since', 'Tue, 1 Jan 1991 00:00:00 GMT');
+			xhr.setRequestHeader('X-Time-Stamp', Date.now());
 		}
 	};
 
@@ -749,13 +753,12 @@ function parseRSS(xml, sourceID) {
 		nodes = xml.querySelectorAll('entry');
 	}
 
-	var title = xml.querySelector('channel > title, feed > title, rss > title');
+	var title = getFeedTitle(xml);
 	var source = sources.findWhere({
 		id: sourceID
 	});
 	if (title && (source.get('title') == source.get('url') || !source.get('title'))) {
-		source.set('title', title.textContent);
-		source.save();
+		source.save('title', title);
 	}
 
 	/**
@@ -803,6 +806,24 @@ function parseRSS(xml, sourceID) {
 	return items;
 }
 
+
+function getFeedTitle(xml) {
+	var title = xml.querySelector('channel > title, feed > title, rss > title');
+	if (!title || !(title.textContent).trim()) {
+		title = xml.querySelector('channel > description, feed > description, rss > description');
+	}
+
+	if (!title || !(title.textContent).trim()) {
+		title = xml.querySelector('channel > description, feed > description, rss > description');
+	}
+
+	if (!title || !(title.textContent).trim()) {
+		title = xml.querySelector('channel > link, feed > link, rss > link');
+	}
+
+	return title ? title.textContent || 'rss' : 'rss';
+}
+
 function rssGetDate(node) {
 	var pubDate = node.querySelector('pubDate, published');
 	if (pubDate) {
@@ -826,8 +847,8 @@ function rssGetAuthor(node, title) {
 	var creator = node.querySelector('creator, author');
 	if (creator) {
 		creator = creator.textContent;
-	} else if (title && title.textContent.length > 0) {
-		creator = title.textContent;
+	} else if (title && title.length > 0) {
+		creator = title;
 	}
 
 	if (creator) {
