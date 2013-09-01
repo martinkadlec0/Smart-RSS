@@ -372,7 +372,7 @@ $(function() {
 				if (!sourcesContextMenu.currentSource) return;
 				var id = sourcesContextMenu.currentSource.get('id');
 				bg.items.forEach(function(item) {
-					if (item.get('unread') == true && item.getSource().id = id) {
+					if (item.get('unread') == true && item.getSource().id == id) {
 						item.save({
 							unread: false,
 							visited: true
