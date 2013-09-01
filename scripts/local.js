@@ -623,14 +623,14 @@ var lang = {
 		OPTIONS: 'Опции',
 		UPDATING_FEEDS: 'Обновление рассылок',
 
-		UNREAD: 'unread',
-		TOTAL: 'total',
-		NEW_FOLDER: 'New Folder',
-		DOWNLOAD: 'Download',
-		DELETE_ALL_ARTICLES: 'Delete All Articles',
-		DELETE_ALL_Q: 'Do you really want to comletely delete ALL articles?',
-		REALLY_EMPTY_TRASH: 'Do you really want to completely delete all articles from trash?',
-		RENAME: 'Rename'
+		UNREAD: 'непрочтённое',
+		TOTAL: 'всего',
+		NEW_FOLDER: 'Новая группа',
+		DOWNLOAD: 'Сохранить',
+		DELETE_ALL_ARTICLES: 'Удалить все новости',
+		DELETE_ALL_Q: 'Вы действительно хотите удалить все новости?',
+		REALLY_EMPTY_TRASH: 'Вы действительно хотите удалить содержимое корзины?',
+		RENAME: 'Переименовать'
 	},
 };
 
