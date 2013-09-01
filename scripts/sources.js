@@ -287,7 +287,7 @@ $(function() {
 		}
 	});
 
-	var toolbar = new (Backbone.View.extend({
+	var AppToolbar = Backbone.View.extend({
 		el: '#toolbar',
 		events: {
 			'click #button-add': 'addSourceDialog',
@@ -333,7 +333,7 @@ $(function() {
 		reloadSources: function() {
 			bg.downloadAll(true);
 		}
-	}));
+	});
 
 
 	var ContextMenu = bg.ContextMenu.extend({
@@ -588,7 +588,7 @@ $(function() {
 		}
 	}));
 
-	var list = new (Backbone.View.extend({
+	var AppList = Backbone.View.extend({
 		el: '#list',
 		selectedItems: [],
 		events: {
@@ -821,9 +821,9 @@ $(function() {
 		generateAllFeedsSource: function() {
 
 		}
-	}));
+	});
 
-	var app = new (Backbone.View.extend({
+	var App = Backbone.View.extend({
 		el: 'body',
 		events: {
 			'keydown': 'handleKeyDown',
@@ -944,7 +944,16 @@ $(function() {
 			$('#indicator').css('background', 'linear-gradient(to right,  #c5c5c5 ' + perc + '%, #eee ' + perc + '%)');
 			$('#indicator').html(bg.lang.c.UPDATING_FEEDS + ' (' + l.get('loaded') + '/' + l.get('maxSources') + ')');
 		}
-	}));
+	});
+
+	var app, list, toolbar;
+
+	bg.appStarted.done(function() {
+		list = new AppList();
+		toolbar = new AppToolbar();
+		app = new App();
+	});
+
 });
 
 });

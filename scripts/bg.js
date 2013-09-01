@@ -46,6 +46,8 @@ var folderIdIndex = localStorage.getItem('folderIdIndex') || 1;
 	cache: false
 });*/
 
+var appStarted = new (jQuery.Deferred)();
+var deferreds = [];
 
 /**
  * Items
@@ -72,7 +74,8 @@ var settings = new(Backbone.Model.extend({
 	},
 	localStorage: new Backbone.LocalStorage('settings-backbone'),
 	initialize: function() {
-		this.fetch({ merge: true });
+		var d = this.fetch({ merge: true });
+		deferreds.push(d);
 	}
 }));
 
@@ -86,7 +89,8 @@ var info = new(Backbone.Model.extend({
 	},
 	localStorage: new Backbone.LocalStorage('info-backbone'),
 	initialize: function() {
-		this.fetch({ merge: true });
+		var d = this.fetch({ merge: true });
+		deferreds.push(d);
 	}
 }));
 
@@ -117,11 +121,13 @@ var sources = new(Backbone.Collection.extend({
 	},
 	initialize: function() {
 		var that = this;
-		this.fetch({ silent: true }).then(function() {
+		var d = this.fetch({ silent: true });
+		d.done(function() {
 			if (that.findWhere({ hasNew: true })) {
 				chrome.browserAction.setIcon({ path: '/images/icon19-' + settings.get('icon') + '.png' 	});
 			}
 		});
+		deferreds.push(d);
 	}
 }));
 
@@ -171,9 +177,8 @@ var items = new(Backbone.Collection.extend({
 	},
 	initialize: function() {
 		var that = this;
-		this.fetch({
-			silent: true
-		});
+		var d = this.fetch({ silent: true });
+		deferreds.push(d);
 		settings.on('change:sortOrder', this.sort, this);
 	}
 }));
@@ -198,7 +203,8 @@ var folders = new (Backbone.Collection.extend({
 	localStorage: new Backbone.LocalStorage('folders-backbone'),
 	initialize: function() {
 		var that = this;
-		this.fetch({ silent: true });
+		var d = this.fetch({ silent: true });
+		deferreds.push(d);
 	},
  	comparator: function(a, b) {
 		return (a.get('title') || '').trim() < (b.get('title') || '').trim() ? -1 : 1;
@@ -281,7 +287,6 @@ var MenuItemView = Backbone.View.extend({
 	},
 	render: function() {
 		if (this.model.get('icon')) {
-			//alert('url("/images/' + this.model.get('icon') + '") no-repeat left center');
 			this.$el.css('background', 'url(/images/' + this.model.get('icon') + ') no-repeat left center');
 		}
 		this.$el.html(this.model.get('title'));
@@ -330,12 +335,13 @@ var ContextMenu = Backbone.View.extend({
 $.support.cors = true;
 
 $(function() {
+$.when.apply($, deferreds).done(function() {
 
 	sources.on('add', function(source) {
 		if (source.get('updateEvery') > 0) {
 			chrome.alarms.create('source-' + source.get('id'), {
 				delayInMinutes: source.get('updateEvery'),
-				periodInMinutes: source.get('updateEvery')
+				periodInMinutes: source.get('updateEvery')	
 			});
 		}
 		downloadOne(source);
@@ -570,8 +576,8 @@ $(function() {
 	 */
 
 
-	// I should make sure all items are fetched before downloadAll is called .. ideas?
 	setTimeout(downloadAll, 30000);
+	appStarted.resolve();
 
 	/**
 	 * onclick:button -> open RSS
@@ -580,6 +586,7 @@ $(function() {
 		openRSS(true);
 	});
 
+});
 });
 
 function openRSS(closeIfActive) {

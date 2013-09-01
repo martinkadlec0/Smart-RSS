@@ -552,7 +552,7 @@ $(function() {
 		}
 	]);
 
-	var list = window.list = new (Backbone.View.extend({
+	var AppList = Backbone.View.extend({
 		el: '#list',
 		selectedItems: [],
 		selectPivot: null,
@@ -1005,9 +1005,9 @@ $(function() {
 			}
 			return true;
 		}
-	}));
+	});
 
-	var app = new (Backbone.View.extend({
+	var App = Backbone.View.extend({
 		el: 'body',
 		events: {
 			'keydown': 'handleKeyDown',
@@ -1172,7 +1172,16 @@ $(function() {
 
 			
 		} 
-	}));
+	});
+
+
+	var app, list;
+
+	bg.appStarted.done(function() {
+		list = new AppList();
+		app = new App();
+	});
+
 });
 
 

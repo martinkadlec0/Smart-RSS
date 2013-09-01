@@ -6,15 +6,17 @@
 
 var tabID = -1;
 
-chrome.extension.sendMessage({ action: 'get-tab-id'}, function(response) {
-	if (response.action == 'response-tab-id') {
-		tabID = response.value;	
-	}
-});
 
-chrome.runtime.connect();
 
 chrome.runtime.getBackgroundPage(function(bg) {
+
+	chrome.extension.sendMessage({ action: 'get-tab-id'}, function(response) {
+		if (response.action == 'response-tab-id') {
+			tabID = response.value;	
+		}
+	});
+
+	chrome.runtime.connect();
 
 	var ls = bg.settings.get('layout');
 
