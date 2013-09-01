@@ -74,10 +74,12 @@ $(function() {
 			
 			if (this.model.get('name') == 'all-feeds') {
 				bg.sources.forEach(function(source) {
-					source.save({ hasNew: false });
+					if (source.get('hasNew')) {
+						source.save({ hasNew: false });
+					}
 				});
 				
-			} else if (this.model instanceof bg.Source) {
+			} else if (this.model instanceof bg.Source && this.model.get('hasNew')) {
 				this.model.save({ hasNew: false });
 			}
 

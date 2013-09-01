@@ -107,6 +107,8 @@ var Source = Backbone.Model.extend({
 	}
 });
 
+var sourceJoker = new Source();
+
 var sources = new(Backbone.Collection.extend({
 	model: Source,
 	localStorage: new Backbone.LocalStorage('sources-backbone'),
@@ -150,7 +152,7 @@ var Item = Backbone.Model.extend({
 	_source: null,
 	getSource: function() {
 		if (!this._source) {
-			this._source = sources.findWhere({ id: this.get('sourceID')	}) || new Source();
+			this._source = sources.findWhere({ id: this.get('sourceID')	}) || sourceJoker;
 		}
 		return this._source;
 	}
