@@ -371,11 +371,13 @@ $(function() {
 			action: function() { 
 				if (!sourcesContextMenu.currentSource) return;
 				var id = sourcesContextMenu.currentSource.get('id');
-				bg.items.where({ sourceID: id }).forEach(function(item) {
-					item.save({
-						unread: false,
-						visited: true
-					});
+				bg.items.forEach(function(item) {
+					if (item.get('unread') == true && item.getSource().id = id) {
+						item.save({
+							unread: false,
+							visited: true
+						});
+					}
 				});
 
 				sourcesContextMenu.currentSource.save({ hasNew: false });
@@ -407,10 +409,12 @@ $(function() {
 			icon: 'read.png',
 			action: function() { 
 				bg.items.where({ trashed: true, deleted: false }).forEach(function(item) {
-					item.save({
-						unread: false,
-						visited: true
-					});
+					if (item.get('unread') == true) {
+						item.save({
+							unread: false,
+							visited: true
+						});
+					}
 				});
 			}
 		},
@@ -472,11 +476,13 @@ $(function() {
 				if (!sources.length) return;
 
 				for (var i=0; i<sources.length; i++) {
-					bg.items.where({ sourceID: sources[i].get('id') }).forEach(function(item) {
-						item.save({
-							unread: false,
-							visited: true
-						});
+					bg.items.forEach(function(item) {
+						if (item.get('unread') == true && item.getSource() == sources[i]) {
+							item.save({
+								unread: false,
+								visited: true
+							});
+						}
 					});
 					sources[i].save({ hasNew: false });
 				}

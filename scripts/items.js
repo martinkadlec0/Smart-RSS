@@ -1117,13 +1117,17 @@ $(function() {
 				if (list.currentSource) {
 					var id = list.currentSource.get('id');
 					if (!id) return;
-					bg.items.where({ sourceID: id }).forEach(function(item) {
-						item.save({ unread: false, visited: true });
+					bg.items.forEach(function(item) {
+						if (item.get('unread') == true && item.getSource().id == id) {
+							item.save({ unread: false, visited: true });
+						}
 					});
 				} else if (list.specialName == 'all-feeds') {
 					if (confirm(bg.lang.c.MARK_ALL_QUESTION)) {
 						bg.items.forEach(function(item) {
-							item.save({ unread: false, visited: true });
+							if (item.get('unread') == true) {
+								item.save({ unread: false, visited: true });
+							}
 						});	
 					}
 				} else if (list.specialName) {

@@ -150,9 +150,7 @@ var Item = Backbone.Model.extend({
 	_source: null,
 	getSource: function() {
 		if (!this._source) {
-			this._source = sources.findWhere({
-				id: this.get('sourceID')
-			});
+			this._source = sources.findWhere({ id: this.get('sourceID')	}) || new Source();
 		}
 		return this._source;
 	}
