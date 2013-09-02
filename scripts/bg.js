@@ -47,6 +47,7 @@ var folderIdIndex = localStorage.getItem('folderIdIndex') || 1;
 });*/
 
 var appStarted = new (jQuery.Deferred)();
+var settingsLoaded = null;
 var deferreds = [];
 
 /**
@@ -75,6 +76,7 @@ var settings = new(Backbone.Model.extend({
 	localStorage: new Backbone.LocalStorage('settings-backbone'),
 	initialize: function() {
 		var d = this.fetch({ merge: true });
+		settingsLoaded = d;
 		deferreds.push(d);
 	}
 }));

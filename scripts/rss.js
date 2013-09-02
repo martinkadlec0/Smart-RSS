@@ -9,6 +9,9 @@ var tabID = -1;
 
 
 chrome.runtime.getBackgroundPage(function(bg) {
+bg.settingsLoaded.done(function() {
+		
+	
 
 	chrome.extension.sendMessage({ action: 'get-tab-id'}, function(response) {
 		if (response.action == 'response-tab-id') {
@@ -84,5 +87,5 @@ chrome.runtime.getBackgroundPage(function(bg) {
 	bg.sources.on('clear-events', handleClearEvents);
 
 
-
+});
 });
