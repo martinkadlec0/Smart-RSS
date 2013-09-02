@@ -83,12 +83,12 @@ $(function() {
 				this.model.save({ hasNew: false });
 			}
 
-			
 			window.top.frames[1].postMessage({
 				action: 'new-select',
 				value: this.model.id || this.model.get('filter'),
 				name: this.model.get('name'),
-				unreadOnly: !!e.shiftKey
+				unreadOnly: !!e.shiftKey,
+				noFocus: !!e.noFocus
 			}, '*');
 			
 		}
@@ -194,7 +194,8 @@ $(function() {
 			window.top.frames[1].postMessage({
 				action: 'new-folder-select',
 				value: this.model.id,
-				unreadOnly: !!e.shiftKey
+				unreadOnly: !!e.shiftKey,
+				noFocus: !!e.noFocus
 			}, '*');
 			
 		}
@@ -907,10 +908,16 @@ $(function() {
 				}
 				if (s) s.view.select();
 				e.preventDefault();
-			} else if (e.keyCode == 39) {
+			} else if (e.keyCode == 37) {
 				var cs = $('.selected:first');
 				if (cs.length && cs.hasClass('folder')) {
 					cs.get(0).view.handleClickArrow();
+				}
+				e.preventDefault();
+			} else if (e.keyCode == 39) {
+				var cs = $('.selected:first');
+				if (cs.length) {
+					cs.get(0).view.showSourceItems({ noSelect: true, shiftKey: e.shiftKey, noFocus: true });
 				}
 				e.preventDefault();
 			} else if (e.keyCode == 13) {

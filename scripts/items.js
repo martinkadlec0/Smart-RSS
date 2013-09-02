@@ -601,7 +601,7 @@ $(function() {
 
 			window.addEventListener('message', function(e) {
 				if (e.data.action == 'new-select' || e.data.action == 'new-folder-select') {
-					window.focus();
+					if (!e.data.noFocus) window.focus();
 					that.el.scrollTop = 0;
 					that.unreadOnly = e.data.unreadOnly;
 				}
