@@ -421,7 +421,11 @@ $.when.apply($, deferreds).always(function() {
 
 		items.trigger('render-screen');
 		
-		chrome.alarms.clear('source-' + source.get('id'));
+		try {
+			chrome.alarms.clear('source-' + source.get('id'));
+		} catch (e) {
+			console.log('Alarm error: ' + e);
+		}
 
 		info.save({
 			allCountUnread: info.get('allCountUnread') - source.get('count'),
