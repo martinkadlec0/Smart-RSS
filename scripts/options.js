@@ -199,7 +199,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 
 
 			if (data.folders) {
-				for (var i=0; i<data.folders.length; i++) {
+				for (var i=0, j = data.folders.length; i<j; i++) {
 					ifindex = Math.max(ifindex, data.folders[i].id);
 					if (!bg.folders.get(data.folders[i].id)) {
 						bg.folders.create(data.folders[i]);	
@@ -207,14 +207,14 @@ chrome.runtime.getBackgroundPage(function(bg) {
 				}
 			}
 
-			for (var i=0; i<data.sources.length; i++) {
+			for (var i=0, j=data.sources.length; i<j; i++) {
 				isindex = Math.max(isindex, data.sources[i].id);
 				if (!bg.sources.get(data.sources[i].id)) {
 					bg.sources.create(data.sources[i]);	
 				}
 			}
 
-			for (var i=0; i<data.items.length; i++) {
+			for (var i=0, j=data.items.length; i<j; i++) {
 				if (!bg.items.get(data.items[i].id)) {
 					bg.items.create(data.items[i]);	
 				}
