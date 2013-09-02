@@ -948,7 +948,7 @@ $(function() {
 
 	var app, list, toolbar;
 
-	bg.appStarted.done(function() {
+	bg.appStarted.always(function() {
 		list = new AppList();
 		toolbar = new AppToolbar();
 		app = new App();

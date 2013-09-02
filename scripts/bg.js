@@ -124,7 +124,7 @@ var sources = new(Backbone.Collection.extend({
 	initialize: function() {
 		var that = this;
 		var d = this.fetch({ silent: true });
-		d.done(function() {
+		d.always(function() {
 			if (that.findWhere({ hasNew: true })) {
 				chrome.browserAction.setIcon({ path: '/images/icon19-' + settings.get('icon') + '.png' 	});
 			}
@@ -337,7 +337,7 @@ var ContextMenu = Backbone.View.extend({
 $.support.cors = true;
 
 $(function() {
-$.when.apply($, deferreds).done(function() {
+$.when.apply($, deferreds).always(function() {
 
 	sources.on('add', function(source) {
 		if (source.get('updateEvery') > 0) {

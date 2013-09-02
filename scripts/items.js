@@ -1184,7 +1184,7 @@ $(function() {
 
 	var app, list;
 
-	bg.appStarted.done(function() {
+	bg.appStarted.always(function() {
 		list = new AppList();
 		app = new App();
 	});

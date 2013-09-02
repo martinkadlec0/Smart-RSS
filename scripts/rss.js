@@ -9,7 +9,7 @@ var tabID = -1;
 
 
 chrome.runtime.getBackgroundPage(function(bg) {
-bg.settingsLoaded.done(function() {
+bg.settingsLoaded.always(function() {
 		
 	
 
