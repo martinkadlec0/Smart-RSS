@@ -593,7 +593,7 @@ $(function() {
 			bg.items.on('reset', this.addItems, this);
 			bg.items.on('add', this.addItem, this);
 			bg.items.on('sort', this.handleSort, this);
-			bg.items.on('render-screen', this.handleScroll, this);
+			bg.items.on('render-screen', this.handleRenderScreen, this);
 			bg.settings.on('change:lines', this.handleChangeLines, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 
@@ -629,6 +629,9 @@ $(function() {
 				that.addItems(bg.items.where({ trashed: false, unread: true }));
 			}, 0);
 		},
+		handleRenderScreen: function() {
+			this.handleScroll();
+		},
 		handleScroll: function() {
 			var start = -1;
 			var count = 0;
@@ -652,7 +655,7 @@ $(function() {
 				bg.items.off('reset', this.addItems, this);
 				bg.items.off('add', this.addItem, this);
 				bg.items.off('sort', this.handleSort, this);
-				bg.items.off('render-screen', this.handleScroll, this);
+				bg.items.off('render-screen', this.handleRenderScreen, this);
 				bg.settings.off('change:lines', this.handleChangeLines, this);
 				if (this.currentSource) {
 					this.currentSource.off('destroy', this.handleDestroyedSource, this);
@@ -731,7 +734,7 @@ $(function() {
 				if (!after) {
 					if (this.reuseIndex >= this.views.length) {
 						view = new ItemView({ model: item });
-						if (noManualSort !== true || !_itemHeight) {
+						if (!_itemHeight) {
 							view.render();
 						} else {
 							view.$el.css('height', _itemHeight + 'px');
@@ -755,6 +758,10 @@ $(function() {
 					if (index == -1) index = this.reuseIndex;
 
 					this.views.splice(index, 0, view);
+				}
+
+				if (!_itemHeight) {
+					_itemHeight = view.el.getBoundingClientRect().height;
 				}
 
 
