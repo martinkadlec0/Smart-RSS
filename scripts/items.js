@@ -165,7 +165,9 @@ $(function() {
 			this.setEvents();
 			this.prerender();
 		},
+		prerendered: false,
 		prerender: function() {
+			prerendered = true;
 			list.viewsToRender.push(this);
 			this.el.className = this.model.get('unread') ? 'item unread' : 'item';
 		},
@@ -189,9 +191,19 @@ $(function() {
 			bg.sources.off('clear-events', this.handleClearEvents, this);
 		},
 		render: function() {
-			this.$el.css('height','');
+
 			this.$el.toggleClass('unvisited', !this.model.get('visited'));
 			this.$el.toggleClass('unread', this.model.get('unread'));
+
+			var ca = this.model.changedAttributes();
+			if (ca) {
+				var caKeys =  Object.keys(ca);
+				if ( ('unread' in ca && caKeys.length == 1) || ('unread' in ca && 'visited' in ca && caKeys.length == 2) ) {
+					return this;
+				}
+			}
+
+			this.$el.css('height','');
 			var data = this.model.toJSON();
 
 			var dateFormats = { normal: 'DD.MM.YYYY', iso: 'YYYY-MM-DD', us: 'MM/DD/YYYY' };
