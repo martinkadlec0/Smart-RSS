@@ -10,8 +10,6 @@ var tabID = -1;
 
 chrome.runtime.getBackgroundPage(function(bg) {
 bg.settingsLoaded.always(function() {
-		
-	
 
 	chrome.extension.sendMessage({ action: 'get-tab-id'}, function(response) {
 		if (response.action == 'response-tab-id') {
@@ -62,6 +60,8 @@ bg.settingsLoaded.always(function() {
 		} else {
 			layoutToHorizontal();
 		}
+
+		document.documentElement.style.visibility = 'visible';
 	}
 	
 	// might not happen!!!!!!!!
@@ -85,7 +85,6 @@ bg.settingsLoaded.always(function() {
 	bg.settings.on('change:layout', handleLayoutChange);
 	bg.settings.on('change:panelToggled', setFirstFrameSize);
 	bg.sources.on('clear-events', handleClearEvents);
-
 
 });
 });

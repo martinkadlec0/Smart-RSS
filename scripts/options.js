@@ -46,6 +46,7 @@ JSON.safeParse = function(str) {
 }
 
 chrome.runtime.getBackgroundPage(function(bg) {
+
 	$(function() {
 
 		$('#version').html(bg.version || 'dev build');
@@ -181,7 +182,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 			return;
 		}
 
-		$('#smart-imported').html('Importing, please wait!');
+		$('#smart-imported').html('Loading & parsing file');
 
 		
 
@@ -193,48 +194,34 @@ chrome.runtime.getBackgroundPage(function(bg) {
 				$('#smart-imported').html('Wrong file');
 				return;
 			}
+			
+			$('#smart-imported').html('Importing, please wait!');
 
-			var ifindex = 1;
-			var isindex = 1;
+			var worker = new Worker('scripts/worker.js');
+			worker.onmessage = function(e) {
+				if (e.data.action == 'finished'){
+					$('#smart-imported').html('Loading data to memory!');
 
+					bg.folderIdIndex = Math.max(bg.folderIdIndex, e.data.ifindex) + 1;
+					bg.sourceIdIndex = Math.max(bg.sourceIdIndex, e.data.isindex) + 1;
 
-			if (data.folders) {
-				for (var i=0, j = data.folders.length; i<j; i++) {
-					ifindex = Math.max(ifindex, data.folders[i].id);
-					if (!bg.folders.get(data.folders[i].id)) {
-						bg.folders.create(data.folders[i]);	
-					}
+					localStorage.setItem('folderIdIndex', bg.folderIdIndex);
+					localStorage.setItem('sourceIdIndex', bg.sourceIdIndex);
+
+					bg.fetchAll().always(function() {
+						bg.info.autoSetData();
+						$('#smart-imported').html('Import fully completed!');
+						bg.downloadAll(true);
+					});
+				} else if (e.data.action == 'message'){
+					$('#smart-imported').html(e.data.value);
 				}
 			}
+			worker.postMessage({ action: 'file-content', value: data });
 
-			for (var i=0, j=data.sources.length; i<j; i++) {
-				isindex = Math.max(isindex, data.sources[i].id);
-				if (!bg.sources.get(data.sources[i].id)) {
-					bg.sources.create(data.sources[i]);	
-				}
+			worker.onerror = function(e) {
+				alert('Importing error: ' + e.message);
 			}
-
-			for (var i=0, j=data.items.length; i<j; i++) {
-				if (!bg.items.get(data.items[i].id)) {
-					bg.items.create(data.items[i]);	
-				}
-			}
-
-			bg.folderIdIndex = Math.max(bg.folderIdIndex, ifindex) + 1;
-			bg.sourceIdIndex = Math.max(bg.sourceIdIndex, isindex) + 1;
-
-			localStorage.setItem('folderIdIndex', bg.folderIdIndex);
-			localStorage.setItem('sourceIdIndex', bg.sourceIdIndex);
-
-			bg.info.save({
-				allCountUnread: bg.items.where({ trashed: false, deleted: false, unread: true }).length,
-				allCountTotal: bg.items.where({ trashed: false, deleted: false }).length,
-				trashCountUnread: bg.items.where({ trashed: true, deleted: false, unread: true }).length,
-				trashCountTotal: bg.items.where({ trashed: true, deleted: false }).length
-
-			});
-
-			$('#smart-imported').html('Import completed!');
 		}
 
 		var url = chrome.extension.getURL('rss.html');

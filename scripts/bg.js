@@ -15,8 +15,8 @@ Backbone.LocalStorage.prepare = function(db) {
 	if (!db.objectStoreNames.contains('folders-backbone'))
 		db.createObjectStore('folders-backbone', { keyPath: 'id' });
 
-	if (!db.objectStoreNames.contains('info-backbone'))
-		db.createObjectStore('info-backbone', { keyPath: 'id' });
+	/*if (!db.objectStoreNames.contains('info-backbone'))
+		db.createObjectStore('info-backbone', { keyPath: 'id' });*/
 
 }
 Backbone.LocalStorage.version = 3;
@@ -47,8 +47,7 @@ var folderIdIndex = localStorage.getItem('folderIdIndex') || 1;
 });*/
 
 var appStarted = new (jQuery.Deferred)();
-var settingsLoaded = null;
-var deferreds = [];
+var settingsLoaded = new (jQuery.Deferred)();
 
 /**
  * Items
@@ -73,12 +72,7 @@ var settings = new(Backbone.Model.extend({
 		fullDate: false,
 		hoursFormat: '24h'
 	},
-	localStorage: new Backbone.LocalStorage('settings-backbone'),
-	initialize: function() {
-		var d = this.fetch({ merge: true });
-		settingsLoaded = d;
-		deferreds.push(d);
-	}
+	localStorage: new Backbone.LocalStorage('settings-backbone')
 }));
 
 var info = new(Backbone.Model.extend({
@@ -89,10 +83,29 @@ var info = new(Backbone.Model.extend({
 		trashCountUnread: 0,
 		trashCountTotal: 0
 	},
-	localStorage: new Backbone.LocalStorage('info-backbone'),
-	initialize: function() {
-		var d = this.fetch({ merge: true });
-		deferreds.push(d);
+	autoSetData: function() {
+		this.set({
+			allCountUnread:   items.where({ trashed: false, deleted: false, unread: true }).length,
+			allCountTotal:    items.where({ trashed: false, deleted: false }).length,
+			trashCountUnread: items.where({ trashed: true,  deleted: false, unread: true }).length,
+			trashCountTotal:  items.where({ trashed: true,  deleted: false }).length
+		});
+
+		sources.forEach(function(source) {
+			source.set({
+				count: items.where({ trashed: false, sourceID: source.id, unread: true }).length,
+				countAll: items.where({ trashed: false, sourceID: source.id }).length
+			});
+		});
+
+		folders.forEach(function(folder) {
+			var count = countAll = 0;
+			sources.where({ folderID: folder.id }).forEach(function(source) {
+				count += source.get('count');
+				countAll += source.get('countAll');
+			});
+			folder.set({ count: count, countAll: countAll });
+		});
 	}
 }));
 
@@ -120,16 +133,6 @@ var sources = new(Backbone.Collection.extend({
 	localStorage: new Backbone.LocalStorage('sources-backbone'),
 	comparator: function(a, b) {
 		return (a.get('title') || '').trim() < (b.get('title') || '').trim() ? -1 : 1;
-	},
-	initialize: function() {
-		var that = this;
-		var d = this.fetch({ silent: true });
-		d.always(function() {
-			if (that.findWhere({ hasNew: true })) {
-				chrome.browserAction.setIcon({ path: '/images/icon19-' + settings.get('icon') + '.png' 	});
-			}
-		});
-		deferreds.push(d);
 	}
 }));
 
@@ -178,9 +181,6 @@ var items = new(Backbone.Collection.extend({
 		return val;
 	},
 	initialize: function() {
-		var that = this;
-		var d = this.fetch({ silent: true });
-		deferreds.push(d);
 		settings.on('change:sortOrder', this.sort, this);
 	}
 }));
@@ -203,11 +203,6 @@ var Folder = Backbone.Model.extend({
 var folders = new (Backbone.Collection.extend({
 	model: Folder,
 	localStorage: new Backbone.LocalStorage('folders-backbone'),
-	initialize: function() {
-		var that = this;
-		var d = this.fetch({ silent: true });
-		deferreds.push(d);
-	},
  	comparator: function(a, b) {
 		return (a.get('title') || '').trim() < (b.get('title') || '').trim() ? -1 : 1;
 	}
@@ -330,14 +325,71 @@ var ContextMenu = Backbone.View.extend({
 });
 
 
-
 /**
  * RSS Downloader
  */
 $.support.cors = true;
 
+
+/**
+ * Fetch all
+ */
+
+function fetchOne(arr, allDef) {
+	if (!arr.length) {
+		allDef.resolve();
+		return;
+	}
+	var one = arr.shift();
+	one.always(function() {
+		fetchOne(arr, allDef);
+	});
+}
+
+function fetchAll() {
+	var allDef = new (jQuery.Deferred)();
+	var deferreds = [];
+	var settingsDef;
+	deferreds.push(  folders.fetch({ silent: true }) );
+	deferreds.push(  sources.fetch({ silent: true }) );
+	deferreds.push(    items.fetch({ silent: true }) );
+	deferreds.push( settingsDef = settings.fetch({ silent: true }) );
+
+	fetchOne(deferreds, allDef)
+
+	settingsDef.always(function() {
+		settingsLoaded.resolve();
+	});
+	
+
+	return allDef.promise();
+}
+
+/**
+ * Init
+ */
+
+
 $(function() {
-$.when.apply($, deferreds).always(function() {
+fetchAll().always(function() {
+
+	/**
+	 * Set icon
+	 */
+
+	if (sources.findWhere({ hasNew: true })) {
+		chrome.browserAction.setIcon({ path: '/images/icon19-' + settings.get('icon') + '.png' 	});
+	}
+
+	/**
+	 * Load counters for specials
+	 */
+
+	info.autoSetData();
+
+	/**
+	 * Set events
+	 */
 
 	sources.on('add', function(source) {
 		if (source.get('updateEvery') > 0) {
@@ -427,7 +479,7 @@ $.when.apply($, deferreds).always(function() {
 			console.log('Alarm error: ' + e);
 		}
 
-		info.save({
+		info.set({
 			allCountUnread: info.get('allCountUnread') - source.get('count'),
 			allCountTotal: info.get('allCountTotal') - source.get('countAll'),
 			trashCountUnread: info.get('trashCountUnread') - trashUnread,
@@ -439,7 +491,7 @@ $.when.apply($, deferreds).always(function() {
 			var folder = folders.findWhere({ id: source.get('folderID') });
 			if (!folder) return;
 
-			folder.save({ 
+			folder.set({ 
 				count: folder.get('count') - source.get('count'),
 				countAll: folder.get('countAll') - source.get('countAll')
 			});
@@ -454,11 +506,11 @@ $.when.apply($, deferreds).always(function() {
 		var source = model.getSource();
 		if (!model.get('trashed') && source) {
 			if (model.get('unread') == true) {
-				source.save({
+				source.set({
 					'count': source.get('count') + 1
 				});
 			} else {
-				source.save({
+				source.set({
 					'count': source.get('count') - 1
 				});
 
@@ -467,7 +519,7 @@ $.when.apply($, deferreds).always(function() {
 				}
 			}
 		} else if (!model.get('deleted') && source) {
-			info.save({
+			info.set({
 				trashCountUnread: info.get('trashCountUnread') + (model.get('unread') ? 1 : -1)
 			});
 		}
@@ -477,7 +529,7 @@ $.when.apply($, deferreds).always(function() {
 		var source = model.getSource();
 		if (source && model.get('unread') == true) {
 			if (model.get('trashed') == true) {
-				source.save({
+				source.set({
 					'count': source.get('count') - 1,
 					'countAll': source.get('countAll') - 1
 				});
@@ -487,26 +539,26 @@ $.when.apply($, deferreds).always(function() {
 				}
 
 			} else {
-				source.save({
+				source.set({
 					'count': source.get('count') + 1,
 					'countAll': source.get('countAll') + 1
 				});
 			}
 
 			if (!model.get('deleted')) {
-				info.save({
+				info.set({
 					'trashCountTotal': info.get('trashCountTotal') + (model.get('trashed') ? 1 : -1),
 					'trashCountUnread': info.get('trashCountUnread') + (model.get('trashed') ? 1 : -1)
 				});
 			}
 		} else if (source) {
-			source.save({ 
+			source.set({ 
 				'countAll': source.get('countAll') + (model.get('trashed') ? - 1 : 1) 
 			});
 
 
 			if (!model.get('deleted')) {
-				info.save({ 
+				info.set({ 
 					'trashCountTotal': info.get('trashCountTotal') + (model.get('trashed') ? 1 : -1) 
 				});
 			}
@@ -516,7 +568,7 @@ $.when.apply($, deferreds).always(function() {
 
 	items.on('change:deleted', function(model) {
 		if (model.previous('trashed') == true) {
-			info.save({
+			info.set({
 				'trashCountTotal': info.get('trashCountTotal') - 1,
 				'trashCountUnread': !model.previous('unread') ?  info.get('trashCountUnread') : info.get('trashCountUnread') - 1
 			});
@@ -528,7 +580,7 @@ $.when.apply($, deferreds).always(function() {
 
 	sources.on('change:count', function(source) {
 		// SPECIALS
-		info.save({ 
+		info.set({ 
 			'allCountUnread': info.get('allCountUnread') + source.get('count') - source.previous('count')
 		});
 
@@ -538,12 +590,12 @@ $.when.apply($, deferreds).always(function() {
 		var folder = folders.findWhere({ id: source.get('folderID') });
 		if (!folder) return;
 
-		folder.save({ count: folder.get('count') + source.get('count') - source.previous('count') });
+		folder.set({ count: folder.get('count') + source.get('count') - source.previous('count') });
 	});
 
 	sources.on('change:countAll', function(source) {
 		// SPECIALS
-		info.save({ 
+		info.set({ 
 			'allCountTotal': info.get('allCountTotal') + source.get('countAll') - source.previous('countAll')
 		});
 
@@ -553,7 +605,7 @@ $.when.apply($, deferreds).always(function() {
 		var folder = folders.findWhere({ id: source.get('folderID') });
 		if (!folder) return;
 
-		folder.save({ countAll: folder.get('countAll') + source.get('countAll') - source.previous('countAll') });
+		folder.set({ countAll: folder.get('countAll') + source.get('countAll') - source.previous('countAll') });
 	});
 
 	sources.on('change:folderID', function(source) {
@@ -562,7 +614,7 @@ $.when.apply($, deferreds).always(function() {
 			var folder = folders.findWhere({ id: source.get('folderID') });
 			if (!folder) return;
 
-			folder.save({ 
+			folder.set({ 
 				count: folder.get('count') + source.get('count'),
 				countAll: folder.get('countAll') + source.get('countAll')
 			});
@@ -570,7 +622,7 @@ $.when.apply($, deferreds).always(function() {
 			var folder = folders.findWhere({ id: source.previous('folderID') });
 			if (!folder) return;
 
-			folder.save({ 
+			folder.set({ 
 				count: Math.max(folder.get('count') - source.get('count'), 0),
 				countAll: Math.max(folder.get('countAll') - source.get('countAll'), 0)
 			});
@@ -726,6 +778,12 @@ function downloadURL(urls, cb) {
 				'countAll': countAll,
 				'lastUpdate': Date.now(),
 				'hasNew': hasNew || sourceToLoad.get('hasNew')
+			});
+
+			// reset alarm to make sure next call isn't too soon + to make sure alarm acutaly exists (it doesn't after import)
+			chrome.alarms.create('source-' + sourceToLoad.get('id'), {
+				delayInMinutes: sourceToLoad.get('updateEvery'),
+				periodInMinutes: sourceToLoad.get('updateEvery')	
 			});
 
 
