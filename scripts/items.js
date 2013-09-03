@@ -52,7 +52,6 @@ function isScrolledIntoView(elem) {
 	/*  && (elemBottom <= docViewBottom) &&  (elemTop >= docViewTop) ;*/
 }
 
-
 chrome.runtime.getBackgroundPage(function(bg) {
 
 $(function() {
@@ -1052,38 +1051,57 @@ $(function() {
 		},
 		selectNext: function(e) {
 			var e = e || {};
-			var q = e.selectUnread ? '.unread:not(.invisible):first' : '.item:not(.invisible):first';
-			var next =  e.selectUnread &&  list.selectPivot ? list.selectPivot.$el.nextAll(q) : $('.last-selected').nextAll(q);
-			if (!next.length && !e.shiftKey && !e.ctrlKey) {
-				next = $(q);
-				if (e.currentIsRemoved && next.length && $('.last-selected').get(0) == next.get(0)) {
+
+			var q = e.selectUnread ? '.unread:not(.invisible)' : '.item:not(.invisible)';
+			var next;
+			if (e.selectUnread &&  list.selectPivot) {
+				next = list.selectPivot.el.nextElementSibling;
+			} else {
+				next = $('.last-selected').get(0).nextElementSibling;
+			}
+			while (next && !next.matchesSelector(q)) {
+				next = next.nextElementSibling;
+			}
+
+			if (!next && !e.shiftKey && !e.ctrlKey) {
+				next = list.el.querySelector(q);
+				if (e.currentIsRemoved && next && $('.last-selected').get(0) == next) {
 					next = [];
 					topWindow.frames[2].postMessage({ action: 'no-items' }, '*');
 				}
 			}
-			if (next.length) {
-				next.get(0).view.select(e);
-				if (!list.inView(next.get(0))) {
-					next.get(0).scrollIntoView(false);	
+			if (next) {
+				next.view.select(e);
+				if (!list.inView(next)) {
+					next.scrollIntoView(false);	
 				}
-				
-			} 
+			}
+
 		},
 		selectPrev: function(e) {
 			var e = e || {};
 			var q = e.selectUnread ? '.unread:not(.invisible)' : '.item:not(.invisible)';
-			var prev = $('.last-selected').prevAll(q + ':first');
-			if (!prev.length && !e.shiftKey && !e.ctrlKey) {
-				prev = $(q + ':last');
-				if (e.currentIsRemoved && prev.length && $('.last-selected').get(0) == prev.get(0)) {
+			var prev;
+			if (e.selectUnread &&  list.selectPivot) {
+				prev = list.selectPivot.el.previousElementSibling;
+			} else {
+				prev = $('.last-selected').get(0).previousElementSibling;
+			}
+			while (prev && !prev.matchesSelector(q)) {
+				prev = prev.previousElementSibling;
+			}
+
+			if (!prev && !e.shiftKey && !e.ctrlKey) {
+				prev = list.el.querySelector(q);
+				if (e.currentIsRemoved && prev && $('.last-selected').get(0) == prev) {
 					prev = [];
 					topWindow.frames[2].postMessage({ action: 'no-items' }, '*');
 				}
 			}
-			if (prev.length) {
-				prev.get(0).view.select(e);
-				if (!list.inView(prev.get(0))) {
-					prev.get(0).scrollIntoView(true);
+			if (prev) {
+				prev.view.select(e);
+				if (!list.inView(prev)) {
+					prev.scrollIntoView(true);	
 				}
 			}
 		},
