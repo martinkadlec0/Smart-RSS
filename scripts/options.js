@@ -52,9 +52,13 @@ chrome.runtime.getBackgroundPage(function(bg) {
 		$('#version').html(bg.version || 'dev build');
 
 
-		$('select[id]').each(function(i, item) {
+		$('select[id], input[type=number], input[type=range]').each(function(i, item) {
 			$(item).val(bg.settings.get(item.id));
-			$(item).change(handleChange);
+			if (item.type == 'number') {
+				$(item).on('input', handleChange);
+			} else {
+				$(item).change(handleChange);
+			}
 		});
 
 		$('input[type=checkbox]').each(function(i, item) {

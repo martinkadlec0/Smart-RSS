@@ -19,6 +19,7 @@ $(function() {
 	$('#toolbar').html( bg.translate($('#toolbar').html()) );
 	$('header').html( bg.translate($('header').html()) );
 	$('.overlay').html( bg.translate($('.overlay').html()) );
+	document.documentElement.style.fontSize = bg.settings.get('uiFontSize') + '%';
 
 	$('iframe').load(function() {
 		$('iframe').get(0).contentDocument.querySelector('#smart-rss-url').innerHTML = bg.lang.c.FULL_ARTICLE;
@@ -204,6 +205,7 @@ $(function() {
 
 				if (fr.contentDocument.readyState == 'complete') {
 					try {
+						fr.contentDocument.documentElement.style.fontSize = bg.settings.get('articleFontSize') + '%';
 						fr.contentDocument.querySelector('base').href = source ? source.get('url') : '#';
 						fr.contentDocument.querySelector('#smart-rss-content').innerHTML = content;
 						fr.contentDocument.querySelector('#smart-rss-url').href = that.model.get('url');
@@ -214,6 +216,7 @@ $(function() {
 						var that = that;
 						fr.onload = function() {
 							itemView.frameLoaded = true;
+							fr.contentDocument.documentElement.style.fontSize = bg.settings.get('articleFontSize') + '%';
 							fr.contentDocument.querySelector('base').href = source ? source.get('url') : '#';
 							fr.contentDocument.querySelector('#smart-rss-content').innerHTML = content;
 							fr.contentDocument.querySelector('#smart-rss-url').href = that.model.get('url');

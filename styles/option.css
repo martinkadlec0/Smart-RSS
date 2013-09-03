@@ -128,13 +128,19 @@ section div {
 	display: none!important;
 }
 
-.checkbox span, input {
+.checkbox span, input[type=button], input[type=checkbox] {
 	cursor: pointer;
 }
 
 select {
 	cursor: pointer;
-	min-width: 100px;
+	min-width: 110px;
+}
+
+input[type=number] {
+	min-width: 110px;
+	box-sizing: border-box;
+	padding: 1px 3px;
 }
 
 .twitter {

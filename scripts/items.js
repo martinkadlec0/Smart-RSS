@@ -58,6 +58,7 @@ $(function() {
 
 	$('body').html( bg.translate($('body').html()) );
 	$('#input-search').attr('placeholder', bg.lang.c.SEARCH);
+	document.documentElement.style.fontSize = bg.settings.get('uiFontSize') + '%';
 
 	var _itemHeight = 0;
 	

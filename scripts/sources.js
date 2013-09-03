@@ -36,6 +36,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 $(function() {
 
 	$('body').html( bg.translate($('body').html()) );
+	document.documentElement.style.fontSize = bg.settings.get('uiFontSize') + '%';
 
 	var TopView = Backbone.View.extend({
 		tagName: 'div',

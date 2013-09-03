@@ -70,7 +70,9 @@ var settings = new(Backbone.Model.extend({
 		panelToggled: true,
 		enablePanelToggle: false,
 		fullDate: false,
-		hoursFormat: '24h'
+		hoursFormat: '24h',
+		articleFontSize: '100',
+		uiFontSize: '100'
 	},
 	localStorage: new Backbone.LocalStorage('settings-backbone')
 }));
