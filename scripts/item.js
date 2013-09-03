@@ -271,6 +271,26 @@ $(function() {
 			} else if (e.keyCode == 32) {
 				this.handleSpace();
 				e.preventDefault();
+			} else if (e.keyCode == 33) {
+				var cw = $('iframe').get(0).contentWindow;
+				var d = $('iframe').get(0).contentWindow.document;
+				cw.scrollBy(0, -d.documentElement.clientHeight * 0.85);
+				e.preventDefault();
+			} else if (e.keyCode == 34) {
+				var cw = $('iframe').get(0).contentWindow;
+				var d = $('iframe').get(0).contentWindow.document;
+				cw.scrollBy(0, d.documentElement.clientHeight * 0.85);
+				e.preventDefault();
+			} else if (e.keyCode == 35) {
+				var cw = $('iframe').get(0).contentWindow;
+				var d = $('iframe').get(0).contentWindow.document;
+				cw.scrollTo(0, d.documentElement.offsetHeight);
+				e.preventDefault();
+			} else if (e.keyCode == 36) {
+				var cw = $('iframe').get(0).contentWindow;
+				var d = $('iframe').get(0).contentWindow.document;
+				cw.scrollTo(0, 0);
+				e.preventDefault();
 			} else if (e.keyCode == 68 || e.keyCode == 46) {
 				toolbar.handleButtonDelete(e);
 				e.preventDefault();
