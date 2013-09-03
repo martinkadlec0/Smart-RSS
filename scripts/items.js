@@ -1092,7 +1092,7 @@ $(function() {
 			}
 
 			if (!prev && !e.shiftKey && !e.ctrlKey) {
-				prev = list.el.querySelector(q);
+				prev = $(q + ':last').get(0);
 				if (e.currentIsRemoved && prev && $('.last-selected').get(0) == prev) {
 					prev = [];
 					topWindow.frames[2].postMessage({ action: 'no-items' }, '*');
