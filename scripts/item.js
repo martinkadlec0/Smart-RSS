@@ -178,50 +178,55 @@ $(function() {
 
 			return formatDate(new Date(unixtime), pickedFormat + ' ' + timeFormat);
 		},
+		renderTime: null,
 		render: function() {
+			clearTimeout(this.renderTime);
 
-			this.show();
+			this.renderTime = setTimeout(function(that) {
+				that.show();
 
-			var date = this.getFormatedDate(this.model.get('date'));
-			var source = this.model.getSource(); 
-			var content = this.model.get('content');
+				var date = that.getFormatedDate(that.model.get('date'));
+				var source = that.model.getSource(); 
+				var content = that.model.get('content');
 
 
-			this.$el.find('h1 a').html(this.model.escape('title'));
-			this.$el.find('h1 a').attr('href', escapeHtml(this.model.get('url')) );
-			this.$el.find('.author').html(this.model.escape('author'));
-			this.$el.find('.date').html(date);
-			this.$el.find('.pin-button').toggleClass('pinned', this.model.get('pinned'));
-			//this.$el.find('iframe').attr('src', 'data:text/html;charset=utf-8;base64,' + content);
+				that.$el.find('h1 a').html(that.model.escape('title'));
+				that.$el.find('h1 a').attr('href', escapeHtml(that.model.get('url')) );
+				that.$el.find('.author').html(that.model.escape('author'));
+				that.$el.find('.date').html(date);
+				that.$el.find('.pin-button').toggleClass('pinned', that.model.get('pinned'));
+				//that.$el.find('iframe').attr('src', 'data:text/html;charset=utf-8;base64,' + content);
 
-			// first load might be too soon
-			var fr = this.$el.find('iframe').get(0);
-			fr.contentWindow.scrollTo(0, 0);
+				// first load might be too soon
+				var fr = that.$el.find('iframe').get(0);
+				fr.contentWindow.scrollTo(0, 0);
+				fr.contentWindow.stop();
 
-			if (fr.contentDocument.readyState == 'complete') {
-				try {
-					fr.contentDocument.querySelector('base').href = source ? source.get('url') : '#';
-					fr.contentDocument.querySelector('#smart-rss-content').innerHTML = content;
-					fr.contentDocument.querySelector('#smart-rss-url').href = this.model.get('url');
-				} catch(e) {}
-			} 
-			if (!this.frameLoaded) {
-				if (!fr.contentDocument.documentElement || fr.contentDocument.documentElement.innerHTML != content) {
-					var that = this;
-					fr.onload = function() {
-						itemView.frameLoaded = true;
+				if (fr.contentDocument.readyState == 'complete') {
+					try {
 						fr.contentDocument.querySelector('base').href = source ? source.get('url') : '#';
 						fr.contentDocument.querySelector('#smart-rss-content').innerHTML = content;
 						fr.contentDocument.querySelector('#smart-rss-url').href = that.model.get('url');
-					};
+					} catch(e) {}
+				} 
+				if (!that.frameLoaded) {
+					if (!fr.contentDocument.documentElement || fr.contentDocument.documentElement.innerHTML != content) {
+						var that = that;
+						fr.onload = function() {
+							itemView.frameLoaded = true;
+							fr.contentDocument.querySelector('base').href = source ? source.get('url') : '#';
+							fr.contentDocument.querySelector('#smart-rss-content').innerHTML = content;
+							fr.contentDocument.querySelector('#smart-rss-url').href = that.model.get('url');
+						};
+					}
 				}
-			}
+			}, 50, this);
 
 			return this;
 		},
 		handleNewSelected: function(model) {
 			this.model = model;
-		if (!this.model) {
+			if (!this.model) {
 				// should not happen but happens
 				this.hide();
 			} else {
