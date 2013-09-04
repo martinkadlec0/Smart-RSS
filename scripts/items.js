@@ -638,7 +638,12 @@ $(function() {
 			this.el.addEventListener('scroll', this.handleScroll.bind(this));
 
 			setTimeout(function() {
-				that.addItems(bg.items.where({ trashed: false, unread: true }));
+				var unread = bg.items.where({ trashed: false, unread: true });
+				if (unread.length) {
+					that.addItems(unread);
+				} else {
+					that.addItems(bg.items.where({ trashed: false }));
+				}
 			}, 0);
 		},
 		handleRenderScreen: function() {
