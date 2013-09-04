@@ -30,6 +30,7 @@ Array.prototype.last = function(val) {
 	return this[this.length - 1];
 };
 
+window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame;
 
 chrome.runtime.getBackgroundPage(function(bg) {
 
@@ -127,10 +128,10 @@ $(function() {
 			if (this.renderInterval == 'first-time') return this.realRender();
 			if (this.renderInterval) return;
 			
-
-			this.renderInterval = setTimeout(function(that) {
+			var that = this;
+			this.renderInterval = requestAnimationFrame(function() {
 				that.realRender();
-			}, 0, this);
+			});
 			return this;
 		},
 		realRender: function() {
@@ -194,10 +195,10 @@ $(function() {
 			if (this.renderInterval == 'first-time') return this.realRender();
 			if (this.renderInterval) return;
 			
-
-			this.renderInterval = setTimeout(function(that) {
+			var that = this;
+			this.renderInterval = requestAnimationFrame(function(that) {
 				that.realRender();
-			}, 0, this);
+			});
 			return this;
 		},
 		realRender: function() {
