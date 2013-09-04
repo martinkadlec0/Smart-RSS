@@ -40,6 +40,8 @@ window.addEventListener('blur', function() {
 	document.documentElement.classList.remove('focused');
 });
 
+window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame;
+
 function isScrolledIntoView(elem) {
 	var docViewTop = 0;
 	var docViewBottom = screen.height;
@@ -607,6 +609,7 @@ $(function() {
 			bg.items.on('sort', this.handleSort, this);
 			bg.items.on('render-screen', this.handleRenderScreen, this);
 			bg.settings.on('change:lines', this.handleChangeLines, this);
+			bg.settings.on('change:layout', this.handleChangeLayout, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 
 			groups.on('add', this.addGroup, this);
@@ -674,6 +677,7 @@ $(function() {
 				bg.items.off('sort', this.handleSort, this);
 				bg.items.off('render-screen', this.handleRenderScreen, this);
 				bg.settings.off('change:lines', this.handleChangeLines, this);
+				bg.settings.off('change:layout', this.handleChangeLayout, this);
 				if (this.currentSource) {
 					this.currentSource.off('destroy', this.handleDestroyedSource, this);
 				}
@@ -682,6 +686,12 @@ $(function() {
 				}
 				bg.sources.off('clear-events', this.handleClearEvents, this);
 			}
+		},
+		handleChangeLayout: function() {
+			requestAnimationFrame(function() {
+				list.setItemHeight();
+				list.handleScroll();
+			});
 		},
 		handleSort: function(items) {
 			$('#input-search').val('');
@@ -802,8 +812,13 @@ $(function() {
 	
 			view.render().$el.insertBefore(before);
 		},
+		setItemHeight: function() {
+			var firstItem = $('.item:not(.invisible):first');
+			if (firstItem.length) {
+				_itemHeight = firstItem.get(0).getBoundingClientRect().height;
+			}
+		},
 		addItems: function(items) {
-
 
 			groups.reset();
 			
@@ -820,10 +835,7 @@ $(function() {
 
 			//var st = Date.now();
 
-			var firstItem = $('.item:not(.invisible):first');
-			if (firstItem.length) {
-				_itemHeight = firstItem.get(0).getBoundingClientRect().height;
-			}
+			this.setItemHeight();
 
 			this.reuseIndex = 0;
 
