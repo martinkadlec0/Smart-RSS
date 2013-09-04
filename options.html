@@ -76,6 +76,13 @@
 
 					<div class="settings-row learn-more" title="">
 						<label class="web-content-select-label">
+							<span class="selectLabel">Disable date groups:</span>
+							<input type="checkbox" id="disableDateGroups" />
+						</label>
+					</div>
+
+					<div class="settings-row learn-more" title="">
+						<label class="web-content-select-label">
 							<span class="selectLabel">Article font size:</span>
 							<input type="number" id="articleFontSize" min="30" max="300" />%
 						</label>
@@ -137,6 +144,7 @@
 
 				<section>
 					<h3 class="section-header">Import</h3>
+					<p>The SMART export exports everyhing including IDs of folders and feeds which are numbers from 1 to n. Because of this, SMART import from another instance of Smart RSS might cause id collisions. You are advised to clear all data before using the SMART import!.</p>
 					<div class="settings-row learn-more" title="SMART is special format of Smart RSS extension. It exports/imports both, feeds and feeds's articles.">
 						<label class="web-content-select-label">
 							<span class="selectLabel">SMART:</span>
@@ -144,6 +152,7 @@
 							<span id="smart-imported"></span>
 						</label>
 					</div>
+					<p>OPML export exports only list of feeds and it should be safe to use OPML import at any time.
 					<div class="settings-row learn-more" title="You can use OPML format to import feeds from Opera 12 to Smart RSS.">
 						<label class="web-content-select-label">
 							<span class="selectLabel">OPML:</span>

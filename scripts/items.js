@@ -777,10 +777,11 @@ $(function() {
 				}
 
 
-
-				var group = getGroup(item.get('date'));
-				if (!groups.findWhere({ title: group.title })) {
-					groups.add(new Group(group), { before: view.el });
+				if (!bg.settings.get('disableDateGroups')) {
+					var group = getGroup(item.get('date'));
+					if (!groups.findWhere({ title: group.title })) {
+						groups.add(new Group(group), { before: view.el });
+					}
 				}
 
 				this.reuseIndex++;
