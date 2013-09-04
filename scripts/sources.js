@@ -196,7 +196,7 @@ $(function() {
 			if (this.renderInterval) return;
 			
 			var that = this;
-			this.renderInterval = requestAnimationFrame(function(that) {
+			this.renderInterval = requestAnimationFrame(function() {
 				that.realRender();
 			});
 			return this;
