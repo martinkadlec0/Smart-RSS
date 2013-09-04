@@ -66,6 +66,9 @@ body {
 	background: url('/images/delete_selected.png') no-repeat center center;
 	display: none;
 }
+#button-webcam {
+	background: url('/images/camera_inactive.png') no-repeat center center;
+}
 #context-undelete {
 	display: none;
 }

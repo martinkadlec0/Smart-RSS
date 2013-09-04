@@ -405,10 +405,22 @@ $(function() {
 			'click #button-reload': 'refreshItems',
 			'click #button-delete': 'handleButtonDelete',
 			'click #button-undelete': 'handleButtonUndelete',
+			'click #button-webcam': 'handleButtonWebcam',
 			'input input[type=search]': 'handleSearch'
 		},
 		initialize: function() {
 			
+		},
+		handleButtonWebcam: function(e) {
+			var fr = document.querySelector('#webcamframe');
+			if (!fr) return;
+			if (fr.src != 'about:blank') {
+				fr.src = 'about:blank';
+				e.currentTarget.style.backgroundImage = 'url(/images/camera_inactive.png )';
+			} else {
+				fr.src = 'http://html5.operacesky.net/gestures.html';
+				e.currentTarget.style.backgroundImage = 'url(/images/camera.png )';
+			}
 		},
 		handleButtonRead: function() {
 			list.changeUnreadState();
@@ -653,6 +665,14 @@ $(function() {
 					} 
 					
 					app.selectNext({ selectUnread: true });
+				} else if (e.data.action == 'gesture-up') {
+					if (document.webkitVisibilityState == 'visible') {
+						app.selectPrev();
+					}
+				} else if (e.data.action == 'gesture-down') {
+					if (document.webkitVisibilityState == 'visible') {
+						app.selectNext();
+					}
 				}
 			});
 
