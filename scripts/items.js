@@ -98,7 +98,7 @@ $(function() {
 			if (dtt >= dct) {
 				group = {
 					title: bg.lang.c.TODAY.toUpperCase(),
-					date: todayMidnight.getTime() + 86400000
+					date: todayMidnight.getTime() + 86400000 * 5000 // 5000 = make sure "today" is the first element in list
 				}; 
 			} else if (dtt + 1 == dct) {
 				group = {
