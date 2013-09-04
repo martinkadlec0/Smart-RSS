@@ -126,17 +126,12 @@ $(function() {
 		events: {
 			'mousedown': 'handleMouseDown',
 			'click .pin-button': 'handlePinClick',
-			'mousedown iframe': 'handleIframeClick',
 			'keydown': 'handleKeyDown'
 		},
 		handleMouseDown: function(e) {
 			if (overlay.isVisible() && !e.target.matchesSelector('.overlay, .overlay *')) {
 				overlay.hide();
 			}
-		},
-		handleIframeClick: function() {
-			alert('now');
-			window.focus();
 		},
 		handlePinClick: function(e) {
 			$(e.currentTarget).toggleClass('pinned');
