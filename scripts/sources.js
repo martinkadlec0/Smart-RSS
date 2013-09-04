@@ -122,27 +122,34 @@ $(function() {
 		handleModelDestroy: function(e) {
 			list.destroySource(this);
 		},
-		renderInterval:  null,
+		renderInterval: 'first-time',
 		render: function() {
+			if (this.renderInterval == 'first-time') return this.realRender();
 			if (this.renderInterval) return;
+			
 
 			this.renderInterval = setTimeout(function(that) {
-				that.$el.toggleClass('has-unread', !!that.model.get('count'));
-
-				if (that.model.get('folderID') > 0) {
-					that.el.dataset.inFolder = that.model.get('folderID');
-				} else {
-					that.$el.removeClass('in-closed-folder');
-					delete that.el.dataset.inFolder;
-				}
-
-				
-				that.$el.attr('title', 
-					that.model.get('title') + ' (' + that.model.get('count') + ' ' + bg.lang.c.UNREAD + ', ' + that.model.get('countAll') + ' ' + bg.lang.c.TOTAL + ')'
-				);
-				that.$el.html(that.template(that.model.toJSON()));
-				that.renderInterval = null;
+				that.realRender();
 			}, 0, this);
+			return this;
+		},
+		realRender: function() {
+			this.$el.toggleClass('has-unread', !!this.model.get('count'));
+
+			if (this.model.get('folderID') > 0) {
+				this.el.dataset.inFolder = this.model.get('folderID');
+			} else {
+				this.$el.removeClass('in-closed-folder');
+				delete this.el.dataset.inFolder;
+			}
+
+			
+			this.$el.attr('title', 
+				this.model.get('title') + ' (' + this.model.get('count') + ' ' + bg.lang.c.UNREAD + ', ' + this.model.get('countAll') + ' ' + bg.lang.c.TOTAL + ')'
+			);
+			this.$el.html(this.template(this.model.toJSON()));
+			this.renderInterval = null;
+
 			return this;
 		}
 	});
@@ -182,21 +189,30 @@ $(function() {
 			e.stopPropagation();
 		},
 		template: _.template($('#template-folder').html()),
-		renderInterval: null,
+		renderInterval: 'first-time',
 		render: function() {
+			if (this.renderInterval == 'first-time') return this.realRender();
 			if (this.renderInterval) return;
+			
 
 			this.renderInterval = setTimeout(function(that) {
-				that.$el.toggleClass('has-unread', !!that.model.get('count'));
-				var data = Object.create(that.model.attributes);
-				that.$el.toggleClass('opened', that.model.get('opened'));
-				that.$el.html(that.template(data));
-
-				that.$el.attr('title', 
-					that.model.get('title') + ' (' + that.model.get('count') + ' ' + bg.lang.c.UNREAD + ', ' + that.model.get('countAll') + ' ' + bg.lang.c.TOTAL + ')'
-				);
-				that.renderInterval = null;
+				that.realRender();
 			}, 0, this);
+			return this;
+		},
+		realRender: function() {
+			
+			this.$el.toggleClass('has-unread', !!this.model.get('count'));
+			
+			var data = Object.create(this.model.attributes);
+			this.$el.toggleClass('opened', this.model.get('opened'));
+			this.$el.html(this.template(data));
+
+			this.$el.attr('title', 
+				this.model.get('title') + ' (' + this.model.get('count') + ' ' + bg.lang.c.UNREAD + ', ' + this.model.get('countAll') + ' ' + bg.lang.c.TOTAL + ')'
+			);
+			this.renderInterval = null;
+
 			return this;
 		},
 		showSourceItems: function(e) {
