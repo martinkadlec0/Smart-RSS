@@ -923,10 +923,19 @@ function rssGetDate(node) {
 }
 
 function rssGetAuthor(node, title) {
-	var creator = node.querySelector('creator, author');
+	var creator = node.querySelector('creator, author > name');
 	if (creator) {
-		creator = creator.textContent;
-	} else if (title && title.length > 0) {
+		creator = creator.textContent.trim();
+	} 
+
+	if (!creator) {
+		creator = node.querySelector('author');
+		if (creator) {
+			creator = creator.textContent.trim();
+		}
+	} 
+
+	if (!creator && title && title.length > 0) {
 		creator = title;
 	}
 
@@ -938,7 +947,7 @@ function rssGetAuthor(node, title) {
 		return creator;
 	}
 
-	return '<no author>';
+	return 'no author';
 }
 
 function rssGetTitle(node) {
