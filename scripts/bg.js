@@ -900,7 +900,7 @@ function getFeedTitle(xml) {
 		title = xml.querySelector('channel > link, feed > link, rss > link');
 	}
 
-	return title ? title.textContent || 'rss' : 'rss';
+	return title && title.textContent ? title.textContent.trim() || 'rss' : 'rss';
 }
 
 function rssGetDate(node) {
