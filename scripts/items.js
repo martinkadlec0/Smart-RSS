@@ -1089,7 +1089,7 @@ $(function() {
 					topWindow.frames[2].postMessage({ action: 'no-items' }, '*');
 				}
 			}
-			if (next) {
+			if (next && next.view) {
 				next.view.select(e);
 				if (!list.inView(next)) {
 					next.scrollIntoView(false);	
@@ -1117,7 +1117,7 @@ $(function() {
 					topWindow.frames[2].postMessage({ action: 'no-items' }, '*');
 				}
 			}
-			if (prev) {
+			if (prev && prev.view) {
 				prev.view.select(e);
 				if (!list.inView(prev)) {
 					prev.scrollIntoView(true);	
