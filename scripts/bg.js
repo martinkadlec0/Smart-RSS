@@ -738,10 +738,6 @@ function downloadURL(urls, cb) {
 		dataType: 'xml',
 		success: function(r) {
 
-			// will url.get('id') be still the right id?
-
-			loader.set('loaded', loader.get('loaded') + 1);
-
 			// parsedData step needed for debugging
 			var parsedData = parseRSS(r, sourceToLoad.get('id'));
 
@@ -782,6 +778,13 @@ function downloadURL(urls, cb) {
 				'lastUpdate': Date.now(),
 				'hasNew': hasNew || sourceToLoad.get('hasNew')
 			});
+			
+		},
+		error: function(e) {
+			console.log('Failed load RSS: ' + sourceToLoad.get('url'));
+		},
+		complete: function() {
+			loader.set('loaded', loader.get('loaded') + 1);
 
 			// reset alarm to make sure next call isn't too soon + to make sure alarm acutaly exists (it doesn't after import)
 			chrome.alarms.create('source-' + sourceToLoad.get('id'), {
@@ -790,12 +793,6 @@ function downloadURL(urls, cb) {
 			});
 
 
-			downloadURL();
-		},
-		error: function(e) {
-			loader.set('loaded', loader.get('loaded') + 1);
-
-			console.log('Failed load RSS: ' + sourceToLoad.get('url'));
 			downloadURL();
 		},
 		beforeSend: function(xhr) {
