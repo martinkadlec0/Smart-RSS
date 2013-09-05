@@ -90,7 +90,8 @@ var lang = {
 		DELETE_ALL_ARTICLES: 'Delete All Articles',
 		DELETE_ALL_Q: 'Do you really want to comletely delete ALL articles?',
 		REALLY_EMPTY_TRASH: 'Do you really want to completely delete all articles from trash?',
-		RENAME: 'Rename'
+		RENAME: 'Rename',
+		FOLDER_NAME: 'Folder name'
 	},
 	cs: {
 		MARK_AS_READ: 'Označit jako (Ne)Přečtené',
@@ -180,7 +181,8 @@ var lang = {
 		DELETE_ALL_ARTICLES: 'Odstranit Všechny Články',
 		DELETE_ALL_Q: 'Určitě chcete odstranit VŠECHNY články?',
 		REALLY_EMPTY_TRASH: 'Určitě chcete vysypat koš?',
-		RENAME: 'Přejmenovat'
+		RENAME: 'Přejmenovat',
+		FOLDER_NAME: 'Název složky'
 	},
 	de: {
 		MARK_AS_READ: 'Als (un)gelesen markieren',
@@ -270,7 +272,8 @@ var lang = {
 		DELETE_ALL_ARTICLES: 'Alle Artikel löschen',
 		DELETE_ALL_Q: 'Möchten sie wirklich ALLE Artikel löschen?',
 		REALLY_EMPTY_TRASH: 'Möchten sie alle Artikel im Papierkorb endgültig löschen?',
-		RENAME: 'Umbenennen'
+		RENAME: 'Umbenennen',
+		FOLDER_NAME: 'Ordnername'
 	},
 	pl: {
 		MARK_AS_READ: 'Oznacz jako (nie)przeczytane',
@@ -360,7 +363,8 @@ var lang = {
 		DELETE_ALL_ARTICLES: 'Usuń wszystkie wiadomości',
 		DELETE_ALL_Q: 'Czy na pewno chcesz całkowicie usunąć WSZYSTKIE wiadomości?',
 		REALLY_EMPTY_TRASH: 'Czy na pewno chcesz opróżnić kosz?',
-		RENAME: 'Zmień nazwę'
+		RENAME: 'Zmień nazwę',
+		FOLDER_NAME: 'Nazwa folderu'
 	},
 	tr: {
 		MARK_AS_READ: 'Okunmadı Olarak İşaretle',
@@ -450,7 +454,8 @@ var lang = {
 		DELETE_ALL_ARTICLES: 'Tüm Başlıkları Sil',
 		DELETE_ALL_Q: 'Gerçekten TÜM başlıkları silmek istiyor musunuz?',
 		REALLY_EMPTY_TRASH: 'Çöp kutusundaki TÜM başlıkları gerçekten silmek istiyor musunuz?',
-		RENAME: 'Yeniden Adlandır'
+		RENAME: 'Yeniden Adlandır',
+		FOLDER_NAME: 'Klasör ismi'
 	},
 	sk: {
 		MARK_AS_READ: 'Označiť ako (Ne)Prečítané',
@@ -540,7 +545,8 @@ var lang = {
 		DELETE_ALL_ARTICLES: 'Zmazať všetky správy',
 		DELETE_ALL_Q: 'Naozaj chcete zmazať VŠETKY správy?',
 		REALLY_EMPTY_TRASH: 'Chcete vymazať všetky spávy z koša?',
-		RENAME: 'Premenovať'
+		RENAME: 'Premenovať',
+		FOLDER_NAME: 'Názov zložky'
 	},
 	ru: {
 		MARK_AS_READ: 'Отметить прочтённой',
@@ -630,7 +636,8 @@ var lang = {
 		DELETE_ALL_ARTICLES: 'Удалить все новости',
 		DELETE_ALL_Q: 'Вы действительно хотите удалить все новости?',
 		REALLY_EMPTY_TRASH: 'Вы действительно хотите удалить содержимое корзины?',
-		RENAME: 'Переименовать'
+		RENAME: 'Переименовать',
+		FOLDER_NAME: 'Имя группи'
 	},
 };
 

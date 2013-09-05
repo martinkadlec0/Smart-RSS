@@ -329,7 +329,7 @@ $(function() {
 			
 		},
 		addFolderDialog: function() {
-			var title = (prompt('Folder name: ') || '').trim();
+			var title = (prompt(bg.lang.c.FOLDER_NAME + ': ') || '').trim();
 			if (!title) return;
 
 			bg.folders.create({
@@ -537,7 +537,7 @@ $(function() {
 		{ 
 			title: bg.lang.c.RENAME,
 			action: function() { 
-				var newTitle = prompt('Title: ', list.selectedItems[0].model.get('title'));
+				var newTitle = prompt(bg.lang.c.FOLDER_NAME + ': ', list.selectedItems[0].model.get('title'));
 				if (!newTitle) return;
 
 				list.selectedItems[0].model.save({ title: newTitle });
