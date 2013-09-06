@@ -159,9 +159,13 @@ $(function() {
 		className: 'list-item folder',
 		template: _.template($('#template-folder').html()),
 		events: {
+			'dblclick': 'handleDoubleClick',
 			'mouseup': 'handleMouseUp',
 			'click': 'handleMouseDown',
 			'click .folder-arrow': 'handleClickArrow'
+		},
+		handleDoubleClick: function(e) {
+			this.handleClickArrow(e);
 		},
 		showContextMenu: function(e) {
 			this.select(e);
