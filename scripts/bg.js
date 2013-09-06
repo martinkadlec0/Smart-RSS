@@ -158,7 +158,7 @@ var info = new(Backbone.Model.extend({
 var Source = Backbone.Model.extend({
 	defaults: {
 		title: '<no title>',
-		url: 'rss.rss',
+		url: 'about:blank',
 		updateEvery: 0,
 		lastUpdate: 0,
 		count: 0, // unread
@@ -169,7 +169,7 @@ var Source = Backbone.Model.extend({
 	}
 });
 
-var sourceJoker = new Source();
+var sourceJoker = new Source({ id: 'joker' });
 
 var sources = new(Backbone.Collection.extend({
 	model: Source,
@@ -542,7 +542,7 @@ fetchAll().always(function() {
 
 	items.on('change:unread', function(model) {
 		var source = model.getSource();
-		if (!model.get('trashed') && source) {
+		if (!model.get('trashed') && source != sourceJoker) {
 			if (model.get('unread') == true) {
 				source.set({
 					'count': source.get('count') + 1
@@ -556,7 +556,7 @@ fetchAll().always(function() {
 					source.save('hasNew', false);
 				}
 			}
-		} else if (!model.get('deleted') && source) {
+		} else if (!model.get('deleted') && source != sourceJoker) {
 			info.set({
 				trashCountUnread: info.get('trashCountUnread') + (model.get('unread') ? 1 : -1)
 			});
@@ -565,7 +565,7 @@ fetchAll().always(function() {
 
 	items.on('change:trashed', function(model) {
 		var source = model.getSource();
-		if (source && model.get('unread') == true) {
+		if (source != sourceJoker && model.get('unread') == true) {
 			if (model.get('trashed') == true) {
 				source.set({
 					'count': source.get('count') - 1,
@@ -589,7 +589,7 @@ fetchAll().always(function() {
 					'trashCountUnread': info.get('trashCountUnread') + (model.get('trashed') ? 1 : -1)
 				});
 			}
-		} else if (source) {
+		} else if (source != sourceJoker) {
 			source.set({ 
 				'countAll': source.get('countAll') + (model.get('trashed') ? - 1 : 1) 
 			});
@@ -754,14 +754,18 @@ function downloadURL(urls, cb) {
 	if (!loader.sourcesToLoad.length) {
 		// IF DOWNLOADING FINISHED, DELETED ITEMS WITH DELETED SOURCE (should not really happen)
 		var sourceIDs = sources.pluck('id');
-		items.where({
-			deleted: true
-		}).forEach(function(item) {
+		var foundSome = false;
+		items.toArray().forEach(function(item) {
 			if (sourceIDs.indexOf(item.get('sourceID')) == -1) {
-				console.log('DELETING OLD CONTENT BECAUSE OF MISSING SOURCE');
+				console.log('DELETING ITEM BECAUSE OF MISSING SOURCE');
 				item.destroy();
+				foundSome = true;
 			}
 		});
+
+		if (foundSome) {
+			info.autoSetData();
+		}
 
 		loader.set('maxSources', 0);
 		loader.set('loaded', 0);

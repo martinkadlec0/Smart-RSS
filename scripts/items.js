@@ -1129,27 +1129,27 @@ $(function() {
 				return;
 			}
 
-			if (e.keyCode == 68 || e.keyCode == 46) {
+			if (e.keyCode == 68 || e.keyCode == 46) { // D, DEL
 				if (list.specialName == 'trash' || e.shiftKey) {
 					list.destroyBatch(list.selectedItems, list.removeItemCompletely);
 				} else {
 					list.destroyBatch(list.selectedItems, list.removeItem);
 				}
 				e.preventDefault();
-			} else if (e.keyCode == 70 && e.ctrlKey) {
+			} else if (e.keyCode == 70 && e.ctrlKey) { // CTRL+F
 				$('#input-search').focus();
 				e.preventDefault();
-			} else if (e.keyCode == 49) {
+			} else if (e.keyCode == 49) { // 1
 				topWindow.frames[0].focus();
 				e.preventDefault();
-			} else if (e.keyCode == 13) {
+			} else if (e.keyCode == 13) { // ENTER
 				if (!list.selectedItems.length) return;
 				list.handleItemDblClick({ currentTarget: list.selectedItems[0].el, shiftKey: e.shiftKey });
 				e.preventDefault();
-			} else if (e.keyCode == 51) {
+			} else if (e.keyCode == 51) { // 3
 				topWindow.frames[2].focus();
 				e.preventDefault();
-			} else if (e.keyCode == 75) { // mark as read/unread
+			} else if (e.keyCode == 75) { // K - mark as read/unread
 				list.changeUnreadState();
 				e.preventDefault();
 			} else if (e.keyCode == 40 || e.keyCode == 74) { // arrow down, J

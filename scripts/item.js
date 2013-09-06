@@ -201,7 +201,7 @@ $(function() {
 				if (fr.contentDocument.readyState == 'complete') {
 					try {
 						fr.contentDocument.documentElement.style.fontSize = bg.settings.get('articleFontSize') + '%';
-						fr.contentDocument.querySelector('base').href = source ? source.get('url') : '#';
+						fr.contentDocument.querySelector('base').href = source.get('url');
 						fr.contentDocument.querySelector('#smart-rss-content').innerHTML = content;
 						fr.contentDocument.querySelector('#smart-rss-url').href = that.model.get('url');
 					} catch(e) {}
