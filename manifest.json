@@ -16,7 +16,7 @@
 	"browser_action": {
 		"default_title": "Smart RSS",
 		"default_icon": {
-			"19": "images/icon19.png"
+			"19": "images/reload_anim_1.png"
 		}
 	},
 	"options_page": "options.html",

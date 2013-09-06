@@ -9,6 +9,36 @@
 
 
 
+/**
+ * Update animations
+ */
+
+var animation = {
+ 	i: 2,
+ 	interval: null,
+ 	update: function() {
+ 		chrome.browserAction.setIcon({ path: '/images/reload_anim_' + this.i + '.png' });
+ 		this.i++;
+		if (this.i > 4) this.i = 1;
+ 	},
+ 	stop: function() {
+ 		clearInterval(this.interval);
+ 		this.interval = null;
+ 		this.i = 1;
+ 		handleIconChange();
+ 	},
+ 	start: function() {
+ 		if (this.interval) return;
+ 		var that = this;
+ 		this.interval = setInterval(function() {
+ 			that.update();
+ 		}, 400);
+		this.update();
+ 	}
+};
+animation.start();
+
+
 
 /**
  * IndexedDB preps.
@@ -381,6 +411,22 @@ function fetchAll() {
 	return allDef.promise();
 }
 
+
+function handleIconChange() {
+	if (animation.interval) return;
+	if ( sources.findWhere({ hasNew: true }) ) {
+		chrome.browserAction.setIcon({
+			path: '/images/icon19-' + settings.get('icon') + '.png'
+		});
+	} else {
+		chrome.browserAction.setIcon({
+			path: '/images/icon19.png'
+		});
+	}
+}
+
+
+
 /**
  * Init
  */
@@ -388,14 +434,6 @@ function fetchAll() {
 
 $(function() {
 fetchAll().always(function() {
-
-	/**
-	 * Set icon
-	 */
-
-	if (sources.findWhere({ hasNew: true })) {
-		chrome.browserAction.setIcon({ path: '/images/icon19-' + settings.get('icon') + '.png' 	});
-	}
 
 	/**
 	 * Load counters for specials
@@ -458,18 +496,6 @@ fetchAll().always(function() {
 			downloadOne(source);
 		}
 	});
-
-	function handleIconChange() {
-		if ( sources.findWhere({ hasNew: true }) ) {
-			chrome.browserAction.setIcon({
-				path: '/images/icon19-' + settings.get('icon') + '.png'
-			});
-		} else {
-			chrome.browserAction.setIcon({
-				path: '/images/icon19.png'
-			});
-		}
-	}
 
 	sources.on('change:hasNew', handleIconChange);
 	settings.on('change:icon', handleIconChange);
@@ -654,6 +680,13 @@ fetchAll().always(function() {
 	appStarted.resolve();
 
 	/**
+	 * Set icon
+	 */
+
+	animation.stop();
+
+
+	/**
 	 * onclick:button -> open RSS
 	 */
 	chrome.browserAction.onClicked.addListener(function(tab) {
@@ -738,10 +771,12 @@ function downloadURL(urls, cb) {
 		loader.set('loaded', 0);
 		loader.set('loading', false);
 		loader.sourceLoading = null;
+		animation.stop();
 
 		return;
 	}
 
+	animation.start();
 	loader.set('loading', true);
 	var sourceToLoad = loader.sourceLoading = loader.sourcesToLoad.pop();
 
