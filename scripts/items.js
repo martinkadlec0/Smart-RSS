@@ -1169,7 +1169,7 @@ $(function() {
 			} else if (e.keyCode == 72) { // H = go to next unread
 				this.selectNext({ selectUnread: true });
 				e.preventDefault();
-			} else if (e.keyCode == 89) { // Y = go to prev unread
+			} else if (e.keyCode == 89 || e.keyCode == 90) { // Y/Z = go to prev unread
 				this.selectPrev({ selectUnread: true });
 				e.preventDefault();
 			} else if (e.keyCode == 65 && e.ctrlKey && e.shiftKey) { // A = Mark all as read
