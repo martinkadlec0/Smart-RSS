@@ -1149,10 +1149,10 @@ $(function() {
 			} else if (e.keyCode == 75) { // mark as read/unread
 				list.changeUnreadState();
 				e.preventDefault();
-			} else if (e.keyCode == 40) { // arrow down
+			} else if (e.keyCode == 40 || e.keyCode == 74) { // arrow down, J
 				this.selectNext(e);
 				e.preventDefault();
-			} else if (e.keyCode == 38) { // arrow up
+			} else if (e.keyCode == 38 || e.keyCode == 85) { // arrow up, U
 				this.selectPrev(e);
 				e.preventDefault();
 			} else if (e.keyCode == 71) { // G - mark as read and go to next unread
@@ -1216,7 +1216,7 @@ $(function() {
 					itemsContextMenu.hide();
 					e.preventDefault();
 				}
-			} else if (e.keyCode == 85) { // U = Undelete item
+			} else if (e.keyCode == 78) { // N = Undelete item
 				if (!list.selectedItems || !list.selectedItems.length || list.specialName != 'trash') return;
 				list.destroyBatch(list.selectedItems, list.undeleteItem);				
 				e.preventDefault();
