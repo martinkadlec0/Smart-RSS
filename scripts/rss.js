@@ -42,6 +42,15 @@ bg.settingsLoaded.always(function() {
 	
 	function setFirstFrameSize() {
 		var fs = document.querySelectorAll('frameset');
+
+		if (!bg.settings.get('thickFrameBorders')) {
+			var all = document.querySelectorAll('frameset, frame');
+			[].forEach.call(all, function(one) { 
+				one.setAttribute('border', 1);
+				one.setAttribute('bordercolor', '#a6a6a6');
+			});
+		}
+
 		if (!bg.settings.get('panelToggled')) {
 			fs[0].cols = '4,*';
 			fs[0].firstElementChild.setAttribute('noresize', true);

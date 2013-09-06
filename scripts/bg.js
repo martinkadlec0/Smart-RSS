@@ -73,7 +73,8 @@ var settings = new(Backbone.Model.extend({
 		hoursFormat: '24h',
 		articleFontSize: '100',
 		uiFontSize: '100',
-		disableDateGroups: false
+		disableDateGroups: false,
+		thickFrameBorders: false
 	},
 	localStorage: new Backbone.LocalStorage('settings-backbone')
 }));
