@@ -942,10 +942,26 @@ $(function() {
 				}
 				if (s) s.view.select();
 				e.preventDefault();
+			} else if (e.keyCode == 37 && e.ctrlKey) {
+				var folders = $('.folder.opened');
+				if (!folders.length) return;
+				folders.each(function(i, folder) {
+					if (folder.view) {
+						folder.view.handleClickArrow(e);
+					}
+				});
+			} else if (e.keyCode == 39 && e.ctrlKey) {
+				var folders = $('.folder:not(.opened)');
+				if (!folders.length) return;
+				folders.each(function(i, folder) {
+					if (folder.view) {
+						folder.view.handleClickArrow(e);
+					}
+				});
 			} else if (e.keyCode == 37) {
 				var cs = $('.selected:first');
 				if (cs.length && cs.hasClass('folder')) {
-					cs.get(0).view.handleClickArrow();
+					cs.get(0).view.handleClickArrow(e);
 				}
 				e.preventDefault();
 			} else if (e.keyCode == 39) {
