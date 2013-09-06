@@ -206,12 +206,6 @@ chrome.runtime.getBackgroundPage(function(bg) {
 				if (e.data.action == 'finished'){
 					$('#smart-imported').html('Loading data to memory!');
 
-					bg.folderIdIndex = Math.max(bg.folderIdIndex, e.data.ifindex) + 1;
-					bg.sourceIdIndex = Math.max(bg.sourceIdIndex, e.data.isindex) + 1;
-
-					localStorage.setItem('folderIdIndex', bg.folderIdIndex);
-					localStorage.setItem('sourceIdIndex', bg.sourceIdIndex);
-
 					bg.fetchAll().always(function() {
 						bg.info.autoSetData();
 						$('#smart-imported').html('Import fully completed!');
@@ -267,13 +261,11 @@ chrome.runtime.getBackgroundPage(function(bg) {
 					var subfeeds = feeds[i].querySelectorAll('outline[type=rss]');
 
 					var folder = bg.folders.create({
-						id: bg.folderIdIndex++,
 						title: decodeHTML(feeds[i].getAttribute('title'))
 					});
 
 					for (var n=0; n<subfeeds.length; n++) {
 						bg.sources.create({
-							id: bg.sourceIdIndex++,
 							title: decodeHTML(subfeeds[n].getAttribute('title')),
 							url: subfeeds[n].getAttribute('xmlUrl'),
 							updateEvery: 180,
@@ -282,16 +274,12 @@ chrome.runtime.getBackgroundPage(function(bg) {
 					}
 				} else {
 					bg.sources.create({
-						id: bg.sourceIdIndex++,
 						title: decodeHTML(feeds[i].getAttribute('title')),
 						url: feeds[i].getAttribute('xmlUrl'),
 						updateEvery: 180
 					});
 				}
 			}
-
-			localStorage.setItem('folderIdIndex', bg.folderIdIndex);
-			localStorage.setItem('sourceIdIndex', bg.sourceIdIndex);
 
 
 			$('#opml-imported').html('Import completed!');

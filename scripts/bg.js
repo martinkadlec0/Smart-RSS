@@ -81,8 +81,6 @@ function translate(str) {
 	});
 }
 
-var sourceIdIndex = localStorage.getItem('sourceIdIndex') || 1;
-var folderIdIndex = localStorage.getItem('folderIdIndex') || 1;
 
 /*$.ajaxSetup({
 	cache: false
@@ -159,7 +157,6 @@ var info = new(Backbone.Model.extend({
 
 var Source = Backbone.Model.extend({
 	defaults: {
-		id: null,
 		title: '<no title>',
 		url: 'rss.rss',
 		updateEvery: 0,
@@ -238,8 +235,7 @@ var items = new(Backbone.Collection.extend({
 
 var Folder = Backbone.Model.extend({
 	defaults: {
-		id: -1,
-		title: '<no title',
+		title: '<no title>',
 		opened: false,
 		count: 0, // unread
 		countAll: 0
@@ -467,7 +463,7 @@ fetchAll().always(function() {
 	});
 
 	chrome.alarms.onAlarm.addListener(function(alarm) {
-		var sourceID = parseInt(alarm.name.replace('source-', ''));
+		var sourceID = alarm.name.replace('source-', '');
 		if (sourceID) {
 			var source = sources.findWhere({
 				id: sourceID
@@ -528,7 +524,7 @@ fetchAll().always(function() {
 			trashCountTotal: info.get('trashCountTotal') - trashAll
 		});
 
-		if (source.get('folderID') > 0) {
+		if (source.get('folderID')) {
 
 			var folder = folders.findWhere({ id: source.get('folderID') });
 			if (!folder) return;
@@ -627,7 +623,7 @@ fetchAll().always(function() {
 		});
 
 		// FOLDER
-		if (!(source.get('folderID') > 0)) return;
+		if (!(source.get('folderID'))) return;
 
 		var folder = folders.findWhere({ id: source.get('folderID') });
 		if (!folder) return;
@@ -642,7 +638,7 @@ fetchAll().always(function() {
 		});
 
 		// FOLDER
-		if (!(source.get('folderID') > 0)) return;
+		if (!(source.get('folderID'))) return;
 
 		var folder = folders.findWhere({ id: source.get('folderID') });
 		if (!folder) return;
@@ -651,7 +647,7 @@ fetchAll().always(function() {
 	});
 
 	sources.on('change:folderID', function(source) {
-		if (source.get('folderID') > 0) {
+		if (source.get('folderID')) {
 
 			var folder = folders.findWhere({ id: source.get('folderID') });
 			if (!folder) return;
@@ -660,7 +656,7 @@ fetchAll().always(function() {
 				count: folder.get('count') + source.get('count'),
 				countAll: folder.get('countAll') + source.get('countAll')
 			});
-		} else if (source.previous('folderID') > 0) {
+		} else if (source.previous('folderID')) {
 			var folder = folders.findWhere({ id: source.previous('folderID') });
 			if (!folder) return;
 
@@ -1037,13 +1033,10 @@ chrome.runtime.onMessageExternal.addListener(function(message, sender, sendRespo
 	if (message.action == 'new-rss' && message.value) {
 		message.value = message.value.replace(/^feed:/i, 'http:');
 		sources.create({
-			id: sourceIdIndex++,
 			title: message.value,
 			url: message.value,
 			updateEvery: 180
 		});
-
-		localStorage.setItem('sourceIdIndex', sourceIdIndex);
 
 		openRSS();
 

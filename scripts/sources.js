@@ -137,7 +137,7 @@ $(function() {
 		realRender: function() {
 			this.$el.toggleClass('has-unread', !!this.model.get('count'));
 
-			if (this.model.get('folderID') > 0) {
+			if (this.model.get('folderID')) {
 				this.el.dataset.inFolder = this.model.get('folderID');
 			} else {
 				this.$el.removeClass('in-closed-folder');
@@ -337,11 +337,8 @@ $(function() {
 			if (!title) return;
 
 			bg.folders.create({
-				id: bg.folderIdIndex++,
 				title: title
 			});
-
-			localStorage.setItem('folderIdIndex', bg.folderIdIndex);
 
 		},
 		addSourceDialog: function() {
@@ -355,14 +352,12 @@ $(function() {
 
 			url = fixURL(url);
 			bg.sources.create({
-				id: bg.sourceIdIndex++,
 				title: url,
 				url: url,
 				updateEvery: 180,
 				folderID: folderID
 			}).fetch();
 
-			localStorage.setItem('sourceIdIndex', bg.sourceIdIndex);
 		
 		},
 		reloadSources: function() {
@@ -692,16 +687,16 @@ $(function() {
 
 			$('.drag-over').removeClass('drag-over');
 
-			var id = parseInt(oe.dataTransfer.getData('dnd-sources') || 0);
+			var id = oe.dataTransfer.getData('dnd-sources');
 			if (!id) return;
 
 			var item = bg.sources.findWhere({ id: id });
 			if (!item) return;
 
 			if ($(e.currentTarget).hasClass('folder')) {
-				var folderID = parseInt(e.currentTarget.dataset.id || 0);
+				var folderID = e.currentTarget.dataset.id;
 			} else {
-				var folderID = parseInt(e.currentTarget.dataset.inFolder || 0);	
+				var folderID = e.currentTarget.dataset.inFolder;	
 			}
 
 			item.save({ folderID: folderID });
@@ -766,7 +761,7 @@ $(function() {
 		placeSource: function(view, noManualSort) {
 			var folder = null;
 			var source = view.model;
-			if (source.get('folderID') > 0) {
+			if (source.get('folderID')) {
 				folder = $('.folder[data-id=' + source.get('folderID') + ']');
 				if (!folder.length) folder = null;
 			}

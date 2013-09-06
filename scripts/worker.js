@@ -25,8 +25,6 @@ onmessage = function(e) {
 	}
 }
 
-var ifindex = 1;
-var isindex = 1;
 var writes = 0;
 
 function handleReq(req) {
@@ -34,7 +32,7 @@ function handleReq(req) {
 	req.onsuccess = req.onerror = function() {
 		writes--;
 		if (writes <= 0) {
-			postMessage({ action: 'finished', ifindex: ifindex, isindex: isindex });
+			postMessage({ action: 'finished' });
 		}
 	}
 }
@@ -52,7 +50,6 @@ function startImport() {
 
 	if (f) {
 		for (var i=0,j=f.length; i<j; i++) {
-			ifindex = Math.max(ifindex, f[i].id);
 			handleReq( folders.add(f[i]) );
 			if (!(i % 10)) postMessage({ action: 'message', value: 'Folders: ' + i + '/' + j });
 		}
@@ -60,7 +57,6 @@ function startImport() {
 
 	if (s) {
 		for (var i=0,j=s.length; i<j; i++) {
-			isindex = Math.max(isindex, s[i].id);
 			handleReq( sources.add(s[i]) );
 			if (!(i % 10)) postMessage({ action: 'message', value: 'Feeds: ' + i + '/' + j });
 		}
@@ -74,7 +70,7 @@ function startImport() {
 	}
 
 	if (writes == 0) {
-		postMessage({ action: 'finished', ifindex: ifindex, isindex: isindex });
+		postMessage({ action: 'finished' });
 	} else {
 		postMessage({ action: 'message', value: 'Writing...' });
 	}
