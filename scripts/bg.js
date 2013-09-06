@@ -1,4 +1,16 @@
 /**
+ * Smart RSS extension
+ * COPYRIGHT by Martin Kadlec
+ * This extension is meant for Opera only. Do not reuse any of the code for any other browser.
+ * You are allowed to do any changes for personal use in Opera Browser.
+ * Ask before publishing modified versions.
+ * Do not upload any modified version of this extension to addons.opera.com!
+ */
+
+
+
+
+/**
  * IndexedDB preps.
  */
 
