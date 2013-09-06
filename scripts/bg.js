@@ -880,7 +880,10 @@ function parseRSS(xml, sourceID) {
 }
 
 function rssGetLink(node) {
-	var link = node.querySelector('link');
+	var link = node.querySelector('link[rel="alternate"]');
+	if (!link) link = node.querySelector('link[type="text/html"]');
+	if (!link) link = node.querySelector('link');
+
 	if (link) {
 		return link.textContent || link.getAttribute('href');
 	} 
