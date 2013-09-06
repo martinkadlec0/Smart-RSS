@@ -743,6 +743,8 @@ $(function() {
 				} else {
 					app.selectNext({ currentIsRemoved: true });
 				}
+			} else {
+				this.selectFirst()
 			}
 		},
 		addItem: function(item, noManualSort) {
@@ -995,8 +997,9 @@ $(function() {
 					for (var i=0, j=this.nextFrameStore.length - 1; i<j; i++) {
 						this.destroyItemFrame(this.nextFrameStore[i]);
 					}
-					this.selectAfterDelete(view);
-					this.destroyItemFrame(this.nextFrameStore[this.nextFrameStore.length - 1]);
+					var lastView = this.nextFrameStore[this.nextFrameStore.length - 1];
+					this.selectAfterDelete(lastView);
+					this.destroyItemFrame(lastView);
 
 					this.nextFrame = null;
 					this.nextFrameStore = [];
