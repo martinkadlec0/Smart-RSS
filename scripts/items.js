@@ -27,6 +27,26 @@ if (!Element.prototype.hasOwnProperty('matchesSelector')) {
 	Element.prototype.matchesSelector = Element.prototype.webkitMatchesSelector;
 }
 
+Element.prototype.findNext = function(query) {
+	var cur = this;
+	while (cur = cur.nextElementSibling) {
+		if (cur.matchesSelector(query)) {
+			return cur;
+		}
+	}
+	return null;
+}
+
+Element.prototype.findPrev = function(query) {
+	var cur = this;
+	while (cur = cur.previousElementSibling) {
+		if (cur.matchesSelector(query)) {
+			return cur;
+		}
+	}
+	return null;
+}
+
 window.addEventListener('load', function() {
 	window.focus();
 })
@@ -328,12 +348,7 @@ $(function() {
 		},
 		handleModelDestroy: function(mod, col, opt) {
 			if (opt.noFocus && list.currentSource) return;
-			if (opt.noFocus) list.noFocus = true;
 			list.destroyItem(this);
-			if (opt.noFocus) {
-				list.noFocus = false;
-				list.selectFirst();
-			}
 		},
 		handleClickPin: function(e) {
 			e.stopPropagation();
@@ -967,35 +982,48 @@ $(function() {
 			//this.destroyItem(view);
 		},
 		destroyBatch: function(arr, fn) {
-			this.noFocus = true;
-			while (arr.length > 1) fn.call(this, arr[0]);
-			this.noFocus = false;
-			if (arr.length) fn.call(this, arr[0]);
-			this.handleScroll();
-		},
-		destroyItem: function(view) {
-			if (!this.noFocus) {
-				this.selectAfterDelete(view);
+			for (var i=0, j=arr.length; i<j; i++) {
+				fn.call(this, arr[i]);
 			}
+		},
+		nextFrameStore: [],
+		nextFrame: null,
+		destroyItem: function(view) {
+			this.nextFrameStore.push(view);
+			if (!this.nextFrame) {
+				this.nextFrame = requestAnimationFrame(function() {
+					for (var i=0, j=this.nextFrameStore.length - 1; i<j; i++) {
+						this.destroyItemFrame(this.nextFrameStore[i]);
+					}
+					this.selectAfterDelete(view);
+					this.destroyItemFrame(this.nextFrameStore[this.nextFrameStore.length - 1]);
 
+					this.nextFrame = null;
+					this.nextFrameStore = [];
+					this.handleScroll();
 
+				}.bind(this));
+			}
+		},
+		destroyItemFrame: function(view) {
 			// START: REMOVE DATE GROUP
 			/*var prev = view.el.previousElementSibling;
 			var next = view.el.nextElementSibling;*/
-			var prev = view.$el.prevAll(':not(.unpluged):first');
-			var next = view.$el.nextAll(':not(.unpluged):first');
-			if (prev.length && prev.hasClass('date-group')) {
-				if (!next.length || next.hasClass('date-group')) {
-					groups.remove(prev.get(0).view.model);
+			var prev = view.el.findPrev(':not(.unpluged)');
+			var next = view.el.findNext(':not(.unpluged)');
+			if (prev && prev.classList.contains('date-group')) {
+				if (!next || next.classList.contains('date-group')) {
+					groups.remove(prev.view.model);
 				}
 			}
 			// END: REMOVE DATE GROUP
 
 			view.clearEvents();
-			view.undelegateEvents();
-			view.$el.removeData().unbind(); 
-			view.off();
-			view.remove();
+			// view.undelegateEvents(); - I moved all events to _list_ so this shouldn't be neccesary
+			// view.$el.removeData() - i removed this as I don't use jquery .data, if I will in future I have to add it again
+			// view.$el.unbind(); - - I'm not adding any jquery events
+			// view.off(); - This takes from some reason quite a time, and does nothing because I'm not adding events on the view
+			view.remove(); 
 			
 			var io = list.selectedItems.indexOf(view);
 			if (io >= 0) list.selectedItems.splice(io, 1);
@@ -1006,10 +1034,6 @@ $(function() {
 
 			// not really sure what would happen if this wouldn't be here :P (too tired to think about it)
 			this.reuseIndex--;
-
-			if (!this.noFocus) {
-				this.handleScroll();
-			}
 		},
 		restartSelection: function() {
 			if (this.selectedItems.length) {
