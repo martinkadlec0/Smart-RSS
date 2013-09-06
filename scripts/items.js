@@ -1136,6 +1136,9 @@ $(function() {
 					list.destroyBatch(list.selectedItems, list.removeItem);
 				}
 				e.preventDefault();
+			} else if (e.keyCode == 70 && e.ctrlKey) {
+				$('#input-search').focus();
+				e.preventDefault();
 			} else if (e.keyCode == 49) {
 				topWindow.frames[0].focus();
 				e.preventDefault();
