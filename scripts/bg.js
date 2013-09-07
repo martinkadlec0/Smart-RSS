@@ -263,7 +263,7 @@ var handleAllCountChange = function(model) {
 		var val = info.get('allCountUnread') > 99 ? '+' : info.get('allCountUnread');
 		val = val <= 0 ? '' : String(val);
 		chrome.browserAction.setBadgeText({ text: val });
-		chrome.browserAction.setBadgeBackgroundColor({ color: '#0000FF' });
+		chrome.browserAction.setBadgeBackgroundColor({ color: '#777' });
 		info.badgeTimeout = null;
 	});
 }
