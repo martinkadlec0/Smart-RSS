@@ -677,7 +677,10 @@ $(function() {
 				var folder = $('.folder[data-id=' + e.data.value + ']').get(0);
 				if (!folder) return;
 				folder.view.select();
-
+			} else if (e.data.action == 'select-all-feeds') {
+				var allFeeds = $('.special:first').get(0);
+				if (!allFeeds) return;
+				allFeeds.view.select();
 			}
 		},
 		handleDragOver: function(e) {

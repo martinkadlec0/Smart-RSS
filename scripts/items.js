@@ -208,8 +208,10 @@ $(function() {
 			} 
 		},
 		clearEvents: function() {
-			this.model.off('change', this.handleModelChange, this);
-			this.model.off('destroy', this.handleModelDestroy, this);
+			if (this.model) {
+				this.model.off('change', this.handleModelChange, this);
+				this.model.off('destroy', this.handleModelDestroy, this);
+			}
 			bg.sources.off('clear-events', this.handleClearEvents, this);
 		},
 		render: function() {
@@ -956,11 +958,10 @@ $(function() {
 		},
 		/**
 		 * @Triggered: when any source is destroyed
-		 * @Description: if source is in currently selected folder, send msg to sources.js to select that folder
+		 * @Description: if source in current folder is deleted select current folder
 		 */
 		handleSourcesDestroy: function(source) {
 			if (!this.currentFolder) return;
-
 			var folderID = source.get('folderID'); 
 			if (folderID && this.currentFolder.id == folderID) {
 				topWindow.frames[0].postMessage({ action: 'select-folder', value: this.currentFolder.id }, '*');
@@ -978,11 +979,17 @@ $(function() {
 					that.handleNewFolderSelected(that.currentFolder);
 				}, 0);*/
 			} else {
+				// select all feeds in left column
+				if (model == this.currentSource) {
+					topWindow.frames[0].postMessage({ action: 'select-all-feeds' }, '*');
+				} 
+
+				// load all feeds in middle column
 				this.clearOnSelect();
 				this.specialName = 'all-feeds';
-				setTimeout(function() {
+				this.once('items-destroyed', function() {
 					that.addItems(bg.items.where({ trashed: false, unread: true }));
-				}, 0);	
+				}, this);	
 			}
 		},
 		undeleteItem: function(view) {
@@ -1026,6 +1033,8 @@ $(function() {
 					this.nextFrame = null;
 					this.nextFrameStore = [];
 					this.handleScroll();
+
+					this.trigger('items-destroyed');
 
 				}.bind(this));
 			}

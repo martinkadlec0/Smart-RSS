@@ -542,18 +542,16 @@ fetchAll().always(function() {
 				if (item.get('trashed')) trashAll++;
 				if (item.get('trashed') && item.get('unread')) trashUnread++;
 			}
-			item.destroy({
-				noFocus: true
-			});
+			item.destroy({ noFocus: true });
 		});
 
+		/**
+		 * probably not neccesary because I  save all the removed items to batch and then 
+		 * in next frame I remove tehm at once and all handleScroll anyway
+		 */
 		items.trigger('render-screen');
 		
-		try {
-			chrome.alarms.clear('source-' + source.get('id'));
-		} catch (e) {
-			console.log('Alarm error: ' + e);
-		}
+		
 
 		info.set({
 			allCountUnread: info.get('allCountUnread') - source.get('count'),
@@ -566,16 +564,22 @@ fetchAll().always(function() {
 		if (source.get('folderID')) {
 
 			var folder = folders.findWhere({ id: source.get('folderID') });
-			if (!folder) return;
-
-			folder.set({ 
-				count: folder.get('count') - source.get('count'),
-				countAll: folder.get('countAll') - source.get('countAll')
-			});
+			if (folder) {
+				folder.set({ 
+					count: folder.get('count') - source.get('count'),
+					countAll: folder.get('countAll') - source.get('countAll')
+				});
+			}
 		}
 
 		if (source.get('hasNew')) {
 			handleIconChange();
+		}
+
+		try {
+			chrome.alarms.clear('source-' + source.get('id'));
+		} catch (e) {
+			console.log('Alarm error: ' + e);
 		}
 	});
 
