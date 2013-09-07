@@ -970,7 +970,7 @@ $(function() {
 			this.destroyItem(view);
 		},
 		removeItem: function(view) {
-			view.model.save({ 'trashed': true });
+			view.model.save({ trashed: true, visited: true });
 			//this.destroyItem(view);
 		},
 		removeItemCompletely: function(view) {

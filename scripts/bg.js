@@ -125,6 +125,7 @@ var info = new(Backbone.Model.extend({
 		id: 'info-id',
 		allCountUnread: 0,
 		allCountTotal: 0,
+		allCountUnvisited: 0,
 		trashCountUnread: 0,
 		trashCountTotal: 0
 	},
@@ -133,6 +134,7 @@ var info = new(Backbone.Model.extend({
 		this.set({
 			allCountUnread:   items.where({ trashed: false, deleted: false, unread: true }).length,
 			allCountTotal:    items.where({ trashed: false, deleted: false }).length,
+			allCountUnvisited:    items.where({ visited: false, trashed: false }).length,
 			trashCountUnread: items.where({ trashed: true,  deleted: false, unread: true }).length,
 			trashCountTotal:  items.where({ trashed: true,  deleted: false }).length
 		});
@@ -199,6 +201,8 @@ var Item = Backbone.Model.extend({
 		this.save({
 			trashed: true,
 			deleted: true,
+			visited: true,
+			unread: false,
 			'pinned': false,
 			'content': '',
 			'author': '',
@@ -253,14 +257,29 @@ var folders = new (Backbone.Collection.extend({
 }));
 
 var handleAllCountChange = function(model) {
-	if (settings.get('badgeMode') != 'unread') {
+	if (settings.get('badgeMode') == 'disabled') {
 		if (model == settings) chrome.browserAction.setBadgeText({ text: '' });
 		return;
+	}
+
+	if (model == settings) {
+		if (settings.get('badgeMode') == 'unread') {
+			info.off('change:allCountUnvisited', handleAllCountChange);
+			info.on('change:allCountUnread', handleAllCountChange);
+		} else {
+			info.off('change:allCountUnread', handleAllCountChange);
+			info.on('change:allCountUnvisited', handleAllCountChange);
+		}
 	}
 	if (info.badgeTimeout) return;
 
 	info.badgeTimeout = setTimeout(function() {
-		var val = info.get('allCountUnread') > 99 ? '+' : info.get('allCountUnread');
+		if (settings.get('badgeMode') == 'unread') {
+			var val = info.get('allCountUnread') > 99 ? '+' : info.get('allCountUnread');
+		} else {
+			var val = info.get('allCountUnvisited') > 99 ? '+' : info.get('allCountUnvisited');
+		}
+		
 		val = val <= 0 ? '' : String(val);
 		chrome.browserAction.setBadgeText({ text: val });
 		chrome.browserAction.setBadgeBackgroundColor({ color: '#777' });
@@ -516,8 +535,10 @@ fetchAll().always(function() {
 	sources.on('destroy', function(source) {
 		var trashUnread = 0;
 		var trashAll = 0;
+		var allUnvisited = 0;
 		items.where({ sourceID: source.get('id') }).forEach(function(item) {
 			if (!item.get('deleted')) {
+				if (!item.get('visited')) allUnvisited++;
 				if (item.get('trashed')) trashAll++;
 				if (item.get('trashed') && item.get('unread')) trashUnread++;
 			}
@@ -537,6 +558,7 @@ fetchAll().always(function() {
 		info.set({
 			allCountUnread: info.get('allCountUnread') - source.get('count'),
 			allCountTotal: info.get('allCountTotal') - source.get('countAll'),
+			allCountUnvisited: info.get('allCountUnvisited') - allUnvisited,
 			trashCountUnread: info.get('trashCountUnread') - trashUnread,
 			trashCountTotal: info.get('trashCountTotal') - trashAll
 		});
@@ -629,6 +651,14 @@ fetchAll().always(function() {
 			});
 		}
 	});
+
+	items.on('change:visited', function(model) {
+		info.set({
+			'allCountUnvisited':  info.get('allCountUnvisited') + (model.get('visited') ? -1 : 1)
+		});
+	});
+
+
 	/**
 	 * Folder counts
 	 */
@@ -684,8 +714,13 @@ fetchAll().always(function() {
 		}
 	});
 
-	info.on('change:allCountUnread', handleAllCountChange);
+
 	settings.on('change:badgeMode', handleAllCountChange);
+	if (settings.get('badgeMode') == 'unread') {
+		info.on('change:allCountUnread', handleAllCountChange);
+	} else if (settings.get('badgeMode') == 'unvisited') {
+		info.on('change:allCountUnvisited', handleAllCountChange);	
+	}
 	handleAllCountChange();
 
 	/**
@@ -811,11 +846,13 @@ function downloadURL(urls, cb) {
 			var parsedData = parseRSS(r, sourceToLoad.get('id'));
 
 			var hasNew = false;
+			var createdNo = 0;
 			parsedData.forEach(function(item) {
 				var existingItem = items.get(item.id);
 				if (!existingItem) {
 					hasNew = true;
 					items.create(item, { sort: false });
+					createdNo++;
 				} else if (existingItem.get('deleted') == false && existingItem.get('content') != item.content) {
 					existingItem.save({
 						content: item.content
@@ -846,6 +883,10 @@ function downloadURL(urls, cb) {
 				'countAll': countAll,
 				'lastUpdate': Date.now(),
 				'hasNew': hasNew || sourceToLoad.get('hasNew')
+			});
+
+			info.set({
+				allCountUnvisited: info.get('allCountUnvisited') + createdNo
 			});
 			
 		},

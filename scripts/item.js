@@ -67,7 +67,8 @@ $(function() {
 				itemView.model.markAsDeleted();
 			} else {
 				itemView.model.save({
-					trashed: true
+					trashed: true,
+					visited: true
 				});
 			}
 		},
