@@ -21,6 +21,10 @@ $(function() {
 	$('.overlay').html( bg.translate($('.overlay').html()) );
 	document.documentElement.style.fontSize = bg.settings.get('uiFontSize') + '%';
 
+	try {
+		$('iframe').get(0).contentDocument.querySelector('#smart-rss-url').innerHTML = bg.lang.c.FULL_ARTICLE;
+	} catch(e) {}
+
 	$('iframe').load(function() {
 		$('iframe').get(0).contentDocument.querySelector('#smart-rss-url').innerHTML = bg.lang.c.FULL_ARTICLE;
 	});
