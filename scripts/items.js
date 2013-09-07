@@ -625,6 +625,7 @@ $(function() {
 			bg.items.on('render-screen', this.handleRenderScreen, this);
 			bg.settings.on('change:lines', this.handleChangeLines, this);
 			bg.settings.on('change:layout', this.handleChangeLayout, this);
+			bg.sources.on('destroy', this.handleSourcesDestroy, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 
 			groups.on('add', this.addGroup, this);
@@ -693,6 +694,7 @@ $(function() {
 				bg.items.off('render-screen', this.handleRenderScreen, this);
 				bg.settings.off('change:lines', this.handleChangeLines, this);
 				bg.settings.off('change:layout', this.handleChangeLayout, this);
+				bg.sources.off('destroy', this.handleSourcesDestroy, this);
 				if (this.currentSource) {
 					this.currentSource.off('destroy', this.handleDestroyedSource, this);
 				}
@@ -744,7 +746,10 @@ $(function() {
 					app.selectNext({ currentIsRemoved: true });
 				}
 			} else {
-				this.selectFirst()
+				// if first item is the last item to be deleted, selecting it will trigger error - rAF to get around it
+				requestAnimationFrame(function() {
+					this.selectFirst();	
+				}.bind(this));
 			}
 		},
 		addItem: function(item, noManualSort) {
@@ -949,12 +954,29 @@ $(function() {
 				
 			}, this) );
 		},
+		/**
+		 * @Triggered: when any source is destroyed
+		 * @Description: if source is in currently selected folder, send msg to sources.js to select that folder
+		 */
+		handleSourcesDestroy: function(source) {
+			if (!this.currentFolder) return;
+
+			var folderID = source.get('folderID'); 
+			if (folderID && this.currentFolder.id == folderID) {
+				topWindow.frames[0].postMessage({ action: 'select-folder', value: this.currentFolder.id }, '*');
+			}
+		},
+		/**
+		 * Triggered: when currently selected feed or folder is destroyed
+		 */
 		handleDestroyedSource: function(model) {
 			var that = this;
 			if (this.currentFolder && !(model instanceof bg.Folder)) {
-				setTimeout(function() {
+				alert('U01: This should never happen. If it did, please note what you just did it and contact me :)');
+				/*setTimeout(function() {
+					topWindow.frames[0].postMessage({ action: 'select-folder', value: this.currentFolder.id }, '*');
 					that.handleNewFolderSelected(that.currentFolder);
-				}, 0);
+				}, 0);*/
 			} else {
 				this.clearOnSelect();
 				this.specialName = 'all-feeds';

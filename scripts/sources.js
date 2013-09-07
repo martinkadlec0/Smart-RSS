@@ -59,6 +59,7 @@ $(function() {
 			sourcesContextMenu.show(e.clientX, e.clientY);
 		},
 		select: function(e) {
+			e = e || {};
 			//if (e.ctrlKey != true && e.shiftKey != true) {
 				list.selectedItems = [];
 				$('.selected').removeClass('selected');
@@ -667,7 +668,17 @@ $(function() {
 			bg.sources.on('change:folderID', this.handleChangeFolder, this);
 			bg.folders.on('add', this.addFolder, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
+
+			window.addEventListener('message', this.handleMessage);
 			
+		},
+		handleMessage: function(e) {
+			if (e.data.action == 'select-folder') {
+				var folder = $('.folder[data-id=' + e.data.value + ']').get(0);
+				if (!folder) return;
+				folder.view.select();
+
+			}
 		},
 		handleDragOver: function(e) {
 			var f = e.currentTarget.dataset.inFolder;
