@@ -106,6 +106,7 @@ $(function() {
 			this.el.setAttribute('draggable', 'true');
 			this.model.on('change', this.render, this);
 			this.model.on('destroy', this.handleModelDestroy, this);
+			this.model.on('change:title', this.handleChangeTitle, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 			this.el.dataset.id = this.model.get('id');
 			this.el.view = this;
@@ -118,7 +119,11 @@ $(function() {
 		clearEvents: function() {
 			this.model.off('change', this.render, this);
 			this.model.off('destroy', this.handleModelDestroy, this);
+			this.model.off('change:title', this.handleChangeTitle, this);
 			bg.sources.off('clear-events', this.handleClearEvents, this);
+		},
+		handleChangeTitle: function() {
+			list.placeSource(this);
 		},
 		handleModelDestroy: function(e) {
 			list.destroySource(this);
@@ -804,7 +809,7 @@ $(function() {
 		insertBefore: function(what, where){
 			var before = null;
 			where.some(function(el) {
-				if (bg.sources.comparator(el.view.model, what.model) == 1) {
+				if (el.view.model != what.model && bg.sources.comparator(el.view.model, what.model) == 1) {
 					return before = el;
 				}
 			});
