@@ -114,7 +114,8 @@ var settings = new(Backbone.Model.extend({
 		articleFontSize: '100',
 		uiFontSize: '100',
 		disableDateGroups: false,
-		thickFrameBorders: false
+		thickFrameBorders: false,
+		badgeMode: 'disabled'
 	},
 	localStorage: new Backbone.LocalStorage('settings-backbone')
 }));
@@ -127,6 +128,7 @@ var info = new(Backbone.Model.extend({
 		trashCountUnread: 0,
 		trashCountTotal: 0
 	},
+	badgeTimeout: null,
 	autoSetData: function() {
 		this.set({
 			allCountUnread:   items.where({ trashed: false, deleted: false, unread: true }).length,
@@ -250,6 +252,21 @@ var folders = new (Backbone.Collection.extend({
 	}
 }));
 
+var handleAllCountChange = function(model) {
+	if (settings.get('badgeMode') != 'unread') {
+		if (model == settings) chrome.browserAction.setBadgeText({ text: '' });
+		return;
+	}
+	if (info.badgeTimeout) return;
+
+	info.badgeTimeout = setTimeout(function() {
+		var val = info.get('allCountUnread') > 99 ? '+' : info.get('allCountUnread');
+		val = val <= 0 ? '' : String(val);
+		chrome.browserAction.setBadgeText({ text: val });
+		chrome.browserAction.setBadgeBackgroundColor({ color: '#0000FF' });
+		info.badgeTimeout = null;
+	});
+}
 
 
 /**
@@ -666,6 +683,10 @@ fetchAll().always(function() {
 			});
 		}
 	});
+
+	info.on('change:allCountUnread', handleAllCountChange);
+	settings.on('change:badgeMode', handleAllCountChange);
+	handleAllCountChange();
 
 	/**
 	 * Init
