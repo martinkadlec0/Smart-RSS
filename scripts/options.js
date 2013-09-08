@@ -26,8 +26,8 @@ function escapeHtml(string) {
 }
 
 function decodeHTML(str) {
-    var map = {"gt":">", 'lt': '<', 'amp': '&', '&quot': '"', '#39': '\'' };
-    return str.replace(/&(#(?:x[0-9a-f]+|\d+)|[a-z]+);?/gi, function($0, $1) {
+    var map = {"gt":">", 'lt': '<', 'amp': '&', 'quot': '"' };
+    return str.replace(/&(#(?:x[0-9a-f]+|\d+)|[a-z]+);?/gmi, function($0, $1) {
         if ($1[0] === "#") {
             return String.fromCharCode($1[1].toLowerCase() === "x" ? parseInt($1.substr(2), 16)  : parseInt($1.substr(1), 10));
         } else {
