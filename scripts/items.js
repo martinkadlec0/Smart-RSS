@@ -1206,14 +1206,14 @@ $(function() {
 			} else if (e.keyCode == 70 && e.ctrlKey) { // CTRL+F
 				$('#input-search').focus();
 				e.preventDefault();
-			} else if (e.keyCode == 49) { // 1
+			} else if (e.keyCode == 49 && e.shiftKey) { // SHIFT+1
 				topWindow.frames[0].focus();
 				e.preventDefault();
 			} else if (e.keyCode == 13) { // ENTER
 				if (!list.selectedItems.length) return;
 				list.handleItemDblClick({ currentTarget: list.selectedItems[0].el, shiftKey: e.shiftKey });
 				e.preventDefault();
-			} else if (e.keyCode == 51) { // 3
+			} else if (e.keyCode == 51  && e.shiftKey) { // SHIFT+3
 				topWindow.frames[2].focus();
 				e.preventDefault();
 			} else if (e.keyCode == 75) { // K - mark as read/unread

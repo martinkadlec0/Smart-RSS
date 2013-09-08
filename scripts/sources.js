@@ -928,12 +928,12 @@ $(function() {
 			}
 
 			if (e.keyCode == 68) {
-				//there shouldnt be same shortcut for deleting item and source
+				//there shouldn't be the same shortcut for deleting item and source
 				//list.selectedItems.forEach(list.removeSource, list);
-			} else if (e.keyCode == 50) {
+			} else if (e.keyCode == 50 && e.shiftKey) {
 				window.top.frames[1].focus();
 				e.preventDefault();
-			} else if (e.keyCode == 51) {
+			} else if (e.keyCode == 51 && e.shiftKey) {
 				window.top.frames[2].focus();
 				e.preventDefault();
 			} else if (e.keyCode == 38) {

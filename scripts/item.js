@@ -257,10 +257,10 @@ $(function() {
 				return;
 			}
 
-			if (e.keyCode == 49) {
+			if (e.keyCode == 49 && e.shiftKey) {
 				topWindow.frames[0].focus();
 				e.preventDefault();
-			} else if (e.keyCode == 50) {
+			} else if (e.keyCode == 50 && e.shiftKey) {
 				topWindow.frames[1].focus();
 				e.preventDefault();
 			} else if (e.keyCode == 38) {
