@@ -524,9 +524,11 @@ fetchAll().always(function() {
 
 	sources.on('change:title', function(source) {
 		// if url was changed as well change:url listener will download the source
-		if (!source.get('title') && !source.changed.url) {
+		if (!source.get('title')) {
 			downloadOne(source);
 		}
+
+		sources.sort();
 	});
 
 	sources.on('change:hasNew', handleIconChange);
