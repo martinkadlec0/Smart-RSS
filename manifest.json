@@ -26,5 +26,15 @@
         "64": "images/64-inverted-round.png",
         "96": "images/96-inverted-round.png",
         "128": "images/128-inverted-round.png" 
-    }
+    },
+    "commands": {
+	    "_execute_browser_action": {
+			"suggested_key": {
+				"windows": "Ctrl+Shift+R",
+				"mac": "Command+Shift+R",
+				"chromeos": "Ctrl+Shift+R",
+				"linux": "Ctrl+Shift+R"
+			}
+		}
+	}
 }
