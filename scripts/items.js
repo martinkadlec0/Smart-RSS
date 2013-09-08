@@ -1294,6 +1294,9 @@ $(function() {
 				if (!list.selectedItems || !list.selectedItems.length) return;
 				topWindow.frames[2].postMessage({ action: 'space-pressed' }, '*');
 				e.preventDefault();
+			} else if (e.keyCode == 82) { // R - Reload current
+				toolbar.refreshItems();
+				e.preventDefault();
 			}
 
 			
