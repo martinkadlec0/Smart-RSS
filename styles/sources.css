@@ -182,7 +182,7 @@ body {
 	cursor: pointer;
 	padding-left: 16px;
 	font-family: sans-serif;
-	background: url('/images/right.png') no-repeat left 37%;
+	background: url('/images/right.png') no-repeat left 45%;
 }
 
 #advanced-switch:hover {
@@ -190,7 +190,7 @@ body {
 }
 
 #advanced-switch.switched {
-	background: url('/images/down.png') no-repeat left 37%;
+	background: url('/images/down.png') no-repeat left 45%;
 }
 
 .in-closed-folder {
