@@ -178,10 +178,10 @@ body {
 	user-select: none;
 	margin: 5px 0;
 	font-weight: bold;
-	font-size: 0.8rem;
+	font-size: 0.75rem;
 	cursor: pointer;
 	padding-left: 16px;
-	font-family: serif;
+	font-family: sans-serif;
 	background: url('/images/right.png') no-repeat left 37%;
 }
 
