@@ -658,6 +658,10 @@ $(function() {
 
 			this.el.addEventListener('scroll', this.handleScroll.bind(this));
 
+			this.loadAllFeeds();
+		},
+		loadAllFeeds: function() {
+			var that = this;
 			setTimeout(function() {
 				var unread = bg.items.where({ trashed: false, unread: true });
 				if (unread.length) {
@@ -987,9 +991,14 @@ $(function() {
 				// load all feeds in middle column
 				this.clearOnSelect();
 				this.specialName = 'all-feeds';
-				this.once('items-destroyed', function() {
-					that.addItems(bg.items.where({ trashed: false, unread: true }));
-				}, this);	
+				if (document.querySelector('.item')) {
+					this.once('items-destroyed', function() {
+						that.loadAllFeeds();
+					}, this);		
+				} else {
+					this.loadAllFeeds();
+				}
+				
 			}
 		},
 		undeleteItem: function(view) {
