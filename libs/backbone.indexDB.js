@@ -1,7 +1,7 @@
 /**
- * Backbone localStorage Adapter
- * Version 1.1.6
+ * My own Backbone indexDB Adapter based on localStorage adapter from jeromegn:
  *
+ * Version 1.1.6
  * https://github.com/jeromegn/Backbone.localStorage
  */
 (function(root, factory) {

@@ -10,7 +10,7 @@
 	"background": {
 		"page": "index.html"
 	},
-	"web_accessible_resources": ["libs/jquery.min.js", "libs/underscore.min.js", "libs/backbone.min.js", "libs/backbone.localStorage.min.js", "images/icon16_v2.png"],
+	"web_accessible_resources": ["libs/jquery.min.js", "libs/underscore.min.js", "libs/backbone.min.js", "libs/backbone.indexDB.js", "images/icon16_v2.png"],
 	"permissions": ["https://*/*", "storage", "unlimitedStorage", "alarms", "tabs", "contextMenus", "http://*/*", "opera://favicon/*"],
 	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'unsafe-eval';",
 	"browser_action": {
