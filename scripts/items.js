@@ -415,8 +415,13 @@ $(function() {
 		},
 		refreshItems: function() {
 			if (list.currentSource) {
-				// need to add listener for source destroy to prevent loading deleted source
 				bg.downloadOne(list.currentSource);	
+			} else if (list.currentFolder) {
+				bg.sources.forEach(function(source) {
+					if (source.get('folderID') == list.currentFolder.id) {
+						bg.downloadOne(source);	
+					}
+				});
 			} else {
 				bg.downloadAll(true); // true = force
 			}

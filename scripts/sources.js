@@ -503,6 +503,21 @@ $(function() {
 	]);
 
 	var folderContextMenu = new ContextMenu([
+		{
+			title: bg.lang.c.UPDATE,
+			icon: 'reload.png',
+			action: function() {
+				var folder = list.selectedItems[0].model;
+				if (!folder || !(folder instanceof bg.Folder)) return;
+
+				bg.sources.forEach(function(source) {
+					if (source.get('folderID') == folder.id) {
+						bg.downloadOne(source);	
+					}
+				});
+				bg.downloadOne(sourcesContextMenu.currentSource);
+			}
+		},
 		{ 
 			title: bg.lang.c.MARK_ALL_AS_READ,
 			icon: 'read.png',
