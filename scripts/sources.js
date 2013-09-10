@@ -109,7 +109,6 @@ $(function() {
 			this.model.on('destroy', this.handleModelDestroy, this);
 			this.model.on('change:title', this.handleChangeTitle, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
-			this.el.dataset.id = this.model.get('id');
 			this.el.view = this;
 		},
 		handleClearEvents: function(id) {
@@ -141,6 +140,7 @@ $(function() {
 			return this;
 		},
 		realRender: function() {
+			this.el.dataset.id = this.model.get('id');
 			this.$el.toggleClass('has-unread', !!this.model.get('count'));
 
 			if (this.model.get('folderID')) {
@@ -184,7 +184,6 @@ $(function() {
 			this.model.on('destroy', this.handleModelDestroy, this);
 			this.model.on('change', this.render, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
-			this.el.dataset.id = this.model.get('id');
 		},
 		clearEvents: function() {
 			this.model.off('destroy', this.handleModelDestroy, this);
@@ -212,7 +211,7 @@ $(function() {
 			return this;
 		},
 		realRender: function() {
-			
+			this.el.dataset.id = this.model.get('id');
 			this.$el.toggleClass('has-unread', !!this.model.get('count'));
 			
 			var data = Object.create(this.model.attributes);
@@ -353,7 +352,11 @@ $(function() {
 
 			var folderID = 0;
 			if (list.selectedItems.length && list.selectedItems[0] instanceof FolderView) {
-				folderID = list.selectedItems[0].model.get('id');
+				var fid = list.selectedItems[0].model.get('id');
+				// make sure source is not added to folder which is not in db
+				if (bg.folders.get(fid)) {
+					folderID = fid;	
+				}
 			}
 
 			url = fixURL(url);
@@ -362,7 +365,7 @@ $(function() {
 				url: url,
 				updateEvery: 180,
 				folderID: folderID
-			}).fetch();
+			});
 
 		
 		},
@@ -877,7 +880,7 @@ $(function() {
 			view.$el.removeData().unbind(); 
 			view.off();
 			view.remove();
-			var io = list.selectedItems.indexOf(this);
+			var io = list.selectedItems.indexOf(view);
 			if (io >= 0) {
 				list.selectedItems.splice(io, 1);
 			}
