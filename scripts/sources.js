@@ -109,6 +109,7 @@ $(function() {
 			this.model.on('destroy', this.handleModelDestroy, this);
 			this.model.on('change:title', this.handleChangeTitle, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
+			this.el.dataset.id = this.model.get('id');
 			this.el.view = this;
 		},
 		handleClearEvents: function(id) {
@@ -140,7 +141,6 @@ $(function() {
 			return this;
 		},
 		realRender: function() {
-			this.el.dataset.id = this.model.get('id');
 			this.$el.toggleClass('has-unread', !!this.model.get('count'));
 
 			if (this.model.get('folderID')) {
@@ -184,6 +184,8 @@ $(function() {
 			this.model.on('destroy', this.handleModelDestroy, this);
 			this.model.on('change', this.render, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
+
+			this.el.dataset.id = this.model.get('id');
 		},
 		clearEvents: function() {
 			this.model.off('destroy', this.handleModelDestroy, this);
@@ -211,7 +213,6 @@ $(function() {
 			return this;
 		},
 		realRender: function() {
-			this.el.dataset.id = this.model.get('id');
 			this.$el.toggleClass('has-unread', !!this.model.get('count'));
 			
 			var data = Object.create(this.model.attributes);
@@ -343,7 +344,7 @@ $(function() {
 
 			bg.folders.create({
 				title: title
-			});
+			}, { wait: true });
 
 		},
 		addSourceDialog: function() {
@@ -365,7 +366,7 @@ $(function() {
 				url: url,
 				updateEvery: 180,
 				folderID: folderID
-			});
+			}, { wait: true });
 
 		
 		},
