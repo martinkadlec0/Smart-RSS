@@ -262,7 +262,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 
 					var folder = bg.folders.create({
 						title: decodeHTML(feeds[i].getAttribute('title'))
-					});
+					}, { wait: true });
 
 					for (var n=0; n<subfeeds.length; n++) {
 						bg.sources.create({
@@ -270,14 +270,14 @@ chrome.runtime.getBackgroundPage(function(bg) {
 							url: subfeeds[n].getAttribute('xmlUrl'),
 							updateEvery: 180,
 							folderID: folder.get('id')
-						});
+						}, { wait: true });
 					}
 				} else {
 					bg.sources.create({
 						title: decodeHTML(feeds[i].getAttribute('title')),
 						url: feeds[i].getAttribute('xmlUrl'),
 						updateEvery: 180
-					});
+					}, { wait: true });
 				}
 			}
 

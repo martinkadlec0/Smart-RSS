@@ -1108,7 +1108,7 @@ chrome.runtime.onMessageExternal.addListener(function(message, sender, sendRespo
 			title: message.value,
 			url: message.value,
 			updateEvery: 180
-		});
+		}, { wait: true });
 
 		openRSS();
 
