@@ -103,7 +103,7 @@ $(function() {
 
 			if (!todayMidnight) {
 				todayMidnight = new Date(dc);
-				todayMidnight.setHours(0,0,0);
+				todayMidnight.setHours(0,0,0,0);
 				setTimeout(function() {
 					todayMidnight = null;
 					dc = null;
@@ -112,7 +112,7 @@ $(function() {
 			}
 			
 			var itemMidnight = new Date(dt);
-			itemMidnight.setHours(0,0,0);
+			itemMidnight.setHours(0,0,0,0);
 
 			var group;
 			var dtwoy, dcwoy;

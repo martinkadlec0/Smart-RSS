@@ -223,7 +223,7 @@ var items = new(Backbone.Collection.extend({
 	batch: false,
 	localStorage: new Backbone.LocalStorage('items-backbone'),
 	comparator: function(a, b) {
-		var val = a.get('date') < b.get('date') ? 1 : -1;
+		var val = a.get('date') <= b.get('date') ? 1 : -1;
 		if (settings.get('sortOrder') == 'asc') {
 			val = -val;
 		}
