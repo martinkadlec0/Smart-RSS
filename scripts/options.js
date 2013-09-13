@@ -26,6 +26,7 @@ function escapeHtml(string) {
 }
 
 function decodeHTML(str) {
+	str = str || '';
     var map = {"gt":">", 'lt': '<', 'amp': '&', 'quot': '"' };
     return str.replace(/&(#(?:x[0-9a-f]+|\d+)|[a-z]+);?/gmi, function($0, $1) {
         if ($1[0] === "#") {
@@ -261,7 +262,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 					var subfeeds = feeds[i].querySelectorAll('outline[type=rss]');
 
 					var folder = bg.folders.create({
-						title: decodeHTML(feeds[i].getAttribute('title'))
+						title: decodeHTML(feeds[i].getAttribute('title') || feeds[i].getAttribute('text'))
 					}, { wait: true });
 
 					for (var n=0; n<subfeeds.length; n++) {
