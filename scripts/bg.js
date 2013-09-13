@@ -587,7 +587,7 @@ fetchAll().always(function() {
 
 	items.on('change:unread', function(model) {
 		var source = model.getSource();
-		if (!model.get('trashed') && source != sourceJoker) {
+		if (!model.previous('trashed') && source != sourceJoker) {
 			if (model.get('unread') == true) {
 				source.set({
 					'count': source.get('count') + 1
@@ -709,7 +709,9 @@ fetchAll().always(function() {
 				count: folder.get('count') + source.get('count'),
 				countAll: folder.get('countAll') + source.get('countAll')
 			});
-		} else if (source.previous('folderID')) {
+		} 
+
+		if (source.previous('folderID')) {
 			var folder = folders.findWhere({ id: source.previous('folderID') });
 			if (!folder) return;
 
