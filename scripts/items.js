@@ -63,7 +63,10 @@ window.addEventListener('blur', function() {
 window.requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame;
 
 function isScrolledIntoView(elem) {
-	if (!screen) return false;
+	if (!screen) {
+		bg.sources.trigger('clear-events', -1);
+		return false;
+	}
 	
 	var docViewTop = 0;
 	var docViewBottom = screen.height;
