@@ -266,7 +266,7 @@ return {
 			title: bg.lang.c.DELETE,
 			fn: function(e) {
 				var list = require('views/articleList');
-				if (list.specialName == 'trash' || e.shiftKey) {
+				if (list.currentData.name == 'trash' || e.shiftKey) {
 					list.destroyBatch(list.selectedItems, list.removeItemCompletely);
 				} else {
 					list.destroyBatch(list.selectedItems, list.removeItem);
@@ -278,7 +278,7 @@ return {
 			title: bg.lang.c.UNDELETE,
 			fn: function() {
 				var articleList = require('views/articleList');
-				if (!articleList.selectedItems || !articleList.selectedItems.length || articleList.specialName != 'trash') return;
+				if (!articleList.selectedItems || !articleList.selectedItems.length || articleList.currentData.name != 'trash') return;
 				articleList.destroyBatch(articleList.selectedItems, articleList.undeleteItem);
 			}
 		},

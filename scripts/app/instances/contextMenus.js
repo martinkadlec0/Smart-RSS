@@ -194,7 +194,7 @@ function(BB, ContextMenu) {
 			}
 		},
 		{
-			title: bg.lang.c.UNDELETE + ' (U)',
+			title: bg.lang.c.UNDELETE + ' (N)',
 			id: 'context-undelete',
 			icon: 'undelete.png',
 			action: function() {
