@@ -118,7 +118,7 @@ define([
 		},
 		
 		handleModelChange: function() {
-			if (this.model.get('deleted') || (this.list.specialName != 'trash' && this.model.get('trashed')) ) {
+			if (this.model.get('deleted') || (this.list.currentData.name != 'trash' && this.model.get('trashed')) ) {
 				this.list.destroyItem(this);
 			} else {
 				this.render();
