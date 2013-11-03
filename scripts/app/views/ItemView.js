@@ -1,6 +1,17 @@
+/**
+ * @module App
+ * @submodule views/ItemView
+ */
 define([
 	'backbone', 'jquery', 'underscore', 'helpers/formatDate', 'instances/contextMenus'
 ], function(BB, $, _, formatDate, contextMenus) {
+
+	/**
+	 * View of one article item in article list
+	 * @class ItemView
+	 * @constructor
+	 * @extends Backbone.View
+	 */
 	var ItemView = BB.View.extend({
 		tagName: 'div',
 		className: 'item',
@@ -124,6 +135,7 @@ define([
 				this.render();
 			}
 		},
+		/****this.list.currentSource does not exsits anymore****/
 		handleModelDestroy: function(mod, col, opt) {
 			if (opt.noFocus && this.list.currentSource) return;
 			this.list.destroyItem(this);

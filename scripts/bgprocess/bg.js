@@ -172,7 +172,9 @@ var sources = new(Backbone.Collection.extend({
 	model: Source,
 	localStorage: new Backbone.LocalStorage('sources-backbone'),
 	comparator: function(a, b) {
-		return (a.get('title') || '').trim() < (b.get('title') || '').trim() ? -1 : 1;
+		var t1 = (a.get('title') || '').trim().toLowerCase();
+		var t2 = (b.get('title') || '').trim().toLowerCase();
+		return t1 < t2  ? -1 : 1;
 	}
 }));
 
