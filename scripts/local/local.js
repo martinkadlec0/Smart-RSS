@@ -1042,9 +1042,9 @@ var lang = {
 		UNDELETE: 'Povrat',
 		NEXT_UNREAD: 'Sljedeće nepročitano',
 		PREV_UNREAD: 'Predhodno nepročitano',
-		MARK_AND_NEXT_UNREAD: 'Označi i idi na sljedeći nepročitan',
+		MARK_AND_NEXT_UNREAD: 'Označi i idi na sljedeći	nepročitan',
 		MARK_AND_PREV_UNREAD: 'Označi i idi na prethodni nepročitan',
-		PIN: '(Un)Pin',
+		PIN: 'Zakači/Otkači',
 		PIN_QUESTION_A: 'Stavka "',
 		PIN_QUESTION_B: '" je zakačena. Dali je stvarno želite obrisati?',
 		MARK_ALL_QUESTION: 'Dali stvaro želite označiti SVE članke kao pročitane?',
@@ -1088,10 +1088,11 @@ var lang = {
 		NEW_FOLDER: 'Nova mapa',
 		DOWNLOAD: 'Preuzmi',
 		DELETE_ALL_ARTICLES: 'Obriši sve članke',
-		DELETE_ALL_Q: 'Dali stvarno želite potpuno obrisati SVE članke?',
+		DELETE_ALL_Q: 'Dali stvarno želite potpuno obrisati SVE	članke?',
 		REALLY_EMPTY_TRASH: 'Dali stvarno želite potpuno obrisati sve članke iz koša?',
 		RENAME: 'Preimenuj',
 		FOLDER_NAME: 'Ime mape'
 	}
+
 };
 
