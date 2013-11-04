@@ -29,7 +29,7 @@ function(BB, $, _, formatDate, escapeHtml) {
 		 * @default #template-header
 		 * @type Function
 		 */
-		template:  _.template($('#template-header').html()),
+		template: null,
 
 
 		events: {
@@ -56,6 +56,8 @@ function(BB, $, _, formatDate, escapeHtml) {
 		 * @method initialize
 		 */
 		initialize: function() {
+			this.template = _.template($('#template-header').html());
+
 			this.on('attach', this.handleAttached);
 
 			bg.items.on('change:pinned', this.handleItemsPin, this);
@@ -180,14 +182,14 @@ function(BB, $, _, formatDate, escapeHtml) {
 				if (sandbox.loaded) {
 					fr.contentWindow.scrollTo(0, 0);
 					fr.contentDocument.documentElement.style.fontSize = bg.settings.get('articleFontSize') + '%';
-					fr.contentDocument.querySelector('base').href = source.get('url');
+					fr.contentDocument.querySelector('base').href = source.get('base') || source.get('url');
 					fr.contentDocument.querySelector('#smart-rss-content').innerHTML = content;
 					fr.contentDocument.querySelector('#smart-rss-url').href = that.model.get('url');
 				} else {
 					sandbox.on('load', function() {
 						fr.contentWindow.scrollTo(0, 0);
 						fr.contentDocument.documentElement.style.fontSize = bg.settings.get('articleFontSize') + '%';
-						fr.contentDocument.querySelector('base').href = source ? source.get('url') : '#';
+						fr.contentDocument.querySelector('base').href = source ? source.get('base') || source.get('url') : '#';
 						fr.contentDocument.querySelector('#smart-rss-content').innerHTML = content;
 						fr.contentDocument.querySelector('#smart-rss-url').href = that.model.get('url');
 					});

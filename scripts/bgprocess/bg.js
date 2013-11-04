@@ -156,6 +156,7 @@ var Source = Backbone.Model.extend({
 	defaults: {
 		title: '',
 		url: 'about:blank',
+		base: '',
 		updateEvery: 180,
 		lastUpdate: 0,
 		count: 0, // unread
@@ -921,6 +922,14 @@ function parseRSS(xml, sourceID) {
 		}
 	}
 	/* END: ttl check */
+
+	var mainEl = xml.querySelector('rss, rdf, feed');
+	if (mainEl) {
+		var baseStr = mainEl.getAttribute('xml:base') || mainEl.getAttribute('xmlns:base') || mainEl.getAttribute('base');
+		if (baseStr) {
+			source.save({ base: baseStr });
+		}
+	}
 
 	[].forEach.call(nodes, function(node) {
 		items.push({
