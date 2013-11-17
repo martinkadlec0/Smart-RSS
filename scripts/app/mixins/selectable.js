@@ -35,7 +35,7 @@ return {
 			next = next.nextElementSibling;
 		}
 
-		if (!next && !e.shiftKey && !e.ctrlKey) {
+		if (!next && !e.shiftKey && !e.ctrlKey && bg.settings.get('circularNavigation')) {
 			next = this.el.querySelector(q);
 			if (e.currentIsRemoved && next && this.$el.find('.last-selected').get(0) == next) {
 				next = [];
@@ -68,7 +68,7 @@ return {
 			prev = prev.previousElementSibling;
 		}
 
-		if (!prev && !e.shiftKey && !e.ctrlKey) {
+		if (!prev && !e.shiftKey && !e.ctrlKey && bg.settings.get('circularNavigation')) {
 			prev = this.$el.find(q + ':last').get(0);
 			if (e.currentIsRemoved && prev && this.$el.find('.last-selected').get(0) == prev) {
 				prev = [];

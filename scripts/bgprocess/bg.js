@@ -108,7 +108,8 @@ var settings = new(Backbone.Model.extend({
 		uiFontSize: '100',
 		disableDateGroups: false,
 		thickFrameBorders: false,
-		badgeMode: 'disabled'
+		badgeMode: 'disabled',
+		circularNavigation: true
 	},
 	localStorage: new Backbone.LocalStorage('settings-backbone')
 }));
