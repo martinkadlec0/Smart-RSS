@@ -51,7 +51,12 @@ define({
 		'p': 'articles:pin',
 		'n': 'articles:undelete',
 		'space': 'articles:spaceThrough',
-		'r': 'articles:update'
+		'r': 'articles:update',
+
+		'pgup': 'articles:pageUp',
+		'pgdown': 'articles:pageDown',
+		'end': 'articles:scrollToBottom',
+		'home': 'articles:scrollToTop'
 	},
 	content: {
 		'up': 'content:scrollUp',

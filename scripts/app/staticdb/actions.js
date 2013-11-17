@@ -462,6 +462,34 @@ return {
 				if (!articleList.selectedItems || !articleList.selectedItems.length) return;
 				app.trigger('space-pressed');
 			}
+		},
+		pageUp: {
+			title: 'Page up',
+			fn: function() {
+				var el = require('views/articleList').el;
+				el.scrollByPages(-1);
+			}
+		},
+		pageDown: {
+			title: 'Page down',
+			fn: function() {	
+				var el = require('views/articleList').el;
+				el.scrollByPages(1);
+			}
+		},
+		scrollToBottom: {
+			title: 'Scroll to bottom',
+			fn: function() {
+				var el = require('views/articleList').el;
+				el.scrollTop = el.scrollHeight;
+			}
+		},
+		scrollToTop: {
+			title: 'Scroll to top',
+			fn: function() {
+				var el = require('views/articleList').el;
+				el.scrollTop = 0;
+			}
 		}
 	},
 	content: {
