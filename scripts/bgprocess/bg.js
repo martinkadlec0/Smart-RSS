@@ -889,6 +889,10 @@ function downloadURL(urls, cb) {
 function parseRSS(xml, sourceID) {
 	var items = [];
 
+	if (!xml || !(xml instanceof XMLDocument)) {
+		return items;
+	}
+
 
 	var nodes = xml.querySelectorAll('item');
 	if (!nodes.length) {
@@ -957,6 +961,8 @@ function parseRSS(xml, sourceID) {
 }
 
 function rssGetLink(node) {
+	if (!node) return false;
+
 	var link = node.querySelector('link[rel="alternate"]');
 	if (!link) link = node.querySelector('link[type="text/html"]');
 	if (!link) link = node.querySelector('link');
