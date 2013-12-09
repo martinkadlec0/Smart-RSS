@@ -413,11 +413,11 @@ input[type=search]:not(:focus):not(:valid) {
   -webkit-flex-flow: row wrap;
   flex-flow: row wrap;
 }
-/*.item:active,*/
 .selected {
   color: #f1f1f1 !important;
   background: #39f;
   border-bottom-color: #39f;
+  -webkit-font-smoothing: antialiased;
 }
 .region:not(.focused) .selected {
   background: #94c6f7;
