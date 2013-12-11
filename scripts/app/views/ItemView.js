@@ -13,21 +13,68 @@ define([
 	 * @extends Backbone.View
 	 */
 	var ItemView = BB.View.extend({
+
+		/**
+		 * Tag name of article item element
+		 * @property tagName
+		 * @default 'div'
+		 * @type String
+		 */
 		tagName: 'div',
+
+		/**
+		 * Class name of article item element
+		 * @property className
+		 * @default 'item'
+		 * @type String
+		 */
 		className: 'item',
+
+		/**
+		 * Article item view template
+		 * @property template
+		 * @default #template-item
+		 * @type Function
+		 */
 		template: _.template($('#template-item').html()),
+
+		/**
+		 * Reference to view/articleList instance. It should be replaced with require('views/articleList')
+		 * @property list
+		 * @default null
+		 * @type Backbone.View
+		 */
 		list: null,
+
+		/**
+		 * Initializations (*constructor*)
+		 * @method initialize
+		 * @param opt {Object} I don't use it, but it is automatically passed by Backbone
+		 * @param list {Backbone.View} Reference to articleList
+		 */
 		initialize: function(opt, list) {
 			this.list = list;
 			this.el.setAttribute('draggable', 'true');
 			this.el.view = this;
 			this.setEvents();
 		},
+
+		/**
+		 * Set events that are binded to bgprocess
+		 * @method setEvents
+		 */
 		setEvents: function() {
 			this.model.on('change', this.handleModelChange, this);
 			this.model.on('destroy', this.handleModelDestroy, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 		},
+
+		/**
+		 * Swaps models of view.
+		 * It reuses already created DOM when changing selected feeds/folders.
+		 * @method swapModel
+		 * @param newModel {Item} Item model to be used
+		 */
 		swapModel: function(newModel) {
 			if (this.model == newModel) {
 				this.prerender();
@@ -40,12 +87,33 @@ define([
 			this.setEvents();
 			this.prerender();
 		},
+
+		/**
+		 * Indiciates whether the item was prerendered (true) or already fully-rendered (false).
+		 * When prerendered, only the classNames are set without any text content.
+		 * Prerendering is used for not-visible items in the list. 
+		 * @property prerendered
+		 * @default false
+		 * @type Boolean
+		 */
 		prerendered: false,
+
+		/**
+		 * Prerenders view. (More info on prerenderer property).
+		 * @method prerender
+		 */
 		prerender: function() {
 			this.prerendered = true;
 			this.list.viewsToRender.push(this);
 			this.el.className = this.model.get('unread') ? 'item unread' : 'item';
 		},
+
+		/**
+		 * Removes item content without removing the actuall DOM and Backbone view. 
+		 * When changing selected feed with _m_ items to another feed with _n_ items where n<m
+		 * then the first n items use the swapModel method and the rest unplugModel method.
+		 * @method unplugModel
+		 */
 		unplugModel: function() {
 			if (this.model) {
 				this.el.className = 'unpluged';
@@ -55,11 +123,23 @@ define([
 				if (this.list._itemHeight) this.$el.css('height', this.list._itemHeight + 'px');
 			}
 		},
+
+		/**
+		 * If the tab is closed, it will remove all events binded to bgprocess
+		 * @method handleClearEvents
+		 * @triggered when bgprocesses triggers clear-events event
+		 * @param id {Number} ID of closed tab
+		 */
 		handleClearEvents: function(id) {
 			if (window == null || id == tabID) {
 				this.clearEvents();
 			}
 		},
+
+		/**
+		 * Removes all events binded to bgprocess
+		 * @method clearEvents
+		 */
 		clearEvents: function() {
 			if (this.model) {
 				this.model.off('change', this.handleModelChange, this);
@@ -67,6 +147,12 @@ define([
 			}
 			bg.sources.off('clear-events', this.handleClearEvents, this);
 		},
+
+		/**
+		 * Renders article item view
+		 * @method render
+		 * @chainable
+		 */
 		render: function() {
 
 			this.$el.toggleClass('unvisited', !this.model.get('visited'));
@@ -92,6 +178,12 @@ define([
 			return this;
 		},
 
+		/**
+		 * Returns formated date according to user settings and time interval
+		 * @method getItemDate
+		 * @param date {Integer} UTC time
+		 * @return String
+		 */
 		getItemDate: function(date) {
 			var dateFormats = { normal: 'DD.MM.YYYY', iso: 'YYYY-MM-DD', us: 'MM/DD/YYYY' };
 			var pickedFormat = dateFormats[bg.settings.get('dateType') || 'normal'] || dateFormats['normal'];
@@ -114,12 +206,23 @@ define([
 			return date;
 		},
 
+		/**
+		 * Shows context menu on right click
+		 * @method handleMouseUp
+		 * @triggered on mouse up + condition for right click only
+		 * @param event {MouseEvent}
+		 */
 		handleMouseUp: function(e) {
 			if (e.which == 3) {
 				this.showContextMenu(e);
 			}
 		},
 
+		/**
+		 * Shows context menu for article item
+		 * @method showContextMenu
+		 * @param event {MouseEvent}
+		 */
 		showContextMenu: function(e) {
 			if (!this.$el.hasClass('selected')) {
 				this.list.select(this, e);
@@ -128,6 +231,11 @@ define([
 			contextMenus.get('items').show(e.clientX, e.clientY);
 		},
 		
+		/**
+		 * When model is changed rerender it or remove it from DOM (depending on what is changed)
+		 * @method handleModelChange
+		 * @triggered when model is changed
+		 */
 		handleModelChange: function() {
 			if (this.model.get('deleted') || (this.list.currentData.name != 'trash' && this.model.get('trashed')) ) {
 				this.list.destroyItem(this);
@@ -135,11 +243,23 @@ define([
 				this.render();
 			}
 		},
+
+		/**
+		 * When model is removed from DB/Backbone remove it from DOM as well
+		 * @method handleModelDestroy
+		 * @triggered when model is destroyed
+		 */
 		/****this.list.currentSource does not exsits anymore****/
 		handleModelDestroy: function(mod, col, opt) {
 			if (opt.noFocus && this.list.currentSource) return;
 			this.list.destroyItem(this);
 		},
+
+		/**
+		 * Changes pin state (true/false)
+		 * @method when user clicked on pin button in article item
+		 * @triggered when model is destroyed
+		 */
 		handleClickPin: function(e) {
 			e.stopPropagation();
 			this.model.save({ pinned: !this.model.get('pinned') });
