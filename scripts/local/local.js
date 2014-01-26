@@ -536,7 +536,7 @@ var lang = {
 		EMPTY_TRASH: 'Vysypať kôš',
 		RSS_FEED_URL: 'Adresa RSS zdroja: ',
 		OPTIONS: 'Ďalšie možnosti',
-		UPDATING_FEEDS: 'Aktualizácija zdrojov',
+		UPDATING_FEEDS: 'Aktualizácia zdrojov',
 
 		UNREAD: 'neprečítaných', 
 		TOTAL: 'celkom', 
@@ -1095,4 +1095,3 @@ var lang = {
 	}
 
 };
-
