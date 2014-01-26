@@ -3,9 +3,9 @@
  * @submodule views/contentView
  */
 define([
-	'backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escapeHtml'
+	'backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escapeHtml', 'helpers/stripTags'
 ],
-function(BB, $, _, formatDate, escapeHtml) {
+function(BB, $, _, formatDate, escapeHtml, stripTags) {
 
 	/**
 	 * Full view of one article (right column)
@@ -168,6 +168,7 @@ function(BB, $, _, formatDate, escapeHtml) {
 
 				var data = Object.create(that.model.attributes);
 				data.date = that.getFormatedDate(that.model.get('date'));
+				data.title = stripTags(data.title);
 				data.url = escapeHtml(data.url);
 
 				var source = that.model.getSource();

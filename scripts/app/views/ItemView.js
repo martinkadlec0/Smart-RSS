@@ -3,8 +3,8 @@
  * @submodule views/ItemView
  */
 define([
-	'backbone', 'jquery', 'underscore', 'helpers/formatDate', 'instances/contextMenus'
-], function(BB, $, _, formatDate, contextMenus) {
+	'backbone', 'jquery', 'underscore', 'helpers/formatDate', 'instances/contextMenus', 'helpers/stripTags'
+], function(BB, $, _, formatDate, contextMenus, stripTags) {
 
 	/**
 	 * View of one article item in article list
@@ -170,6 +170,7 @@ define([
 			var data = this.model.toJSON();
 
 			data.date = this.getItemDate(data.date);
+			data.title = stripTags(data.title);
 
 			//this.el.title = data.title + '\n' + formatDate(this.model.get('date'), pickedFormat + ' ' + timeFormatTitle);
 			

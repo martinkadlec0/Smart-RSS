@@ -84,14 +84,14 @@
 
 	<!-- ARTICLE TEMPLATES -->
 	<script id="template-item" type="text/template">
-		<div class="item-title"><%- title %></div>
+		<div class="item-title"><%= title %></div>
 		<div class="item-pin <%- pinned ? 'pinned' : '' %>"></div>
 		<div class="item-author"><%- author %></div>
 		<div class="item-date"><%- date %></div>
 	</script>
 
 	<script id="template-header" type="text/template">
-		<h1><a href="<%= url ? url : '#' %>" target="_blank" tabindex="-1"><%- title %></a></h1>
+		<h1><a href="<%= url ? url : '#' %>" target="_blank" tabindex="-1"><%= title %></a></h1>
 		<div id="below-h1">
 			<p class="author"><%- author %></p>
 			<p class="date"><%= date %></p>
