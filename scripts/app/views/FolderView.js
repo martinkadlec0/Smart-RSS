@@ -4,7 +4,7 @@
  */
 define([
 	'backbone', 'jquery', 'underscore', 'views/TopView', 'instances/contextMenus'
-], 
+],
 function(BB, $, _, TopView, contextMenus) {
 
 	/**

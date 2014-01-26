@@ -8,9 +8,9 @@
 define([], function() {
 
 	var stripTags = function(str) {
-    	if (str == null) return '';
-    	return String(str).replace(/<\/?[^>]+>/g, '');
-    };
+		if (str == null) return '';
+		return String(str).replace(/<\/?[^>]+>/g, '');
+	};
 
 	return stripTags;
 });

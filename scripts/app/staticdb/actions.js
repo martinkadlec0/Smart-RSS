@@ -472,7 +472,7 @@ return {
 		},
 		pageDown: {
 			title: 'Page down',
-			fn: function() {	
+			fn: function() {
 				var el = require('views/articleList').el;
 				el.scrollByPages(1);
 			}
