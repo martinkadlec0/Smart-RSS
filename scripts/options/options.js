@@ -119,7 +119,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 			tmp.setAttribute('text', escapeHtml(title));
 			tmp.setAttribute('title', escapeHtml(title));
 			tmp.setAttribute('type', 'rss');
-			tmp.setAttribute('xmlUrl', escapeHtml(url));
+			tmp.setAttribute('xmlUrl', url);
 			return tmp;
 		}
 
@@ -268,7 +268,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 					for (var n=0; n<subfeeds.length; n++) {
 						bg.sources.create({
 							title: decodeHTML(subfeeds[n].getAttribute('title') || subfeeds[n].getAttribute('text')),
-							url: subfeeds[n].getAttribute('xmlUrl'),
+							url: decodeHTML(subfeeds[n].getAttribute('xmlUrl')),
 							updateEvery: 180,
 							folderID: folder.get('id')
 						}, { wait: true });
@@ -276,7 +276,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 				} else {
 					bg.sources.create({
 						title: decodeHTML(feeds[i].getAttribute('title') || feeds[i].getAttribute('text')),
-						url: feeds[i].getAttribute('xmlUrl'),
+						url: decodeHTML(feeds[i].getAttribute('xmlUrl')),
 						updateEvery: 180
 					}, { wait: true });
 				}
