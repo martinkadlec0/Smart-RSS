@@ -811,7 +811,7 @@ function downloadURL(urls, cb) {
 			var hasNew = false;
 			var createdNo = 0;
 			parsedData.forEach(function(item) {
-				var existingItem = items.get(item.id);
+				var existingItem = items.get(item.id) || items.get(item.oldId);
 				if (!existingItem) {
 					hasNew = true;
 					items.create(item, { sort: false });
@@ -943,6 +943,7 @@ function parseRSS(xml, sourceID) {
 
 	[].forEach.call(nodes, function(node) {
 		items.push({
+			id: rssGetGuid(node),
 			title: rssGetTitle(node),
 			url: rssGetLink(node),
 			date: rssGetDate(node),
@@ -958,12 +959,20 @@ function parseRSS(xml, sourceID) {
 		});
 
 		var last = items[items.length - 1];
-		last.id = CryptoJS.MD5(last.sourceID + last.title + last.date).toString();
+		last.oldId = CryptoJS.MD5(last.sourceID + last.title + last.date).toString();
+		last.id = last.id || last.oldId;
+
 		if (last.date == '0') last.date = Date.now();
 	});
 
 
 	return items;
+}
+
+function rssGetGuid(node) {
+	if (!node) return false;
+	var guid = node.querySelector('guid');
+	return guid ? guid.textContent : '';
 }
 
 function rssGetLink(node) {
