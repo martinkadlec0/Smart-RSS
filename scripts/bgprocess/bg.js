@@ -828,11 +828,12 @@ function downloadURL(urls, cb) {
 
 			// remove old deleted content
 			var fetchedIDs = _.pluck(parsedData, 'id');
+			var fetchedOldIDs = _.pluck(parsedData, 'oldId');
 			items.where({
 				sourceID: sourceToLoad.get('id'),
 				deleted: true
 			}).forEach(function(item) {
-				if (fetchedIDs.indexOf(item.id) == -1) {
+				if (fetchedIDs.indexOf(item.id) == -1 && fetchedOldIDs.indexOf(item.id) == -1) {
 					item.destroy();
 				}
 			});
