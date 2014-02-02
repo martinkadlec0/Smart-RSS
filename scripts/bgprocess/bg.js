@@ -70,7 +70,7 @@ Backbone.LocalStorage.version = 3;
 
 function translate(str) {
 	return str.replace(/\{\{(\w+)\}\}/gm, function(all, str) {
-		return lang.c[str];
+		return lang.c[str] || lang.en[str] || str;
 	});
 }
 
@@ -158,13 +158,14 @@ var Source = Backbone.Model.extend({
 		title: '',
 		url: 'about:blank',
 		base: '',
-		updateEvery: 180,
+		updateEvery: 180, // in minutes
 		lastUpdate: 0,
 		count: 0, // unread
 		countAll: 0,
 		username: '',
 		password: '',
-		hasNew: false
+		hasNew: false,
+		autoremove: 0 // in days
 	}
 });
 
@@ -192,7 +193,8 @@ var Item = Backbone.Model.extend({
 		visited: false,
 		deleted: false,
 		trashed: false,
-		pinned: false
+		pinned: false,
+		dateCreated: 0
 	},
 	markAsDeleted: function() {
 		this.save({
@@ -744,6 +746,7 @@ function downloadOne(model) {
 }
 
 function downloadAll(force) {
+
 	if (loader.get('loading') == true) return;
 
 	var sourcesArr = sources.toArray();
@@ -793,6 +796,8 @@ function downloadURL(urls, cb) {
 	animation.start();
 	loader.set('loading', true);
 	var sourceToLoad = loader.sourceLoading = loader.sourcesToLoad.pop();
+
+	autoremoveItems(sourceToLoad);
 
 	var options = {
 		url: sourceToLoad.get('url'),
@@ -948,7 +953,8 @@ function parseRSS(xml, sourceID) {
 			deleted: false,
 			trashed: false,
 			visited: false,
-			pinned: false
+			pinned: false,
+			dateCreated: Date.now()
 		});
 
 		var last = items[items.length - 1];
@@ -1058,6 +1064,24 @@ function rssGetContent(node) {
 	return '&nbsp;'
 }
 
+function autoremoveItems(source) {
+	/*
+	var sourcesWithAutoRemove = sources.filter(function(source) {
+		return source.get('autoremove') > 0;
+	});
+	sourcesWithAutoRemove.forEach(function(source) {
+	*/
+
+	if (!source.get('autoremove')) return;
+
+	items.where({ sourceID: source.get('id'), deleted: false, pinned: false }).forEach(function(item) {
+		var date = item.get('dateCreated') || item.get('date');
+		var removalInMs = source.get('autoremove') * 24 * 60 * 60 * 1000;
+		if (date + removalInMs < Date.now() ) {
+			item.markAsDeleted();
+		}
+	});
+}
 
 /**
  * Messages

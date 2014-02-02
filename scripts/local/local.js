@@ -91,7 +91,9 @@ var lang = {
 		DELETE_ALL_Q: 'Do you really want to comletely delete ALL articles?',
 		REALLY_EMPTY_TRASH: 'Do you really want to completely delete all articles from trash?',
 		RENAME: 'Rename',
-		FOLDER_NAME: 'Folder name'
+		FOLDER_NAME: 'Folder name',
+
+		AUTOREMOVE: 'Autoremove'
 	},
 	cs: {
 		MARK_AS_READ: 'Označit jako (Ne)Přečtené',

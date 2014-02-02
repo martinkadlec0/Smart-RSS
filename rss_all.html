@@ -32,7 +32,7 @@
 		<% } %>
 
 		<label>{{UPDATE}}: <select id="prop-update-every">
-			<% if (typeof mixed != 'undefined') { %> 
+			<% if (typeof updateEveryDiffers != 'undefined' && updateEveryDiffers == true) { %> 
 				<option value="-1">&lt;mixed&gt;</option>
 			<% } %> 
 			<option value="0">{{NEVER}}</option>
@@ -53,7 +53,22 @@
 		<div id="properties-advanced">
 			<label>{{USERNAME}}: <input type="text" id="prop-username" value="<%= username %>" /></label>
 			<label>{{PASSWORD}}: <input type="password" id="prop-password" value="<%= password %>" /></label>
-		</div>
+
+		<% } %> 
+
+			<label>{{AUTOREMOVE}}: <select id="prop-autoremove">
+				<% if (typeof autoremoveDiffers != 'undefined' && autoremoveDiffers == true) { %> 
+					<option value="-1">&lt;mixed&gt;</option>
+				<% } %> 
+				<option value="0">{{NEVER}}</option>
+				<option value="1">{{OLDER_THAN_DAY}}</option>
+				<option value="7">{{OLDER_THAN_WEEK}}</option>
+				<option value="30">{{OLDER_THAN_MONTH}}</option>
+				<option value="60">{{OLDER_THAN_TWO_MONTHS}}</option>
+			</select></label>
+		
+		<% if (typeof url != 'undefined') { %>
+			</div>
 		<% } %>
 
 		<button id="prop-ok">{{OK}}</button><button id="prop-cancel">{{CANCEL}}</button>

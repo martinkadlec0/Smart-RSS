@@ -25,7 +25,7 @@ define(['backbone', 'jquery', 'underscore'], function(BB, $, _) {
 				return;
 			}
 
-			var updateEvery;
+			var updateEvery, autoremove;
 
 			if (this.current instanceof bg.Source) {
 				this.current.save({
@@ -33,17 +33,27 @@ define(['backbone', 'jquery', 'underscore'], function(BB, $, _) {
 					url: app.fixURL($('#prop-url').val()),
 					username: $('#prop-username').val(),
 					password: $('#prop-password').val(),
-					updateEvery: parseFloat($('#prop-update-every').val())
+					updateEvery: parseFloat($('#prop-update-every').val()),
+					autoremove: $('#prop-autoremove').val(),
 				});
 			} else if (this.current instanceof bg.Folder) {
 				this.current.save({
 					title: $('#prop-title').val()
 				});
 
+				var sourcesInFolder = bg.sources.where({ folderID: this.current.id });
+
 				updateEvery = parseFloat($('#prop-update-every').val());
 				if (updateEvery >= 0) {
-					bg.sources.where({ folderID: this.current.id }).forEach(function(source) {
+					sourcesInFolder.forEach(function(source) {
 						source.save({ updateEvery: updateEvery });
+					});
+				}
+
+				autoremove = parseFloat($('#prop-autoremove').val());
+				if (autoremove >= 0) {
+					sourcesInFolder.forEach(function(source) {
+						source.save({ autoremove: autoremove });
 					});
 				}
 			} else if (Array.isArray(this.current)) {
@@ -51,6 +61,13 @@ define(['backbone', 'jquery', 'underscore'], function(BB, $, _) {
 				if (updateEvery >= 0) {
 					this.current.forEach(function(source) {
 						source.save({ updateEvery: updateEvery });
+					});
+				}
+
+				autoremove = parseFloat($('#prop-autoremove').val());
+				if (autoremove >= 0) {
+					this.current.forEach(function(source) {
+						source.save({ autoremove: autoremove });
 					});
 				}
 			}
@@ -72,21 +89,46 @@ define(['backbone', 'jquery', 'underscore'], function(BB, $, _) {
 				if (this.current.get('updateEvery')) {
 					$('#prop-update-every').val(this.current.get('updateEvery'));
 				}
+
+				if (this.current.get('autoremove')) {
+					$('#prop-autoremove').val(this.current.get('autoremove'));
+				}
 			} else {
 				var isFolder = this.current instanceof bg.Folder;
-				var arr = isFolder ? bg.sources.where({ folderID: this.current.id }) : this.current;
+				var listOfSources = isFolder ? bg.sources.where({ folderID: this.current.id }) : this.current;
 
-				var firstUpdate = arr[0].get('updateEvery');
-				var someDiffer = arr.some(function(c) {
-					if (firstUpdate != c.get('updateEvery')) return true;
+				var params = { updateEveryDiffers: 0, autoremoveDiffers: 0, firstUpdate: 0, firstAutoremove: 0 };
+
+				/**
+				 * Test if all selected feeds has the same properteies or if tehy are mixed
+				 */
+
+				params.firstUpdate = listOfSources[0].get('updateEvery');
+				params.updateEveryDiffers = listOfSources.some(function(c) {
+					if (params.firstUpdate != c.get('updateEvery')) return true;
 				});
 
-				if (someDiffer) {
-					this.$el.html(this.template( isFolder ? _.extend({ mixed: 1 }, this.current.attributes) : { mixed: 1 } ));
+				params.firstAutoremove = listOfSources[0].get('autoremove');
+				params.autoremoveDiffers = listOfSources.some(function(c) {
+					if (params.firstAutoremove != c.get('autoremove')) return true;
+				});
+
+				/**
+				 * Create HTML
+				 */
+
+				if (isFolder) {
+					this.$el.html(this.template( _.extend(params, this.current.attributes)  ));
 				} else {
-					this.$el.html(this.template( isFolder ? this.current.attributes : {} ));
-					$('#prop-update-every').val(firstUpdate);
+					this.$el.html(this.template( params ));
 				}
+
+				/**
+				 * Set <select>s's values
+				 */
+
+				if (!params.updateEveryDiffers) $('#prop-update-every').val(params.firstUpdate);
+				if (!params.autoremoveDiffers) $('#prop-autoremove').val(params.firstAutoremove);
 			}
 
 			return this;
