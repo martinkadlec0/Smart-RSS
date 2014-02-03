@@ -122,12 +122,12 @@ return {
 
 			}
 
-			if (forceSelect) {
+			if (forceSelect === true) {
 				setTimeout(function() {
 					this.trigger('pick', view, e);
 				}.bind(this), 0);
 			}
-			
+
 		} else if (e.ctrlKey && view.$el.hasClass('selected')) {
 			view.$el.removeClass('selected');
 			view.$el.removeClass('last-selected');
