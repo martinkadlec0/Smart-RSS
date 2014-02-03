@@ -43,7 +43,7 @@ return {
 			}
 		}
 		if (next && next.view) {
-			this.select(next.view, e);
+			this.select(next.view, e, true);
 			if (!this.inView(next)) {
 				next.scrollIntoView(false);
 			}
@@ -76,16 +76,16 @@ return {
 			}
 		}
 		if (prev && prev.view) {
-			this.select(prev.view, e);
+			this.select(prev.view, e, true);
 			if (!this.inView(prev)) {
 				prev.scrollIntoView(true);
 			}
 		}
 	},
-	select: function(view, e) {
+	select: function(view, e, forceSelect) {
 		e = e || {};
 		var that = this;
-		if ( (e.shiftKey != true && e.ctrlKey != true) || (e.shiftKey && !this.selectPivot) ) {
+		if ( (e.shiftKey != true && e.ctrlKey != true) || (e.shiftKey && !this.selectPivot)) {
 			this.selectedItems = [];
 			this.selectPivot = view;
 			this.$el.find('.selected').removeClass('selected');
@@ -121,6 +121,13 @@ return {
 				}
 
 			}
+
+			if (forceSelect) {
+				setTimeout(function() {
+					this.trigger('pick', view, e);
+				}.bind(this), 0);
+			}
+			
 		} else if (e.ctrlKey && view.$el.hasClass('selected')) {
 			view.$el.removeClass('selected');
 			view.$el.removeClass('last-selected');
