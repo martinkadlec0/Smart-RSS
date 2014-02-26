@@ -1007,21 +1007,34 @@ function getFeedTitle(xml) {
 	return title && title.textContent ? title.textContent.trim() || 'rss' : 'rss';
 }
 
+function replaceUTCAbbr(str) {
+	str = String(str);
+	var rep = {
+		'CET': '+0100', 'CEST': '+0200', 'EST': '', 'WET': '+0000', 'WEZ': '+0000', 'WEST': '+0100',
+		'EEST': '+0300', 'BST': '+0100', 'EET': '+0200', 'IST': '+0100', 'KUYT': '+0400', 'MSD': '+0400',
+		'MSK': '+0400', 'SAMT': '+0400'
+	};
+	var reg = new RegExp('(' + Object.keys(rep).join('|') + ')', 'gi');
+	return str.replace(reg, function(all, abbr) {
+		return rep[abbr];
+	});
+}
+
 function rssGetDate(node) {
 	var pubDate = node.querySelector('pubDate, published');
 	if (pubDate) {
-		return (new Date(pubDate.textContent)).getTime();
+		return (new Date( replaceUTCAbbr(pubDate.textContent) )).getTime();
 	}
 
 	pubDate = node.querySelector('date');
 	if (pubDate) {
-		return (new Date(pubDate.textContent)).getTime();
+		return (new Date( replaceUTCAbbr(pubDate.textContent) )).getTime();
 	}
 
 	pubDate = node.querySelector('lastBuildDate, updated, update');
 
 	if (pubDate) {
-		return (new Date(pubDate.textContent)).getTime();
+		return (new Date( replaceUTCAbbr(pubDate.textContent) )).getTime();
 	}
 	return '0';
 }
