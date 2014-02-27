@@ -753,7 +753,12 @@ function downloadAll(force) {
 
 	if (!force) {
 		sourcesArr = sourcesArr.filter(function(source) {
-			if (!source.get('lastUpdate') || source.get('lastUpdate') > Date.now() - source.get('updateEvery') * 60 * 1000) {
+			if (source.get('updateEvery') == 0) return false;
+			/****
+				why !source.get('lastUpdate') ? .. I think I wanted !source.get('lastUpdate') => true not the other way around 
+			****/
+			if (!source.get('lastUpdate')) return true;
+			if (/*!source.get('lastUpdate') ||*/ source.get('lastUpdate') > Date.now() - source.get('updateEvery') * 60 * 1000) {
 				return false;
 			}
 			return true;
