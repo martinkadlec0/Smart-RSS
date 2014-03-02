@@ -29,6 +29,7 @@ define({
 		'shift+d': 'articles:delete',
 		'shift+del': 'articles:delete',
 		'ctrl+f': 'articles:focusSearch',
+		'shift+enter': 'articles:fullArticle',
 		'enter': 'articles:fullArticle',
 		'k': 'articles:mark',
 		'j': 'articles:selectNext',

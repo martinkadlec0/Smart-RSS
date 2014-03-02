@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'helpers/escapeHtml'], function($, _, escapeHtml) {
+define(['jquery', 'underscore', 'helpers/stripTags'], function($, _, stripTags) {
 
 return {
 	global: {
@@ -348,7 +348,7 @@ return {
 					}
 				}
 				articleList.selectedItems.forEach(function(item) {
-					chrome.tabs.create({ url: escapeHtml(item.model.get('url')), active: !e.shiftKey });
+					chrome.tabs.create({ url: stripTags(item.model.get('url')), active: !e.shiftKey });
 				});
 			}
 		},
@@ -365,7 +365,7 @@ return {
 					view = articleList.selectedItems[0];
 				}
 				if (view.model) {
-					chrome.tabs.create({ url: escapeHtml(view.model.get('url')), active: !e.shiftKey });
+					chrome.tabs.create({ url: stripTags(view.model.get('url')), active: !e.shiftKey });
 				}
 			}
 		},
