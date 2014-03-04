@@ -1,7 +1,10 @@
-define(['jquery', 'underscore', 'views/TopView'], function($, _, TopView) {
+define([
+	'jquery', 'underscore', 'views/TopView', 'text!templates/special.html'
+],
+function($, _, TopView, tplSpecial) {
 	var SpecialView = TopView.extend({
 		className: 'list-item special',
-		template: _.template($('#template-special').html()),
+		template: _.template(tplSpecial),
 		/*events: {
 			'mouseup': 'handleMouseUp',
 			'click': 'handleMouseDown'

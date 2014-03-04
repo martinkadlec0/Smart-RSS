@@ -1,4 +1,7 @@
-define(['backbone', 'views/TopView', 'instances/contextMenus'], function(BB, TopView, contextMenus) {
+define([
+	'backbone', 'views/TopView', 'instances/contextMenus'
+],
+function(BB, TopView, contextMenus) {
 	var SourceView = TopView.extend({
 		/*events: {
 			'mouseup': 'handleMouseUp',

@@ -3,8 +3,8 @@
  * @submodule views/ItemView
  */
 define([
-	'backbone', 'jquery', 'underscore', 'helpers/formatDate', 'instances/contextMenus', 'helpers/stripTags'
-], function(BB, $, _, formatDate, contextMenus, stripTags) {
+	'backbone', 'jquery', 'underscore', 'helpers/formatDate', 'instances/contextMenus', 'helpers/stripTags', 'text!templates/item.html'
+], function(BB, $, _, formatDate, contextMenus, stripTags, tplItem) {
 
 	/**
 	 * View of one article item in article list
@@ -33,10 +33,10 @@ define([
 		/**
 		 * Article item view template
 		 * @property template
-		 * @default #template-item
+		 * @default ./templates/item.html
 		 * @type Function
 		 */
-		template: _.template($('#template-item').html()),
+		template: _.template(tplItem),
 
 		/**
 		 * Reference to view/articleList instance. It should be replaced with require('views/articleList')

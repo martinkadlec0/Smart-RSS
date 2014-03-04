@@ -1,8 +1,10 @@
-define(['backbone', 'jquery', 'underscore', 'modules/Locale', 'views/feedList'], function(BB, $, _, Locale) {
+define([
+	'backbone', 'jquery', 'underscore', 'modules/Locale', 'text!templates/source.html', 'views/feedList'
+], function(BB, $, _, Locale, tplSource) {
 	var TopView = BB.View.extend({
 		tagName: 'div',
 		className: 'list-item',
-		template: _.template($('#template-source').html()),
+		template: _.template(tplSource),
 		handleMouseUp: function(e) {
 			if (e.which == 3) {
 				this.showContextMenu(e);

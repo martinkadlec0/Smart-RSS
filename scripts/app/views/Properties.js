@@ -1,15 +1,16 @@
-define(['backbone', 'jquery', 'underscore'], function(BB, $, _) {
+define([
+	'backbone', 'jquery', 'underscore', 'text!templates/properties.html', 'modules/Locale'
+],
+function(BB, $, _, tplProperties, Locale) {
 
 	var Properties = BB.View.extend({
 		id: 'properties',
 		current: null,
+		template: _.template(Locale.translateHTML(tplProperties)),
 		events: {
 			'click button' : 'handleClick',
 			'keydown button' : 'handleKeyDown',
 			'click #advanced-switch' : 'handleSwitchClick',
-		},
-		initialize: function() {
-			this.template = _.template($('#template-properties').html());
 		},
 		handleClick: function(e) {
 			var t = e.currentTarget;

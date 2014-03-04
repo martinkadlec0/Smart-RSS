@@ -1,13 +1,16 @@
-define(['backbone', 'underscore', 'jquery'], function(BB, _, $) {
+define([
+	'backbone', 'underscore', 'jquery', 'text!templates/overlay.html', 'modules/Locale'
+],
+function(BB, _, $, tplOverlay, Locale) {
 	var OverlayView = BB.View.extend({
 		tagName: 'div',
 		className: 'overlay',
+		template: _.template(Locale.translateHTML(tplOverlay)),
 		events: {
 			'click #config-layout input[type=image]': 'handleLayoutChange',
 			'change select': 'handleSelectChange',
 		},
 		initialize: function() {
-			this.template = _.template($('#template-overlay').html());
 			
 			window.addEventListener('blur', this.hide.bind(this));
 			window.addEventListener('resize', this.hide.bind(this));

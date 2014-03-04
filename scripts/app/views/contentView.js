@@ -3,9 +3,10 @@
  * @submodule views/contentView
  */
 define([
-	'backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escapeHtml', 'helpers/stripTags', 'text!templates/download.html'
+	'backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escapeHtml', 'helpers/stripTags', 'text!templates/download.html',
+	'text!templates/header.html'
 ],
-function(BB, $, _, formatDate, escapeHtml, stripTags, tplDownload) {
+function(BB, $, _, formatDate, escapeHtml, stripTags, tplDownload, tplHeader) {
 
 	/**
 	 * Full view of one article (right column)
@@ -26,14 +27,15 @@ function(BB, $, _, formatDate, escapeHtml, stripTags, tplDownload) {
 		/**
 		 * Content view template
 		 * @property template
-		 * @default #template-header
+		 * @default ./templates/header.html
 		 * @type Function
 		 */
-		template: null,
+		template: _.template(tplHeader),
 
 		/**
 		 * Template for downlaoding an article
 		 * @property downloadTemplate
+		 * @default ./templates/download.html
 		 * @type Function
 		 */
 		downloadTemplate: _.template(tplDownload),
@@ -76,7 +78,7 @@ function(BB, $, _, formatDate, escapeHtml, stripTags, tplDownload) {
 		 * @triggered when content view is attached to DOM
 		 */
 		handleAttached: function() {
-			this.template = _.template($('#template-header').html());
+			//this.template = _.template($('#template-header').html());
 			
 			//window.addEventListener('message', function(e) {
 			app.on('select:article-list', function(data) {

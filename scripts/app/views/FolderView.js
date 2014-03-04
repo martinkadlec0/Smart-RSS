@@ -3,9 +3,9 @@
  * @submodule views/FolderView
  */
 define([
-	'backbone', 'jquery', 'underscore', 'views/TopView', 'instances/contextMenus'
+	'backbone', 'jquery', 'underscore', 'views/TopView', 'instances/contextMenus', 'text!templates/folder.html'
 ],
-function(BB, $, _, TopView, contextMenus) {
+function(BB, $, _, TopView, contextMenus, tplFolder) {
 
 	/**
 	 * View for Folder in feed list
@@ -26,10 +26,10 @@ function(BB, $, _, TopView, contextMenus) {
 		/**
 		 * Folder view template
 		 * @property template
-		 * @default #template-folder
+		 * @default ./templates/folder.html
 		 * @type Function
 		 */
-		template: _.template($('#template-folder').html()),
+		template: _.template(tplFolder),
 
 		/**
 		 * Reference to view/feedList instance. It should be replaced with require('views/feedList')

@@ -3,8 +3,8 @@
  * @submodule views/LogView
  */
 define([
-	'backbone', 'underscore', 'jquery', 'helpers/formatDate'
-], function(BB, _, $, formatDate) {
+	'backbone', 'underscore', 'jquery', 'helpers/formatDate', 'text!templates/log.html'
+], function(BB, _, $, formatDate, tplLog) {
 
 	/**
 	 * View in bottom right corner used for bgprocess error logs and integration tests
@@ -25,13 +25,14 @@ define([
 			'click #button-hide-log': 'hide'
 		},
 
+		template: _.template(tplLog),
+
 		/**
 		 * Initializations of events and template.
 		 * Underscore template function has to be created in constructor as the HTML is not yet avalable on Protoype creation.
 		 * @method initialize
 		 */
 		initialize: function() {
-			this.template = _.template($('#template-log').html());
 			this.$el.html(this.template({}));
 
 			bg.logs.on('add', this.addItem, this);
