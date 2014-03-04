@@ -4,16 +4,15 @@
 define([
 	'controllers/comm',
 	'layouts/Layout', 'jquery', 'domReady!', 'collections/Actions', 'layouts/FeedsLayout', 'layouts/ArticlesLayout',
-	'layouts/ContentLayout', 'staticdb/shortcuts', 'preps/all'
+	'layouts/ContentLayout', 'staticdb/shortcuts', 'modules/Locale', 'preps/all'
 ],
-function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLayout, shortcuts) {
+function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLayout, shortcuts, Locale) {
 
-	//$('body').html( bg.translate($('body').html()) );
 	document.documentElement.style.fontSize = bg.settings.get('uiFontSize') + '%';
 
 	var templates = $('script[type="text/template"]');
 	templates.each(function(i, el) {
-		el.innerHTML = bg.translate(el.innerHTML);
+		el.innerHTML = Locale.translateHTML(el.innerHTML);
 	});
 
 	document.addEventListener('contextmenu', function(e) {

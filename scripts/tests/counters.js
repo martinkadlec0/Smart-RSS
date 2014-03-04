@@ -44,7 +44,7 @@ define(['chai', 'preps/extendNative'], function(chai) {
 		describe('Updating feed', function() {
 			before(function(done) {
 				source.save({ url: 'http://smartrss.martinkadlec.eu/test2.rss' });
-				bg.downloadOne(source);
+				bg.loader.downloadOne(source);
 
 				source.on('update', function() {
 					done();

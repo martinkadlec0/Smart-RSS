@@ -52,6 +52,12 @@ label {
   -webkit-user-select: none;
   user-select: none;
 }
+.dynamic-space {
+  -webkit-flex: 1 1 auto;
+  flex: 1 1 auto;
+  text-align: center;
+  margin-right: 3px;
+}
 .button {
   -webkit-flex: 0 0 28px;
   flex: 0 0 28px;
@@ -75,7 +81,7 @@ label {
 }
 [data-action="articles:undelete"] {
   background: url("/images/delete_selected.png") no-repeat center center;
-  display: none;
+/*display: none;*/
 }
 #context-undelete {
   display: none;

@@ -1,11 +1,11 @@
 define([
-	'backbone', 'models/Special', 'instances/contextMenus', 'views/feedList'
+	'backbone', 'models/Special', 'instances/contextMenus', 'modules/Locale', 'views/feedList'
 ],
-function(BB, Special, contextMenus) {
+function(BB, Special, contextMenus, Locale) {
 	
 	var specials = {
 		trash: new Special({
-			title: bg.lang.c.TRASH,
+			title: Locale.c.TRASH,
 			icon: 'trashsource.png',
 			filter: { trashed: true, deleted: false },
 			position: 'bottom',
@@ -30,7 +30,7 @@ function(BB, Special, contextMenus) {
 			}
 		}),
 		allFeeds: new Special({
-			title: bg.lang.c.ALL_FEEDS,
+			title: Locale.c.ALL_FEEDS,
 			icon: 'icon16_v2.png',
 			filter: { trashed: false },
 			position: 'top',
@@ -40,7 +40,7 @@ function(BB, Special, contextMenus) {
 			}
 		}),
 		pinned: new Special({
-			title: bg.lang.c.PINNED,
+			title: Locale.c.PINNED,
 			icon: 'pinsource.png',
 			filter: { trashed: false, pinned: true },
 			position: 'bottom',

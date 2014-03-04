@@ -3,13 +3,13 @@
  * @submodule layouts/FeedsLayout
  */
 define([
-	'jquery', 'layouts/Layout', 'views/ToolbarView', 'models/Toolbar', 'views/feedList',
+	'jquery', 'layouts/Layout', 'views/ToolbarView', 'views/feedList',
 	'instances/contextMenus', 'views/properties', 'mixins/resizable', 'views/IndicatorView',
 	'controllers/comm', 'domReady!'
 ],
-function ($, Layout, ToolbarView, Toolbar, feedList, contextMenus, Properties, resizable, IndicatorView, comm) {
+function ($, Layout, ToolbarView, feedList, contextMenus, Properties, resizable, IndicatorView, comm) {
 
-	var toolbar = new Toolbar({ id: 'feeds' });
+	var toolbar = bg.toolbars.findWhere({ region: 'feeds' });
 
 	/**
 	 * Feeds layout view

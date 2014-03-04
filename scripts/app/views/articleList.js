@@ -4,9 +4,9 @@
  */
 define([
 	'backbone', 'underscore', 'jquery', 'collections/Groups', 'models/Group', 'views/GroupView',
-	'views/ItemView', 'mixins/selectable'
+	'views/ItemView', 'mixins/selectable', 'modules/Locale'
 ],
-function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
+function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 
 	function isScrolledIntoView(elem) {
 		if (!screen) {
@@ -558,8 +558,10 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 
 			// if prev selected was trash, hide undelete buttons
 			if (this.currentData.name == 'trash') {
-				$('[data-action="articles:update"]').css('display', 'block');
-				$('[data-action="articles:undelete"]').css('display', 'none');
+				/*$('[data-action="articles:update"]').css('display', 'block');
+				$('[data-action="articles:undelete"]').css('display', 'none');*/
+				app.articles.toolbar.showItems('articles:update');
+				app.articles.toolbar.hideItems('articles:undelete');
 				$('#context-undelete').css('display', 'none');
 			}
 
@@ -588,9 +590,12 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 				searchIn = bg.items.where({ trashed: false });
 			}
 
+			// if newly selected is trash
 			if (this.currentData.name == 'trash') {
-				$('[data-action="articles:update"]').css('display', 'none');
-				$('[data-action="articles:undelete"]').css('display', 'block');
+				app.articles.toolbar.hideItems('articles:update');
+				app.articles.toolbar.showItems('articles:undelete');
+				/*$('[data-action="articles:update"]').css('display', 'none');
+				$('[data-action="articles:undelete"]').css('display', 'block');*/
 				$('#context-undelete').css('display', 'block');
 			}
 
@@ -662,7 +667,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable) {
 		 */
 		removeItemCompletely: function(view) {
 			if (view.model.get('pinned')) {
-				var conf = confirm(bg.lang.c.PIN_QUESTION_A + view.model.escape('title') + bg.lang.c.PIN_QUESTION_B);
+				var conf = confirm(Locale.c.PIN_QUESTION_A + view.model.escape('title') + Locale.c.PIN_QUESTION_B);
 				if (!conf) {
 					return;
 				}

@@ -2,7 +2,7 @@
  * @module App
  * @submodule views/IndicatorView
  */
-define(['backbone'], function(BB) {
+define(['backbone', 'modules/Locale'], function(BB, Locale) {
 
 	/**
 	 * Feeds update indicator view
@@ -70,7 +70,7 @@ define(['backbone'], function(BB) {
 			if (l.get('maxSources') == 0) return;
 			var perc = Math.round(l.get('loaded') * 100 / l.get('maxSources'));
 			this.$el.css('background', 'linear-gradient(to right,  #c5c5c5 ' + perc + '%, #eee ' + perc + '%)');
-			this.$el.html(bg.lang.c.UPDATING_FEEDS + ' (' + l.get('loaded') + '/' + l.get('maxSources') + ')');
+			this.$el.html(Locale.c.UPDATING_FEEDS + ' (' + l.get('loaded') + '/' + l.get('maxSources') + ')');
 			return this;
 		}
 	});

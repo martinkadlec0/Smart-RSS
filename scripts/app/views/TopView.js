@@ -1,4 +1,4 @@
-define(['backbone', 'jquery', 'underscore', 'views/feedList'], function(BB, $, _) {
+define(['backbone', 'jquery', 'underscore', 'modules/Locale', 'views/feedList'], function(BB, $, _, Locale) {
 	var TopView = BB.View.extend({
 		tagName: 'div',
 		className: 'list-item',
@@ -30,7 +30,7 @@ define(['backbone', 'jquery', 'underscore', 'views/feedList'], function(BB, $, _
 		},
 		setTitle: function(unread, total) {
 			this.$el.attr('title',
-				this.model.get('title') + ' (' + unread + ' ' + bg.lang.c.UNREAD + ', ' + total + ' ' + bg.lang.c.TOTAL + ')'
+				this.model.get('title') + ' (' + unread + ' ' + Locale.c.UNREAD + ', ' + total + ' ' + Locale.c.TOTAL + ')'
 			);
 		}
 	});

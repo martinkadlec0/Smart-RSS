@@ -1,11 +1,24 @@
+/**
+ * Smart RSS extension
+ * COPYRIGHT by Martin Kadlec
+ * This extension is meant for Opera only. Do not reuse any of the code for any other browser.
+ * You are allowed to do any changes for personal use in Opera Browser.
+ * Ask before publishing modified versions.
+ * Do not upload any modified version of this extension to addons.opera.com!
+ */
+
+
 require.config({
 
-	baseUrl: 'scripts/app',
+	baseUrl: 'scripts/bgprocess',
 
 	paths: {
 		jquery: '../libs/jquery.min',
 		underscore: '../libs/underscore.min',
 		backbone: '../libs/backbone.min',
+		backboneDB: '../libs/backbone.indexDB',
+		locale: '../local/local',
+		md5: '../libs/md5',
 		text: '../text',
 		domReady: '../domReady',
 		//mocha: '../../node_modules/mocha/mocha',
@@ -22,33 +35,22 @@ require.config({
 			deps: ['underscore', 'jquery'],
 			exports: 'Backbone'
 		},
+		backboneDB: {
+			deps: ['backbone']
+		},
 		underscore: {
 			exports: '_'
 		},
 		mocha: {
 			exports: 'mocha'
+		},
+		md5: {
+			exports: 'CryptoJS'
 		}
 	}
 });
 
-var tabID = -1;
 
-chrome.runtime.getBackgroundPage(function(bg) {
-	/**
-	 * Stup work, that has to be done before any dependencies get executed
-	 */
-	window.bg = bg;
-
-	chrome.extension.sendMessage({ action: 'get-tab-id'}, function(response) {
-		if (response.action == 'response-tab-id') {
-			tabID = response.value;	
-		}
-	});
-	chrome.runtime.connect();
-	
-	requirejs(['app'], function(app) {	
-		bg.appStarted.always(function() {	
-			app.start();
-		});
-	});
+requirejs(['bg'], function(bg) {	
+	// bg started
 });

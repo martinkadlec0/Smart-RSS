@@ -1,8 +1,8 @@
 /**
- * @module App
+ * @module BgProcess
  * @submodule models/Toolbar
  */
-define(['backbone', 'staticdb/buttons'], function (BB, db) {
+define(['backbone'], function (BB) {
 
 	/**
 	 * Region toolbar for buttons
@@ -33,24 +33,13 @@ define(['backbone', 'staticdb/buttons'], function (BB, db) {
 			 * @default []
 			 */
 			actions: [],
-
-			/**
-			 * @attribute firstRun
-			 * @type Boolean
-			 * @default true
-			 */
-			firstRun: true
 		},
 
 		/**
 		 * @method initialize
 		 */
 		initialize: function() {
-			if (!this.get('firstRun')) return;
-			this.set({
-				actions: db[this.id],
-				firstRun: false
-			});
+			// ...
 		}
 	});
 

@@ -3,12 +3,12 @@
  * @submodule layouts/ArticlesLayout
  */
 define([
-	'jquery', 'layouts/Layout', 'views/ToolbarView', 'models/Toolbar', 'views/articleList',
+	'jquery', 'layouts/Layout', 'views/ToolbarView', 'views/articleList',
 	'mixins/resizable', 'controllers/comm', 'domReady!'
 ],
-function ($, Layout, ToolbarView, Toolbar, articleList, resizable, comm) {
+function ($, Layout, ToolbarView, articleList, resizable, comm) {
 
-	var toolbar = new Toolbar({ id: 'articles' });
+	var toolbar = bg.toolbars.findWhere({ region: 'articles' });
 
 	/**
 	 * Articles layout view

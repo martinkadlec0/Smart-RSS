@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'helpers/stripTags'], function($, _, stripTags) {
+define(['jquery', 'underscore', 'helpers/stripTags', 'modules/Locale'], function($, _, stripTags, Locale) {
 
 return {
 	global: {
@@ -24,24 +24,24 @@ return {
 	feeds: {
 		updateAll: {
 			icon: 'reload.png',
-			title: bg.lang.c.UPDATE_ALL,
+			title: Locale.c.UPDATE_ALL,
 			fn: function() {
-				bg.downloadAll(true);
+				bg.loader.downloadAll(true);
 			}
 		},
 		update: {
 			icon: 'reload.png',
-			title: bg.lang.c.UPDATE,
+			title: Locale.c.UPDATE,
 			fn: function() {
 				var s = require('views/feedList').selectedItems;
 				if (s.length) {
-					bg.download(_.pluck(s, 'model'));
+					bg.loader.download(_.pluck(s, 'model'));
 				}
 			}
 		},
 		mark: {
 			icon: 'read.png',
-			title: bg.lang.c.MARK_ALL_AS_READ,
+			title: Locale.c.MARK_ALL_AS_READ,
 			fn: function() {
 				var s = require('views/feedList').getSelectedFeeds();
 				if (!s.length) return;
@@ -65,9 +65,9 @@ return {
 		},
 		delete: {
 			icon: 'delete.png',
-			title: bg.lang.c.DELETE,
+			title: Locale.c.DELETE,
 			fn: function() {
-				if (!confirm(bg.lang.c.REALLY_DELETE)) return;
+				if (!confirm(Locale.c.REALLY_DELETE)) return;
 
 				var feeds = require('views/feedList').getSelectedFeeds();
 				var folders = require('views/feedList').getSelectedFolders();
@@ -83,7 +83,7 @@ return {
 		},
 		showProperties: {
 			icon: 'properties.png',
-			title: bg.lang.c.PROPERTIES,
+			title: Locale.c.PROPERTIES,
 			fn: function() {
 				var properties = app.feeds.properties;
 
@@ -104,9 +104,9 @@ return {
 		},
 		addSource: {
 			icon: 'add.png',
-			title: bg.lang.c.ADD_RSS_SOURCE,
+			title: Locale.c.ADD_RSS_SOURCE,
 			fn: function() {
-				var url = (prompt(bg.lang.c.RSS_FEED_URL) || '').trim();
+				var url = (prompt(Locale.c.RSS_FEED_URL) || '').trim();
 				if (!url)  return;
 
 				var folderID = 0;
@@ -130,9 +130,9 @@ return {
 		},
 		addFolder: {
 			icon: 'add_folder.png',
-			title: bg.lang.c.NEW_FOLDER,
+			title: Locale.c.NEW_FOLDER,
 			fn: function() {
-				var title = (prompt(bg.lang.c.FOLDER_NAME + ': ') || '').trim();
+				var title = (prompt(Locale.c.FOLDER_NAME + ': ') || '').trim();
 				if (!title) return;
 
 				bg.folders.create({
@@ -242,28 +242,28 @@ return {
 	articles: {
 		mark: {
 			icon: 'read.png',
-			title: bg.lang.c.MARK_AS_READ,
+			title: Locale.c.MARK_AS_READ,
 			fn: function() {
 				require('views/articleList').changeUnreadState();
 			}
 		},
 		update: {
 			icon: 'reload.png',
-			title: bg.lang.c.UPDATE,
+			title: Locale.c.UPDATE,
 			fn: function() {
 				var list = require('views/articleList');
 				if (list.currentData.feeds.length) {
 					list.currentData.feeds.forEach(function(id) {
-						bg.downloadOne(bg.sources.get(id));
+						bg.loader.downloadOne(bg.sources.get(id));
 					});
 				} else {
-					bg.downloadAll(true); // true = force
+					bg.loader.downloadAll(true); // true = force
 				}
 			}
 		},
 		delete: {
 			icon: 'delete.png',
-			title: bg.lang.c.DELETE,
+			title: Locale.c.DELETE,
 			fn: function(e) {
 				var list = require('views/articleList');
 				if (list.currentData.name == 'trash' || e.shiftKey) {
@@ -275,7 +275,7 @@ return {
 		},
 		undelete: {
 			icon: 'undelete.png',
-			title: bg.lang.c.UNDELETE,
+			title: Locale.c.UNDELETE,
 			fn: function() {
 				var articleList = require('views/articleList');
 				if (!articleList.selectedItems || !articleList.selectedItems.length || articleList.currentData.name != 'trash') return;
@@ -293,7 +293,7 @@ return {
 			}
 		},
 		search: {
-			title: bg.lang.c.SEARCH_TIP,
+			title: Locale.c.SEARCH_TIP,
 			fn: function(e) {
 				e = e || {};
 				var str = e.currentTarget.value || '';
@@ -337,7 +337,7 @@ return {
 			}
 		},
 		fullArticle: {
-			title: bg.lang.c.FULL_ARTICLE,
+			title: Locale.c.FULL_ARTICLE,
 			icon: 'full_article.png',
 			fn: function(e) {
 				var articleList = app.articles.articleList;
@@ -370,7 +370,7 @@ return {
 			}
 		},
 		markAndNextUnread: {
-			title: bg.lang.c.MARK_AND_NEXT_UNREAD,
+			title: Locale.c.MARK_AND_NEXT_UNREAD,
 			icon: 'find_next.png',
 			fn: function() {
 				require('views/articleList').changeUnreadState({ onlyToRead: true });
@@ -378,7 +378,7 @@ return {
 			}
 		},
 		markAndPrevUnread: {
-			title: bg.lang.c.MARK_AND_PREV_UNREAD,
+			title: Locale.c.MARK_AND_PREV_UNREAD,
 			icon: 'find_previous.png',
 			fn: function() {
 				require('views/articleList').changeUnreadState({ onlyToRead: true });
@@ -386,21 +386,21 @@ return {
 			}
 		},
 		nextUnread: {
-			title: bg.lang.c.NEXT_UNREAD,
+			title: Locale.c.NEXT_UNREAD,
 			icon: 'forward.png',
 			fn: function() {
 				require('views/articleList').selectNext({ selectUnread: true });
 			}
 		},
 		prevUnread: {
-			title: bg.lang.c.PREV_UNREAD,
+			title: Locale.c.PREV_UNREAD,
 			icon: 'back.png',
 			fn: function() {
 				require('views/articleList').selectPrev({ selectUnread: true });
 			}
 		},
 		markAllAsRead: {
-			title: bg.lang.c.MARK_ALL_AS_READ,
+			title: Locale.c.MARK_ALL_AS_READ,
 			icon: 'read.png',
 			fn: function() {
 				var articleList = require('views/articleList');
@@ -413,7 +413,7 @@ return {
 						}
 					});
 				} else if (articleList.currentData.name == 'all-feeds') {
-					if (confirm(bg.lang.c.MARK_ALL_QUESTION)) {
+					if (confirm(Locale.c.MARK_ALL_QUESTION)) {
 						bg.items.forEach(function(item) {
 							if (item.get('unread') == true) {
 								item.save({ unread: false, visited: true });
@@ -444,7 +444,7 @@ return {
 			}
 		},
 		pin: {
-			title: bg.lang.c.PIN,
+			title: Locale.c.PIN,
 			icon: 'pinsource_context.png',
 			fn: function() {
 				var articleList = require('views/articleList');
@@ -494,7 +494,7 @@ return {
 	},
 	content: {
 		download: {
-			title: bg.lang.c.DOWNLOAD,
+			title: Locale.c.DOWNLOAD,
 			icon: 'save.png',
 			fn: function() {
 				var contentView = require('views/contentView');
@@ -511,7 +511,7 @@ return {
 			}
 		},
 		print: {
-			title: bg.lang.c.PRINT,
+			title: Locale.c.PRINT,
 			icon: 'print.png',
 			fn: function() {
 				var contentView = require('views/contentView');
@@ -520,7 +520,7 @@ return {
 			}
 		},
 		mark: {
-			title: bg.lang.c.MARK_AS_READ,
+			title: Locale.c.MARK_AS_READ,
 			icon: 'read.png',
 			fn: function() {
 				var contentView = require('views/contentView');
@@ -532,7 +532,7 @@ return {
 			}
 		},
 		delete: {
-			title: bg.lang.c.DELETE,
+			title: Locale.c.DELETE,
 			icon: 'delete.png',
 			fn: function(e) {
 				var contentView = require('views/contentView');
@@ -548,7 +548,7 @@ return {
 			}
 		},
 		showConfig: {
-			title: bg.lang.c.SETTINGS,
+			title: Locale.c.SETTINGS,
 			icon: 'config.png',
 			fn: function() {
 				app.content.overlay.show();

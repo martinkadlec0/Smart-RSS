@@ -1,4 +1,4 @@
-define(['backbone'], function(BB) {
+define(['backbone', 'modules/Locale'], function(BB, Locale) {
 	var SandboxView = BB.View.extend({
 		tagName: 'iframe',
 		loaded: false,
@@ -16,7 +16,7 @@ define(['backbone'], function(BB) {
 		},
 		handleLoad: function() {
 			this.loaded = true;
-			this.el.contentDocument.querySelector('#smart-rss-url').innerHTML = bg.lang.c.FULL_ARTICLE;
+			this.el.contentDocument.querySelector('#smart-rss-url').innerHTML = Locale.c.FULL_ARTICLE;
 			this.trigger('load');
 		}
 	});

@@ -1,10 +1,10 @@
 define([
-	'backbone', 'views/ContextMenu', 'views/feedList'
+	'backbone', 'views/ContextMenu', 'modules/Locale', 'views/feedList'
 ],
-function(BB, ContextMenu) {
+function(BB, ContextMenu, Locale) {
 	var sourceContextMenu = new ContextMenu([
 		{
-			title: bg.lang.c.UPDATE,
+			title: Locale.c.UPDATE,
 			icon: 'reload.png',
 			action: function() {
 				app.actions.execute('feeds:update');
@@ -12,21 +12,21 @@ function(BB, ContextMenu) {
 			}
 		},
 		{
-			title: bg.lang.c.MARK_ALL_AS_READ,
+			title: Locale.c.MARK_ALL_AS_READ,
 			icon: 'read.png',
 			action: function() {
 				app.actions.execute('feeds:mark');
 			}
 		},
 		{
-			title: bg.lang.c.DELETE,
+			title: Locale.c.DELETE,
 			icon: 'delete.png',
 			action: function() {
 				app.actions.execute('feeds:delete');
 			}
 		},
 		{
-			title: bg.lang.c.PROPERTIES,
+			title: Locale.c.PROPERTIES,
 			icon: 'properties.png',
 			action: function() {
 				app.actions.execute('feeds:showProperties');
@@ -36,7 +36,7 @@ function(BB, ContextMenu) {
 
 	var trashContextMenu = new ContextMenu([
 		{
-			title: bg.lang.c.MARK_ALL_AS_READ,
+			title: Locale.c.MARK_ALL_AS_READ,
 			icon: 'read.png',
 			action: function() {
 				bg.items.where({ trashed: true, deleted: false }).forEach(function(item) {
@@ -50,10 +50,10 @@ function(BB, ContextMenu) {
 			}
 		},
 		{
-			title: bg.lang.c.EMPTY_TRASH,
+			title: Locale.c.EMPTY_TRASH,
 			icon: 'delete.png',
 			action: function() {
-				if (confirm(bg.lang.c.REALLY_EMPTY_TRASH)) {
+				if (confirm(Locale.c.REALLY_EMPTY_TRASH)) {
 					bg.items.where({ trashed: true, deleted: false }).forEach(function(item) {
 						item.markAsDeleted();
 					});
@@ -64,17 +64,17 @@ function(BB, ContextMenu) {
 
 	var allFeedsContextMenu = new ContextMenu([
 		{
-			title: bg.lang.c.UPDATE_ALL,
+			title: Locale.c.UPDATE_ALL,
 			icon: 'reload.png',
 			action: function() {
 				bg.downloadAll(true);
 			}
 		},
 		{
-			title: bg.lang.c.MARK_ALL_AS_READ,
+			title: Locale.c.MARK_ALL_AS_READ,
 			icon: 'read.png',
 			action: function() {
-				if (confirm(bg.lang.c.MARK_ALL_QUESTION)) {
+				if (confirm(Locale.c.MARK_ALL_QUESTION)) {
 					bg.items.forEach(function(item) {
 						item.save({ unread: false, visited: true });
 					});
@@ -82,10 +82,10 @@ function(BB, ContextMenu) {
 			}
 		},
 		{
-			title: bg.lang.c.DELETE_ALL_ARTICLES,
+			title: Locale.c.DELETE_ALL_ARTICLES,
 			icon: 'delete.png',
 			action: function() {
-				if (confirm(bg.lang.c.DELETE_ALL_Q)) {
+				if (confirm(Locale.c.DELETE_ALL_Q)) {
 					bg.items.forEach(function(item) {
 						if (item.get('deleted') == true) return;
 						item.markAsDeleted();
@@ -97,38 +97,38 @@ function(BB, ContextMenu) {
 
 	var folderContextMenu = new ContextMenu([
 		{
-			title: bg.lang.c.UPDATE,
+			title: Locale.c.UPDATE,
 			icon: 'reload.png',
 			action: function() {
 				app.actions.execute('feeds:update');
 			}
 		},
 		{
-			title: bg.lang.c.MARK_ALL_AS_READ,
+			title: Locale.c.MARK_ALL_AS_READ,
 			icon: 'read.png',
 			action: function() {
 				app.actions.execute('feeds:mark');
 			}
 		},
 		{
-			title: bg.lang.c.DELETE,
+			title: Locale.c.DELETE,
 			icon: 'delete.png',
 			action: function() {
 				app.actions.execute('feeds:delete');
 			}
 		},
 		{
-			title: bg.lang.c.PROPERTIES,
+			title: Locale.c.PROPERTIES,
 			icon: 'properties.png',
 			action: function() {
 				app.actions.execute('feeds:showProperties');
 			}
 		}
 		/*{
-			title: bg.lang.c.RENAME,
+			title: Locale.c.RENAME,
 			action: function() {
 				var feedList = require('views/feedList');
-				var newTitle = prompt(bg.lang.c.FOLDER_NAME + ': ', feedList.selectedItems[0].model.get('title'));
+				var newTitle = prompt(Locale.c.FOLDER_NAME + ': ', feedList.selectedItems[0].model.get('title'));
 				if (!newTitle) return;
 
 				feedList.selectedItems[0].model.save({ title: newTitle });
@@ -138,63 +138,63 @@ function(BB, ContextMenu) {
 
 	var itemsContextMenu = new ContextMenu([
 		{
-			title: bg.lang.c.NEXT_UNREAD + ' (H)',
+			title: Locale.c.NEXT_UNREAD + ' (H)',
 			icon: 'forward.png',
 			action: function() {
 				app.actions.execute('articles:nextUnread');
 			}
 		},
 		{
-			title: bg.lang.c.PREV_UNREAD + ' (Y)',
+			title: Locale.c.PREV_UNREAD + ' (Y)',
 			icon: 'back.png',
 			action: function() {
 				app.actions.execute('articles:prevUnread');
 			}
 		},
 		{
-			title: bg.lang.c.MARK_AS_READ + ' (K)',
+			title: Locale.c.MARK_AS_READ + ' (K)',
 			icon: 'read.png',
 			action: function() {
 				app.actions.execute('articles:mark');
 			}
 		},
 		{
-			title: bg.lang.c.MARK_AND_NEXT_UNREAD + ' (G)',
+			title: Locale.c.MARK_AND_NEXT_UNREAD + ' (G)',
 			icon: 'find_next.png',
 			action: function() {
 				app.actions.execute('articles:markAndNextUnread');
 			}
 		},
 		{
-			title: bg.lang.c.MARK_AND_PREV_UNREAD + ' (T)',
+			title: Locale.c.MARK_AND_PREV_UNREAD + ' (T)',
 			icon: 'find_previous.png',
 			action: function() {
 				app.actions.execute('articles:markAndPrevUnread');
 			}
 		},
 		{
-			title: bg.lang.c.FULL_ARTICLE,
+			title: Locale.c.FULL_ARTICLE,
 			icon: 'full_article.png',
 			action: function(e) {
 				app.actions.execute('articles:fullArticle', e);
 			}
 		},
 		{
-			title: bg.lang.c.PIN + ' (P)',
+			title: Locale.c.PIN + ' (P)',
 			icon: 'pinsource_context.png',
 			action: function() {
 				app.actions.execute('articles:pin');
 			}
 		},
 		{
-			title: bg.lang.c.DELETE + ' (D)',
+			title: Locale.c.DELETE + ' (D)',
 			icon: 'delete.png',
 			action: function(e) {
 				app.actions.execute('articles:delete', e);
 			}
 		},
 		{
-			title: bg.lang.c.UNDELETE + ' (N)',
+			title: Locale.c.UNDELETE + ' (N)',
 			id: 'context-undelete',
 			icon: 'undelete.png',
 			action: function() {

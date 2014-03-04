@@ -3,12 +3,12 @@
  * @submodule layouts/ContentLayout
  */
 define([
-	'jquery', 'layouts/Layout', 'views/ToolbarView', 'models/Toolbar', 'views/contentView', 'views/SandboxView',
+	'jquery', 'layouts/Layout', 'views/ToolbarView', 'views/contentView', 'views/SandboxView',
 	'views/OverlayView', 'views/LogView', 'controllers/comm', 'domReady!'
 ],
-function ($, Layout, ToolbarView, Toolbar, contentView, SandboxView, OverlayView, LogView, comm) {
+function ($, Layout, ToolbarView, contentView, SandboxView, OverlayView, LogView, comm) {
 
-	var toolbar = new Toolbar({ id: 'content' });
+	var toolbar = bg.toolbars.findWhere({ region: 'content' });
 
 	/**
 	 * Content layout view
