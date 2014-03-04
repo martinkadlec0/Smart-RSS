@@ -89,6 +89,8 @@ function ($, doc, animation, dbSuccess, Settings, Info, Source, Sources, Items, 
 		return allDef.promise();
 	}
 
+	window.fetchAll = fetchAll;
+	window.fetchOne = fetchOne;
 
 
 

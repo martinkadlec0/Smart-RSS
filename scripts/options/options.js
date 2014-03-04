@@ -210,7 +210,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 					bg.fetchAll().always(function() {
 						bg.info.autoSetData();
 						$('#smart-imported').html('Import fully completed!');
-						bg.downloadAll(true);
+						bg.loader.downloadAll(true);
 					});
 				} else if (e.data.action == 'message'){
 					$('#smart-imported').html(e.data.value);
@@ -286,7 +286,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 			$('#opml-imported').html('Import completed!');
 
 			setTimeout(function() {
-				bg.downloadAll();
+				bg.loader.downloadAll();
 			}, 10);
 		}
 
