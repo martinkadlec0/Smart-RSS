@@ -499,7 +499,7 @@ return {
 			fn: function() {
 				var contentView = require('views/contentView');
 				if (!contentView.model) return;
-				var tpl = _.template($('#template-download').html());
+				var tpl = contentView.downloadTemplate;
 				var attrs = Object.create(contentView.model.attributes);
 				attrs.date = contentView.getFormatedDate(attrs.date);
 				var blob = new Blob([ tpl(attrs) ], { type: 'text\/html' });

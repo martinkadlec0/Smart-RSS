@@ -3,9 +3,9 @@
  * @submodule views/contentView
  */
 define([
-	'backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escapeHtml', 'helpers/stripTags'
+	'backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escapeHtml', 'helpers/stripTags', 'text!templates/download.html'
 ],
-function(BB, $, _, formatDate, escapeHtml, stripTags) {
+function(BB, $, _, formatDate, escapeHtml, stripTags, tplDownload) {
 
 	/**
 	 * Full view of one article (right column)
@@ -30,6 +30,13 @@ function(BB, $, _, formatDate, escapeHtml, stripTags) {
 		 * @type Function
 		 */
 		template: null,
+
+		/**
+		 * Template for downlaoding an article
+		 * @property downloadTemplate
+		 * @type Function
+		 */
+		downloadTemplate: _.template(tplDownload),
 
 
 		events: {
