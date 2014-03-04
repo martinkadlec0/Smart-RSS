@@ -455,7 +455,7 @@ return {
 				});
 			}
 		},
-		spaceTrough: {
+		spaceThrough: {
 			title: 'Space Through',
 			fn: function() {
 				var articleList = require('views/articleList');
