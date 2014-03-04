@@ -3,15 +3,19 @@
 <head>
 	<meta charset="utf-8">
 	<title>Smart RSS</title>
-	<link rel="stylesheet" type="text/css" href="styles/rss.css" />
+	<link rel="stylesheet" type="text/css" href="styles/main-compiled.css" />
 	<link rel="shortcut icon" href="images/icon16_v2.png" />
-	<script src="scripts/rss.js"></script>
+	<script data-main="scripts/main.js" src="scripts/libs/require.js"></script>
+	<!--<script data-main="scripts/main-compiled.js" src="scripts/libs/require.js"></script>-->
 </head>
-<frameset cols="250,*">
-	<frame src="rss_sources.html" name="sources" />
-	<frameset cols="350,*">
-		<frame src="rss_items.html" name="items" />
-		<frame src="rss_item.html" name="item" />
-	</frameset>
-</frameset>
+<body class="loading">
+	<div class="regions" data-cols="250,*"> <!--  cols="350,*" -->
+		<div id="panel-toggle"></div>
+		<section class="region" id="region-feeds" tabindex="1" name="feeds"></section>
+		<div class="regions" data-cols="250,*">
+			<section class="region" id="region-articles" tabindex="2" name="articles"></section>
+			<section class="region" id="region-content"  tabindex="3" name="content"></section>
+		</div>
+	</div>
+</body>
 </html>

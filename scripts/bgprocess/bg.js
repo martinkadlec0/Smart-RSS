@@ -200,7 +200,7 @@ function ($, doc, animation, dbSuccess, Settings, Info, Source, Sources, Items, 
 	});
 
 	function openRSS(closeIfActive) {
-		var url = chrome.extension.getURL('rss_all.html');
+		var url = chrome.extension.getURL('rss.html');
 		chrome.tabs.query({
 			url: url
 		}, function(tabs) {
