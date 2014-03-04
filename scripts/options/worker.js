@@ -3,7 +3,7 @@ self.IDBTransaction = self.IDBTransaction || self.webkitIDBTransaction || self.m
 self.IDBKeyRange = self.IDBKeyRange || self.webkitIDBKeyRange || self.msIDBKeyRange;
 
 
-var request = indexedDB.open('backbone-indexeddb', 3);
+var request = indexedDB.open('backbone-indexeddb', 4);
 
 var db;
 var content;
