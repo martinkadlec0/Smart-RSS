@@ -10,7 +10,7 @@ define([], function() {
 		},
 		{
 			region: 'content',
-			actions: ['content:mark', 'content:print', 'content:download', 'content:delete', '!dynamicSpace', 'content:showConfig']
+			actions: ['content:mark', 'content:print', 'articles:download', 'content:delete', '!dynamicSpace', 'content:showConfig']
 		}
 	];
 });

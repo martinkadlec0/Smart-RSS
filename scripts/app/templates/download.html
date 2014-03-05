@@ -36,28 +36,27 @@
 	div.newsitem  { margin: 0px 0px 10px 0px; border-bottom: 1px solid white; }
 	div.header { padding: 10px 10px 5px 10px; border-top: 1px solid white; }
 	</style>
-	<title><%- title %></title>
+	<title><%- (articles[0] ? articles[0].title : 'Feed') %></title>
 </head>
 <body>
 	<!-- $BeginBlock article -->
+	<% for (var i=0; i<articles.length; i++) { %>
 	<div class="newsitem">
-	  <div class="header" style="border-top: none;">
-	    <div class="title"><a href="<%- url %>" class="read"><%- title %></a></div>
-	    <div class="subline">
-	      <table class="subline">
-	        <tr class="subline">
-	          <td class="subline date"><%- date %></td>
-	          <td class="sublineseparator">|</td>
-	          <td class="subline author"><%- author %></td>
-	          <!--<td class="sublineseparator">|</td>-->
-	          <!--<td class="subline">${ARTICLE_TAGS}</td>-->
-	        </tr>
-	      </table>
-	    </div>
-	  </div>
-	  <div class="content"><%= content %></div>
-	  <!--<div class="footer clearing-footer">${ARTICLE_NOTE}</div>-->
+		<div class="header" style="border-top: none;">
+			<div class="title"><a href="<%- articles[i].url %>" class="read"><%- articles[i].title %></a></div>
+			<div class="subline">
+				<table class="subline">
+				<tr class="subline">
+					<td class="subline date"><%- articles[i].date %></td>
+					<td class="sublineseparator">|</td>
+					<td class="subline author"><%- articles[i].author %></td>
+				</tr>
+				</table>
+			</div>
+		</div>
+		<div class="content"><%= articles[i].content %></div>
 	</div>
+	<% } %>
 	<!-- $EndBlock article -->
 </body>
 </html>

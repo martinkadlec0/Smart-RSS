@@ -490,6 +490,35 @@ return {
 				var el = require('views/articleList').el;
 				el.scrollTop = 0;
 			}
+		},
+		download: {
+			title: Locale.c.DOWNLOAD,
+			icon: 'save.png',
+			fn: function() {
+				var contentView = require('views/contentView');
+				var articleList = require('views/articleList');
+				if (!articleList.selectedItems.length) return;
+				var tpl = contentView.downloadTemplate;
+				
+				var list = {};
+				list.articles = articleList.selectedItems.map(function(itemView) {
+					var attrs = Object.create(itemView.model.attributes);
+					attrs.date = contentView.getFormatedDate(attrs.date);
+					return attrs;
+				});
+
+				var blob = new Blob([ tpl(list) ], { type: 'text\/html' });
+				var reader = new FileReader();
+				reader.readAsDataURL(blob);
+				reader.onload = function() {
+					window.open(this.result.replace('data:text/html;', 'data:text/html;charset=utf-8;'));
+				}
+				/*var url = URL.createObjectURL(blob);
+				window.open(url);
+				setTimeout(function() {
+					URL.revokeObjectURL(url);
+				}, 30000);*/
+			}
 		}
 	},
 	content: {
@@ -502,12 +531,18 @@ return {
 				var tpl = contentView.downloadTemplate;
 				var attrs = Object.create(contentView.model.attributes);
 				attrs.date = contentView.getFormatedDate(attrs.date);
-				var blob = new Blob([ tpl(attrs) ], { type: 'text\/html' });
-				var url = URL.createObjectURL(blob);
+				var list = { articles: [attrs] };
+				var blob = new Blob([ tpl(list) ], { type: 'text\/html' });
+				var reader = new FileReader();
+				reader.readAsDataURL(blob);
+				reader.onload = function() {
+					window.open(this.result.replace('data:text/html;', 'data:text/html;charset=utf-8;'));
+				}
+				/*var url = URL.createObjectURL(blob);
 				window.open(url);
 				setTimeout(function() {
 					URL.revokeObjectURL(url);
-				}, 30000);
+				}, 30000);*/
 			}
 		},
 		print: {
