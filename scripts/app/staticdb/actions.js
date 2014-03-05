@@ -497,7 +497,10 @@ return {
 			fn: function() {
 				var contentView = require('views/contentView');
 				var articleList = require('views/articleList');
-				if (!articleList.selectedItems.length) return;
+				if (!articleList.selectedItems.length) {
+					app.actions.execute('content:download');
+					return;
+				};
 				var tpl = contentView.downloadTemplate;
 				
 				var list = {};
