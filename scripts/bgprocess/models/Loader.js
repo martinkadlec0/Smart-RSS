@@ -189,7 +189,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 
 		if (sourceToLoad.get('username') || sourceToLoad.get('password')) {
 			options.username = sourceToLoad.get('username') || '';
-			options.password = sourceToLoad.get('password') || '';
+			options.password = sourceToLoad.getPass() || '';
 		}
 
 

@@ -29,11 +29,13 @@ function(BB, $, _, tplProperties, Locale) {
 			var updateEvery, autoremove;
 
 			if (this.current instanceof bg.Source) {
+				/* encrypt the password */
+				this.current.setPass($('#prop-password').val());
+
 				this.current.save({
 					title: $('#prop-title').val(),
 					url: app.fixURL($('#prop-url').val()),
 					username: $('#prop-username').val(),
-					password: $('#prop-password').val(),
 					updateEvery: parseFloat($('#prop-update-every').val()),
 					autoremove: $('#prop-autoremove').val(),
 				});
@@ -85,7 +87,11 @@ function(BB, $, _, tplProperties, Locale) {
 			if (!this.current) return;
 
 			if (this.current instanceof bg.Source) {
-				this.$el.html(this.template(this.current.attributes));
+				/* decrypt password */
+				var attrs = this.current.toJSON();
+				attrs.password = this.current.getPass();
+
+				this.$el.html(this.template(attrs));
 
 				if (this.current.get('updateEvery')) {
 					$('#prop-update-every').val(this.current.get('updateEvery'));

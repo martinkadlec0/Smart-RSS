@@ -23,7 +23,31 @@ define(['backbone'], function (BB) {
 			password: '',
 			hasNew: false,
 			autoremove: 0 // in days
+		},
+
+		getPass: function() {
+			var str = this.get('password');
+			if (str.indexOf('enc:') != 0) return str;
+
+			var dec = '';
+			for (var i=4; i<str.length; i++) {
+				dec += String.fromCharCode(str.charCodeAt(i) - 13);
+			}
+			return dec;
+		},
+		setPass: function(str) {
+			if (!str) {
+				this.save('password', '');
+				return;
+			}
+
+			var enc = 'enc:';
+			for (var i=0; i<str.length; i++) {
+				enc += String.fromCharCode(str.charCodeAt(i) + 13);
+			}
+			this.set('password', enc);
 		}
+
 	});
 
 	return Source;
