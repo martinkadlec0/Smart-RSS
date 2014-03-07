@@ -122,6 +122,9 @@ module.exports = function(grunt) {
 						},
 						underscore: {
 							exports: '_'
+						},
+						md5: {
+							exports: 'CryptoJS'
 						}
 					},
 					excludeShallow: ['jquery', 'underscore', 'backbone', 'backboneDB'],
