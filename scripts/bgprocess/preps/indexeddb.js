@@ -3,7 +3,7 @@
  * @module BgProcess
  * @submodule preps/indexeddb
  */
-define(['backbone', 'backboneDB'], function(BB, DB) {
+define(['backbone', 'backboneDB'], function(BB) {
 
 	/**
 	 * IndexedDB preps.
@@ -28,7 +28,7 @@ define(['backbone', 'backboneDB'], function(BB, DB) {
 		/*if (!db.objectStoreNames.contains('info-backbone'))
 			db.createObjectStore('info-backbone', { keyPath: 'id' });*/
 
-	}
+	};
 
 	/**
 	 * 1 -> 3: Main objects stores and testing

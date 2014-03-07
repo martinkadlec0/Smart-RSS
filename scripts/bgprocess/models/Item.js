@@ -46,9 +46,10 @@ define(['backbone'], function (BB) {
 		},
 		query: function(o) {
 			if (!o) return true;
-			for (i in o) {
-				if (!o.hasOwnProperty(i)) continue;
-				if (this.get(i) != o[i]) return false;
+			for (var i in o) {
+				if (o.hasOwnProperty(i)) {
+					if (this.get(i) != o[i]) return false;
+				}
 			}
 			return true;
 		}

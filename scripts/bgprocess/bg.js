@@ -79,7 +79,7 @@ function ($, animation, dbSuccess, Settings, Info, Source, Sources, Items, Folde
 		deferreds.push( toolbars.fetch({ silent: true }) );
 		deferreds.push( settingsDef = settings.fetch({ silent: true }) );
 
-		fetchOne(deferreds, allDef)
+		fetchOne(deferreds, allDef);
 
 		settingsDef.always(function() {
 			settingsLoaded.resolve();
@@ -118,7 +118,7 @@ function ($, animation, dbSuccess, Settings, Info, Source, Sources, Items, Folde
 			if (source.get('updateEvery') > 0) {
 				chrome.alarms.create('source-' + source.get('id'), {
 					delayInMinutes: source.get('updateEvery'),
-					periodInMinutes: source.get('updateEvery')	
+					periodInMinutes: source.get('updateEvery')
 				});
 			}
 			loader.downloadOne(source);
@@ -148,7 +148,6 @@ function ($, animation, dbSuccess, Settings, Info, Source, Sources, Items, Folde
 				} else {
 					console.log('No source with ID: ' + sourceID);
 					chrome.alarms.clear(alarm.name);
-					debugger;
 				}
 
 			}
@@ -192,7 +191,7 @@ function ($, animation, dbSuccess, Settings, Info, Source, Sources, Items, Folde
 		/**
 		 * onclick:button -> open RSS
 		 */
-		chrome.browserAction.onClicked.addListener(function(tab) {
+		chrome.browserAction.onClicked.addListener(function() {
 			openRSS(true);
 		});
 
@@ -203,7 +202,7 @@ function ($, animation, dbSuccess, Settings, Info, Source, Sources, Items, Folde
 	 * Messages
 	 */
 
-	chrome.runtime.onMessageExternal.addListener(function(message, sender, sendResponse) {
+	chrome.runtime.onMessageExternal.addListener(function(message) {
 		// if.sender.id != blahblah -> return;
 		if (!message.hasOwnProperty('action')) {
 			return;
@@ -238,7 +237,7 @@ function ($, animation, dbSuccess, Settings, Info, Source, Sources, Items, Folde
 			} else {
 				chrome.tabs.create({
 					'url': url
-				}, function(tab) {});
+				}, function() {});
 			}
 		});
 	}

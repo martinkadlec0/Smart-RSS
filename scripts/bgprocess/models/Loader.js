@@ -76,7 +76,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 
 	}
 
-	function downloadURL(urls, cb) {
+	function downloadURL() {
 		if (!loader.sourcesToLoad.length) {
 			// IF DOWNLOADING FINISHED, DELETED ITEMS WITH DELETED SOURCE (should not really happen)
 			var sourceIDs = sources.pluck('id');
@@ -165,7 +165,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 				sourceToLoad.trigger('update', { ok: true });
 				
 			},
-			error: function(e) {
+			error: function() {
 				console.log('Failed load RSS: ' + sourceToLoad.get('url'));
 
 				sourceToLoad.trigger('update', { ok: false });

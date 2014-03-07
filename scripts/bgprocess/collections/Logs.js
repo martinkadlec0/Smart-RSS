@@ -13,7 +13,7 @@ define(['backbone', 'models/Log'], function (BB, Log) {
 	var Logs = Backbone.Collection.extend({
 		model: Log,
 		initialze: function() {
-			var that = this;
+			
 		},
 		startLogging: function() {
 			window.onerror = function(a, b, c) {

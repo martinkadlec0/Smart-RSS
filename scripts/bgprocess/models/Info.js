@@ -22,10 +22,11 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
 		if (info.badgeTimeout) return;
 
 		info.badgeTimeout = setTimeout(function() {
+			var val;
 			if (settings.get('badgeMode') == 'unread') {
-				var val = info.get('allCountUnread') > 99 ? '+' : info.get('allCountUnread');
+				val = info.get('allCountUnread') > 99 ? '+' : info.get('allCountUnread');
 			} else {
-				var val = info.get('allCountUnvisited') > 99 ? '+' : info.get('allCountUnvisited');
+				val = info.get('allCountUnvisited') > 99 ? '+' : info.get('allCountUnvisited');
 			}
 			
 			val = val <= 0 ? '' : String(val);
@@ -33,7 +34,7 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
 			chrome.browserAction.setBadgeBackgroundColor({ color: '#777' });
 			info.badgeTimeout = null;
 		});
-	}
+	};
 
 
 	
@@ -71,7 +72,8 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
 			});
 
 			folders.forEach(function(folder) {
-				var count = countAll = 0;
+				var count = 0;
+				var countAll = 0;
 				sources.where({ folderID: folder.id }).forEach(function(source) {
 					count += source.get('count');
 					countAll += source.get('countAll');
@@ -84,7 +86,7 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
 			if (settings.get('badgeMode') == 'unread') {
 				info.on('change:allCountUnread', handleAllCountChange);
 			} else if (settings.get('badgeMode') == 'unvisited') {
-				info.on('change:allCountUnvisited', handleAllCountChange);	
+				info.on('change:allCountUnvisited', handleAllCountChange);
 			}
 			handleAllCountChange();
 
@@ -122,7 +124,7 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
 
 					var folder = folders.findWhere({ id: source.get('folderID') });
 					if (folder) {
-						folder.set({ 
+						folder.set({
 							count: folder.get('count') - source.get('count'),
 							countAll: folder.get('countAll') - source.get('countAll')
 						});
@@ -190,14 +192,14 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
 						});
 					}
 				} else if (source != sourceJoker) {
-					source.set({ 
-						'countAll': source.get('countAll') + (model.get('trashed') ? - 1 : 1) 
+					source.set({
+						'countAll': source.get('countAll') + (model.get('trashed') ? - 1 : 1)
 					});
 
 
 					if (!model.get('deleted')) {
-						info.set({ 
-							'trashCountTotal': info.get('trashCountTotal') + (model.get('trashed') ? 1 : -1) 
+						info.set({
+							'trashCountTotal': info.get('trashCountTotal') + (model.get('trashed') ? 1 : -1)
 						});
 					}
 				}
@@ -221,7 +223,7 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
 
 			sources.on('change:count', function(source) {
 				// SPECIALS
-				info.set({ 
+				info.set({
 					'allCountUnread': info.get('allCountUnread') + source.get('count') - source.previous('count')
 				});
 
@@ -236,7 +238,7 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
 
 			sources.on('change:countAll', function(source) {
 				// SPECIALS
-				info.set({ 
+				info.set({
 					'allCountTotal': info.get('allCountTotal') + source.get('countAll') - source.previous('countAll')
 				});
 
@@ -250,22 +252,23 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
 			});
 
 			sources.on('change:folderID', function(source) {
+				var folder;
 				if (source.get('folderID')) {
 
-					var folder = folders.findWhere({ id: source.get('folderID') });
+					folder = folders.findWhere({ id: source.get('folderID') });
 					if (!folder) return;
 
-					folder.set({ 
+					folder.set({
 						count: folder.get('count') + source.get('count'),
 						countAll: folder.get('countAll') + source.get('countAll')
 					});
-				} 
+				}
 
 				if (source.previous('folderID')) {
-					var folder = folders.findWhere({ id: source.previous('folderID') });
+					folder = folders.findWhere({ id: source.previous('folderID') });
 					if (!folder) return;
 
-					folder.set({ 
+					folder.set({
 						count: Math.max(folder.get('count') - source.get('count'), 0),
 						countAll: Math.max(folder.get('countAll') - source.get('countAll'), 0)
 					});

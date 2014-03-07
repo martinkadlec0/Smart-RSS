@@ -28,6 +28,7 @@ module.exports = function(grunt) {
 				maxdepth: 5,        // max nesting depth
 				quotmark: 'single', // single: force '
 				'-W041': true,      // don't warn about something == false/true
+				'-W117': true,      // don't warn about not defined vars until I refactorize bg.js
 				globals: {
 					app: true,
 					bg: true,
@@ -42,7 +43,7 @@ module.exports = function(grunt) {
 					HTMLCollection: true
 				}
 			},
-			all: ['scripts/app/*.js', 'scripts/app/**/*.js']
+			all: ['scripts/app/*.js', 'scripts/app/**/*.js', 'scripts/bgprocess/*.js', 'scripts/bgprocess/**/*.js']
 		},
 
 		requirejs: {

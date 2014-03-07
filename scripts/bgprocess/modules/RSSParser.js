@@ -36,7 +36,7 @@ define(['md5'], function (CryptoJS) {
 		 */
 		var ttl = xml.querySelector('channel > ttl, feed > ttl, rss > ttl');
 		if (ttl && source.get('lastUpdate') == 0) {
-			ttl = parseInt(ttl.textContent);
+			ttl = parseInt(ttl.textContent, 10);
 			var vals = [300, 600, 1440, 10080];
 			if (ttl > 10080) {
 				source.save({ updateEvery: 10080 });
@@ -103,7 +103,7 @@ define(['md5'], function (CryptoJS) {
 
 		if (link) {
 			return link.textContent || link.getAttribute('href');
-		} 
+		}
 
 		return false;
 	}
@@ -161,14 +161,14 @@ define(['md5'], function (CryptoJS) {
 		var creator = node.querySelector('creator, author > name');
 		if (creator) {
 			creator = creator.textContent.trim();
-		} 
+		}
 
 		if (!creator) {
 			creator = node.querySelector('author');
 			if (creator) {
 				creator = creator.textContent.trim();
 			}
-		} 
+		}
 
 		if (!creator && title && title.length > 0) {
 			creator = title;
@@ -202,7 +202,7 @@ define(['md5'], function (CryptoJS) {
 		desc = node.querySelector('content');
 		if (desc) return desc.textContent;
 
-		return '&nbsp;'
+		return '&nbsp;';
 	}
 
 

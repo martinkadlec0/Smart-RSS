@@ -3,7 +3,7 @@ define([], function() {
 		{
 			region: 'feeds',
 			actions: ['feeds:addSource', 'feeds:addFolder', 'feeds:updateAll']
-		}, 
+		},
 		{
 			region: 'articles',
 			actions: ['articles:mark', 'articles:update', 'articles:undelete', 'articles:delete', '!dynamicSpace', 'articles:search']

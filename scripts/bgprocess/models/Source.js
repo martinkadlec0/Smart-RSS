@@ -10,7 +10,7 @@ define(['backbone'], function (BB) {
 	 * @constructor
 	 * @extends Backbone.Model
 	 */
-	var Source = Backbone.Model.extend({
+	var Source = BB.Model.extend({
 		defaults: {
 			title: '',
 			url: 'about:blank',

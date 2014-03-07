@@ -500,7 +500,7 @@ return {
 				if (!articleList.selectedItems.length) {
 					app.actions.execute('content:download');
 					return;
-				};
+				}
 				var tpl = contentView.downloadTemplate;
 				
 				var list = {};
@@ -515,7 +515,7 @@ return {
 				reader.readAsDataURL(blob);
 				reader.onload = function() {
 					window.open(this.result.replace('data:text/html;', 'data:text/html;charset=utf-8;'));
-				}
+				};
 				/*var url = URL.createObjectURL(blob);
 				window.open(url);
 				setTimeout(function() {
@@ -540,7 +540,7 @@ return {
 				reader.readAsDataURL(blob);
 				reader.onload = function() {
 					window.open(this.result.replace('data:text/html;', 'data:text/html;charset=utf-8;'));
-				}
+				};
 				/*var url = URL.createObjectURL(blob);
 				window.open(url);
 				setTimeout(function() {
