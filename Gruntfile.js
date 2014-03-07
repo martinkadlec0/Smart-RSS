@@ -51,9 +51,9 @@ module.exports = function(grunt) {
 				options: {
 					name: '../main',
 					baseUrl: 'scripts/app',
-					/*generateSourceMaps: true,
+					generateSourceMaps: true,
 					preserveLicenseComments: false,
-					optimize: 'uglify2',*/
+					optimize: 'uglify2',
 					paths: {
 						jquery: '../libs/jquery.min',
 						underscore: '../libs/underscore.min',
@@ -74,6 +74,7 @@ module.exports = function(grunt) {
 							exports: '_'
 						}
 					},
+					excludeShallow: ['modules/Locale'],
 					out: 'scripts/main-compiled.js',
 					done: function(done, output) {
 						var duplicates = require('rjs-build-analysis').duplicates(output);
@@ -89,6 +90,57 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+
+		requirejsbg: {
+			compile: {
+				options: {
+					name: '../bgprocess',
+					baseUrl: 'scripts/bgprocess',
+					generateSourceMaps: true,
+					preserveLicenseComments: false,
+					optimize: 'uglify2',
+					paths: {
+						jquery: '../libs/jquery.min',
+						underscore: '../libs/underscore.min',
+						backbone: '../libs/backbone.min',
+						text: '../text',
+						i18n: '../i18n',
+						md5: '../libs/md5',
+						domReady: '../domReady',
+						backboneDB: '../libs/backbone.indexDB'
+					},
+					shim: {
+						jquery: {
+							exports: '$'
+						},
+						backboneDB: {
+							deps: ['backbone']
+						},
+						backbone: {
+							deps: ['underscore', 'jquery'],
+							exports: 'Backbone'
+						},
+						underscore: {
+							exports: '_'
+						}
+					},
+					out: 'scripts/bgprocess-compiled.js',
+					done: function(done, output) {
+						var duplicates = require('rjs-build-analysis').duplicates(output);
+
+						if (duplicates.length > 0) {
+							grunt.log.subhead('Duplicates found in requirejs build:');
+							grunt.log.warn(duplicates);
+							done(new Error('r.js built duplicate modules, please check the excludes option.'));
+						}
+
+						done();
+					}
+				}
+			}
+		},
+
+
 		stylus: {
 			compile: {
 				options: {
