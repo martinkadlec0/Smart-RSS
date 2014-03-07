@@ -35,7 +35,7 @@ var tabID = -1;
 
 chrome.runtime.getBackgroundPage(function(bg) {
 	/**
-	 * Stup work, that has to be done before any dependencies get executed
+	 * Setup work, that has to be done before any dependencies get executed
 	 */
 	window.bg = bg;
 
@@ -46,9 +46,25 @@ chrome.runtime.getBackgroundPage(function(bg) {
 	});
 	chrome.runtime.connect();
 	
-	requirejs(['app'], function(app) {	
-		bg.appStarted.always(function() {	
+	checkState();
+});
+
+/**
+ * This is retarded solution. It is too late to think of something else.
+ * Broadcasting message from bgprocess might help.
+ */
+function checkState() {
+	if ('appStarted' in bg) {
+		init();
+	} else {
+		setTimeout(checkState, 100);
+	}
+}
+
+function init() {
+	bg.appStarted.always(function() {
+		requirejs(['app'], function(app) {
 			app.start();
 		});
 	});
-});
+}

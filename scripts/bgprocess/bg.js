@@ -3,11 +3,11 @@
  */
 define([
 	'jquery',
-	'domReady!', 'modules/Animation', 'preps/indexeddb', 'models/Settings', 'models/Info', 'models/Source',
+	'modules/Animation', 'preps/indexeddb', 'models/Settings', 'models/Info', 'models/Source',
 	'collections/Sources', 'collections/Items', 'collections/Folders', 'models/Loader', 'collections/Logs',
 	'models/Folder', 'models/Item', 'collections/Toolbars'
 ],
-function ($, doc, animation, dbSuccess, Settings, Info, Source, Sources, Items, Folders, Loader, Logs, Folder, Item, Toolbars) {
+function ($, animation, dbSuccess, Settings, Info, Source, Sources, Items, Folders, Loader, Logs, Folder, Item, Toolbars) {
 
 	/**
 	 * Update animations
@@ -199,33 +199,6 @@ function ($, doc, animation, dbSuccess, Settings, Info, Source, Sources, Items, 
 	});
 	});
 
-	function openRSS(closeIfActive) {
-		var url = chrome.extension.getURL('rss.html');
-		chrome.tabs.query({
-			url: url
-		}, function(tabs) {
-			if (tabs[0]) {
-				if (tabs[0].active && closeIfActive) {
-					chrome.tabs.remove(tabs[0].id);
-				} else {
-					chrome.tabs.update(tabs[0].id, {
-						active: true
-					});
-				}
-			} else {
-				chrome.tabs.create({
-					'url': url
-				}, function(tab) {});
-			}
-		});
-	}
-
-
-
-
-
-
-
 	/**
 	 * Messages
 	 */
@@ -249,19 +222,25 @@ function ($, doc, animation, dbSuccess, Settings, Info, Source, Sources, Items, 
 		}
 	});
 
-	chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-		if (message.action == 'get-tab-id') {
-			sendResponse({
-				action: 'response-tab-id',
-				value: sender.tab.id
-			});
-		}
-	});
-
-	chrome.runtime.onConnect.addListener(function(port) {
-		port.onDisconnect.addListener(function(port) {
-			sources.trigger('clear-events', port.sender.tab.id);
+	function openRSS(closeIfActive) {
+		var url = chrome.extension.getURL('rss.html');
+		chrome.tabs.query({
+			url: url
+		}, function(tabs) {
+			if (tabs[0]) {
+				if (tabs[0].active && closeIfActive) {
+					chrome.tabs.remove(tabs[0].id);
+				} else {
+					chrome.tabs.update(tabs[0].id, {
+						active: true
+					});
+				}
+			} else {
+				chrome.tabs.create({
+					'url': url
+				}, function(tab) {});
+			}
 		});
-	});
+	}
 
 });

@@ -125,7 +125,7 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 		},
 
 		/**
-		 * Selectable mixin bindings
+		 * Selectable mixin bindings. The selectable mixing will trigger "pick" event when items are selected.
 		 * @method handleMouseDown
 		 * @triggered on mouse down
 		 * @param event {Event} Mouse event

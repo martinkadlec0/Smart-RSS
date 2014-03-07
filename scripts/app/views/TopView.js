@@ -10,17 +10,6 @@ define([
 				this.showContextMenu(e);
 			}
 		},
-		showSourceItems: function(e) {
-			e = e || {};
-			
-			/****hasNew state is not changed when folder is selected****/
-			/****this is never called, thus hasNew is never changed****/
-			alert('never');
-
-
-			app.trigger('select:' + require('views/feedList').el.id, this.getSelectData(e));
-			
-		},
 		getSelectData: function(e) {
 			return {
 				action: 'new-select',

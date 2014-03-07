@@ -250,9 +250,7 @@ define([
 		 * @method handleModelDestroy
 		 * @triggered when model is destroyed
 		 */
-		/****this.list.currentSource does not exsits anymore****/
-		handleModelDestroy: function(mod, col, opt) {
-			if (opt.noFocus && this.list.currentSource) return;
+		handleModelDestroy: function() {
 			this.list.destroyItem(this);
 		},
 

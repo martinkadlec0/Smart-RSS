@@ -83,9 +83,9 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 		 */
 		viewsToRender: [],
 
-		/**** clearonSelect sets the same thing ... call it in init? ****/
+		
 		/**
-		 * Data received from feedList about current selection (feed ids, name of special, filter, unradOnly)
+		 * Data received from feedList about current selection (feed ids, name of special, filter, unreadOnly)
 		 * @property currentData
 		 * @default { feeds: [], name: 'all-feeds', filter: { trashed: false}, unreadOnly: false }
 		 * @type Object

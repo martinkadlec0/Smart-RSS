@@ -92,31 +92,3 @@ define({
 		46: 'del'
 	}
 });
-
-
-
-/****
-if (e.keyCode == 38) {
-	var cs = $('.selected:first');
-	var s;
-	if (cs.length) {
-		s = cs.prevAll('.list-item:not(.in-closed-folder):first').get(0);
-	} else {
-		s = $('.list-item:not(.in-closed-folder):last').get(0);
-	}
-	if (s) s.view.select();
-	e.preventDefault();
-} else if (e.keyCode == 40) {
-	var cs = $('.selected:first');
-	var s;
-	if (cs.length) {
-		s = cs.nextAll('.list-item:not(.in-closed-folder):first').get(0);
-	} else {
-		s = $('.list-item:not(.in-closed-folder):first').get(0);
-	}
-	if (s) s.view.select();
-	e.preventDefault();
-} 
-
-****/
-

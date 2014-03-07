@@ -99,14 +99,14 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
 						if (item.get('trashed')) trashAll++;
 						if (item.get('trashed') && item.get('unread')) trashUnread++;
 					}
-					item.destroy({ noFocus: true });
+					item.destroy();
 				});
 
-				/**
+				/****
 				 * probably not neccesary because I  save all the removed items to batch and then 
-				 * in next frame I remove tehm at once and all handleScroll anyway
-				 */
-				items.trigger('render-screen');
+				 * in next frame I remove them at once and all handleScroll anyway
+				 ****/
+				//items.trigger('render-screen');
 				
 				
 
