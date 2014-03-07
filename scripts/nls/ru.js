@@ -87,5 +87,11 @@ define({
 	DELETE_ALL_Q: 'Вы действительно хотите удалить все новости?',
 	REALLY_EMPTY_TRASH: 'Вы действительно хотите удалить содержимое корзины?',
 	RENAME: 'Переименовать',
-	FOLDER_NAME: 'Имя группи'
+	FOLDER_NAME: 'Имя группи',
+
+	AUTOREMOVE: 'Автоматическая смазка',
+	OLDER_THAN_DAY: 'Более в день',
+	OLDER_THAN_WEEK: 'Старше недели',
+	OLDER_THAN_MONTH: 'Старше месяц',
+	OLDER_THAN_TWO_MONTHS: 'Старше два месяца'
 });

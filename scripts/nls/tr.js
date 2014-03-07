@@ -87,5 +87,11 @@ define({
 	DELETE_ALL_Q: 'Gerçekten TÜM başlıkları silmek istiyor musunuz?',
 	REALLY_EMPTY_TRASH: 'Çöp kutusundaki TÜM başlıkları gerçekten silmek istiyor musunuz?',
 	RENAME: 'Yeniden Adlandır',
-	FOLDER_NAME: 'Klasör ismi'
+	FOLDER_NAME: 'Klasör ismi',
+
+	AUTOREMOVE: 'Otomatik yağlama',
+	OLDER_THAN_DAY: 'Daha bir gün',
+	OLDER_THAN_WEEK: 'Bir haftadan daha eski',
+	OLDER_THAN_MONTH: 'Bir ay daha eski',
+	OLDER_THAN_TWO_MONTHS: 'Eski fazla iki ay'
 });

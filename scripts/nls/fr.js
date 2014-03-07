@@ -86,5 +86,11 @@ define({
 	DELETE_ALL_Q: 'Souhaitez-vous vraiment supprimer tous les articles ?',
 	REALLY_EMPTY_TRASH: 'Souhaitez-vous supprimer définitivement tous les articles présents dans la poubelle ?',
 	RENAME: 'Renommer',
-	FOLDER_NAME: 'Nom du dossier'
+	FOLDER_NAME: 'Nom du dossier',
+
+	AUTOREMOVE: 'Autoremove',
+	OLDER_THAN_DAY: 'Plus d\'un jour',
+	OLDER_THAN_WEEK: 'Plus d\'une semaine',
+	OLDER_THAN_MONTH: 'Plus de un mois',
+	OLDER_THAN_TWO_MONTHS: 'Plus de deux mois'
 });

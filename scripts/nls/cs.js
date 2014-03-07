@@ -87,5 +87,11 @@ define({
 	DELETE_ALL_Q: 'Určitě chcete odstranit VŠECHNY články?',
 	REALLY_EMPTY_TRASH: 'Určitě chcete vysypat koš?',
 	RENAME: 'Přejmenovat',
-	FOLDER_NAME: 'Název složky'
+	FOLDER_NAME: 'Název složky',
+
+	AUTOREMOVE: 'Automatické mazání',
+	OLDER_THAN_DAY: 'Starší než den',
+	OLDER_THAN_WEEK: 'Starší než týden',
+	OLDER_THAN_MONTH: 'Starší než měsíc',
+	OLDER_THAN_TWO_MONTHS: 'Starší než dva měsíce'
 });

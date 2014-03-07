@@ -89,5 +89,9 @@ define({
 	RENAME: 'Rename',
 	FOLDER_NAME: 'Folder name',
 
-	AUTOREMOVE: 'Autoremove'
+	AUTOREMOVE: 'Autoremove',
+	OLDER_THAN_DAY: 'Older than day',
+	OLDER_THAN_WEEK: 'Older than week',
+	OLDER_THAN_MONTH: 'Older than month',
+	OLDER_THAN_TWO_MONTHS: 'Older than two months'
 });

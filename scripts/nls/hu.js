@@ -87,5 +87,11 @@ define({
 	DELETE_ALL_Q: 'Biztos, hogy véglegesen törölni akarod az összes bejegyzést?',
 	REALLY_EMPTY_TRASH: 'Biztos, hogy véglegesen törölni akarod a kuka teljes tartalmát?',
 	RENAME: 'Átnevezés',
-	FOLDER_NAME: 'A mappa neve'
+	FOLDER_NAME: 'A mappa neve',
+
+	AUTOREMOVE: 'Autoremove',
+	OLDER_THAN_DAY: 'Több mint egy nap',
+	OLDER_THAN_WEEK: 'Régebbi, mint egy hét',
+	OLDER_THAN_MONTH: 'Az idősebb, mint egy hónap',
+	OLDER_THAN_TWO_MONTHS: 'Az idősebb, mint két hónap'
 });

@@ -87,5 +87,11 @@ define({
 	DELETE_ALL_Q: 'Wil je echt ALLE artikelen compleet verwijderen?',
 	REALLY_EMPTY_TRASH: 'Wil je echt ALLE artikelen compleet verwijderen uit de prullenbak?',
 	RENAME: 'Hernoemen',
-	FOLDER_NAME: 'Naam van map'
+	FOLDER_NAME: 'Naam van map',
+
+	AUTOREMOVE: 'Auto-delete',
+	OLDER_THAN_DAY: 'Meer dan een dag',
+	OLDER_THAN_WEEK: 'Ouder dan een week',
+	OLDER_THAN_MONTH: 'Ouder dan een maand',
+	OLDER_THAN_TWO_MONTHS: 'Ouder dan twee maanden'
 });

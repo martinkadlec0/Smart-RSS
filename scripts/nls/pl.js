@@ -87,5 +87,11 @@ define({
 	DELETE_ALL_Q: 'Czy na pewno chcesz całkowicie usunąć WSZYSTKIE wiadomości?',
 	REALLY_EMPTY_TRASH: 'Czy na pewno chcesz opróżnić kosz?',
 	RENAME: 'Zmień nazwę',
-	FOLDER_NAME: 'Nazwa folderu'
+	FOLDER_NAME: 'Nazwa folderu',
+
+	AUTOREMOVE: 'Autoremove',
+	OLDER_THAN_DAY: 'Więcej niż dzień',
+	OLDER_THAN_WEEK: 'Starszy niż tydzień',
+	OLDER_THAN_MONTH: 'Starsze niż miesiąc',
+	OLDER_THAN_TWO_MONTHS: 'Starsze niż dwa miesiące'
 });

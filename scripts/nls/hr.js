@@ -87,5 +87,11 @@ define({
 	DELETE_ALL_Q: 'Dali stvarno želite potpuno obrisati SVE	članke?',
 	REALLY_EMPTY_TRASH: 'Dali stvarno želite potpuno obrisati sve članke iz koša?',
 	RENAME: 'Preimenuj',
-	FOLDER_NAME: 'Ime mape'
+	FOLDER_NAME: 'Ime mape',
+
+	AUTOREMOVE: 'Autoremove',
+	OLDER_THAN_DAY: 'Više nego dan',
+	OLDER_THAN_WEEK: 'Stariji od tjedan dana',
+	OLDER_THAN_MONTH: 'Stariji od mjesec dana',
+	OLDER_THAN_TWO_MONTHS: 'Stariji od dva mjeseca'
 });

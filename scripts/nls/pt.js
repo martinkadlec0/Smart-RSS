@@ -87,5 +87,11 @@ define({
 	DELETE_ALL_Q: 'quer realmente deletar todos os artigos?',
 	REALLY_EMPTY_TRASH: 'Quer realmente deletar todos os artigos da lixeira?',
 	RENAME: 'Renomear',
-	FOLDER_NAME: 'Nome da Pasta'
+	FOLDER_NAME: 'Nome da Pasta',
+
+	AUTOREMOVE: 'Autoremove',
+	OLDER_THAN_DAY: 'Mais do que um dia',
+	OLDER_THAN_WEEK: 'Mais velho de uma semana',
+	OLDER_THAN_MONTH: 'Mais velho do que um mês',
+	OLDER_THAN_TWO_MONTHS: 'Maior de dois meses'
 });

@@ -87,5 +87,11 @@ define({
 	DELETE_ALL_Q: 'Naozaj chcete zmazať VŠETKY správy?',
 	REALLY_EMPTY_TRASH: 'Chcete vymazať všetky spávy z koša?',
 	RENAME: 'Premenovať',
-	FOLDER_NAME: 'Názov zložky'
+	FOLDER_NAME: 'Názov zložky',
+
+	AUTOREMOVE: 'Automatické mazanie', 
+	OLDER_THAN_DAY: 'Staršie ako deň', 
+	OLDER_THAN_WEEK: 'Staršie ako týždeň', 
+	OLDER_THAN_MONTH: 'Staršie ako mesiac', 
+	OLDER_THAN_TWO_MONTHS: 'Staršie ako dva mesiace'
 });

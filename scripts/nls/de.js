@@ -87,5 +87,11 @@ define({
 	DELETE_ALL_Q: 'Möchten sie wirklich ALLE Artikel löschen?',
 	REALLY_EMPTY_TRASH: 'Möchten sie alle Artikel im Papierkorb endgültig löschen?',
 	RENAME: 'Umbenennen',
-	FOLDER_NAME: 'Ordnername'
+	FOLDER_NAME: 'Ordnername',
+
+	AUTOREMOVE: 'Autoremove',
+	OLDER_THAN_DAY: 'Älter als einen Tag ',
+	OLDER_THAN_WEEK: 'Älter als eine Woche',
+	OLDER_THAN_MONTH: 'Älter als einen Monat',
+	OLDER_THAN_TWO_MONTHS: 'Älter als 2 Monate'
 });
