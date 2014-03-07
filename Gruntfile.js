@@ -46,7 +46,7 @@ module.exports = function(grunt) {
 			all: ['scripts/app/*.js', 'scripts/app/**/*.js', 'scripts/bgprocess/*.js', 'scripts/bgprocess/**/*.js']
 		},
 
-		requirejs: {
+		requirejsapp: {
 			compile: {
 				options: {
 					name: '../main',
@@ -74,7 +74,7 @@ module.exports = function(grunt) {
 							exports: '_'
 						}
 					},
-					excludeShallow: ['modules/Locale'],
+					excludeShallow: ['modules/Locale', 'jquery', 'underscore', 'backbone'],
 					out: 'scripts/main-compiled.js',
 					done: function(done, output) {
 						var duplicates = require('rjs-build-analysis').duplicates(output);
@@ -91,7 +91,7 @@ module.exports = function(grunt) {
 			}
 		},
 
-		requirejsbg: {
+		requirejs: {
 			compile: {
 				options: {
 					name: '../bgprocess',
@@ -124,6 +124,7 @@ module.exports = function(grunt) {
 							exports: '_'
 						}
 					},
+					excludeShallow: ['jquery', 'underscore', 'backbone', 'backboneDB'],
 					out: 'scripts/bgprocess-compiled.js',
 					done: function(done, output) {
 						var duplicates = require('rjs-build-analysis').duplicates(output);
