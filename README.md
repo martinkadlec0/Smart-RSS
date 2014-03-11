@@ -63,13 +63,20 @@ grunt rjs
 ```
 
 
-and then switch to "publish" branch that will make index.html (bgprocess) and rss.tml (app) use the compiled files instead of loading all the files separately.
+and then switch to "publish" branch (that will make index.html (bgprocess) and rss.tml (app) use the compiled files instead of loading all the files separately) and rebase it.
 ```
 git checkout publish
+git rebase master
 ```
 
 Then you can use Opera to make extenion out of it. Opera will automatically ignore all files and folders beggining with "." like ".git", but you might want to remove some other files too (like sublime text projects files). You have to do this manually or use some script that will do this for you. I have a script to do this but it is not yet ready to get published. In future it might work like this:
 
 ```
 grunt build
+```
+
+
+Then don't ofrget to switch back to master banch
+```
+git checkout master
 ```
