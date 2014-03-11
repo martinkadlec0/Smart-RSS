@@ -16,7 +16,7 @@ First of all you will need several command line tools:
 - Git (obviously) - http://msysgit.github.io
 - Node.JS & npm - http://nodejs.org
 - Grunt-cli - http://gruntjs.com/getting-started (npm install -g grunt-cli)
-(- Mocha - http://visionmedia.github.io/mocha/ (npm install -g mocha))
+- Mocha - http://visionmedia.github.io/mocha/ (npm install -g mocha) - for in-app integration tests I load mocha from cdn, but if you want to create out-of-app unit tests you will want to install this.
 
 To setup your Smart RSS project open your console and type:
 ```
