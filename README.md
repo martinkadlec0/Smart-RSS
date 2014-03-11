@@ -9,7 +9,7 @@ http://blog.martinkadlec.eu/post/501-smart-rss-final-v10
 
 ## For developers
 
-If you are interesting in improving Smart RSS here are few tips to get started. 
+If you are interested in improving Smart RSS then there are few tips to get started. 
 
 First of all you will need several command line tools:
 
@@ -18,7 +18,7 @@ First of all you will need several command line tools:
 - Grunt-cli - http://gruntjs.com/getting-started (npm install -g grunt-cli)
 - Mocha - http://visionmedia.github.io/mocha/ (npm install -g mocha) - for in-app integration tests I load mocha from cdn, but if you want to create out-of-app unit tests you will want to install this.
 
-To setup your Smart RSS project open your console and type:
+To setup your Smart RSS project open your console, go to your projects folders and type:
 ```
 git clone git@github.com:BS-Harou/Smart-RSS.git smartrss
 cd smartrss
@@ -33,7 +33,7 @@ docs/*
 *-compiled.js
 *.sublime-*
 ```
-(*.sublime-* only if you use sublime text projects)
+(\*.sublime-\* only if you use sublime text projects)
 
 To check for jshint errors:
 ```
@@ -63,7 +63,7 @@ grunt rjs
 ```
 
 
-and then switch to "publish" branch which will make index.html (bgprocess) and rss.tml (app) use compiled files instead of loading each file separately.
+and then switch to "publish" branch that will make index.html (bgprocess) and rss.tml (app) use the compiled files instead of loading all the files separately.
 ```
 git checkout publish
 ```
