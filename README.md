@@ -76,7 +76,7 @@ grunt build
 ```
 
 
-Then don't ofrget to switch back to master banch
+Then don't forget to switch back to master banch
 ```
 git checkout master
 ```
