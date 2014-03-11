@@ -2,7 +2,7 @@
 	"name": "Smart RSS",
 	"developer": {
 		"name": "BS-Harou (Martin Kadlec)",
-		"url": "http://my.opera.com/BS-Harou/blog"
+		"url": "http://blog.martinkadlec.eu/"
 	},
 	"description": "RSS Reader for Opera 15+!",
 	"manifest_version": 2,

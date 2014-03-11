@@ -2,7 +2,7 @@
   "name": "smartrss",
   "version": "2.0.0",
   "description": "RSS Reader for Opera 15+",
-  "homepage": "http://my.opera.com/BS-Harou/blog/2013/08/12/smart-rss-pre-alpha",
+  "homepage": "http://blog.martinkadlec.eu/post/501-smart-rss-final-v10",
   "dependencies": {},
   "devDependencies": {
     "grunt": ">=0.4.1",

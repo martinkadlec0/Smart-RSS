@@ -43,11 +43,11 @@ module.exports = function(grunt) {
 					HTMLCollection: true
 				}
 			},
-			all: ['scripts/app/*.js', 'scripts/app/**/*.js', 'scripts/bgprocess/*.js', 'scripts/bgprocess/**/*.js']
+			all: ['scripts/app/**/*.js', 'scripts/bgprocess/**/*.js']
 		},
 
-		requirejsapp: {
-			compile: {
+		requirejs: {
+			app: {
 				options: {
 					name: '../main',
 					baseUrl: 'scripts/app',
@@ -75,24 +75,10 @@ module.exports = function(grunt) {
 						}
 					},
 					excludeShallow: ['modules/Locale', 'jquery', 'underscore', 'backbone'],
-					out: 'scripts/main-compiled.js',
-					done: function(done, output) {
-						var duplicates = require('rjs-build-analysis').duplicates(output);
-
-						if (duplicates.length > 0) {
-							grunt.log.subhead('Duplicates found in requirejs build:');
-							grunt.log.warn(duplicates);
-							done(new Error('r.js built duplicate modules, please check the excludes option.'));
-						}
-
-						done();
-					}
+					out: 'scripts/main-compiled.js'
 				}
-			}
-		},
-
-		requirejs: {
-			compile: {
+			},
+			bg: {
 				options: {
 					name: '../bgprocess',
 					baseUrl: 'scripts/bgprocess',
@@ -128,22 +114,10 @@ module.exports = function(grunt) {
 						}
 					},
 					excludeShallow: ['jquery', 'underscore', 'backbone', 'backboneDB'],
-					out: 'scripts/bgprocess-compiled.js',
-					done: function(done, output) {
-						var duplicates = require('rjs-build-analysis').duplicates(output);
-
-						if (duplicates.length > 0) {
-							grunt.log.subhead('Duplicates found in requirejs build:');
-							grunt.log.warn(duplicates);
-							done(new Error('r.js built duplicate modules, please check the excludes option.'));
-						}
-
-						done();
-					}
+					out: 'scripts/bgprocess-compiled.js'
 				}
 			}
 		},
-
 
 		stylus: {
 			compile: {
@@ -188,6 +162,7 @@ module.exports = function(grunt) {
 		}
 	});
 
+
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
 	grunt.loadNpmTasks('grunt-contrib-stylus');
@@ -196,4 +171,5 @@ module.exports = function(grunt) {
 
 	// Default task(s).
 	grunt.registerTask('default', ['jshint']);
+	grunt.registerTask('rjs', ['requirejs:app', 'requirejs:bg']);
 };
