@@ -3,11 +3,11 @@
  */
 define([
 	'jquery',
-	'modules/Animation', 'preps/indexeddb', 'models/Settings', 'models/Info', 'models/Source',
+	'modules/Animation', 'models/Settings', 'models/Info', 'models/Source',
 	'collections/Sources', 'collections/Items', 'collections/Folders', 'models/Loader', 'collections/Logs',
 	'models/Folder', 'models/Item', 'collections/Toolbars'
 ],
-function ($, animation, dbSuccess, Settings, Info, Source, Sources, Items, Folders, Loader, Logs, Folder, Item, Toolbars) {
+function ($, animation, Settings, Info, Source, Sources, Items, Folders, Loader, Logs, Folder, Item, Toolbars) {
 
 	/**
 	 * Update animations

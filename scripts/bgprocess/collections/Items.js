@@ -2,7 +2,7 @@
  * @module BgProcess
  * @submodule collections/Items
  */
-define(['backbone', 'models/Item', 'backboneDB'], function (BB, Item) {
+define(['backbone', 'models/Item', 'preps/indexeddb'], function (BB, Item) {
 
 	/**
 	 * Collection of feed modules

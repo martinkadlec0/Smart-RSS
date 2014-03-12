@@ -2,7 +2,7 @@
  * @module BgProcess
  * @submodule collections/Folders
  */
-define(['backbone', 'models/Folder', 'backboneDB'], function (BB, Folder) {
+define(['backbone', 'models/Folder', 'preps/indexeddb'], function (BB, Folder) {
 
 	/**
 	 * Collection of feed folders

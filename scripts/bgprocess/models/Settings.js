@@ -2,7 +2,7 @@
  * @module BgProcess
  * @submodule models/Settings
  */
-define(['backbone', 'backboneDB'], function (BB) {
+define(['backbone', 'preps/indexeddb'], function (BB) {
 
 	/**
 	 * User settings

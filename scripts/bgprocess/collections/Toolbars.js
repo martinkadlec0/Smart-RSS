@@ -3,9 +3,9 @@
  * @submodule collections/Toolbars
  */
 define([
-	'backbone', 'models/Toolbar', 'backboneDB', 'staticdb/defaultToolbarItems'
+	'backbone', 'models/Toolbar', 'staticdb/defaultToolbarItems', 'preps/indexeddb'
 ],
-function (BB, Toolbar, DB, defaultToolbarItems) {
+function (BB, Toolbar, defaultToolbarItems) {
 
 	/**
 	 * Collection of feed modules
