@@ -89,9 +89,9 @@ define({
 	RENAME: 'Yeniden Adlandır',
 	FOLDER_NAME: 'Klasör ismi',
 
-	AUTOREMOVE: 'Otomatik yağlama',
-	OLDER_THAN_DAY: 'Daha bir gün',
-	OLDER_THAN_WEEK: 'Bir haftadan daha eski',
-	OLDER_THAN_MONTH: 'Bir ay daha eski',
-	OLDER_THAN_TWO_MONTHS: 'Eski fazla iki ay'
+	AUTOREMOVE: 'Otomatik sil',
+	OLDER_THAN_DAY: 'Günden daha eaki',
+	OLDER_THAN_WEEK: 'Haftadan daha eski',
+	OLDER_THAN_MONTH: 'Aydan daha eski',
+	OLDER_THAN_TWO_MONTHS: 'Iki aydan daha eski'
 });
