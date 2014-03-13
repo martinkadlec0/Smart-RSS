@@ -25,9 +25,9 @@ require.config({
 		underscore: {
 			exports: '_'
 		},
-		/*mocha: {
+		mocha: {
 			exports: 'mocha'
-		}*/
+		}
 	}
 });
 
