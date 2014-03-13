@@ -10,9 +10,9 @@ require.config({
 		text: '../text',
 		domReady: '../domReady',
 		//mocha: '../../node_modules/mocha/mocha',
-		mocha: 'https://cdnjs.cloudflare.com/ajax/libs/mocha/1.12.1/mocha.min',
+		/*mocha: 'https://cdnjs.cloudflare.com/ajax/libs/mocha/1.12.1/mocha.min',
 		mochacss: 'https://cdnjs.cloudflare.com/ajax/libs/mocha/1.12.1/mocha.min.css?nojs',
-		chai: 'https://raw.github.com/chaijs/chai/master/chai'
+		chai: 'https://raw.github.com/chaijs/chai/master/chai'*/
 	},
 
 	shim: {
@@ -25,10 +25,10 @@ require.config({
 		},
 		underscore: {
 			exports: '_'
-		},
+		}/*,
 		mocha: {
 			exports: 'mocha'
-		}
+		}*/
 	}
 });
 
