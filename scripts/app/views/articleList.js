@@ -470,7 +470,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 			}
 
 
-			if (!bg.settings.get('disableDateGroups')) {
+			if (!bg.settings.get('disableDateGroups') && bg.settings.get('sortBy') == 'date') {
 				var group = Group.getGroup(item.get('date'));
 				if (!groups.findWhere({ title: group.title })) {
 					groups.add(new Group(group), { before: view.el });
