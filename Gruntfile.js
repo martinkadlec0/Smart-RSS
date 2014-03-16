@@ -54,6 +54,7 @@ module.exports = function(grunt) {
 					generateSourceMaps: true,
 					preserveLicenseComments: false,
 					optimize: 'uglify2',
+					waitSeconds: 0,
 					paths: {
 						jquery: '../libs/jquery.min',
 						underscore: '../libs/underscore.min',
@@ -85,6 +86,7 @@ module.exports = function(grunt) {
 					generateSourceMaps: true,
 					preserveLicenseComments: false,
 					optimize: 'uglify2',
+					waitSeconds: 0,
 					paths: {
 						jquery: '../libs/jquery.min',
 						underscore: '../libs/underscore.min',

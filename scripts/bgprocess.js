@@ -11,6 +11,7 @@
 require.config({
 
 	baseUrl: 'scripts/bgprocess',
+	waitSeconds: 0,
 
 	paths: {
 		jquery: '../libs/jquery.min',
