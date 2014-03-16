@@ -37,7 +37,7 @@ function(BB, $, _, tplProperties, Locale) {
 					url: app.fixURL($('#prop-url').val()),
 					username: $('#prop-username').val(),
 					updateEvery: parseFloat($('#prop-update-every').val()),
-					autoremove: $('#prop-autoremove').val(),
+					autoremove: parseFloat($('#prop-autoremove').val(), 10),
 				});
 			} else if (this.current instanceof bg.Folder) {
 				this.current.save({

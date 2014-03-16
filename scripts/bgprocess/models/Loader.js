@@ -12,7 +12,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 		sourcesWithAutoRemove.forEach(function(source) {
 		*/
 
-		if (!source.get('autoremove')) return;
+		if (!parseFloat(source.get('autoremove'))) return;
 
 		items.where({ sourceID: source.get('id'), deleted: false, pinned: false }).forEach(function(item) {
 			var date = item.get('dateCreated') || item.get('date');
