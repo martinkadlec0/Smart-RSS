@@ -170,7 +170,7 @@ define([
 			var data = this.model.toJSON();
 
 			data.date = this.getItemDate(data.date);
-			data.title = stripTags(data.title);
+			data.title = stripTags(data.title).trim() || '&lt;no title&gt;';
 
 			//this.el.title = data.title + '\n' + formatDate(this.model.get('date'), pickedFormat + ' ' + timeFormatTitle);
 			

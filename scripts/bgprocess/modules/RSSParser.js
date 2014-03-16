@@ -186,7 +186,7 @@ define(['md5'], function (CryptoJS) {
 	}
 
 	function rssGetTitle(node) {
-		return node.querySelector('title') ? node.querySelector('title').textContent : '<no title>;';
+		return node.querySelector('title') ? node.querySelector('title').textContent : '&lt;no title&gt;';
 	}
 
 	function rssGetContent(node) {

@@ -177,7 +177,7 @@ function(BB, $, _, formatDate, escapeHtml, stripTags, tplDownload, tplHeader) {
 
 				var data = Object.create(that.model.attributes);
 				data.date = that.getFormatedDate(that.model.get('date'));
-				data.title = stripTags(data.title);
+				data.title = stripTags(data.title).trim() || '&lt;no title&gt;';
 				data.url = escapeHtml(data.url);
 
 				var source = that.model.getSource();
