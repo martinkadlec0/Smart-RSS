@@ -27,6 +27,7 @@ function(BB, _, $, tplOverlay, Locale) {
 			}
 			this.$el.find('#config-lines').val(bg.settings.get('lines'));
 			this.$el.find('#config-sort-order').val(bg.settings.get('sortOrder'));
+			this.$el.find('#config-sort-by').val(bg.settings.get('sortBy'));
 			return this;
 		},
 		handleSelectChange: function(e) {

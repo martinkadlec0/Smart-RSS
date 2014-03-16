@@ -33,7 +33,8 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
 			disableDateGroups: false,
 			thickFrameBorders: false,
 			badgeMode: 'disabled',
-			circularNavigation: true
+			circularNavigation: true,
+			sortBy: 'date'
 		},
 
 		/**

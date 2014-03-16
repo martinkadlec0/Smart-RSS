@@ -93,5 +93,10 @@ define({
 	OLDER_THAN_DAY: 'Older than day',
 	OLDER_THAN_WEEK: 'Older than week',
 	OLDER_THAN_MONTH: 'Older than month',
-	OLDER_THAN_TWO_MONTHS: 'Older than two months'
+	OLDER_THAN_TWO_MONTHS: 'Older than two months',
+
+	SORT_BY: 'Sort By',
+	DATE: 'Date',
+	TITLE: 'Title',
+	AUTHOR: 'Author'
 });
