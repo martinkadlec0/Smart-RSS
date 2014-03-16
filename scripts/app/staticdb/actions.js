@@ -576,6 +576,13 @@ return {
 				var contentView = require('views/contentView');
 				if (!contentView.model) return;
 				if (e.shiftKey) {
+					if (contentView.model.get('pinned') && bg.settings.get('askRmPinned')) {
+						var conf = confirm(Locale.c.PIN_QUESTION_A + contentView.model.escape('title') + Locale.c.PIN_QUESTION_B);
+						if (!conf) {
+							return;
+						}
+					}
+					
 					contentView.model.markAsDeleted();
 				} else {
 					contentView.model.save({

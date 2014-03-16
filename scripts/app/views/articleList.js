@@ -666,7 +666,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 		 * @param view {views/ItemView} Removed article view
 		 */
 		removeItemCompletely: function(view) {
-			if (view.model.get('pinned')) {
+			if (view.model.get('pinned') && bg.settings.get('askRmPinned')) {
 				var conf = confirm(Locale.c.PIN_QUESTION_A + view.model.escape('title') + Locale.c.PIN_QUESTION_B);
 				if (!conf) {
 					return;

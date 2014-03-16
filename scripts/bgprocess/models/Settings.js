@@ -34,7 +34,8 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
 			thickFrameBorders: false,
 			badgeMode: 'disabled',
 			circularNavigation: true,
-			sortBy: 'date'
+			sortBy: 'date',
+			askRmPinned: true
 		},
 
 		/**
