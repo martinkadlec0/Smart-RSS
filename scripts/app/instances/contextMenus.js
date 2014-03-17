@@ -67,7 +67,7 @@ function(BB, ContextMenu, Locale) {
 			title: Locale.c.UPDATE_ALL,
 			icon: 'reload.png',
 			action: function() {
-				bg.downloadAll(true);
+				app.actions.execute('feeds:updateAll');
 			}
 		},
 		{
