@@ -17,9 +17,9 @@ define(['backbone', 'models/Item', 'preps/indexeddb'], function (BB, Item) {
 		comparator: function(a, b) {
 			var val;
 			if (settings.get('sortBy') == 'title') {
-				val = a.get('title') <= b.get('title') ? 1 : -1;
+				val = String(a.get('title')).toLowerCase() <= String(b.get('title')).toLowerCase() ? 1 : -1;
 			} else if (settings.get('sortBy') == 'author') {
-				val = a.get('author') <= b.get('author') ? 1 : -1;
+				val = String(a.get('author')).toLowerCase() <= String(b.get('author')).toLowerCase() ? 1 : -1;
 			} else {
 				val = a.get('date') <= b.get('date') ? 1 : -1;
 			}
