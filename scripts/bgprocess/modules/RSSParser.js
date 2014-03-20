@@ -78,8 +78,13 @@ define(['md5'], function (CryptoJS) {
 			});
 
 			var last = items[items.length - 1];
-			last.oldId = CryptoJS.MD5(last.sourceID + last.title + last.date).toString();
-			last.id = last.id || last.oldId;
+			last.oldId = last.id;
+			if (!last.id) {
+				last.id = CryptoJS.MD5(last.sourceID + last.title + last.date).toString();
+			} else {
+				last.id = CryptoJS.MD5(last.sourceID + last.id);
+			}
+			
 
 			if (last.date == '0') last.date = Date.now();
 		});
