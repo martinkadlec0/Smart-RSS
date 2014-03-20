@@ -82,7 +82,7 @@ define(['md5'], function (CryptoJS) {
 			if (!last.id) {
 				last.id = CryptoJS.MD5(last.sourceID + last.title + last.date).toString();
 			} else {
-				last.id = CryptoJS.MD5(last.sourceID + last.id);
+				last.id = CryptoJS.MD5(last.sourceID + last.id).toString();
 			}
 			
 
