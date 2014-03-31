@@ -37,11 +37,6 @@ support-for-ie = false
 	border-bottom-color: #ccc;
 }
 
-/*.item:active .item-pin:not(.pinned),*/ .selected  .item-pin:not(.pinned) {
-	border-color: rgb(51, 153, 255);
-	background: radial-gradient(circle at center, rgb(51, 153, 255) 30%, #c6c6c6 30%);
-}
-
 
 .last-selected {
 	outline: 1px dotted grey;
@@ -89,18 +84,23 @@ support-for-ie = false
 
 .item-pin {
 	width: 0.4rem;
-	height: 0.4rem;
+	height: 0.5rem;
 	margin-top: 0.46rem;
 	margin-right: 0.4rem;
 	margin-left: 0.2rem;
-	border-radius: 0.4rem;
-	background: radial-gradient(circle at center, white 30%, #c6c6c6 30%);
-	border: 1px solid white;
+	background-image: url('../images/bullet_read.png');
+	background-position: 50% 50%;
+	background-size: 1rem;
 	flex: 0 0 0.4rem;
 }
+.unread:not(.unvisited) .item-pin:not(.pinned) {
+	background-image: url('../images/bullet_unread.png');
+}
+.unvisited  .item-pin:not(.pinned) {
+	background-image: url('../images/bullet_unseen.png');
+}
 .pinned {
-	background: #BB2222;
-	border-color: #222;
+	background-image: url('../images/bullet_pinned.png');
 }
 
 .item-date {
