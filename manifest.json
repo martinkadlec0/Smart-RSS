@@ -6,7 +6,7 @@
 	},
 	"description": "RSS Reader for Opera 15+!",
 	"manifest_version": 2,
-	"version": "1.0",
+	"version": "2.0",
 	"background": {
 		"page": "index.html"
 	},
