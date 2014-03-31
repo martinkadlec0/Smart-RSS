@@ -1,4 +1,8 @@
-<h1><a href="<%= url ? url : '#' %>" target="_blank" tabindex="-1"><%= title %></a></h1>
+<h1>
+	<% if (titleIsLink) { %><a href="<%= url ? url : '#' %>" target="_blank" tabindex="-1"><% } %>
+		<%= title %>
+	<% if (titleIsLink) { %></a><% } %>
+</h1>
 <div id="below-h1">
 	<p class="author"><%- author %></p>
 	<p class="date"><%= date %></p>
