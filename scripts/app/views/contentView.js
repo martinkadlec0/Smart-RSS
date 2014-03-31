@@ -180,7 +180,6 @@ function(BB, $, _, formatDate, escapeHtml, stripTags, tplDownload, tplHeader) {
 				data.title = stripTags(data.title).trim() || '&lt;no title&gt;';
 				data.url = escapeHtml(data.url);
 				data.titleIsLink = bg.settings.get('titleIsLink');
-				debugger;
 
 				var source = that.model.getSource();
 				var content = that.model.get('content');

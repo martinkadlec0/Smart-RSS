@@ -19,6 +19,13 @@ return {
 			fn: function() {
 				require(['../runtests']);
 			}
+		},
+		openOptions: {
+			title: 'Options',
+			icon: 'options.png',
+			fn: function() {
+				window.open('options.html');
+			}
 		}
 	},
 	feeds: {
