@@ -2,7 +2,7 @@
  * @module App
  * @submodule views/IndicatorView
  */
-define(['backbone', 'modules/Locale'], function(BB, Locale) {
+define(['backbone', 'modules/Locale', 'text!templates/indicator.html'], function(BB, Locale, tplIndicator) {
 
 	/**
 	 * Feeds update indicator view
@@ -19,9 +19,22 @@ define(['backbone', 'modules/Locale'], function(BB, Locale) {
 		id: 'indicator',
 
 		/**
+		 * Article item view template
+		 * @property template
+		 * @default ./templates/item.html
+		 * @type Function
+		 */
+		template: _.template(tplIndicator),
+
+		events: {
+			'click #indicator-stop': 'handleButtonStop'
+		},
+
+		/**
 		 * @method initialize
 		 */
 		initialize: function() {
+			this.$el.html(this.template());
 			bg.loader.on('change:loading', this.handleLoadingChange, this);
 			bg.loader.on('change:loaded', this.render, this);
 			bg.loader.on('change:maxSources', this.render, this);
@@ -45,6 +58,15 @@ define(['backbone', 'modules/Locale'], function(BB, Locale) {
 		},
 
 		/**
+		 * Stops updating feeds
+		 * @method handleButtonStop
+		 * @triggered when user clicks on stop button
+		 */
+		handleButtonStop: function() {
+			app.actions.execute('feeds:stopUpdate');
+		},
+
+		/**
 		 * Hides/shows indicator according to loading flag
 		 * @method handleLoadingChange
 		 */
@@ -52,10 +74,10 @@ define(['backbone', 'modules/Locale'], function(BB, Locale) {
 			var that = this;
 			if (bg.loader.get('loading') == true) {
 				this.render();
-				this.$el.css('display', 'block');
+				this.$el.addClass('indicator-visible');
 			} else {
 				setTimeout(function() {
-					that.$el.css('display', 'none');
+					that.$el.removeClass('indicator-visible');
 				}, 500);
 			}
 		},
@@ -69,8 +91,8 @@ define(['backbone', 'modules/Locale'], function(BB, Locale) {
 			var l = bg.loader;
 			if (l.get('maxSources') == 0) return;
 			var perc = Math.round(l.get('loaded') * 100 / l.get('maxSources'));
-			this.$el.css('background', 'linear-gradient(to right,  #c5c5c5 ' + perc + '%, #eee ' + perc + '%)');
-			this.$el.html(Locale.c.UPDATING_FEEDS + ' (' + l.get('loaded') + '/' + l.get('maxSources') + ')');
+			this.$el.find('#indicator-progress').css('background', 'linear-gradient(to right,  #c5c5c5 ' + perc + '%, #eee ' + perc + '%)');
+			this.$el.find('#indicator-progress').html(Locale.c.UPDATING_FEEDS + ' (' + l.get('loaded') + '/' + l.get('maxSources') + ')');
 			return this;
 		}
 	});

@@ -100,17 +100,53 @@ support-for-ie = false
 
 #indicator {
 	display: none;
-	flex: 0 0 25px;
-	line-height: 25px;
-	white-space: nowrap;
-	overflow: hidden;
-	font-family: sans-serif;
-	text-overflow: ellipsis;
+	flex: 0 0 1.75rem;
+	line-height: 1.75rem;
 	width: 100%;
-	text-align: center;
 	border-top: 1px solid #a6a6a6;
-	font-size: 0.8rem;
+	
+
+	flex-flow: row;
+	align-items: stretch;
+	user-select: none;
+}
+
+#indicator-progress {
+	border-right: 1px solid #a6a6a6;
+	font-family: sans-serif;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 	background: linear-gradient(to right, #d1d1d1 0%, #eee 0%);
+	flex: 1 1 auto;
+	text-align: center;
+	font-size: 0.8rem;
+}
+
+#indicator.indicator-visible {
+	display: flex;
+}
+
+#indicator-toolbar {
+	flex: 0 0 2rem;
+	padding: 0.1rem;
+	display: flex;
+	flex-flow: row;
+	align-items: stretch;
+}
+
+#indicator-stop {
+	cursor: pointer;
+	background: url('../images/stop.png') no-repeat center center;
+	border-radius: 3px;
+	width: 28px;
+	border: 1px solid transparent;
+}
+#indicator-stop:hover, #indicator-stop:active {
+	border-color: #c4c4c4;
+}
+#indicator-stop:active {
+	box-shadow: inset 0 1px 3px #bbb;
 }
 
 #properties {

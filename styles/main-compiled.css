@@ -336,19 +336,61 @@ input[type=search]:not(:focus):not(:valid) {
 }
 #indicator {
   display: none;
-  -webkit-flex: 0 0 25px;
-  flex: 0 0 25px;
-  line-height: 25px;
-  white-space: nowrap;
-  overflow: hidden;
-  font-family: sans-serif;
-  text-overflow: ellipsis;
+  -webkit-flex: 0 0 1.75rem;
+  flex: 0 0 1.75rem;
+  line-height: 1.75rem;
   width: 100%;
-  text-align: center;
   border-top: 1px solid #a6a6a6;
-  font-size: 0.8rem;
+  -webkit-flex-flow: row;
+  flex-flow: row;
+  -webkit-align-items: stretch;
+  align-items: stretch;
+  -webkit-user-select: none;
+  user-select: none;
+}
+#indicator-progress {
+  border-right: 1px solid #a6a6a6;
+  font-family: sans-serif;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   background: -webkit-linear-gradient(left, #d1d1d1 0%, #eee 0%);
   background: linear-gradient(to right, #d1d1d1 0%, #eee 0%);
+  -webkit-flex: 1 1 auto;
+  flex: 1 1 auto;
+  text-align: center;
+  font-size: 0.8rem;
+}
+#indicator.indicator-visible {
+  display: -webkit-flex;
+  display: flex;
+}
+#indicator-toolbar {
+  -webkit-flex: 0 0 2rem;
+  flex: 0 0 2rem;
+  padding: 0.1rem;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: row;
+  flex-flow: row;
+  -webkit-align-items: stretch;
+  align-items: stretch;
+}
+#indicator-stop {
+  cursor: pointer;
+  background: url("../images/stop.png") no-repeat center center;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  width: 28px;
+  border: 1px solid transparent;
+}
+#indicator-stop:hover,
+#indicator-stop:active {
+  border-color: #c4c4c4;
+}
+#indicator-stop:active {
+  -webkit-box-shadow: inset 0 1px 3px #bbb;
+  box-shadow: inset 0 1px 3px #bbb;
 }
 #properties {
   padding: 10px;
@@ -474,6 +516,7 @@ input[type=search]:not(:focus):not(:valid) {
   margin-top: 0.46rem;
   margin-right: 0.4rem;
   margin-left: 0.2rem;
+  background-repeat: no-repeat;
   background-image: url("../images/bullet_read.png");
   background-position: 50% 50%;
   -webkit-background-size: 1rem;

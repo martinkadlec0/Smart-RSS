@@ -76,6 +76,15 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 
 	}
 
+	function downloadStopped() {
+		loader.set('maxSources', 0);
+		loader.set('loaded', 0);
+		loader.set('loading', false);
+		loader.sourceLoading = null;
+		loader.currentRequest = null;
+		animation.stop();
+	}
+
 	function downloadURL() {
 		if (!loader.sourcesToLoad.length) {
 			// IF DOWNLOADING FINISHED, DELETED ITEMS WITH DELETED SOURCE (should not really happen)
@@ -93,11 +102,8 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 				info.autoSetData();
 			}
 
-			loader.set('maxSources', 0);
-			loader.set('loaded', 0);
-			loader.set('loading', false);
-			loader.sourceLoading = null;
-			animation.stop();
+			downloadStopped();
+			
 
 			return;
 		}
@@ -193,7 +199,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 		}
 
 
-		$.ajax(options);
+		loader.currentRequest = $.ajax(options);
 	}
 
 
@@ -209,6 +215,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 			loaded: 0,
 			loading: false
 		},
+		currentRequest: null,
 		sourcesToLoad: [],
 		sourceLoading: null,
 		addSources: function(s) {
@@ -219,6 +226,11 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 				this.sourcesToLoad = this.sourcesToLoad.concat(s);
 				this.set('maxSources', this.get('maxSources') + s.length);
 			}
+		},
+		abortDownloading: function() {
+			loader.currentRequest.abort();
+			this.sourcesToLoad = [];
+			downloadStopped();
 		},
 		download: download,
 		downloadURL: downloadURL,

@@ -46,6 +46,13 @@ return {
 				}
 			}
 		},
+		stopUpdate: {
+			icon: 'stop.png',
+			title: 'Stop updating feeds',
+			fn: function() {
+				bg.loader.abortDownloading();
+			}
+		},
 		mark: {
 			icon: 'read.png',
 			title: Locale.c.MARK_ALL_AS_READ,
