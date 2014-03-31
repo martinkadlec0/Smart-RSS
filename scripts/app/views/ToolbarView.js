@@ -103,7 +103,7 @@ function (BB, ToolbarItems, $, ToolbarItemsFactory, _) {
 
 		/**
 		 * Called when new model was added to _items_ collection
-		 * @method addTolbarItem
+		 * @method addToolbarItem
 		 * @param toolbarItem {ToolbarButton} Model added to the collection
 		 */
 		addToolbarItem: function(toolbarItem) {
