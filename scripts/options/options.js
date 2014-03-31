@@ -67,6 +67,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 			$(item).change(handleCheck);
 		});
 
+		$('#default-sound').change(handleDefaultSound);
 		$('#export-smart').click(handleExportSmart);
 		$('#export-opml').click(handleExportOPML);
 		$('#clear-data').click(handleClearData);
@@ -82,6 +83,31 @@ chrome.runtime.getBackgroundPage(function(bg) {
 	function handleCheck(e) {
 		var t = e.target;
 		bg.settings.save(t.id, t.checked);
+	}
+
+	function handleDefaultSound(e) {
+		var file = e.currentTarget.files[0];
+		if (!file || file.size == 0) {
+			return;
+		}
+
+		if (!file.type.match(/audio.*/)) {
+			alert('Please select audio file!')
+			return;
+		}
+
+		if (file.size > 500000) {
+			alert('Please use file smaller than 500kB!');
+			return;
+		}
+
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			bg.settings.save('defaultSound', this.result);
+		}
+
+		reader.readAsDataURL(file);
+		
 	}
 
 	function handleExportSmart() {

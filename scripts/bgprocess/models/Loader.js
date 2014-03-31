@@ -77,11 +77,16 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 	}
 
 	function downloadStopped() {
+		if (loader.itemsDownloaded && settings.get('soundNotifications')) {
+			var audio = new Audio(settings.get('defaultSound'));
+			audio.play();
+		}
 		loader.set('maxSources', 0);
 		loader.set('loaded', 0);
 		loader.set('loading', false);
 		loader.sourceLoading = null;
 		loader.currentRequest = null;
+		loader.itemsDownloaded = false;
 		animation.stop();
 	}
 
@@ -139,7 +144,10 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 				});
 
 				items.sort({ silent: true });
-				if (hasNew) items.trigger('render-screen');
+				if (hasNew) {
+					items.trigger('render-screen');
+					loader.itemsDownloaded = true;
+				}
 
 				// remove old deleted content
 				var fetchedIDs = _.pluck(parsedData, 'id');
@@ -216,6 +224,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 			loading: false
 		},
 		currentRequest: null,
+		itemsDownloaded: false,
 		sourcesToLoad: [],
 		sourceLoading: null,
 		addSources: function(s) {
