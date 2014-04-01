@@ -245,6 +245,7 @@ return {
 		showAndFocusArticles: {
 			title: 'Show and focus articles',
 			fn: function(e) {
+				e = e || {};
 				var cs = require('views/feedList').selectedItems;
 				if (cs.length) {
 					app.actions.execute('feeds:showArticles', e);

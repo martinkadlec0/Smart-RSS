@@ -69,6 +69,13 @@ function(BB, TopView, contextMenus) {
 			this.$el.html(this.template(this.model.toJSON()));
 			this.renderInterval = null;
 
+			if (bg.sourceToFocus == this.model.get('id')) {
+				setTimeout(function() {
+					app.trigger('focus-feed', bg.sourceToFocus);
+					bg.sourceToFocus = null;
+				}, 0);
+			}
+
 			return this;
 		}
 	});

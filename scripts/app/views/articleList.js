@@ -235,7 +235,14 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 				this.selectNext({ selectUnread: true });
 			}, this);
 
-			this.loadAllFeeds();
+			if (bg.sourceToFocus) {
+				setTimeout(function() {
+					app.trigger('focus-feed', bg.sourceToFocus);
+					bg.sourceToFocus = null;
+				}, 0);
+			} else {
+				this.loadAllFeeds();	
+			}
 		},
 
 		/**

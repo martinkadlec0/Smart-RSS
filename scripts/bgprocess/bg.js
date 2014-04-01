@@ -39,6 +39,11 @@ function ($, animation, Settings, Info, Source, Sources, Items, Folders, Loader,
 	window.items = new Items();
 	window.folders = new Folders();
 
+	/**
+	 * This is used for when new feed is subsribed and smart rss tab is opened to focus the newly added feed
+	 */
+	window.sourceToFocus = null;
+
 	window.toolbars = new Toolbars();
 
 
@@ -210,18 +215,19 @@ function ($, animation, Settings, Info, Source, Sources, Items, Folders, Loader,
 
 		if (message.action == 'new-rss' && message.value) {
 			message.value = message.value.replace(/^feed:/i, 'http:');
-			sources.create({
+			var s = sources.create({
 				title: message.value,
 				url: message.value,
 				updateEvery: 180
 			}, { wait: true });
 
-			openRSS();
+			console.log(s.get('id'));
+			openRSS(false, s.get('id'));
 
 		}
 	});
 
-	function openRSS(closeIfActive) {
+	function openRSS(closeIfActive, focusSource) {
 		var url = chrome.extension.getURL('rss.html');
 		chrome.tabs.query({
 			url: url
@@ -233,8 +239,12 @@ function ($, animation, Settings, Info, Source, Sources, Items, Folders, Loader,
 					chrome.tabs.update(tabs[0].id, {
 						active: true
 					});
+					if (focusSource) {
+						window.sourceToFocus = focusSource;
+					}
 				}
 			} else {
+				window.sourceToFocus = focusSource;
 				chrome.tabs.create({
 					'url': url
 				}, function() {});

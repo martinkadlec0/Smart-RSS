@@ -90,6 +90,13 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 				this.select(folder.view);
 			}, this);
 
+			app.on('focus-feed', function(id) {
+				var feed = $('.list-item[data-id=' + id + ']').get(0);
+				if (!feed) return;
+				this.select(feed.view);
+				app.actions.execute('feeds:showAndFocusArticles');
+			}, this);
+
 			this.insertFeeds();
 		},
 
