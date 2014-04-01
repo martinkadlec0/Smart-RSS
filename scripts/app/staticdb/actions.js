@@ -134,12 +134,19 @@ return {
 				}
 
 				url = app.fixURL(url);
-				bg.sources.create({
-					title: url,
-					url: url,
-					updateEvery: 180,
-					folderID: folderID
-				}, { wait: true });
+				var duplicate = bg.sources.findWhere({ url: url });
+
+				if (!duplicate) {
+					var newFeed = bg.sources.create({
+						title: url,
+						url: url,
+						updateEvery: 180,
+						folderID: folderID
+					}, { wait: true });
+					app.trigger('focus-feed', newFeed.get('id'));
+				} else {
+					app.trigger('focus-feed', duplicate.get('id'));
+				}
 			}
 		},
 		addFolder: {

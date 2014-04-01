@@ -215,14 +215,19 @@ function ($, animation, Settings, Info, Source, Sources, Items, Folders, Loader,
 
 		if (message.action == 'new-rss' && message.value) {
 			message.value = message.value.replace(/^feed:/i, 'http:');
-			var s = sources.create({
-				title: message.value,
-				url: message.value,
-				updateEvery: 180
-			}, { wait: true });
 
-			console.log(s.get('id'));
-			openRSS(false, s.get('id'));
+			var duplicate = sources.findWhere({ url: message.value });
+			if (!duplicate) {
+				var s = sources.create({
+					title: message.value,
+					url: message.value,
+					updateEvery: 180
+				}, { wait: true });
+				openRSS(false, s.get('id'));
+			} else {
+				duplicate.trigger('change');
+				openRSS(false, duplicate.get('id'));
+			}
 
 		}
 	});
