@@ -77,6 +77,22 @@ return {
 				
 			}
 		},
+		refetch: {
+			title: 'Refetch', /****localization needed****/
+			fn: function() {
+				var s = require('views/feedList').getSelectedFeeds();
+				if (!s.length) return;
+
+				s.forEach(function(source) {
+					bg.items.where({ sourceID: source.get('id') }).forEach(function(item) {
+						item.destroy();
+					});
+				});
+
+				app.actions.execute('feeds:update');
+				
+			}
+		},
 		delete: {
 			icon: 'delete.png',
 			title: Locale.c.DELETE,

@@ -26,6 +26,13 @@ function(BB, ContextMenu, Locale) {
 			}
 		},
 		{
+			title: 'Refetch', /**** Localization needed****/
+			icon: 'save.png',
+			action: function() {
+				app.actions.execute('feeds:refetch');
+			}
+		},
+		{
 			title: Locale.c.PROPERTIES,
 			icon: 'properties.png',
 			action: function() {
