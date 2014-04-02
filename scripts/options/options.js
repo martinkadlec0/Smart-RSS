@@ -286,12 +286,16 @@ chrome.runtime.getBackgroundPage(function(bg) {
 			for (var i=0; i<feeds.length; i++) {
 				if ( !feeds[i].hasAttribute('xmlUrl') ) {
 					var subfeeds = feeds[i].querySelectorAll('outline[xmlUrl]');
+					var folderTitle = decodeHTML(feeds[i].getAttribute('title') || feeds[i].getAttribute('text'));
 
-					var folder = bg.folders.create({
-						title: decodeHTML(feeds[i].getAttribute('title') || feeds[i].getAttribute('text'))
+					var duplicite = bg.folders.findWhere({ title: folderTitle });
+
+					var folder = duplicite || bg.folders.create({
+						title: folderTitle
 					}, { wait: true });
 
 					for (var n=0; n<subfeeds.length; n++) {
+						if ( bg.sources.findWhere({ url: decodeHTML(subfeeds[n].getAttribute('xmlUrl')) }) ) continue;
 						bg.sources.create({
 							title: decodeHTML(subfeeds[n].getAttribute('title') || subfeeds[n].getAttribute('text')),
 							url: decodeHTML(subfeeds[n].getAttribute('xmlUrl')),
@@ -300,6 +304,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 						}, { wait: true });
 					}
 				} else {
+					if ( bg.sources.findWhere({ url: decodeHTML(feeds[i].getAttribute('xmlUrl')) }) ) continue;
 					bg.sources.create({
 						title: decodeHTML(feeds[i].getAttribute('title') || feeds[i].getAttribute('text')),
 						url: decodeHTML(feeds[i].getAttribute('xmlUrl')),
