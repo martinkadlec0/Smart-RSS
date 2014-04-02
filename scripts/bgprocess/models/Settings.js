@@ -5,6 +5,19 @@
 define(['backbone', 'preps/indexeddb'], function (BB) {
 
 	/**
+	 * Test navigator.language and if it matches some avalable language
+	 */
+	function getLangFromNavigator() {
+		var ln = String(navigator.language).split('-')[0];
+		var available = ['en', 'cs', 'sk', 'de', 'tr', 'pl', 'ru', 'hu', 'nl', 'fr', 'pt', 'hr'];
+		var index = available.indexOf(ln);
+		if (index >= 0) {
+			return available[index];
+		}
+		return 'en';
+	}
+
+	/**
 	 * User settings
 	 * @class Settings
 	 * @constructor
@@ -13,7 +26,7 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
 	var Settings = BB.Model.extend({
 		defaults: {
 			id: 'settings-id',
-			lang: 'en', // or cs,sk,tr,de
+			lang: getLangFromNavigator(),
 			dateType: 'normal', // normal = DD.MM.YYYY, ISO = YYYY-MM-DD, US = MM/DD/YYYY
 			layout: 'horizontal', // or vertical
 			lines: 'auto', // one-line, two-lines
