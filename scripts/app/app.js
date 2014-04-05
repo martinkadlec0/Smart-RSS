@@ -16,7 +16,9 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 	});
 
 	document.addEventListener('contextmenu', function(e) {
-		e.preventDefault();
+		if (!e.target.matchesSelector('#region-content header, #region-content header *')) {
+			e.preventDefault();
+		}
 	});
 
 	var app = window.app = new (Layout.extend({
