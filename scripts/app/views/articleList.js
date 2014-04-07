@@ -608,7 +608,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 
 			var items = searchIn.filter(function(item) {
 				if (!item.get('unread') && this.unreadOnly) return false;
-				return !data.feeds.length || data.feeds.indexOf(item.get('sourceID')) >= 0;
+				return data.name || data.feeds.indexOf(item.get('sourceID')) >= 0;
 			}, this);
 
 			this.addItems( items );

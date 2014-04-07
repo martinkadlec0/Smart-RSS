@@ -110,15 +110,17 @@ function(BB, $, _, tplProperties, Locale) {
 				 * Test if all selected feeds has the same properteies or if tehy are mixed
 				 */
 
-				params.firstUpdate = listOfSources[0].get('updateEvery');
-				params.updateEveryDiffers = listOfSources.some(function(c) {
-					if (params.firstUpdate != c.get('updateEvery')) return true;
-				});
+				if (listOfSources.length) {
+					params.firstUpdate = listOfSources[0].get('updateEvery');
+					params.updateEveryDiffers = listOfSources.some(function(c) {
+						if (params.firstUpdate != c.get('updateEvery')) return true;
+					});
 
-				params.firstAutoremove = listOfSources[0].get('autoremove');
-				params.autoremoveDiffers = listOfSources.some(function(c) {
-					if (params.firstAutoremove != c.get('autoremove')) return true;
-				});
+					params.firstAutoremove = listOfSources[0].get('autoremove');
+					params.autoremoveDiffers = listOfSources.some(function(c) {
+						if (params.firstAutoremove != c.get('autoremove')) return true;
+					});
+				}
 
 				/**
 				 * Create HTML
