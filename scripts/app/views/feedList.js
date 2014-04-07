@@ -240,7 +240,7 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 		},
 
 		/**
-		 * Place feed ti right place
+		 * Place feed to the right place
 		 * @method handleDragStart
 		 * @triggered when folderID of feed is changed
 		 * @param source {Source} Source tha has its folderID changed
@@ -382,7 +382,7 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 
 		/**
 		 * Insert element after another element
-		 * @method placeSource
+		 * @method insertBefore
 		 * @param what {HTMLElement} Element to add
 		 * @param where {HTMLElement} Element to add after
 		 */

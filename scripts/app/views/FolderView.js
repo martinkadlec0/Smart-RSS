@@ -81,9 +81,37 @@ function(BB, $, _, TopView, contextMenus, tplFolder) {
 
 			this.model.on('destroy', this.handleModelDestroy, this);
 			this.model.on('change', this.render, this);
+			this.model.on('change:title', this.handleChangeTitle, this);
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 
 			this.el.dataset.id = this.model.get('id');
+		},
+
+		/**
+		 * Places folder to its right place after renaming
+		 * @method handleChangeTitle
+		 * @triggered when title of folder is changed
+		 */
+		handleChangeTitle: function() {
+			var folderViews = $('.folder').toArray();
+			if (folderViews.length) {
+				this.list.insertBefore(this.render(), folderViews);
+			} else if ($('.special:first').length) {
+				this.render().$el.insertAfter($('.special:first'));
+			}
+
+			var that = this;
+
+			var feedsInFolder = $('[data-in-folder="' + this.model.get('id') + '"');
+
+			feedsInFolder.each(function(i, el) {
+				el.parentNode.removeChild(el);
+			});
+
+			feedsInFolder.each(function(i, el) {
+				that.list.placeSource(el.view);
+			});
+			
 		},
 
 		/**
@@ -105,6 +133,7 @@ function(BB, $, _, TopView, contextMenus, tplFolder) {
 		clearEvents: function() {
 			this.model.off('destroy', this.handleModelDestroy, this);
 			this.model.off('change', this.render, this);
+			this.model.off('change:title', this.handleChangeTitle, this);
 			bg.sources.off('clear-events', this.handleClearEvents, this);
 		},
 
