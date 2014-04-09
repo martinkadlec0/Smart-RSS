@@ -26,6 +26,7 @@ html, body {
 body {
 	margin: 0;
 	font-size: 100%;
+	font-family: sans-serif;
 }
 
 .visible {
@@ -282,7 +283,7 @@ input[type=search]:not(:focus):not(:valid) {
 	padding: 1rem
 
 	strong
-		text-transform:uppercase;
+		text-transform: uppercase
 		font-size: 1.2rem
 		font-weight: normal
 		display: block
@@ -292,21 +293,34 @@ input[type=search]:not(:focus):not(:valid) {
 
 
 	label
-		display: block
-		width: 100%
-		margin-top: 0.5rem;
+		display: inline-block
+		margin-top: 0.5rem
+		vertical-align: baseline
 		
 
 	textarea, input[type=email], input[type=text]
 		width: 100%
 		resize: none
 
+	input[type=checkbox]
+		vertical-align: bottom
+
 	textarea
 		height: 11rem;
 
 	.report-buttons
-		margin-top: 1rem
+		margin-top: 1.5rem
 		text-align: center
+		font-size: 0.9rem;
+		line-height: 2rem;
 
-	button
+	input[type=submit], input[type=button]
 		padding: 0.3rem 1rem
+
+@media (max-height: 26rem) {
+	.report-window { top: 0 !important; margin-top: 0 !important;	}
+}
+
+@media (max-width: 30rem) {
+	.report-window { left: 0 !important; margin-left: 0 !important; }
+}

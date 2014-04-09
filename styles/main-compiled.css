@@ -18,6 +18,7 @@ body {
 body {
   margin: 0;
   font-size: 100%;
+  font-family: sans-serif;
 }
 .visible {
   display: block !important;
@@ -277,9 +278,9 @@ input[type=search]:not(:focus):not(:valid) {
   border-bottom: 1px solid #ccc;
 }
 .report-window label {
-  display: block;
-  width: 100%;
+  display: inline-block;
   margin-top: 0.5rem;
+  vertical-align: baseline;
 }
 .report-window textarea,
 .report-window input[type=email],
@@ -287,15 +288,33 @@ input[type=search]:not(:focus):not(:valid) {
   width: 100%;
   resize: none;
 }
+.report-window input[type=checkbox] {
+  vertical-align: bottom;
+}
 .report-window textarea {
   height: 11rem;
 }
 .report-window .report-buttons {
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   text-align: center;
+  font-size: 0.9rem;
+  line-height: 2rem;
 }
-.report-window button {
+.report-window input[type=submit],
+.report-window input[type=button] {
   padding: 0.3rem 1rem;
+}
+@media (max-height: 26rem) {
+  .report-window {
+    top: 0 !important;
+    margin-top: 0 !important;
+  }
+}
+@media (max-width: 30rem) {
+  .report-window {
+    left: 0 !important;
+    margin-left: 0 !important;
+  }
 }
 
 #toolbar {

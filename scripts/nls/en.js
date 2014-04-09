@@ -98,5 +98,11 @@ define({
 	SORT_BY: 'Sort By',
 	DATE: 'Date',
 	TITLE: 'Title',
-	AUTHOR: 'Author'
+	AUTHOR: 'Author',
+
+	EMAIL: 'E-Mail',
+	OPTIONAL: 'optional',
+	SUBMIT: 'Submit',
+	INCLUDE_FEED_LIST: 'Include list of feeds',
+	REPORT: 'Please describe the problem, in English if possible.'
 });
