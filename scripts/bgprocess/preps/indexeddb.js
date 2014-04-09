@@ -25,9 +25,6 @@ define(['backbone', 'backboneDB'], function(BB) {
 		if (!db.objectStoreNames.contains('toolbars-backbone'))
 			db.createObjectStore('toolbars-backbone', { keyPath: 'region' });
 
-		/*if (!db.objectStoreNames.contains('info-backbone'))
-			db.createObjectStore('info-backbone', { keyPath: 'id' });*/
-
 	};
 
 	/**

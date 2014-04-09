@@ -242,6 +242,61 @@ input[type=search]:not(:focus):not(:valid) {
 #panel-toggle:not(.toggled) {
   background-image: url("/images/toggle_right.png");
 }
+/**
+ * Report
+ */
+.report-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 10;
+}
+.report-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 30rem;
+  height: 26rem;
+  margin-top: -13rem;
+  margin-left: -15rem;
+  background: #fff;
+  -webkit-box-shadow: 0 0 6px #000;
+  box-shadow: 0 0 6px #000;
+  padding: 1rem;
+}
+.report-window strong {
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  font-weight: normal;
+  display: block;
+  text-align: center;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid #ccc;
+}
+.report-window label {
+  display: block;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+.report-window textarea,
+.report-window input[type=email],
+.report-window input[type=text] {
+  width: 100%;
+  resize: none;
+}
+.report-window textarea {
+  height: 11rem;
+}
+.report-window .report-buttons {
+  margin-top: 1rem;
+  text-align: center;
+}
+.report-window button {
+  padding: 0.3rem 1rem;
+}
 
 #toolbar {
   -webkit-flex: 0 0 auto;

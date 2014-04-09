@@ -33,6 +33,14 @@ define(['backbone'], function (BB) {
 			 * @default []
 			 */
 			actions: [],
+
+			/**
+			 * Version of toolbar (if any default changes are made -> version++)
+			 * @attribute actions
+			 * @type Array
+			 * @default []
+			 */
+			version: 1
 		},
 
 		/**

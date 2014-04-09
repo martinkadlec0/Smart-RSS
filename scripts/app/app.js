@@ -4,9 +4,9 @@
 define([
 	'controllers/comm',
 	'layouts/Layout', 'jquery', 'domReady!', 'collections/Actions', 'layouts/FeedsLayout', 'layouts/ArticlesLayout',
-	'layouts/ContentLayout', 'staticdb/shortcuts', 'modules/Locale', 'preps/all'
+	'layouts/ContentLayout', 'staticdb/shortcuts', 'modules/Locale', 'views/ReportView', 'preps/all'
 ],
-function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLayout, shortcuts, Locale) {
+function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLayout, shortcuts, Locale, ReportView) {
 
 	document.documentElement.style.fontSize = bg.settings.get('uiFontSize') + '%';
 
@@ -131,6 +131,10 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 				that.handleLayoutChange();
 				
 			}, 0, this);
+		},
+		report: function() {
+			var report = new ReportView();
+			document.body.appendChild(report.render().el);
 		}
 	}));
 
