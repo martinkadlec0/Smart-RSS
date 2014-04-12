@@ -294,10 +294,13 @@ input[type=search]:not(:focus):not(:valid) {
 .report-window textarea {
   height: 11rem;
 }
-.report-window .report-buttons {
+.report-window .report-buttons,
+.report-window .report-message {
   margin-top: 1.5rem;
   text-align: center;
   font-size: 0.9rem;
+}
+.report-window .report-buttons {
   line-height: 2rem;
 }
 .report-window input[type=submit],

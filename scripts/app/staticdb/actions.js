@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'helpers/stripTags', 'modules/Locale'], function($, _, stripTags, Locale) {
+define(['jquery', 'underscore', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], function($, _, stripTags, Locale, comm) {
 
 return {
 	global: {
@@ -8,10 +8,10 @@ return {
 				alert('no action');
 			}
 		},
-		hideContextMenus: {
-			title: 'Hide Context Menus',
+		hideOverlays: {
+			title: 'Hide Overlays',
 			fn: function() {
-				require('instances/contextMenus').hideAll();
+				comm.trigger('hide-overlays');
 			}
 		},
 		runTests: {

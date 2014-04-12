@@ -109,7 +109,7 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 			}
 		},
 		hideContextMenus: function() {
-			comm.trigger('hide-overlays');
+			comm.trigger('hide-overlays', { blur: true });
 		},
 		focusLayout: function(e) {
 			this.setFocus(e.currentTarget.getAttribute('name'));
@@ -147,7 +147,8 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 
 
 	document.addEventListener('keydown', function(e) {
-		if (document.activeElement && document.activeElement.tagName == 'INPUT') {
+		var ac = document.activeElement
+		if (ac && (ac.tagName == 'INPUT' || ac.tagName == 'TEXTAREA')) {
 			return;
 		}
 
