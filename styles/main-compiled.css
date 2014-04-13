@@ -52,6 +52,7 @@ label {
   padding: 3px 6px;
   -webkit-user-select: none;
   user-select: none;
+  overflow: hidden;
 }
 .dynamic-space {
   -webkit-flex: 1 1 auto;
@@ -226,7 +227,7 @@ input[type=search]:not(:focus):not(:valid) {
   outline-width: 0;
 }
 .resizer {
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 0;
   -webkit-user-select: none;
