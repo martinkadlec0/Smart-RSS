@@ -51,6 +51,7 @@ function(BB, _, $, tplReport, Locale, comm) {
 					'feeds': feeds,
 					'app': 'Smart RSS',
 					'version': bg.version,
+					'uastring': navigator.userAgent
 				},
 				success: function() {
 					that.$el.find('.report-message').html('Report succesfully sent.');
