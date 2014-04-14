@@ -53,7 +53,9 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
 			askRmPinned: true,
 			titleIsLink: true,
 			soundNotifications: false,
-			defaultSound: ''
+			defaultSound: '',
+			useSound: ':user',
+			soundVolume: 1 // min: 0, max: 1
 		},
 
 		/**

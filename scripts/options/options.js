@@ -53,7 +53,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 		$('#version').html(bg.version || 'dev build');
 
 
-		$('select[id], input[type=number], input[type=range]').each(function(i, item) {
+		$('select[id], input[type=number], input[type=range], input[type=range]').each(function(i, item) {
 			$(item).val(bg.settings.get(item.id));
 			if (item.type == 'number') {
 				$(item).on('input', handleChange);
@@ -65,6 +65,10 @@ chrome.runtime.getBackgroundPage(function(bg) {
 		$('input[type=checkbox]').each(function(i, item) {
 			$(item).get(0).checked = !!bg.settings.get(item.id);
 			$(item).change(handleCheck);
+		});
+
+		$('#useSound').change(function() {
+			bg.loader.playNotificationSound();
 		});
 
 		$('#default-sound').change(handleDefaultSound);

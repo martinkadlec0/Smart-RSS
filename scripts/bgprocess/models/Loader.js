@@ -76,11 +76,28 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 
 	}
 
-	function downloadStopped() {
-		if (loader.itemsDownloaded && settings.get('soundNotifications')) {
-			var audio = new Audio(settings.get('defaultSound'));
+	function playNotificationSound() {
+
+		var audio;
+		if (!settings.get('useSound') || settings.get('useSound') == ':user') {
+			audio = new Audio(settings.get('defaultSound'));
+		} else if (settings.get('useSound') == ':none') {
+			audio = false;
+		} else {
+			audio = new Audio('/sounds/' + settings.get('useSound') + '.ogg');
+		}
+		if (audio) {
+			audio.volume = parseFloat(settings.get('soundVolume'));
 			audio.play();
 		}
+		
+	}
+
+	function downloadStopped() {
+		if (loader.itemsDownloaded && settings.get('soundNotifications')) {
+			playNotificationSound();
+		}
+
 		loader.set('maxSources', 0);
 		loader.set('loaded', 0);
 		loader.set('loading', false);
@@ -244,7 +261,8 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 		download: download,
 		downloadURL: downloadURL,
 		downloadOne: downloadOne,
-		downloadAll: downloadAll
+		downloadAll: downloadAll,
+		playNotificationSound: playNotificationSound
 	});
 
 	return Loader;
