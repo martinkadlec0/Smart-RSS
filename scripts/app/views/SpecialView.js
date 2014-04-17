@@ -37,6 +37,9 @@ function($, _, TopView, tplSpecial) {
 		},
 		changeInfo: function() {
 			if (this.model.get('name') == 'all-feeds') {
+				if ('allCountUnread' in bg.info.changedAttributes()) {
+					this.render(true);
+				}
 				this.setTitle(bg.info.get('allCountUnread'), bg.info.get('allCountTotal'));
 			} else if (this.model.get('name') == 'trash') {
 				var tot = bg.info.get('trashCountTotal');
@@ -58,7 +61,11 @@ function($, _, TopView, tplSpecial) {
 			}
 		},
 		render: function(noinfo) {
-			this.$el.html(this.template(this.model.toJSON()));
+			var data = this.model.toJSON();
+			if (this.model.get('name') == 'all-feeds') {
+				data.count = bg.info.get('allCountUnread');
+			}
+			this.$el.html(this.template(data));
 			if (!noinfo) this.changeInfo();
 			return this;
 		}
