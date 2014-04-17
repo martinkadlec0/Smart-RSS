@@ -240,6 +240,7 @@ return {
 			title: 'Show articles',
 			fn: function(e) {
 				e = e || {};
+				var t = e.target || {};
 				var feedList = require('views/feedList');
 				var feeds = feedList.getSelectedFeeds();
 				var ids = _.pluck(feeds, 'id');
@@ -252,7 +253,7 @@ return {
 					// _.extend is important, because otherwise it would be sent by reference
 					filter: special ? _.extend({}, special.get('filter')) : null,
 					name: special ? special.get('name') : null,
-					unreadOnly: !!e.altKey
+					unreadOnly: !!e.altKey || t.className == 'source-counter'
 				});
 				
 

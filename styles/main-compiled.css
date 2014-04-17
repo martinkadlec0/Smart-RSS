@@ -387,6 +387,12 @@ input[type=search]:not(:focus):not(:valid) {
   max-width: 50px;
   overflow: hidden;
 }
+.source-counter:hover {
+  background: #d5d5d5;
+}
+.selected .source-counter:hover {
+  background: #e8e8e8;
+}
 .selected .source-counter {
   color: #000 !important;
 }
