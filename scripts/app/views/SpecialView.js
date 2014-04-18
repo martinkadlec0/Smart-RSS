@@ -37,7 +37,8 @@ function($, _, TopView, tplSpecial) {
 		},
 		changeInfo: function() {
 			if (this.model.get('name') == 'all-feeds') {
-				if ('allCountUnread' in bg.info.changedAttributes()) {
+				var changed = bg.info.changedAttributes();
+				if (changed && typeof changed == 'object' && 'allCountUnread' in changed) {
 					this.render(true);
 				}
 				this.setTitle(bg.info.get('allCountUnread'), bg.info.get('allCountTotal'));

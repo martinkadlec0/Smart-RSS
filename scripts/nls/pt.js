@@ -30,7 +30,7 @@ define({
 	AUTO: 'Automático',
 	FULL_ARTICLE: 'Artigo Completo',
 	REALLY_DELETE: 'Quer realmente deletar esse feed?',
-	ALL_FEEDS: 'Todos osfeeds',
+	ALL_FEEDS: 'Todos os feeds',
 	PINNED: 'Fixado',
 	TRASH: 'Lixeira',
 	MARK_ALL_AS_READ: 'Marcar todos como Lido',
