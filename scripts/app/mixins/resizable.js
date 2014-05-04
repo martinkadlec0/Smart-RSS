@@ -49,7 +49,7 @@ define(['jquery'], function($) {
 		}
 	}
 
-	function loadPosition() {
+	function loadPosition(resetting) {
 		if (!this.resizer) return;
 
 		if (this.layout == 'vertical') {
@@ -58,14 +58,16 @@ define(['jquery'], function($) {
 			setPosition.call(this, this.el.offsetLeft + this.el.offsetWidth);
 		}
 
-		resetPositions.call(this);
+		if (!resetting) {
+			resetPositions.call(this);
+		}
 	}
 
 	function resetPositions() {
 		requestAnimationFrame(function() {
 			for (var i=0; i<els.length; i++) {
-				if (els[i] == this) return;
-				loadPosition.call(els[i]);
+				if (els[i] == this) continue;
+				loadPosition.call(els[i], true);
 			}
 		}.bind(this));
 	}
