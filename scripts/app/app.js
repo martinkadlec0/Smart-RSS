@@ -135,6 +135,39 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 		report: function() {
 			var report = new ReportView();
 			document.body.appendChild(report.render().el);
+		},
+		handleKeyDown: function(e) {
+			var ac = document.activeElement;
+			if (ac && (ac.tagName == 'INPUT' || ac.tagName == 'TEXTAREA')) {
+				return;
+			}
+
+			var str = '';
+			if (e.ctrlKey) str += 'ctrl+';
+			if (e.shiftKey) str += 'shift+';
+
+			if (e.keyCode > 46 && e.keyCode < 91) {
+				str += String.fromCharCode(e.keyCode).toLowerCase();
+			} else if (e.keyCode in shortcuts.keys) {
+				str += shortcuts.keys[e.keyCode];
+			} else {
+				return;
+			}
+
+			var focus = document.activeElement.getAttribute('name');
+
+			if (focus && focus in shortcuts) {
+				if (str in shortcuts[focus]) {
+					app.actions.execute( shortcuts[focus][str], e);
+					e.preventDefault();
+					return;
+				}
+			}
+
+			if (str in shortcuts.global) {
+				app.actions.execute( shortcuts.global[str], e);
+				e.preventDefault();
+			}
 		}
 	}));
 
@@ -146,40 +179,7 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 	});
 
 
-	document.addEventListener('keydown', function(e) {
-		var ac = document.activeElement
-		if (ac && (ac.tagName == 'INPUT' || ac.tagName == 'TEXTAREA')) {
-			return;
-		}
-
-		var str = '';
-		if (e.ctrlKey) str += 'ctrl+';
-		if (e.shiftKey) str += 'shift+';
-
-		if (e.keyCode > 46 && e.keyCode < 91) {
-			str += String.fromCharCode(e.keyCode).toLowerCase();
-		} else if (e.keyCode in shortcuts.keys) {
-			str += shortcuts.keys[e.keyCode];
-		} else {
-			return;
-		}
-
-		var focus = document.activeElement.getAttribute('name');
-
-		if (focus && focus in shortcuts) {
-			if (str in shortcuts[focus]) {
-				app.actions.execute( shortcuts[focus][str], e);
-				e.preventDefault();
-				return;
-			}
-		}
-
-		if (str in shortcuts.global) {
-			app.actions.execute( shortcuts.global[str], e);
-			e.preventDefault();
-		}
-		
-	});
+	document.addEventListener('keydown', app.handleKeyDown);
 
 
 	return app;

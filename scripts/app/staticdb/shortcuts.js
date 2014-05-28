@@ -69,7 +69,12 @@ define({
 		'home': 'content:scrollToTop',
 		'del': 'content:delete',
 		'd': 'content:delete',
-		'r': 'content:mark'
+		'k': 'content:mark'
+	},
+	sandbox: {
+		'del': 'content:delete',
+		'd': 'content:delete',
+		'k': 'content:mark'
 	},
 	keys: {
 		8: 'backspace',
