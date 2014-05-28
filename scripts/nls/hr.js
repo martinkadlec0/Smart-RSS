@@ -89,9 +89,20 @@ define({
 	RENAME: 'Preimenuj',
 	FOLDER_NAME: 'Ime mape',
 
-	AUTOREMOVE: 'Autoremove',
-	OLDER_THAN_DAY: 'Više nego dan',
-	OLDER_THAN_WEEK: 'Stariji od tjedan dana',
-	OLDER_THAN_MONTH: 'Stariji od mjesec dana',
-	OLDER_THAN_TWO_MONTHS: 'Stariji od dva mjeseca'
+	AUTOREMOVE: 'Automatsko brisanje',
+	OLDER_THAN_DAY: 'Starije od dan',
+	OLDER_THAN_WEEK: 'Starije od tjedan dana',
+	OLDER_THAN_MONTH: 'Starije od mjesec dana',
+	OLDER_THAN_TWO_MONTHS: 'Starije od dva mjeseca',
+	
+	SORT_BY: 'Sortiraj po',
+	DATE: 'Datumu',
+	TITLE: 'Nazivu',
+	AUTHOR: 'Autoru',
+
+	EMAIL: 'E-Mail',
+	OPTIONAL: 'neobavezno',
+	SUBMIT: 'Pošalji',
+	INCLUDE_FEED_LIST: 'Uvrsti listu feedova',
+	REPORT: 'Molim opišite problem na engleskom jeziku, ako je moguće.'	
 });
