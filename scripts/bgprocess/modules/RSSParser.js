@@ -105,6 +105,12 @@ define(['md5'], function (CryptoJS) {
 		var link = node.querySelector('link[rel="alternate"]');
 		if (!link) link = node.querySelector('link[type="text/html"]');
 		if (!link) link = node.querySelector('link');
+		if (!link) {
+			var guid = node.querySelector('guid');
+			if (guid && guid.textContent.match(/:\/\//).length) {
+				link = guid;
+			}
+		}
 
 		if (link) {
 			return link.textContent || link.getAttribute('href');
