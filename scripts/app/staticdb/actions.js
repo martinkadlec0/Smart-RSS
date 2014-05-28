@@ -651,6 +651,12 @@ return {
 				app.setFocus('content');
 			}
 		},
+		focusSandbox: {
+			title: 'Focus Article',
+			fn: function() {
+				app.content.sandbox.el.focus();
+			}
+		},
 		scrollDown: {
 			title: 'Scroll down',
 			fn: function() {

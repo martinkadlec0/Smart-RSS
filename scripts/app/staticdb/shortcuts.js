@@ -3,6 +3,7 @@ define({
 		'shift+1': 'feeds:focus',
 		'shift+2': 'articles:focus',
 		'shift+3': 'content:focus',
+		'shift+4': 'content:focusSandbox',
 		'esc': 'global:hideOverlays',
 		'shift+insert': 'global:runTests'
 	},
