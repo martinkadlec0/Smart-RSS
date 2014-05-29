@@ -102,9 +102,20 @@ define(['md5'], function (CryptoJS) {
 	function rssGetLink(node) {
 		if (!node) return false;
 
+		
 		var link = node.querySelector('link[rel="alternate"]');
-		if (!link) link = node.querySelector('link[type="text/html"]');
-		if (!link) link = node.querySelector('link');
+
+		if (!link) {
+
+			// first non atom links
+			if (!link) link = node.querySelector('link[type="text/html"]');
+			if (!link || link.prefix == 'atom') link = node.querySelector('link');
+
+			if (!link) link = node.querySelector('link[type="text/html"]');
+			if (!link) link = node.querySelector('link');
+
+		}
+
 		if (!link) {
 			var guid = node.querySelector('guid');
 			if (guid && guid.textContent.match(/:\/\//).length) {
