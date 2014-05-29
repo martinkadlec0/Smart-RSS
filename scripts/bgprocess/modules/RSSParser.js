@@ -218,10 +218,11 @@ define(['md5'], function (CryptoJS) {
 		desc = node.querySelector('description');
 		if (desc) return desc.textContent;
 
-		desc = node.querySelector('summary');
+		// content over summary because of "http://neregate.com/blog/feed/atom/"
+		desc = node.querySelector('content');
 		if (desc) return desc.textContent;
 
-		desc = node.querySelector('content');
+		desc = node.querySelector('summary');
 		if (desc) return desc.textContent;
 
 		return '&nbsp;';
