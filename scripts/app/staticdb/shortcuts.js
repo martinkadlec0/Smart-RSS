@@ -75,7 +75,8 @@ define({
 	sandbox: {
 		'del': 'content:delete',
 		'd': 'content:delete',
-		'k': 'content:mark'
+		'k': 'content:mark',
+		'space': 'content:spaceThrough'
 	},
 	keys: {
 		8: 'backspace',
