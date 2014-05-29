@@ -107,8 +107,10 @@ define(['md5'], function (CryptoJS) {
 
 		if (!link) {
 
-			// first non atom links
+			
 			if (!link) link = node.querySelector('link[type="text/html"]');
+
+			// prefer non atom links over atom links because of http://logbuch-netzpolitik.de/
 			if (!link || link.prefix == 'atom') link = node.querySelector('link');
 
 			if (!link) link = node.querySelector('link[type="text/html"]');
