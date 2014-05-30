@@ -206,7 +206,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 
 				// reset alarm to make sure next call isn't too soon + to make sure alarm acutaly exists (it doesn't after import)
 				sourceToLoad.trigger('reset-alarm', sourceToLoad);
-
+				sourceToLoad.set('isLoading', false);
 
 				downloadURL();
 			},
@@ -223,7 +223,9 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 			options.password = sourceToLoad.getPass() || '';
 		}
 
-
+		if (settings.get('showSpinner')) {
+			sourceToLoad.set('isLoading', true);
+		}
 		loader.currentRequest = $.ajax(options);
 	}
 

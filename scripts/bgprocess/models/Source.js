@@ -22,7 +22,13 @@ define(['backbone'], function (BB) {
 			username: '',
 			password: '',
 			hasNew: false,
+			isLoading: false,
 			autoremove: 0 // in days
+		},
+
+		initialize: function() {
+			// in case user quits Opera when the source is being updated
+			this.set('isLoading', false);
 		},
 
 		getPass: function() {

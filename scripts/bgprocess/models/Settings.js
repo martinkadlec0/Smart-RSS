@@ -55,7 +55,8 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
 			soundNotifications: false,
 			defaultSound: '',
 			useSound: ':user',
-			soundVolume: 1 // min: 0, max: 1
+			soundVolume: 1, // min: 0, max: 1
+			showSpinner: true
 		},
 
 		/**
