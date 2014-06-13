@@ -86,7 +86,7 @@ define(['md5'], function (CryptoJS) {
 			}
 			
 
-			if (last.date == '0') last.date = Date.now();
+			if (last.date == 0) last.date = Date.now();
 		});
 
 
@@ -165,20 +165,20 @@ define(['md5'], function (CryptoJS) {
 	function rssGetDate(node) {
 		var pubDate = node.querySelector('pubDate, published');
 		if (pubDate) {
-			return (new Date( replaceUTCAbbr(pubDate.textContent) )).getTime();
+			return (new Date( replaceUTCAbbr(pubDate.textContent) )).getTime() || 0;
 		}
 
 		pubDate = node.querySelector('date');
 		if (pubDate) {
-			return (new Date( replaceUTCAbbr(pubDate.textContent) )).getTime();
+			return (new Date( replaceUTCAbbr(pubDate.textContent) )).getTime() || 0;
 		}
 
 		pubDate = node.querySelector('lastBuildDate, updated, update');
 
 		if (pubDate) {
-			return (new Date( replaceUTCAbbr(pubDate.textContent) )).getTime();
+			return (new Date( replaceUTCAbbr(pubDate.textContent) )).getTime() || 0;
 		}
-		return '0';
+		return 1;
 	}
 
 	function rssGetAuthor(node, title) {
