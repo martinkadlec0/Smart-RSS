@@ -211,7 +211,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 				downloadURL();
 			},
 			beforeSend: function(xhr) {
-				xhr.setRequestHeader('Cache-Control', 'no-cache');
+				xhr.setRequestHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
 				xhr.setRequestHeader('Pragma', 'no-cache');
 				/* Removed because "http://www.f5haber.com/rss/teknoloji_haber.xml" doesn't like it
 				   xhr.setRequestHeader('If-Modified-Since', 'Tue, 1 Jan 1991 00:00:00 GMT');
