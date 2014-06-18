@@ -178,7 +178,7 @@ define(['md5'], function (CryptoJS) {
 		if (pubDate) {
 			return (new Date( replaceUTCAbbr(pubDate.textContent) )).getTime() || 0;
 		}
-		return 1;
+		return 0;
 	}
 
 	function rssGetAuthor(node, title) {
