@@ -48,6 +48,7 @@ define({
 		'h': 'articles:nextUnread',
 		'y': 'articles:prevUnread',
 		'z': 'articles:prevUnread',
+
 		'ctrl+shift+a': 'articles:markAllAsRead',
 		'ctrl+a': 'articles:selectAll',
 		'p': 'articles:pin',
@@ -70,13 +71,29 @@ define({
 		'home': 'content:scrollToTop',
 		'del': 'content:delete',
 		'd': 'content:delete',
-		'k': 'content:mark'
+		'k': 'content:mark',
+
+		'g': 'articles:markAndNextUnread',
+		't': 'articles:markAndPrevUnread',
+		'h': 'articles:nextUnread',
+		'y': 'articles:prevUnread',
+		'z': 'articles:prevUnread',
+		'j': 'articles:selectNext',
+		'u': 'articles:selectPrevious'
 	},
 	sandbox: {
 		'del': 'content:delete',
 		'd': 'content:delete',
 		'k': 'content:mark',
-		'space': 'content:spaceThrough'
+		'space': 'content:spaceThrough',
+
+		'g': 'articles:markAndNextUnread',
+		't': 'articles:markAndPrevUnread',
+		'h': 'articles:nextUnread',
+		'y': 'articles:prevUnread',
+		'z': 'articles:prevUnread',
+		'j': 'articles:selectNext',
+		'u': 'articles:selectPrevious'
 	},
 	keys: {
 		8: 'backspace',
