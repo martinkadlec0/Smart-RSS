@@ -120,7 +120,8 @@ define(['md5'], function (CryptoJS) {
 
 		if (!link) {
 			var guid = node.querySelector('guid');
-			if (guid && guid.textContent.match(/:\/\//).length) {
+			var tmp;
+			if (guid && (tmp = guid.textContent.match(/:\/\//)) && tmp.length) {
 				link = guid;
 			}
 		}
