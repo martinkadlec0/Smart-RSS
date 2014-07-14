@@ -89,7 +89,7 @@ function(BB, $, _, formatDate, escapeHtml, stripTags, tplDownload, tplHeader) {
 				this.handleSpace();
 			}, this);
 
-			app.on('no-items:articles-list', function() {
+			app.on('no-items:article-list', function() {
 				if (this.renderTimeout) {
 					clearTimeout(this.renderTimeout);
 				}

@@ -39,7 +39,6 @@ return {
 			next = this.el.querySelector(q);
 			if (e.currentIsRemoved && next && this.$el.find('.last-selected').get(0) == next) {
 				next = [];
-				app.trigger('no-items:' + this.el.id);
 			}
 		}
 		if (next && next.view) {
@@ -47,6 +46,8 @@ return {
 			if (!this.inView(next)) {
 				next.scrollIntoView(false);
 			}
+		} else {
+			app.trigger('no-items:' + this.el.id);
 		}
 
 	},
@@ -72,7 +73,6 @@ return {
 			prev = this.$el.find(q + ':last').get(0);
 			if (e.currentIsRemoved && prev && this.$el.find('.last-selected').get(0) == prev) {
 				prev = [];
-				app.trigger('no-items:' + this.el.id);
 			}
 		}
 		if (prev && prev.view) {
@@ -80,6 +80,8 @@ return {
 			if (!this.inView(prev)) {
 				prev.scrollIntoView(true);
 			}
+		} else {
+			app.trigger('no-items:' + this.el.id);
 		}
 	},
 	select: function(view, e, forceSelect) {
