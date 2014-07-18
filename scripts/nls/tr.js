@@ -76,7 +76,7 @@ define({
 	SETTINGS: 'Ayarlar',
 	EMPTY_TRASH: 'Çöp Kutusunu Boşalt',
 	RSS_FEED_URL: 'RSS Bildirim Adresi: ',
-	OPTIONS: 'Seçenekleri',
+	OPTIONS: 'Seçenekler',
 	UPDATING_FEEDS: 'Beslemeler güncelleniyor',
 
 	UNREAD: 'okunmamış',
