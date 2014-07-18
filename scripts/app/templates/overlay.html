@@ -9,25 +9,26 @@
 	<option value="one-line">{{ONE_LINE}}</option>
 	<option value="two-lines">{{TWO_LINES}}</option>
 </select>
-<label for="config-sort-order">{{SORT_ORDER}}:</label>
-<select id="config-sort-order" data-name="sortOrder">
-	<option value="desc">{{DESCENDING}}</option>
-	<option value="asc">{{ASCENDING}}</option>
-</select>
-<select id="config-sort-order2" data-name="sortOrder2">
-	<option value="desc">{{DESCENDING}}</option>
-	<option value="asc">{{ASCENDING}}</option>
-</select>
-<label for="config-sort-by">{{SORT_BY}}:</label>
-<select id="config-sort-by" data-name="sortBy">
+<label for="config-sort-order">{{SORTING}}:</label>
+<select id="config-sort-by" data-name="sortBy" class="half-size">
 	<option value="date">{{DATE}}</option>
 	<option value="title">{{TITLE}}</option>
 	<option value="author">{{AUTHOR}}</option>
+</select><!--
+--><select id="config-sort-order" data-name="sortOrder" class="half-size">
+	<option value="desc">{{DESCENDING}}</option>
+	<option value="asc">{{ASCENDING}}</option>
 </select>
-<select id="config-sort-by2" data-name="sortBy2">
+<label for="config-sort-by">{{SECONDARY_SORTING}}:</label>
+
+<select id="config-sort-by2" data-name="sortBy2" class="half-size">
 	<option value="date">{{DATE}}</option>
 	<option value="title">{{TITLE}}</option>
 	<option value="author">{{AUTHOR}}</option>
+</select><!--
+--><select id="config-sort-order2" data-name="sortOrder2" class="half-size">
+	<option value="desc">{{DESCENDING}}</option>
+	<option value="asc">{{ASCENDING}}</option>
 </select>
 
 <a href="/options.html" target="_blank">{{OPTIONS}}</option>

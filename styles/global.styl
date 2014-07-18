@@ -157,8 +157,8 @@ input[type=search]:not(:focus):not(:valid) {
 
 .overlay {
 	display: none;
-	min-width: 150px;
-	max-width: 400px;
+	/*min-width: 150px;*/
+	width: 20rem;
 	min-height: 50px;
 	border: 1px solid rgb(160, 160, 160);
 	background: rgb(240, 240, 240);
@@ -170,6 +170,17 @@ input[type=search]:not(:focus):not(:valid) {
 	padding: 5px;
 	border-radius: 5px;
 	box-shadow: 2px 2px 2px #999;
+}
+
+.overlay label {
+	padding: 0.3rem 0 0.2rem 0;
+	display: block;
+}
+
+.half-size {
+	width: 50% !important;
+	margin: 0;
+	box-sizing: border-box;
 }
 
 /**
