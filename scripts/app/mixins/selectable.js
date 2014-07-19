@@ -46,7 +46,7 @@ return {
 			if (!this.inView(next)) {
 				next.scrollIntoView(false);
 			}
-		} else {
+		} else if (e.currentIsRemoved) {
 			app.trigger('no-items:' + this.el.id);
 		}
 
@@ -80,7 +80,7 @@ return {
 			if (!this.inView(prev)) {
 				prev.scrollIntoView(true);
 			}
-		} else {
+		} else if (e.currentIsRemoved) {
 			app.trigger('no-items:' + this.el.id);
 		}
 	},
