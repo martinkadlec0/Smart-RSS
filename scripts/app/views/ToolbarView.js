@@ -42,7 +42,7 @@ function (BB, ToolbarItems, $, ToolbarItemsFactory, _) {
 
 		/**
 		 * Regenerates DOM of items according to new chnages
-		 * @triggered when some change to Toolbar modle happens
+		 * @triggered when some change to Toolbar model happens
 		 * @method handleChange
 		 */
 		handleChange: function() {
@@ -65,10 +65,24 @@ function (BB, ToolbarItems, $, ToolbarItemsFactory, _) {
 		 * @type Array
 		 */
 		hiddenItems: [],
+
+		/**
+		 * Hides items from toolbar (e.g. update action while in trash)
+		 * @method hideItems
+		 * @chainable
+		 */
 		hideItems: function(action) {
 			var list = this.$el.find('> [data-action="' + action + '"]').hide().toArray();
 			this.hiddenItems = _.uniq(this.hiddenItems.concat(list));
+
+			return this;
 		},
+
+		/**
+		 * Shows again hidden items from toolbar (e.g. update action while going away from trash)
+		 * @method showItems
+		 * @chainable
+		 */
 		showItems: function(action) {
 			this.hiddenItems = this.hiddenItems.filter(function(item) {
 				if (item.dataset.action == action) {
@@ -77,6 +91,8 @@ function (BB, ToolbarItems, $, ToolbarItemsFactory, _) {
 				}
 				return true;
 			});
+
+			return this;
 		},
 
 

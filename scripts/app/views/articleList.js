@@ -272,15 +272,26 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 		 * @triggered when new items arr added or when source is destroyed
 		 */
 		handleRenderScreen: function() {
-			this.handleScroll();
+			this.redraw();
+			if ($('input[type=search]').val()) {
+				app.actions.execute('articles:search');
+			}
 		},
 
 		/**
-		 * Renders unrendered articles in view
+		 * Calls redraw when user scrolls in list
 		 * @method handleScroll
 		 * @triggered when list is scrolled (and is called from many other places)
 		 */
 		handleScroll: function() {
+			this.redraw();
+		},
+
+		/**
+		 * Renders unrendered articles in view
+		 * @method redraw
+		 */
+		redraw: function() {
 			var start = -1;
 			var count = 0;
 			for (var i=0,j=this.viewsToRender.length; i<j; i++) {
@@ -550,7 +561,11 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 				this.views[i].unplugModel();
 			}
 
-			this.handleScroll();
+			this.redraw();
+
+			if ($('input[type=search]').val()) {
+				app.actions.execute('articles:search');
+			}
 
 			//alert(Date.now() - st);
 
@@ -561,7 +576,8 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 		 * @method clearOnSelect
 		 */
 		clearOnSelect: function() {
-			$('input[type=search]').val('');
+			// Smart RSS used to reset search on feed select change. It instead keeps the fitler now.
+			//$('input[type=search]').val('');
 
 			// if prev selected was trash, hide undelete buttons
 			if (this.currentData.name == 'trash') {
@@ -599,10 +615,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 
 			// if newly selected is trash
 			if (this.currentData.name == 'trash') {
-				app.articles.toolbar.hideItems('articles:update');
-				app.articles.toolbar.showItems('articles:undelete');
-				/*$('[data-action="articles:update"]').css('display', 'none');
-				$('[data-action="articles:undelete"]').css('display', 'block');*/
+				app.articles.toolbar.hideItems('articles:update').showItems('articles:undelete');
 				$('#context-undelete').css('display', 'block');
 			}
 
@@ -613,6 +626,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 
 			this.addItems( items );
 		},
+
 		
 		/**
 		 * If current feed is removed, select all feeds

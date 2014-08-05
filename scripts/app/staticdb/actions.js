@@ -341,7 +341,7 @@ return {
 		search: {
 			title: Locale.c.SEARCH_TIP,
 			fn: function(e) {
-				e = e || {};
+				e = e || { currentTarget: $('input[type=search]').get(0) };
 				var str = e.currentTarget.value || '';
 				var list = require('views/articleList');
 				if (str == '') {
@@ -365,7 +365,7 @@ return {
 					}
 				});
 
-				list.handleScroll();
+				list.redraw();
 
 				list.restartSelection();
 			}
