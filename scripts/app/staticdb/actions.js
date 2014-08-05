@@ -244,8 +244,22 @@ return {
 				var feedList = require('views/feedList');
 				var feeds = feedList.getSelectedFeeds();
 				var ids = _.pluck(feeds, 'id');
+
 				var special = $('.special.selected').get(0);
 				if (special) special = special.view.model;
+
+				if (!special && !ids.length) {
+					special = require('instances/specials').allFeeds;
+				}
+
+				var searches = $('.search-item.selected');
+				if (searches.length) {
+					searches = searches.toArray().map(function(el) {
+						return el.view.model.get('name');
+					});
+				} else {
+					searches = [];
+				}
 
 				app.trigger('select:' + feedList.el.id, {
 					action: 'new-select',
@@ -253,6 +267,7 @@ return {
 					// _.extend is important, because otherwise it would be sent by reference
 					filter: special ? _.extend({}, special.get('filter')) : null,
 					name: special ? special.get('name') : null,
+					searches: searches,
 					unreadOnly: !!e.altKey || t.className == 'source-counter'
 				});
 				
@@ -344,21 +359,38 @@ return {
 				e = e || { currentTarget: $('input[type=search]').get(0) };
 				var str = e.currentTarget.value || '';
 				var list = require('views/articleList');
-				if (str == '') {
+
+				// hide date groups
+				if (str == '' && !list.currentData.searches.length) {
 					$('.date-group').css('display', 'block');
 				} else {
 					$('.date-group').css('display', 'none');
 				}
 
-				var searchInContent = false;
-				if (str[0] && str[0] == ':') {
-					str = str.replace(/^:/, '', str);
-					searchInContent = true;
+				function makeSearchList(val) {
+					var o = {
+						searchInContent: val.length && val[0] == ':',
+						str: val.replace(/^:/, '', str)
+					};
+					o.rg = new RegExp(RegExp.escape(o.str), 'i');
+					return o;
 				}
-				var rg = new RegExp(RegExp.escape(str), 'i');
+
+				var searchList = list.currentData.searches.map(makeSearchList);
+
+				searchList.push(makeSearchList(str));
+
 				list.views.some(function(view) {
 					if (!view.model) return true;
-					if (rg.test(view.model.get('title')) || rg.test(view.model.get('author')) || (searchInContent && rg.test(view.model.get('content')) )) {
+					var allMatch = true;
+					for (var i=0; i<searchList.length; i++) {
+						if (!(searchList[i].rg.test(view.model.get('title')) || searchList[i].rg.test(view.model.get('author')) || (searchList[i].searchInContent && searchList[i].rg.test(view.model.get('content')) )) ) {
+							allMatch = false;
+							break;
+						}
+					}
+					
+					if (allMatch) {
 						view.$el.removeClass('invisible');
 					} else {
 						view.$el.addClass('invisible');

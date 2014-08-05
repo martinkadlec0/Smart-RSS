@@ -5,9 +5,9 @@ define([
 	'jquery',
 	'modules/Animation', 'models/Settings', 'models/Info', 'models/Source',
 	'collections/Sources', 'collections/Items', 'collections/Folders', 'models/Loader', 'collections/Logs',
-	'models/Folder', 'models/Item', 'collections/Toolbars'
+	'models/Folder', 'models/Item', 'collections/Toolbars', 'collections/Searches'
 ],
-function ($, animation, Settings, Info, Source, Sources, Items, Folders, Loader, Logs, Folder, Item, Toolbars) {
+function ($, animation, Settings, Info, Source, Sources, Items, Folders, Loader, Logs, Folder, Item, Toolbars, Searches) {
 
 	/**
 	 * Update animations
@@ -38,6 +38,7 @@ function ($, animation, Settings, Info, Source, Sources, Items, Folders, Loader,
 	window.sources = new Sources();
 	window.items = new Items();
 	window.folders = new Folders();
+	window.searches = new Searches();
 
 	/**
 	 * This is used for when new feed is subsribed and smart rss tab is opened to focus the newly added feed

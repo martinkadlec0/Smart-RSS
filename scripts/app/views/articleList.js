@@ -92,6 +92,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 		 */
 		currentData: {
 			feeds: [],
+			searches: [],
 			name: 'all-feeds',
 			filter: { trashed: false },
 			unreadOnly: false
@@ -273,7 +274,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 		 */
 		handleRenderScreen: function() {
 			this.redraw();
-			if ($('input[type=search]').val()) {
+			if ($('input[type=search]').val() || this.currentData.searches.length) {
 				app.actions.execute('articles:search');
 			}
 		},
@@ -563,7 +564,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 
 			this.redraw();
 
-			if ($('input[type=search]').val()) {
+			if ($('input[type=search]').val() || this.currentData.searches.length) {
 				app.actions.execute('articles:search');
 			}
 
@@ -579,17 +580,15 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 			// Smart RSS used to reset search on feed select change. It instead keeps the fitler now.
 			//$('input[type=search]').val('');
 
-			// if prev selected was trash, hide undelete buttons
+			// if trash was previously selected, hide undelete buttons
 			if (this.currentData.name == 'trash') {
-				/*$('[data-action="articles:update"]').css('display', 'block');
-				$('[data-action="articles:undelete"]').css('display', 'none');*/
-				app.articles.toolbar.showItems('articles:update');
-				app.articles.toolbar.hideItems('articles:undelete');
+				app.articles.toolbar.showItems('articles:update').hideItems('articles:undelete');
 				$('#context-undelete').css('display', 'none');
 			}
 
 			this.currentData = {
 				feeds: [],
+				searches: [],
 				name: 'all-feeds',
 				filter: { trashed: false },
 				unreadOnly: false

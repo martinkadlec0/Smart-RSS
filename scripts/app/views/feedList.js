@@ -4,9 +4,9 @@
  */
 define([
 	'backbone', 'jquery', 'underscore', 'views/SourceView', 'views/FolderView', 'views/SpecialView', 'models/Special',
-	'instances/contextMenus', 'mixins/selectable', 'instances/specials'
+	'instances/contextMenus', 'mixins/selectable', 'instances/specials', 'views/SearchView'
 ],
-function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, selectable, specials) {
+function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, selectable, specials, SearchView) {
 
 	/**
 	 * List of feeds (in left column)
@@ -66,10 +66,30 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 			bg.sources.on('add', this.addSource, this);
 			bg.sources.on('change:folderID', this.handleChangeFolder, this);
 			bg.folders.on('add', this.addFolder, this);
+			bg.searches.on('add', this.addSearch, this);
+
 			bg.sources.on('clear-events', this.handleClearEvents, this);
 
 			this.on('pick', this.handlePick);
 			
+		},
+
+		/**
+		 * Unbinds all listeners to bg process
+		 * @method handleClearEvents
+		 * @triggered when tab is closed/refershed
+		 * @param id {Integer} id of the closed tab
+		 */
+		handleClearEvents: function(id) {
+			if (window == null || id == tabID) {
+				bg.sources.off('reset', this.addSources, this);
+				bg.sources.off('add', this.addSource, this);
+				bg.sources.off('change:folderID', this.handleChangeFolder, this);
+				bg.folders.off('add', this.addFolder, this);
+				bg.searches.off('add', this.addSearch, this);
+
+				bg.sources.off('clear-events', this.handleClearEvents, this);
+			}
 		},
 
 		/**
@@ -113,6 +133,8 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 			this.addSpecial(specials.trash);
 
 			this.addSources(bg.sources);
+
+			this.addSearches(bg.searches);
 
 			return this;
 		},
@@ -252,21 +274,6 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 			this.placeSource(source.view);
 		},
 
-		/**
-		 * Unbinds all listeners to bg process
-		 * @method handleClearEvents
-		 * @triggered when tab is closed/refershed
-		 * @param id {Integer} id of the closed tab
-		 */
-		handleClearEvents: function(id) {
-			if (window == null || id == tabID) {
-				bg.sources.off('reset', this.addSources, this);
-				bg.sources.off('add', this.addSource, this);
-				bg.sources.off('change:folderID', this.handleChangeFolder, this);
-				bg.folders.off('add', this.addFolder, this);
-				bg.sources.off('clear-events', this.handleClearEvents, this);
-			}
-		},
 
 		/**
 		 * Adds one special (all feeds, pinned, trash)
@@ -327,6 +334,19 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 		addSource: function(source, noManualSort) {
 			var view = new SourceView({ model: source }, this);
 			this.placeSource(view, noManualSort === true ? true : false);
+		},
+
+		/**
+		 * Adds one search
+		 * @method addSearch
+		 * @param search {models/Search} Search model to add
+		 * @param noManualSort {Boolean} When false, the rigt place is computed
+		 */
+		addSearch: function(search, noManualSort) {
+			var view = new SearchView({ model: search }, this);
+			// this will be still needed to add new searches to right place by title
+			// this.placeSource(view, noManualSort === true ? true : false);
+			this.$el.append(view.render().$el);
 		},
 
 		/**
@@ -419,6 +439,22 @@ function (BB, $, _, SourceView, FolderView, SpecialView, Special, contextMenus, 
 			});
 			sources.forEach(function(source) {
 				this.addSource(source, true);
+			}, this);
+		},
+
+		/**
+		 * Add more searches at once
+		 * @method addSearches
+		 * @param searches {Array} Array of search models to add
+		 */
+		addSearches: function(searches) {
+			var that = this;
+			$('.search-item').each(function(i, search) {
+				if (!search.view || !(search instanceof SearchView)) return;
+				that.destroySource(search.view);
+			});
+			searches.forEach(function(source) {
+				this.addSearch(source, true);
 			}, this);
 		},
 
