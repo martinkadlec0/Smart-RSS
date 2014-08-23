@@ -93,5 +93,19 @@ define({
 	OLDER_THAN_DAY: 'Starší než den',
 	OLDER_THAN_WEEK: 'Starší než týden',
 	OLDER_THAN_MONTH: 'Starší než měsíc',
-	OLDER_THAN_TWO_MONTHS: 'Starší než dva měsíce'
+	OLDER_THAN_TWO_MONTHS: 'Starší než dva měsíce',
+
+	SORT_BY: 'Řadit podle',
+	DATE: 'Datum',
+	TITLE: 'Název',
+	AUTHOR: 'Autor',
+
+	EMAIL: 'E-Mail',
+	OPTIONAL: 'nepovinný',
+	SUBMIT: 'Odeslat',
+	INCLUDE_FEED_LIST: 'Přidat do hlášení seznam rss zdrojů',
+	REPORT: 'Prosím popište problém.',
+
+	SORTING: 'Hlavní řazení',
+	SECONDARY_SORTING: 'Vedlejší řazení'
 });
