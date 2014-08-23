@@ -30,11 +30,11 @@ function(BB, _, $, tplReport, Locale, comm) {
 			this.$el.find('.report-message').html('Sending report. Please wait!');
 			this.sendReport();
 		},
-		showButtons: function(e) {
+		showButtons: function() {
 			this.$el.find('.report-buttons').show();
 			this.$el.find('.report-message').html('');
 		},
-		sendReport: function(e) {
+		sendReport: function() {
 			var desc = this.$el.find('#report-desc').val();
 			var email = this.$el.find('#report-email').val();
 			var includeFeeds = this.$el.find('#report-include-feeds').is(':checked');
@@ -72,8 +72,8 @@ function(BB, _, $, tplReport, Locale, comm) {
 			if (!e.blur) {
 				this.stopListening();
 				this.remove();
-	  			this.unbind();
-  			}
+				this.unbind();
+			}
 		}
 	});
 

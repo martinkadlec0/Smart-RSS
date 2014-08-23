@@ -241,7 +241,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 					bg.sourceToFocus = null;
 				}, 0);
 			} else {
-				this.loadAllFeeds();	
+				this.loadAllFeeds();
 			}
 		},
 

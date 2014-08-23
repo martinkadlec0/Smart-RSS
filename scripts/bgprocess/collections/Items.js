@@ -6,7 +6,7 @@ define(['backbone', 'models/Item', 'preps/indexeddb'], function (BB, Item) {
 
 	function getS(val) {
 		return String(val).toLowerCase();
-	};
+	}
 
 	/**
 	 * Collection of feed modules
@@ -25,7 +25,7 @@ define(['backbone', 'models/Item', 'preps/indexeddb'], function (BB, Item) {
 
 			if (sortBy == 'title') {
 				if (!sorting &&  getS(a.get('title')) == getS(b.get('title')) ) return this.comparator(a, b, settings.get('sortBy2') || true);
-				val = getS(a.get('title')) <= getS(b.get('title')) ? 1 : -1;	
+				val = getS(a.get('title')) <= getS(b.get('title')) ? 1 : -1;
 			} else if (sortBy == 'author') {
 				if (!sorting &&  getS(a.get('author')) == getS(b.get('author')) ) return this.comparator(a, b, settings.get('sortBy2') || true);
 				val = getS(a.get('author')) <= getS(b.get('author')) ? 1 : -1;
