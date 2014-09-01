@@ -7,6 +7,17 @@ define([
 ],
 function (BB, Toolbar, defaultToolbarItems) {
 
+	function getDataByRegion(data, region) {
+		if (!Array.isArray(data)) return null;
+
+		for (var i=0; i<data.length; i++) {
+			if (typeof data[i] != 'object') continue;
+			if (data[i].region == region) return data[i];
+		}
+
+		return null;
+	}
+
 	/**
 	 * Collection of feed modules
 	 * @class Toolbars
@@ -17,19 +28,22 @@ function (BB, Toolbar, defaultToolbarItems) {
 		model: Toolbar,
 		localStorage: new Backbone.LocalStorage('toolbars-backbone'),
 		parse: function(data) {
-			// this is very poor solution, but as long as there won't be any more toolbars it doesn't matter
 			if (!data.length) return defaultToolbarItems;
-			if (data[0].region != 'feeds') data.unshift(defaultToolbarItems[0]);
-			if (data.length < 2 || data[1].region != 'articles') data.splice(1, 0, defaultToolbarItems[1]);
-			if (data.length < 3 || data[2].region != 'content') data.push(defaultToolbarItems[2]);
 
-			for (var i=0; i<data.length; i++) {
-				if (!data[i].version || data[i].version < defaultToolbarItems[i].version) {
-					data[i] = defaultToolbarItems[i];
+			parsedData = defaultToolbarItems;
+			if (!Array.isArray(parsedData)) return [];
+
+			for (var i=0; i<parsedData.length; i++) {
+
+				var fromdb = getDataByRegion(data, parsedData[i].region);
+				if (!fromdb || typeof fromdb != 'object') continue;
+
+				if (fromdb.version && fromdb.version >= parsedData[i].version) {
+					parsedData[i] = fromdb;
 				}
 			}
 			
-			return data;
+			return parsedData;
 		}
 	});
 
