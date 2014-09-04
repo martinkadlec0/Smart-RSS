@@ -41,6 +41,7 @@ define(['jquery'], function($) {
 	function setPosition(pos) {
 		var toLeft = bg.settings.get('thickFrameBorders') ? 5 : 1;
 		if (this.layout == 'vertical') {
+			this.resizer.style.width = this.$el.width() + 'px';
 			this.resizer.style.left = this.el.offsetLeft  + 'px';
 			this.resizer.style.top = pos - Math.round(resizeWidth / 2) - toLeft + 'px';
 		} else {
@@ -94,7 +95,8 @@ define(['jquery'], function($) {
 			}
 
 			if (layout == 'vertical') {
-				this.resizer.style.width = '100%';
+				//this.resizer.style.width = '100%';
+				this.resizer.style.width = this.$el.width() + 'px';
 				this.resizer.style.cursor = 'n-resize';
 				this.resizer.style.height = resizeWidth + 'px';
 			} else {
@@ -117,6 +119,9 @@ define(['jquery'], function($) {
 			});
 			document.addEventListener('mouseup', function(e) {
 				handleMouseUp.call(that, e);
+			});
+			window.addEventListener('resize', function(e) {
+				resetPositions.call(that, e);
 			});
 
 			document.body.appendChild(this.resizer);
