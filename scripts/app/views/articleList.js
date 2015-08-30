@@ -677,6 +677,13 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 		 * @param view {views/ItemView} Removed article view
 		 */
 		removeItem: function(view) {
+			askRmPinned = bg.settings.get('askRmPinned')
+			if (view.model.get('pinned') && askRmPinned == 'all') {
+				var conf = confirm(Locale.c.PIN_QUESTION_A + view.model.escape('title') + Locale.c.PIN_QUESTION_B);
+				if (!conf) {
+					return;
+				}
+			}
 			view.model.save({ trashed: true, visited: true });
 			//this.destroyItem(view);
 		},
@@ -687,7 +694,8 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 		 * @param view {views/ItemView} Removed article view
 		 */
 		removeItemCompletely: function(view) {
-			if (view.model.get('pinned') && bg.settings.get('askRmPinned')) {
+			askRmPinned = bg.settings.get('askRmPinned')
+			if (view.model.get('pinned') && askRmPinned && askRmPinned != 'none') {
 				var conf = confirm(Locale.c.PIN_QUESTION_A + view.model.escape('title') + Locale.c.PIN_QUESTION_B);
 				if (!conf) {
 					return;

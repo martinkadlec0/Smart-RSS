@@ -155,10 +155,14 @@
 						</label>
 					</div>
 
-					<div class="settings-row learn-more" title="Ask when shift+deleting pinned items or removing pinned items from trash.">
+					<div class="settings-row learn-more" title="Ask to prevent accidental removal of pinned items.">
 						<label class="web-content-select-label">
-							<span class="selectLabel">Ask when completely removing pinned items:</span>
-							<input type="checkbox" id="askRmPinned" />
+							<span class="selectLabel">Ask when removing pinned items:</span>
+							<select id="askRmPinned">
+								<option value="none">Never</option>
+								<option value="trashed">On removal from trash</option>
+								<option value="all">Always</option>
+							</select>
 						</label>
 					</div>
 

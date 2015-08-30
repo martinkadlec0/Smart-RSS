@@ -621,8 +621,10 @@ return {
 			fn: function(e) {
 				var contentView = require('views/contentView');
 				if (!contentView.model) return;
+
+				askRmPinned = bg.settings.get('askRmPinned')
 				if (e.shiftKey) {
-					if (contentView.model.get('pinned') && bg.settings.get('askRmPinned')) {
+					if (contentView.model.get('pinned') && askRmPinned && askRmPinned != 'none') {
 						var conf = confirm(Locale.c.PIN_QUESTION_A + contentView.model.escape('title') + Locale.c.PIN_QUESTION_B);
 						if (!conf) {
 							return;
@@ -631,6 +633,13 @@ return {
 					
 					contentView.model.markAsDeleted();
 				} else {
+					if (contentView.model.get('pinned') && askRmPinned == 'all') {
+						var conf = confirm(Locale.c.PIN_QUESTION_A + contentView.model.escape('title') + Locale.c.PIN_QUESTION_B);
+						if (!conf) {
+							return;
+						}
+					}
+
 					contentView.model.save({
 						trashed: true,
 						visited: true

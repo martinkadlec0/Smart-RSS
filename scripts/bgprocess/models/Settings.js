@@ -50,7 +50,7 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
 			circularNavigation: true,
 			sortBy: 'date',
 			sortBy2: 'title',
-			askRmPinned: true,
+			askRmPinned: 'trashed',
 			titleIsLink: true,
 			soundNotifications: false,
 			defaultSound: '',
