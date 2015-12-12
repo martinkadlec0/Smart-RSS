@@ -77,7 +77,7 @@ define({
 	EMPTY_TRASH: 'Ипразни отпад',
 	RSS_FEED_URL: 'Адреса RSS извора: ',
 	OPTIONS: 'Опције',
-	UPDATING_FEEDS: 'Updating feeds',
+	UPDATING_FEEDS: 'Ажурирање вести',
 
 	UNREAD: 'непрочитано',
 	TOTAL: 'укупно',
