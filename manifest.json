@@ -21,7 +21,7 @@
 	},
 	"options_page": "options.html",
 	"icons": {
-		"19": "images/icon19-arrow-orange",
+		"19": "images/icon19-arrow-orange.png",
         "48": "images/48-inverted-round.png",
         "64": "images/64-inverted-round.png",
         "96": "images/96-inverted-round.png",
