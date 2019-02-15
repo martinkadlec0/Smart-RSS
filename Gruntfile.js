@@ -55,7 +55,7 @@ module.exports = function(grunt) {
 					baseUrl: 'scripts/app',
 					generateSourceMaps: true,
 					preserveLicenseComments: false,
-					optimize: 'uglify2',
+					optimize: 'none',
 					waitSeconds: 0,
 					paths: {
 						jquery: '../libs/jquery.min',
@@ -87,7 +87,7 @@ module.exports = function(grunt) {
 					baseUrl: 'scripts/bgprocess',
 					generateSourceMaps: true,
 					preserveLicenseComments: false,
-					optimize: 'uglify2',
+					optimize: 'none',
 					waitSeconds: 0,
 					paths: {
 						jquery: '../libs/jquery.min',
