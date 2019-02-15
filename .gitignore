@@ -2,3 +2,5 @@ node_modules/*
 docs/*
 .idea/*
 styles/main-compiled.css
+scripts/main-compiled.*
+scripts/bgprocess-compiled.*
