@@ -59,7 +59,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 			sourcesArr = sourcesArr.filter(function(source) {
 				if (source.get('updateEvery') == 0) return false;
 				/****
-					why !source.get('lastUpdate') ? .. I think I wanted !source.get('lastUpdate') => true not the other way around 
+					why !source.get('lastUpdate') ? .. I think I wanted !source.get('lastUpdate') => true not the other way around
 				****/
 				if (!source.get('lastUpdate')) return true;
 				if (/*!source.get('lastUpdate') ||*/ source.get('lastUpdate') > Date.now() - source.get('updateEvery') * 60 * 1000) {
@@ -90,7 +90,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 			audio.volume = parseFloat(settings.get('soundVolume'));
 			audio.play();
 		}
-		
+
 	}
 
 	function downloadStopped() {
@@ -125,7 +125,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 			}
 
 			downloadStopped();
-			
+
 
 			return;
 		}
@@ -194,7 +194,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 				});
 
 				sourceToLoad.trigger('update', { ok: true });
-				
+
 			},
 			error: function() {
 				console.log('Failed load RSS: ' + sourceToLoad.get('url'));
@@ -213,7 +213,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
 				xhr.setRequestHeader('Pragma', 'no-cache');
-				
+
 				// Removed because "http://www.f5haber.com/rss/teknoloji_haber.xml" doesn't like it
 				// xhr.setRequestHeader('If-Modified-Since', 'Tue, 1 Jan 1991 00:00:00 GMT');
 				xhr.setRequestHeader('X-Time-Stamp', Date.now());

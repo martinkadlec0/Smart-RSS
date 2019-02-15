@@ -3,9 +3,9 @@
  * @submodule views/FolderView
  */
 define([
-	'backbone', 'jquery', 'underscore', 'views/TopView', 'instances/contextMenus', 'text!templates/folder.html'
+	'backbone', 'jquery', '../../libs/template', 'views/TopView', 'instances/contextMenus', 'text!templates/folder.html'
 ],
-function(BB, $, _, TopView, contextMenus, tplFolder) {
+function(BB, $, template, TopView, contextMenus, tplFolder) {
 
 	/**
 	 * View for Folder in feed list
@@ -29,7 +29,7 @@ function(BB, $, _, TopView, contextMenus, tplFolder) {
 		 * @default ./templates/folder.html
 		 * @type Function
 		 */
-		template: _.template(tplFolder),
+		template: template(tplFolder),
 
 		/**
 		 * Reference to view/feedList instance. It should be replaced with require('views/feedList')
@@ -111,7 +111,7 @@ function(BB, $, _, TopView, contextMenus, tplFolder) {
 			feedsInFolder.each(function(i, el) {
 				that.list.placeSource(el.view);
 			});
-			
+
 		},
 
 		/**
@@ -173,7 +173,7 @@ function(BB, $, _, TopView, contextMenus, tplFolder) {
 		render: function() {
 			if (this.renderInterval == 'first-time') return this.realRender();
 			if (this.renderInterval) return this;
-			
+
 			var that = this;
 			this.renderInterval = requestAnimationFrame(function() {
 				that.realRender();
@@ -187,7 +187,7 @@ function(BB, $, _, TopView, contextMenus, tplFolder) {
 		 */
 		realRender: function() {
 			this.$el.toggleClass('has-unread', !!this.model.get('count'));
-			
+
 			var data = Object.create(this.model.attributes);
 			this.$el.toggleClass('opened', this.model.get('opened'));
 			this.$el.html(this.template(data));
@@ -212,6 +212,6 @@ function(BB, $, _, TopView, contextMenus, tplFolder) {
 			};
 		}
 	});
-	
+
 	return FolderView;
 });

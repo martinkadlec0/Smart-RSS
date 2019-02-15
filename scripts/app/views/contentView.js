@@ -3,10 +3,10 @@
  * @submodule views/contentView
  */
 define([
-	'backbone', 'jquery', 'underscore', 'helpers/formatDate', 'helpers/escapeHtml', 'helpers/stripTags', 'text!templates/download.html',
+	'backbone', 'jquery', '../../libs/template', 'helpers/formatDate', 'helpers/escapeHtml', 'helpers/stripTags', 'text!templates/download.html',
 	'text!templates/header.html'
 ],
-function(BB, $, _, formatDate, escapeHtml, stripTags, tplDownload, tplHeader) {
+function(BB, $, template, formatDate, escapeHtml, stripTags, tplDownload, tplHeader) {
 
 	/**
 	 * Full view of one article (right column)
@@ -30,7 +30,7 @@ function(BB, $, _, formatDate, escapeHtml, stripTags, tplDownload, tplHeader) {
 		 * @default ./templates/header.html
 		 * @type Function
 		 */
-		template: _.template(tplHeader),
+		template: template(tplHeader),
 
 		/**
 		 * Template for downlaoding an article
@@ -38,7 +38,7 @@ function(BB, $, _, formatDate, escapeHtml, stripTags, tplDownload, tplHeader) {
 		 * @default ./templates/download.html
 		 * @type Function
 		 */
-		downloadTemplate: _.template(tplDownload),
+		downloadTemplate: template(tplDownload),
 
 
 		events: {
@@ -79,7 +79,7 @@ function(BB, $, _, formatDate, escapeHtml, stripTags, tplDownload, tplHeader) {
 		 */
 		handleAttached: function() {
 			//this.template = _.template($('#template-header').html());
-			
+
 			//window.addEventListener('message', function(e) {
 			app.on('select:article-list', function(data) {
 				this.handleNewSelected(bg.items.findWhere({ id: data.value }));

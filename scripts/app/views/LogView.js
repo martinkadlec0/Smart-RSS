@@ -3,8 +3,8 @@
  * @submodule views/LogView
  */
 define([
-	'backbone', 'underscore', 'jquery', 'helpers/formatDate', 'text!templates/log.html'
-], function(BB, _, $, formatDate, tplLog) {
+	'backbone', '../../libs/template', 'jquery', 'helpers/formatDate', 'text!templates/log.html'
+], function(BB, template, $, formatDate, tplLog) {
 
 	/**
 	 * View in bottom right corner used for bgprocess error logs and integration tests
@@ -12,7 +12,7 @@ define([
 	 * @constructor
 	 * @extends Backbone.View
 	 */
-	var LogView = BB.View.extend({
+	let LogView = BB.View.extend({
 
 		/**
 		 * Tag name of the view
@@ -25,7 +25,7 @@ define([
 			'click #button-hide-log': 'hide'
 		},
 
-		template: _.template(tplLog),
+		template: template(tplLog),
 
 		/**
 		 * Initializations of events and template.
@@ -46,7 +46,7 @@ define([
 		 * @param id {Number} ID of closed tab
 		 */
 		handleClearEvents: function(id) {
-			if (window == null || id == tabID) {
+			if (window == null || id === tabID) {
 				bg.logs.off('add', this.addItem, this);
 				bg.sources.off('clear-events', this.handleClearEvents, this);
 			}

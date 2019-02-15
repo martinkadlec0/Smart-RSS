@@ -1,12 +1,12 @@
 define([
-	'backbone', 'jquery', 'underscore', 'text!templates/properties.html', 'modules/Locale'
+	'backbone', 'jquery', '../../libs/template', 'text!templates/properties.html', 'modules/Locale'
 ],
-function(BB, $, _, tplProperties, Locale) {
+function(BB, $, template, tplProperties, Locale) {
 
 	var Properties = BB.View.extend({
 		id: 'properties',
 		current: null,
-		template: _.template(Locale.translateHTML(tplProperties)),
+		template: template(Locale.translateHTML(tplProperties)),
 		events: {
 			'click button' : 'handleClick',
 			'keydown button' : 'handleKeyDown',
@@ -127,7 +127,7 @@ function(BB, $, _, tplProperties, Locale) {
 				 */
 
 				if (isFolder) {
-					this.$el.html(this.template( _.extend(params, this.current.attributes)  ));
+					this.$el.html(this.template( Object.assign(params, this.current.attributes)  ));
 				} else {
 					this.$el.html(this.template( params ));
 				}
@@ -145,7 +145,7 @@ function(BB, $, _, tplProperties, Locale) {
 		show: function(source) {
 			this.current = source;
 			this.render();
-			
+
 			this.$el.css('display', 'block');
 		},
 		hide: function() {
