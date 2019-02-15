@@ -13,7 +13,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 			bg.sources.trigger('clear-events', -1);
 			return false;
 		}
-		
+
 		var docViewTop = 0;
 		var docViewBottom = screen.height;
 
@@ -83,7 +83,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 		 */
 		viewsToRender: [],
 
-		
+
 		/**
 		 * Data received from feedList about current selection (feed ids, name of special, filter, unreadOnly)
 		 * @property currentData
@@ -326,7 +326,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 				bg.settings.off('change:layout', this.handleChangeLayout, this);
 
 				bg.sources.off('destroy', this.handleSourcesDestroy, this);
-				
+
 				bg.sources.off('clear-events', this.handleClearEvents, this);
 			}
 		},
@@ -351,9 +351,9 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 		 */
 		handleSort: function() {
 			$('#input-search').val('');
-			
+
 			this.handleNewSelected(this.currentData);
-			
+
 		},
 
 		/**
@@ -434,13 +434,13 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 		 * @param noManualSort {Boolean} true when adding items in a batch in right order
 		 */
 		addItem: function(item, noManualSort) {
-	
+
 			//Don't add newly fetched items to middle column, when they shouldn't be
 			if (noManualSort !== true && !this.inCurrentData(item)) {
 				return false;
 			}
 
-		
+
 
 			var after = null;
 			if (noManualSort !== true) {
@@ -469,12 +469,12 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 					view = this.views[this.reuseIndex];
 					view.swapModel(item);
 				}
-				
+
 				if (!this.selectedItems.length) this.select(view);
 			} else {
 				view = new ItemView({ model: item }, this);
 				view.render().$el.insertBefore($(after));
-				
+
 				// weee, this is definitelly not working 100% right :D or is it?
 				var indexElement = after.view instanceof ItemView ? after : after.nextElementSibling;
 				var index = indexElement ? this.views.indexOf(indexElement.view) : -1;
@@ -508,8 +508,8 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 		addGroup: function(model, col, opt) {
 			var before = opt.before;
 			var view = new GroupView({ model: model }, groups);
-			
-		
+
+
 			view.render().$el.insertBefore(before);
 		},
 
@@ -532,7 +532,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 		addItems: function(items) {
 
 			groups.reset();
-			
+
 
 			/**
 			 * Select removal
@@ -550,7 +550,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 
 			this.reuseIndex = 0;
 
-			
+
 
 			items.forEach(function(item) {
 				this.addItem(item, true);
@@ -627,7 +627,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 			this.addItems( items );
 		},
 
-		
+
 		/**
 		 * If current feed is removed, select all feeds
 		 * @triggered when any source is destroyed
@@ -677,7 +677,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 		 * @param view {views/ItemView} Removed article view
 		 */
 		removeItem: function(view) {
-			askRmPinned = bg.settings.get('askRmPinned')
+			askRmPinned = bg.settings.get('askRmPinned');
 			if (view.model.get('pinned') && askRmPinned == 'all') {
 				var conf = confirm(Locale.c.PIN_QUESTION_A + view.model.escape('title') + Locale.c.PIN_QUESTION_B);
 				if (!conf) {
@@ -694,7 +694,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 		 * @param view {views/ItemView} Removed article view
 		 */
 		removeItemCompletely: function(view) {
-			askRmPinned = bg.settings.get('askRmPinned')
+			askRmPinned = bg.settings.get('askRmPinned');
 			if (view.model.get('pinned') && askRmPinned && askRmPinned != 'none') {
 				var conf = confirm(Locale.c.PIN_QUESTION_A + view.model.escape('title') + Locale.c.PIN_QUESTION_B);
 				if (!conf) {
@@ -783,14 +783,14 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 			// view.$el.unbind(); - - I'm not adding any jquery events
 			// view.off(); - This takes from some reason quite a time, and does nothing because I'm not adding events on the view
 			view.remove();
-			
+
 			var io = this.selectedItems.indexOf(view);
 			if (io >= 0) this.selectedItems.splice(io, 1);
 			io = this.views.indexOf(view);
 			if (io >= 0) this.views.splice(io, 1);
 			io = this.viewsToRender.indexOf(view);
 			if (io >= 0) this.viewsToRender.splice(io, 1);
-			
+
 			this.reuseIndex--;
 			if (this.reuseIndex < 0) {
 				this.reuseIndex = 0;
@@ -810,7 +810,7 @@ function (BB, _, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 				if (!opt.onlyToRead || item.model.get('unread') == true) {
 					item.model.save({ unread: val, visited: true });
 				}
-				
+
 			}, this);
 		}
 	});
