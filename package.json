@@ -1,8 +1,8 @@
 {
   "name": "smartrss",
   "version": "2.0.0",
-  "description": "RSS Reader for Opera 15+",
-  "homepage": "http://blog.martinkadlec.eu/post/501-smart-rss-final-v10",
+  "description": "RSS Reader",
+  "homepage": "",
   "dependencies": {},
   "devDependencies": {
     "grunt": ">=0.4.1",
@@ -18,12 +18,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/BS-Harou/Smart-RSS.git"
+    "url": "git://github.com/zakius/Smart-RSS.git"
   },
-  "author": "Martin Kadlec",
-  "license": "BSD-2-Clause",
+  "author": "zakius",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/BS-Harou/Smart-RSS/issues"
+    "url": "https://github.com/zakius/Smart-RSS/issues"
   },
   "engine": "node >= 0.10.0"
 }
