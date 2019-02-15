@@ -81,7 +81,7 @@ return {
 						source.save({ hasNew: false });
 					}
 				});
-				
+
 			}
 		},
 		refetch: {
@@ -97,7 +97,7 @@ return {
 				});
 
 				app.actions.execute('feeds:update');
-				
+
 			}
 		},
 		delete: {
@@ -136,7 +136,7 @@ return {
 				} else if (feeds.length > 0) {
 					properties.show(feeds);
 				}
-				
+
 			}
 		},
 		addSource: {
@@ -255,7 +255,7 @@ return {
 					name: special ? special.get('name') : null,
 					unreadOnly: !!e.altKey || t.className == 'source-counter'
 				});
-				
+
 
 				if (special && special.get('name') == 'all-feeds') {
 					bg.sources.forEach(function(source) {
@@ -263,7 +263,7 @@ return {
 							source.save({ hasNew: false });
 						}
 					});
-					
+
 				} else if (ids.length) {
 					bg.sources.forEach(function(source) {
 						if (source.get('hasNew') && ids.indexOf(source.id) >= 0) {
@@ -479,7 +479,7 @@ return {
 				var articleList = require('views/articleList');
 				articleList.$el.find('.selected').removeClass('selected');
 				articleList.selectedItems = [];
-				
+
 				articleList.$el.find('.item:not(.invisible)').each(function(i, item) {
 					item.view.$el.addClass('selected');
 					articleList.selectedItems.push(item.view);
@@ -548,7 +548,7 @@ return {
 					return;
 				}
 				var tpl = contentView.downloadTemplate;
-				
+
 				var list = {};
 				list.articles = articleList.selectedItems.map(function(itemView) {
 					var attrs = Object.create(itemView.model.attributes);
@@ -622,19 +622,20 @@ return {
 				var contentView = require('views/contentView');
 				if (!contentView.model) return;
 
-				askRmPinned = bg.settings.get('askRmPinned')
+				askRmPinned = bg.settings.get('askRmPinned');
+
 				if (e.shiftKey) {
 					if (contentView.model.get('pinned') && askRmPinned && askRmPinned != 'none') {
-						var conf = confirm(Locale.c.PIN_QUESTION_A + contentView.model.escape('title') + Locale.c.PIN_QUESTION_B);
+						let conf = confirm(Locale.c.PIN_QUESTION_A + contentView.model.escape('title') + Locale.c.PIN_QUESTION_B);
 						if (!conf) {
 							return;
 						}
 					}
-					
+
 					contentView.model.markAsDeleted();
 				} else {
 					if (contentView.model.get('pinned') && askRmPinned == 'all') {
-						var conf = confirm(Locale.c.PIN_QUESTION_A + contentView.model.escape('title') + Locale.c.PIN_QUESTION_B);
+						let conf = confirm(Locale.c.PIN_QUESTION_A + contentView.model.escape('title') + Locale.c.PIN_QUESTION_B);
 						if (!conf) {
 							return;
 						}
