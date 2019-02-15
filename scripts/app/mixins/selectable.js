@@ -92,7 +92,7 @@ return {
 			this.selectPivot = view;
 			this.$el.find('.selected').removeClass('selected');
 
-			
+
 			if (!window || !window.frames) {
 				bg.logs.add({ message: 'Event duplication bug! Clearing events now...' });
 				bg.console.log('Event duplication bug! Clearing events now...');
@@ -103,7 +103,7 @@ return {
 			setTimeout(function() {
 				this.trigger('pick', view, e);
 			}.bind(this), 0);
-			
+
 		} else if (e.shiftKey && this.selectPivot) {
 			this.$el.find('.selected').removeClass('selected');
 			this.selectedItems = [this.selectPivot];
@@ -155,7 +155,9 @@ return {
 		return true;
 	},
 	handleSelectableMouseDown: function(e) {
-		//e.currentTarget.view.handleMouseDown(e);
+		if(e.which === 2){
+			return browser.tabs.create({url: e.currentTarget.view.model.attributes.url, active: false});
+		}
 		var item = e.currentTarget.view;
 		if (this.selectedItems.length > 1 && item.$el.hasClass('selected') && !e.ctrlKey && !e.shiftKey) {
 			this.selectFlag = true;
