@@ -22,13 +22,14 @@ module.exports = function(grunt) {
 				noempty:  true,  // true: no empty blocks
 				unused:   true,  // true: warn about unused vars
 				trailing: true,  // true: no trailing whitespaces
-				supernew: true,  // true: enable 'new Constructor' instead of 'new Constructor()' 
+				supernew: true,  // true: enable 'new Constructor' instead of 'new Constructor()'
 				onevar:   false, // true: only one var per fn
 				funcscope: false,   // false: no 'var' in blocks
 				maxdepth: 5,        // max nesting depth
 				quotmark: 'single', // single: force '
 				'-W041': true,      // don't warn about something == false/true
-				'-W117': true,      // don't warn about not defined vars until I refactorize bg.js
+				'-W117': true,      // don't warn about not defined vars until I refactorize bg.js,
+				esversion: 6,
 				globals: {
 					app: true,
 					bg: true,
@@ -130,7 +131,7 @@ module.exports = function(grunt) {
 				files: {
 					//'styles/options-compiled.css': 'options.styl', // 1:1 compile
 					'styles/main-compiled.css': [
-						'styles/global.styl', 
+						'styles/global.styl',
 						'styles/feeds.styl',
 						'styles/articles.styl',
 						'styles/content.styl'
