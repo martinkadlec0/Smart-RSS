@@ -3,8 +3,8 @@
  * @submodule views/ItemView
  */
 define([
-	'backbone', 'jquery', 'underscore', 'helpers/formatDate', 'instances/contextMenus', 'helpers/stripTags', 'text!templates/item.html'
-], function(BB, $, _, formatDate, contextMenus, stripTags, tplItem) {
+	'backbone', 'jquery', '../../libs/template', 'helpers/formatDate', 'instances/contextMenus', 'helpers/stripTags', 'text!templates/item.html'
+], function(BB, $, template, formatDate, contextMenus, stripTags, tplItem) {
 
 	/**
 	 * View of one article item in article list
@@ -36,7 +36,7 @@ define([
 		 * @default ./templates/item.html
 		 * @type Function
 		 */
-		template: _.template(tplItem),
+		template: template(tplItem),
 
 		/**
 		 * Reference to view/articleList instance. It should be replaced with require('views/articleList')
@@ -53,6 +53,7 @@ define([
 		 * @param list {Backbone.View} Reference to articleList
 		 */
 		initialize: function(opt, list) {
+
 			this.list = list;
 			this.el.setAttribute('draggable', 'true');
 			this.el.view = this;
@@ -91,7 +92,7 @@ define([
 		/**
 		 * Indiciates whether the item was prerendered (true) or already fully-rendered (false).
 		 * When prerendered, only the classNames are set without any text content.
-		 * Prerendering is used for not-visible items in the list. 
+		 * Prerendering is used for not-visible items in the list.
 		 * @property prerendered
 		 * @default false
 		 * @type Boolean
@@ -109,7 +110,7 @@ define([
 		},
 
 		/**
-		 * Removes item content without removing the actuall DOM and Backbone view. 
+		 * Removes item content without removing the actuall DOM and Backbone view.
 		 * When changing selected feed with _m_ items to another feed with _n_ items where n<m
 		 * then the first n items use the swapModel method and the rest unplugModel method.
 		 * @method unplugModel
@@ -173,7 +174,7 @@ define([
 			data.title = stripTags(data.title).trim() || '&lt;no title&gt;';
 
 			//this.el.title = data.title + '\n' + formatDate(this.model.get('date'), pickedFormat + ' ' + timeFormatTitle);
-			
+
 			this.$el.html(this.template(data));
 
 			return this;
@@ -231,7 +232,7 @@ define([
 			contextMenus.get('items').currentSource = this.model;
 			contextMenus.get('items').show(e.clientX, e.clientY);
 		},
-		
+
 		/**
 		 * When model is changed rerender it or remove it from DOM (depending on what is changed)
 		 * @method handleModelChange
