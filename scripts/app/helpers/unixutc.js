@@ -5,9 +5,8 @@
  * @param date {string|Date} Get the week based on this date
  */
 define([], function() {
-	var _unixutcoff = (new Date).getTimezoneOffset() * 60000;
-	var unixutc = function(date) {
-		return date.getTime() - _unixutcoff;
+	const unixUtcOffset = (new Date).getTimezoneOffset() * 60000;
+	return function(date) {
+		return date.getTime() - unixUtcOffset;
 	};
-	return unixutc;
 });
