@@ -139,30 +139,6 @@ module.exports = function(grunt) {
 					]
 				}
 			}
-		},
-		watch: {
-			scripts: {
-				files: ['styles/*.styl'],
-				tasks: ['stylus'],
-				options: {
-					spawn: false,
-					interrupt: true,
-					events: ['all']
-				},
-			},
-		},
-		yuidoc: {
-			compile: {
-				name: '<%= pkg.name %>',
-				description: '<%= pkg.description %>',
-				version: '<%= pkg.version %>',
-				url: '<%= pkg.homepage %>',
-				options: {
-					paths: ['scripts'],
-					/*themedir: 'path/to/custom/theme/',*/
-					outdir: 'docs/'
-				}
-			}
 		}
 	});
 
@@ -170,8 +146,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
 	grunt.loadNpmTasks('grunt-contrib-stylus');
-	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks('grunt-contrib-yuidoc');
 
 	// Default task(s).
 	grunt.registerTask('default', ['jshint']);
