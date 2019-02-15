@@ -5,12 +5,9 @@
  * @submodule helpers/stripTags
  * @param string {String} String with html to be removed
  */
-define([], function() {
-
-	var stripTags = function(str) {
-		if (str == null) return '';
-		return String(str).replace(/<\/?[^>]+>/g, '');
-	};
-
-	return stripTags;
+define([], function () {
+    return function (str) {
+        if (str == null) return "";
+        return String(str).replace(/<\/?[^>]+>/g, "");
+    };
 });
