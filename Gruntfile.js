@@ -30,6 +30,7 @@ module.exports = function(grunt) {
 				'-W041': true,      // don't warn about something == false/true
 				'-W117': true,      // don't warn about not defined vars until I refactorize bg.js,
 				esversion: 6,
+				futurehostile: true,
 				globals: {
 					app: true,
 					bg: true,
