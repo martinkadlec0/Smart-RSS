@@ -4,13 +4,12 @@
  * @submodule helpers/getWOY
  * @param date {string|Date} Get the week based on this date
  */
-define([], function() {
-	var getWOY = function(pdate) {
-		pdate = new Date(pdate);
-		pdate.setHours(0, 0, 0);
-		pdate.setDate(pdate.getDate() + 4 - (pdate.getDay() || 7));
-		var onejan = new Date(pdate.getFullYear(), 0, 1);
-		return Math.ceil((((pdate - onejan) / 86400000) + onejan.getDay() + 1) / 7);
-	};
-	return getWOY;
+define([], function () {
+    return function (date) {
+        date = new Date(date);
+        date.setHours(0, 0, 0);
+        date.setDate(date.getDate() + 4 - (date.getDay() || 7));
+        const firstJanuary = new Date(date.getFullYear(), 0, 1);
+        return Math.ceil((((date - firstJanuary) / 86400000) + firstJanuary.getDay() + 1) / 7);
+    };
 });
