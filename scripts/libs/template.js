@@ -72,7 +72,7 @@ define([], function () {
 
         let render;
         try {
-            render = new Function(settings.variable || 'obj', '_', source);
+            render = new Function(settings.variable || 'obj', source);
         } catch (e) {
             e.source = source;
             throw e;
