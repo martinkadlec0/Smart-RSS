@@ -78,9 +78,6 @@ function(BB, $, template, formatDate, escapeHtml, stripTags, tplDownload, tplHea
 		 * @triggered when content view is attached to DOM
 		 */
 		handleAttached: function() {
-			//this.template = _.template($('#template-header').html());
-
-			//window.addEventListener('message', function(e) {
 			app.on('select:article-list', function(data) {
 				this.handleNewSelected(bg.items.findWhere({ id: data.value }));
 			}, this);

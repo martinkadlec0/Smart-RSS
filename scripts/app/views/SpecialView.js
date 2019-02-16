@@ -1,17 +1,17 @@
 define([
-	'jquery', 'underscore', 'views/TopView', 'text!templates/special.html'
+	'jquery', '../../libs/template', 'views/TopView', 'text!templates/special.html'
 ],
-function($, _, TopView, tplSpecial) {
+function($, template, TopView, tplSpecial) {
 	var SpecialView = TopView.extend({
 		className: 'list-item special',
-		template: _.template(tplSpecial),
+		template: template(tplSpecial),
 		/*events: {
 			'mouseup': 'handleMouseUp',
 			'click': 'handleMouseDown'
 		},*/
 		showContextMenu: function(e) {
 			if (!this.contextMenu) return;
-			
+
 			if (!this.$el.hasClass('selected')) {
 				app.feeds.feedList.select(this, e);
 			}
@@ -71,6 +71,6 @@ function($, _, TopView, tplSpecial) {
 			return this;
 		}
 	});
-	
+
 	return SpecialView;
 });

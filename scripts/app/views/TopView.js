@@ -1,10 +1,10 @@
 define([
-	'backbone', 'jquery', 'underscore', 'modules/Locale', 'text!templates/source.html', 'views/feedList'
-], function(BB, $, _, Locale, tplSource) {
+	'backbone', 'jquery', '../../libs/template', 'modules/Locale', 'text!templates/source.html', 'views/feedList'
+], function(BB, $, template, Locale, tplSource) {
 	var TopView = BB.View.extend({
 		tagName: 'div',
 		className: 'list-item',
-		template: _.template(tplSource),
+		template: template(tplSource),
 		handleMouseUp: function(e) {
 			if (e.which == 3) {
 				this.showContextMenu(e);
@@ -13,8 +13,7 @@ define([
 		getSelectData: function(e) {
 			return {
 				action: 'new-select',
-				// _.extend is important, because otherwise it would be sent by reference
-				value: this.model.id || _.extend({}, this.model.get('filter')),
+				value: this.model.id || Object.assign({}, this.model.get('filter')),
 				name: this.model.get('name'),
 				unreadOnly: !!e.altKey
 			};
