@@ -87,7 +87,6 @@ module.exports = function(grunt) {
 					waitSeconds: 0,
 					paths: {
 						jquery: '../libs/jquery.min',
-						underscore: '../libs/underscore.min',
 						backbone: '../libs/backbone.min',
 						text: '../text',
 						i18n: '../i18n',
@@ -103,17 +102,14 @@ module.exports = function(grunt) {
 							deps: ['backbone']
 						},
 						backbone: {
-							deps: ['underscore', 'jquery'],
+							deps: ['jquery'],
 							exports: 'Backbone'
-						},
-						underscore: {
-							exports: '_'
 						},
 						md5: {
 							exports: 'CryptoJS'
 						}
 					},
-					excludeShallow: ['jquery', 'underscore', 'backbone', 'backboneDB'],
+					excludeShallow: ['jquery', 'backbone', 'backboneDB'],
 					out: 'scripts/bgprocess-compiled.js'
 				}
 			}

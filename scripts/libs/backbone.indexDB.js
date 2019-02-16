@@ -6,18 +6,18 @@
  */
 (function(root, factory) {
 	if (typeof exports === 'object' && root.require) {
-		module.exports = factory(require('underscore'), require('backbone'));
+		module.exports = factory(require('backbone'));
 	} else if (typeof define === 'function' && define.amd) {
 		// AMD. Register as an anonymous module.
-		define(['underscore', 'backbone'], function(_, Backbone) {
+		define(['backbone'], function(Backbone) {
 			// Use global variables if the locals are undefined.
-			return factory(_ || root._, Backbone || root.Backbone);
+			return factory( Backbone || root.Backbone);
 		});
 	} else {
 		// RequireJS isn't being used. Assume underscore and backbone are loaded in <script> tags
-		factory(_, Backbone);
+		factory(Backbone);
 	}
-}(this, function(_, Backbone) {
+}(this, function(Backbone) {
 	// A simple module to replace `Backbone.sync` with *localStorage*-based
 	// persistence. Models are given GUIDS, and saved into a JSON object. Simple
 	// as that.
@@ -34,13 +34,13 @@
 	// Generate four random hex digits.
 	function S4() {
 		return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-	};
+	}
 
 	// Generate a pseudo-GUID by concatenating random hexadecimal.
 
 	function guid() {
 		return (S4() + S4() + '-' + S4() + '-' + S4() + '-' + S4() + '-' + S4() + S4() + S4());
-	};
+	}
 
 	// Our Store is represented by a single JS object in *localStorage*. Create it
 	// with a meaningful name, like the name you'd give a table.
@@ -74,7 +74,7 @@
 		//this.records = (store && store.split(',')) || [];
 	};
 
-	_.extend(Backbone.LocalStorage.prototype, {
+	Backbone.LocalStorage.prototype = Object.assign(Backbone.LocalStorage.prototype, {
 
 
 		// Add a model, giving it a (hopefully)-unique GUID, if it doesn't already
@@ -99,11 +99,10 @@
 			var request = this.localStorage().get(model.id);
 			request.onsuccess = function() {
 				cb(this.result);
-			}
+			};
 			request.onerror = function() {
 				throw 'IndexDB Error: Can\'t read from or write to database';
 			}
-			//return this.jsonData(this.localStorage().getItem(this.name + '-' + model.id));
 		},
 
 		// Return the array of all models currently in storage.
@@ -124,7 +123,7 @@
 		// Delete a model from `this.data`, returning it.
 		destroy: function(model, cb) {
 			if (model.isNew())
-				return false
+				return false;
 			this.localStorage().delete(model.id);
 			//cb(model);
 			return model;
@@ -163,28 +162,10 @@
 			}
 		})(),
 
-		// Clear localStorage for specific collection.
 		_clear: function(cb) {
 			var req = this.localStorage().clear();
 			req.onsuccess = cb;
 			req.onerror = cb;
-			/*var local = this.localStorage(),
-				itemRe = new RegExp('^' + this.name + '-');
-
-			// Remove id-tracking item (e.g., 'foo').
-			local.removeItem(this.name);
-
-			// Lodash removed _#chain in v1.0.0-rc.1
-			// Match all data items (e.g., 'foo-ID') and remove.
-			(_.chain || _)(local).keys()
-				.filter(function(k) {
-					return itemRe.test(k);
-				})
-				.each(function(k) {
-					local.removeItem(k);
-				});
-
-			this.records.length = 0;*/
 		},
 
 		// Size of localStorage.
@@ -253,7 +234,7 @@
 	}
 
 	function callbackHandler(options, resp, errorMessage) {
-		
+
 		var syncDfd = options.syncDfd;
 		if (resp) {
 			if (options && options.success) {
