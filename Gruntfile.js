@@ -59,7 +59,6 @@ module.exports = function(grunt) {
 					waitSeconds: 0,
 					paths: {
 						jquery: '../libs/jquery.min',
-						underscore: '../libs/underscore.min',
 						backbone: '../libs/backbone.min',
 						text: '../text',
 						i18n: '../i18n',
@@ -70,14 +69,11 @@ module.exports = function(grunt) {
 							exports: '$'
 						},
 						backbone: {
-							deps: ['underscore', 'jquery'],
+							deps: ['jquery'],
 							exports: 'Backbone'
-						},
-						underscore: {
-							exports: '_'
 						}
 					},
-					excludeShallow: ['modules/Locale', 'jquery', 'underscore', 'backbone'],
+					excludeShallow: ['modules/Locale', 'jquery', 'backbone'],
 					out: 'scripts/main-compiled.js'
 				}
 			},
