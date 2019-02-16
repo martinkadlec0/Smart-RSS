@@ -33,7 +33,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
     }
 
     function downloadOne(model) {
-        if (loader.sourceLoading == model || loader.sourcesToLoad.indexOf(model) >= 0) {
+        if (loader.sourceLoading === model || loader.sourcesToLoad.indexOf(model) >= 0) {
             return false;
         }
 
@@ -42,7 +42,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
             return true;
         } else if (model instanceof Source) {
             loader.addSources(model);
-            if (loader.get('loading') == false) downloadURL();
+            if (loader.get('loading') === false) downloadURL();
             return true;
         }
 
@@ -51,21 +51,19 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 
     function downloadAll(force) {
 
-        if (loader.get('loading') == true) return;
+        if (loader.get('loading') === true) return;
 
         var sourcesArr = sources.toArray();
 
         if (!force) {
             sourcesArr = sourcesArr.filter(function (source) {
-                if (source.get('updateEvery') == 0) return false;
+                if (source.get('updateEvery') === 0) return false;
                 /****
                  why !source.get('lastUpdate') ? .. I think I wanted !source.get('lastUpdate') => true not the other way around
                  ****/
                 if (!source.get('lastUpdate')) return true;
-                if (/*!source.get('lastUpdate') ||*/ source.get('lastUpdate') > Date.now() - source.get('updateEvery') * 60 * 1000) {
-                    return false;
-                }
-                return true;
+                return source.get('lastUpdate') <= Date.now() - source.get('updateEvery') * 60 * 1000;
+
             });
         }
 
@@ -79,9 +77,9 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
     function playNotificationSound() {
 
         var audio;
-        if (!settings.get('useSound') || settings.get('useSound') == ':user') {
+        if (!settings.get('useSound') || settings.get('useSound') === ':user') {
             audio = new Audio(settings.get('defaultSound'));
-        } else if (settings.get('useSound') == ':none') {
+        } else if (settings.get('useSound') === ':none') {
             audio = false;
         } else {
             audio = new Audio('/sounds/' + settings.get('useSound') + '.ogg');
@@ -113,7 +111,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
             var sourceIDs = sources.pluck('id');
             var foundSome = false;
             items.toArray().forEach(function (item) {
-                if (sourceIDs.indexOf(item.get('sourceID')) == -1) {
+                if (sourceIDs.indexOf(item.get('sourceID')) === -1) {
                     console.log('DELETING ITEM BECAUSE OF MISSING SOURCE');
                     item.destroy();
                     foundSome = true;
@@ -132,18 +130,22 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 
         animation.start();
         loader.set('loading', true);
-        var sourceToLoad = loader.sourceLoading = loader.sourcesToLoad.pop();
+        let sourceToLoad = loader.sourceLoading = loader.sourcesToLoad.pop();
 
         autoremoveItems(sourceToLoad);
 
-        var options = {
+        let options = {
             url: sourceToLoad.get('url'),
             timeout: 20000,
             dataType: 'xml',
-            success: function (r) {
-
+            beforeSend: (xhr) => {
+                xhr.setRequestHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+                xhr.setRequestHeader('Pragma', 'no-cache');
+                xhr.setRequestHeader('X-Time-Stamp', Date.now());
+            },
+            success: (response) => {
                 // parsedData step needed for debugging
-                var parsedData = RSSParser.parse(r, sourceToLoad.get('id'));
+                var parsedData = RSSParser.parse(response, sourceToLoad.get('id'));
 
                 var hasNew = false;
                 var createdNo = 0;
@@ -153,7 +155,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
                         hasNew = true;
                         items.create(item, {sort: false});
                         createdNo++;
-                    } else if (existingItem.get('deleted') == false && existingItem.get('content') != item.content) {
+                    } else if (existingItem.get('deleted') === false && existingItem.get('content') !== item.content) {
                         existingItem.save({
                             content: item.content
                         });
@@ -198,14 +200,8 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
                 });
 
                 sourceToLoad.trigger('update', {ok: true});
-
             },
-            error: function () {
-                console.log('Failed load RSS: ' + sourceToLoad.get('url'));
-
-                sourceToLoad.trigger('update', {ok: false});
-            },
-            complete: function () {
+            complete: (result) => {
                 loader.set('loaded', loader.get('loaded') + 1);
 
                 // reset alarm to make sure next call isn't too soon + to make sure alarm acutaly exists (it doesn't after import)
@@ -214,14 +210,12 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 
                 downloadURL();
             },
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
-                xhr.setRequestHeader('Pragma', 'no-cache');
-
-                // Removed because "http://www.f5haber.com/rss/teknoloji_haber.xml" doesn't like it
-                // xhr.setRequestHeader('If-Modified-Since', 'Tue, 1 Jan 1991 00:00:00 GMT');
-                xhr.setRequestHeader('X-Time-Stamp', Date.now());
+            error: (error) => {
+                console.log('Failed load RSS: ' + sourceToLoad.get('url'));
+                sourceToLoad.trigger('update', {ok: false});
             }
+
+
         };
 
         if (sourceToLoad.get('username') || sourceToLoad.get('password')) {
@@ -232,7 +226,91 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
         if (settings.get('showSpinner')) {
             sourceToLoad.set('isLoading', true);
         }
-        loader.currentRequest = $.ajax(options);
+
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = (e) => {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    // parsedData step needed for debugging
+                    var parsedData = RSSParser.parse(xhr.responseText, sourceToLoad.get('id'));
+
+                    var hasNew = false;
+                    var createdNo = 0;
+                    parsedData.forEach(function (item) {
+                        var existingItem = items.get(item.id) || items.get(item.oldId);
+                        if (!existingItem) {
+                            hasNew = true;
+                            items.create(item, {sort: false});
+                            createdNo++;
+                        } else if (existingItem.get('deleted') === false && existingItem.get('content') !== item.content) {
+                            existingItem.save({
+                                content: item.content
+                            });
+                        }
+                    });
+
+                    items.sort({silent: true});
+                    if (hasNew) {
+                        items.trigger('render-screen');
+                        loader.itemsDownloaded = true;
+                    }
+
+                    // remove old deleted content
+                    var fetchedIDs = parsedData.map((item) => {
+                        return item.id;
+                    });
+                    var fetchedOldIDs = parsedData.map((item) => {
+                        return item.oldId;
+                    });
+                    items.where({
+                        sourceID: sourceToLoad.get('id'),
+                        deleted: true
+                    }).forEach(function (item) {
+                        if (fetchedIDs.indexOf(item.id) === -1 && fetchedOldIDs.indexOf(item.id) === -1) {
+                            item.destroy();
+                        }
+                    });
+
+                    // tip to optimize: var count = items.where.call(countAll, {unread: true }).length
+                    var countAll = items.where({sourceID: sourceToLoad.get('id'), trashed: false}).length;
+                    var count = items.where({sourceID: sourceToLoad.get('id'), unread: true, trashed: false}).length;
+
+                    sourceToLoad.save({
+                        'count': count,
+                        'countAll': countAll,
+                        'lastUpdate': Date.now(),
+                        'hasNew': hasNew || sourceToLoad.get('hasNew')
+                    });
+
+                    info.set({
+                        allCountUnvisited: info.get('allCountUnvisited') + createdNo
+                    });
+
+                    sourceToLoad.trigger('update', {ok: true});
+
+                }
+                else {
+                    console.log('Failed load RSS: ' + sourceToLoad.get('url'));
+                    sourceToLoad.trigger('update', {ok: false});
+                }
+                loader.set('loaded', loader.get('loaded') + 1);
+
+                // reset alarm to make sure next call isn't too soon + to make sure alarm acutaly exists (it doesn't after import)
+                sourceToLoad.trigger('reset-alarm', sourceToLoad);
+                sourceToLoad.set('isLoading', false);
+
+                downloadURL();
+            }
+
+
+        };
+        xhr.open('GET', sourceToLoad.get('url'));
+        xhr.setRequestHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+        xhr.setRequestHeader('Pragma', 'no-cache');
+        xhr.setRequestHeader('X-Time-Stamp', Date.now());
+
+        loader.currentRequest = xhr;
+        xhr.send();
     }
 
 

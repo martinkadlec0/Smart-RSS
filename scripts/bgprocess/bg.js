@@ -15,10 +15,6 @@ define([
         animation.start();
 
 
-        /*$.ajaxSetup({
-            cache: false
-        });*/
-
         window.appStarted = new (jQuery.Deferred)();
         window.settingsLoaded = new (jQuery.Deferred)();
 
