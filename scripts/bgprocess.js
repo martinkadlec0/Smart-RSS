@@ -64,6 +64,6 @@ chrome.runtime.onConnect.addListener(function(port) {
 });
 
 
-requirejs(['bg'], function(bg) {	
+requirejs(['bg'], function(bg) {
 	// bg started
 });

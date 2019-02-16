@@ -79,7 +79,7 @@ define([], function () {
         }
 
         let template = function (data) {
-            return render.call(this, data, _);
+            return render.call(this, data);
         };
 
         // Provide the compiled source as a convenience for precompilation.

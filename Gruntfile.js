@@ -59,6 +59,7 @@ module.exports = function(grunt) {
 					waitSeconds: 0,
 					paths: {
 						jquery: '../libs/jquery.min',
+						underscore: '../libs/underscore.min',
 						backbone: '../libs/backbone.min',
 						text: '../text',
 						i18n: '../i18n',
@@ -69,11 +70,14 @@ module.exports = function(grunt) {
 							exports: '$'
 						},
 						backbone: {
-							deps: ['jquery'],
+							deps: ['underscore', 'jquery'],
 							exports: 'Backbone'
+						},
+						underscore: {
+							exports: '_'
 						}
 					},
-					excludeShallow: ['modules/Locale', 'jquery', 'backbone'],
+					excludeShallow: ['modules/Locale', 'jquery', 'underscore', 'backbone'],
 					out: 'scripts/main-compiled.js'
 				}
 			},
@@ -87,6 +91,7 @@ module.exports = function(grunt) {
 					waitSeconds: 0,
 					paths: {
 						jquery: '../libs/jquery.min',
+						underscore: '../libs/underscore.min',
 						backbone: '../libs/backbone.min',
 						text: '../text',
 						i18n: '../i18n',
@@ -102,18 +107,22 @@ module.exports = function(grunt) {
 							deps: ['backbone']
 						},
 						backbone: {
-							deps: ['jquery'],
+							deps: ['underscore', 'jquery'],
 							exports: 'Backbone'
+						},
+						underscore: {
+							exports: '_'
 						},
 						md5: {
 							exports: 'CryptoJS'
 						}
 					},
-					excludeShallow: ['jquery', 'backbone', 'backboneDB'],
+					excludeShallow: ['jquery', 'underscore', 'backbone', 'backboneDB'],
 					out: 'scripts/bgprocess-compiled.js'
 				}
 			}
 		},
+
 
 		stylus: {
 			compile: {
