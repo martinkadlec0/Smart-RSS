@@ -5,13 +5,6 @@
 define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSSParser, animation) {
 
     function autoremoveItems(source) {
-        /*
-        var sourcesWithAutoRemove = sources.filter(function(source) {
-            return source.get('autoremove') > 0;
-        });
-        sourcesWithAutoRemove.forEach(function(source) {
-        */
-
         if (!parseFloat(source.get('autoremove'))) return;
 
         items.where({sourceID: source.get('id'), deleted: false, pinned: false}).forEach(function (item) {
@@ -23,30 +16,49 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
         });
     }
 
+    function addToList(sourcesToLoad) {
+        sourcesToLoad.forEach((model)=>{
+            if (model instanceof Folder) {
+            addToList(sources.where({folderID: model.id}));
+            } else if (model instanceof Source) {
+                loader.addSources(model);
+            }
+        });
+    }
+
+    function startDownloading(){
+        animation.start();
+        loader.set('loading', true);
+
+        // TODO: load number of concurrent loads from config
+        downloadURL();
+        downloadURL();
+        downloadURL();
+        downloadURL();
+        downloadURL();
+        downloadURL();
+        downloadURL();
+    }
+
+
     function download(sourcesToDownload) {
         if (!sourcesToDownload) return;
         if (!Array.isArray(sourcesToDownload)) {
             sourcesToDownload = [sourcesToDownload];
         }
 
-        sourcesToDownload.forEach(downloadOne);
+        addToList(sourcesToDownload);
+
+
+        loader.sourcesToLoad.forEach(downloadOne);
     }
 
+
     function downloadOne(model) {
-        if (loader.sourceLoading === model || loader.sourcesToLoad.indexOf(model) >= 0) {
+        if (loader.sourcesLoading.includes(model)) {
             return false;
         }
-
-        if (model instanceof Folder) {
-            download(sources.where({folderID: model.id}));
-            return true;
-        } else if (model instanceof Source) {
-            loader.addSources(model);
-            if (loader.get('loading') === false) downloadURL();
-            return true;
-        }
-
-        return false;
+        startDownloading();
     }
 
     function downloadAll(force) {
@@ -69,7 +81,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 
         if (sourcesArr.length) {
             loader.addSources(sourcesArr);
-            downloadURL();
+            startDownloading();
         }
 
     }
@@ -91,6 +103,17 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 
     }
 
+    function feedDownloaded(model, xhr) {
+        var index = loader.sourcesLoading.indexOf(model);
+        if (index > -1) {
+            loader.sourcesLoading.splice(index, 1);
+        }
+        var index = loader.currentRequests.indexOf(xhr);
+        if (index > -1) {
+            loader.currentRequests.splice(index, 1);
+        }
+    }
+
     function downloadStopped() {
         if (loader.itemsDownloaded && settings.get('soundNotifications')) {
             playNotificationSound();
@@ -99,14 +122,14 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
         loader.set('maxSources', 0);
         loader.set('loaded', 0);
         loader.set('loading', false);
-        loader.sourceLoading = null;
-        loader.currentRequest = null;
+
         loader.itemsDownloaded = false;
         animation.stop();
     }
 
     function downloadURL() {
         if (!loader.sourcesToLoad.length) {
+
             // IF DOWNLOADING FINISHED, DELETED ITEMS WITH DELETED SOURCE (should not really happen)
             var sourceIDs = sources.pluck('id');
             var foundSome = false;
@@ -128,115 +151,33 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
             return;
         }
 
-        animation.start();
-        loader.set('loading', true);
-        let sourceToLoad = loader.sourceLoading = loader.sourcesToLoad.pop();
+        let sourceToLoad = loader.sourcesToLoad.pop();
+        loader.sourcesLoading.push(sourceToLoad);
 
         autoremoveItems(sourceToLoad);
 
-        let options = {
-            url: sourceToLoad.get('url'),
-            timeout: 20000,
-            dataType: 'xml',
-            beforeSend: (xhr) => {
-                xhr.setRequestHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
-                xhr.setRequestHeader('Pragma', 'no-cache');
-                xhr.setRequestHeader('X-Time-Stamp', Date.now());
-            },
-            success: (response) => {
-                // parsedData step needed for debugging
-                var parsedData = RSSParser.parse(response, sourceToLoad.get('id'));
 
-                var hasNew = false;
-                var createdNo = 0;
-                parsedData.forEach(function (item) {
-                    var existingItem = items.get(item.id) || items.get(item.oldId);
-                    if (!existingItem) {
-                        hasNew = true;
-                        items.create(item, {sort: false});
-                        createdNo++;
-                    } else if (existingItem.get('deleted') === false && existingItem.get('content') !== item.content) {
-                        existingItem.save({
-                            content: item.content
-                        });
-                    }
-                });
-
-                items.sort({silent: true});
-                if (hasNew) {
-                    items.trigger('render-screen');
-                    loader.itemsDownloaded = true;
-                }
-
-                // remove old deleted content
-                var fetchedIDs = parsedData.map((item) => {
-                    return item.id;
-                });
-                var fetchedOldIDs = parsedData.map((item) => {
-                    return item.oldId;
-                });
-                items.where({
-                    sourceID: sourceToLoad.get('id'),
-                    deleted: true
-                }).forEach(function (item) {
-                    if (fetchedIDs.indexOf(item.id) === -1 && fetchedOldIDs.indexOf(item.id) === -1) {
-                        item.destroy();
-                    }
-                });
-
-                // tip to optimize: var count = items.where.call(countAll, {unread: true }).length
-                var countAll = items.where({sourceID: sourceToLoad.get('id'), trashed: false}).length;
-                var count = items.where({sourceID: sourceToLoad.get('id'), unread: true, trashed: false}).length;
-
-                sourceToLoad.save({
-                    'count': count,
-                    'countAll': countAll,
-                    'lastUpdate': Date.now(),
-                    'hasNew': hasNew || sourceToLoad.get('hasNew')
-                });
-
-                info.set({
-                    allCountUnvisited: info.get('allCountUnvisited') + createdNo
-                });
-
-                sourceToLoad.trigger('update', {ok: true});
-            },
-            complete: (result) => {
-                loader.set('loaded', loader.get('loaded') + 1);
-
-                // reset alarm to make sure next call isn't too soon + to make sure alarm acutaly exists (it doesn't after import)
-                sourceToLoad.trigger('reset-alarm', sourceToLoad);
-                sourceToLoad.set('isLoading', false);
-
-                downloadURL();
-            },
-            error: (error) => {
-                console.log('Failed load RSS: ' + sourceToLoad.get('url'));
-                sourceToLoad.trigger('update', {ok: false});
-            }
-
-
-        };
-
-        if (sourceToLoad.get('username') || sourceToLoad.get('password')) {
-            options.username = sourceToLoad.get('username') || '';
-            options.password = sourceToLoad.getPass() || '';
-        }
-
+        // if (sourceToLoad.get('username') || sourceToLoad.get('password')) {
+        //     options.username = sourceToLoad.get('username') || '';
+        //     options.password = sourceToLoad.getPass() || '';
+        // }
+        //
         if (settings.get('showSpinner')) {
             sourceToLoad.set('isLoading', true);
         }
 
         let xhr = new XMLHttpRequest();
         xhr.onreadystatechange = (e) => {
+
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     // parsedData step needed for debugging
-                    var parsedData = RSSParser.parse(xhr.responseText, sourceToLoad.get('id'));
+                    var parsedData = RSSParser.parse(xhr.responseXML, sourceToLoad.get('id'));
 
                     var hasNew = false;
                     var createdNo = 0;
                     parsedData.forEach(function (item) {
+
                         var existingItem = items.get(item.id) || items.get(item.oldId);
                         if (!existingItem) {
                             hasNew = true;
@@ -288,8 +229,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 
                     sourceToLoad.trigger('update', {ok: true});
 
-                }
-                else {
+                } else {
                     console.log('Failed load RSS: ' + sourceToLoad.get('url'));
                     sourceToLoad.trigger('update', {ok: false});
                 }
@@ -299,6 +239,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
                 sourceToLoad.trigger('reset-alarm', sourceToLoad);
                 sourceToLoad.set('isLoading', false);
 
+                feedDownloaded(sourceToLoad, xhr);
                 downloadURL();
             }
 
@@ -309,7 +250,8 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
         xhr.setRequestHeader('Pragma', 'no-cache');
         xhr.setRequestHeader('X-Time-Stamp', Date.now());
 
-        loader.currentRequest = xhr;
+        // loader.currentRequest = xhr;
+        loader.currentRequests.push(xhr);
         xhr.send();
     }
 
@@ -327,9 +269,11 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
             loading: false
         },
         currentRequest: null,
+        currentRequests: [],
         itemsDownloaded: false,
         sourcesToLoad: [],
         sourceLoading: null,
+        sourcesLoading: [],
         addSources: function (s) {
             if (s instanceof Source) {
                 this.sourcesToLoad.push(s);
@@ -340,8 +284,12 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
             }
         },
         abortDownloading: function () {
-            loader.currentRequest.abort();
-            this.sourcesToLoad = [];
+            loader.currentRequests.forEach((request) => {
+                request.abort();
+            });
+            loader.sourcesToLoad = [];
+            loader.sourcesLoading = [];
+
             downloadStopped();
         },
         download: download,
