@@ -78,7 +78,7 @@ function(BB, $, MenuCollection, MenuItemView, comm) {
 		 * @triggered when 'hide-overlays' comm message is sent
 		 */
 		hide: function() {
-			if (this.$el.css('display') == 'block') {
+			if (this.$el.css('display') === 'block') {
 				this.$el.css('display', 'none');
 			}
 		},

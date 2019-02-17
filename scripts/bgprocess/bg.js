@@ -101,7 +101,6 @@ define([
 
 
         (function () {
-            console.log("test");
             fetchAll().always(function () {
 
                 /**
@@ -208,7 +207,7 @@ define([
                 return;
             }
 
-            if (message.action == 'new-rss' && message.value) {
+            if (message.action === 'new-rss' && message.value) {
                 message.value = message.value.replace(/^feed:/i, 'http:');
 
                 var duplicate = sources.findWhere({url: message.value});

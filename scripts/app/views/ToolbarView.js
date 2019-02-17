@@ -2,7 +2,7 @@ define([
         'backbone', 'collections/ToolbarItems', 'jquery', 'factories/ToolbarItemsFactory'
     ],
     function (BB, ToolbarItems, $, ToolbarItemsFactory) {
-        var ToolbarView = BB.View.extend({
+        return BB.View.extend({
             tagName: 'div',
             className: 'toolbar',
             items: null,
@@ -34,7 +34,7 @@ define([
              * @param id {Number} ID of closed tab
              */
             handleClearEvents: function (id) {
-                if (window == null || id == tabID) {
+                if (window == null || id === tabID) {
                     this.stopListening();
                     bg.sources.off('clear-events', this.handleClearEvents, this);
                 }
@@ -52,7 +52,7 @@ define([
 
                     this.model.get('actions').forEach(this.createToolbarItem, this);
 
-                    if (app.articles.articleList.currentData.name == 'trash') {
+                    if (app.articles.articleList.currentData.name === 'trash') {
                         this.hideItems('articles:update');
                     } else {
                         this.hideItems('articles:undelete');
@@ -102,7 +102,7 @@ define([
              * @param action {String} Name of the action
              */
             createToolbarItem: function (action) {
-                if (action == '!dynamicSpace') {
+                if (action === '!dynamicSpace') {
                     this.items.add({type: 'dynamicSpace'});
                     return null;
                 }
@@ -123,9 +123,9 @@ define([
              */
             addToolbarItem: function (toolbarItem) {
                 var view;
-                if (toolbarItem.get('actionName') == 'articles:search') {
+                if (toolbarItem.get('actionName') === 'articles:search') {
                     view = ToolbarItemsFactory.create('search', toolbarItem);
-                } else if (toolbarItem.get('type') != 'dynamicSpace') {
+                } else if (toolbarItem.get('type') !== 'dynamicSpace') {
                     view = ToolbarItemsFactory.create('button', toolbarItem);
                 } else {
                     view = ToolbarItemsFactory.create('dynamicSpace', toolbarItem);
@@ -145,10 +145,10 @@ define([
                     var r = item.view.el.getBoundingClientRect();
 
                     // if the toolbarItem is hidden (e.g. undelete button)
-                    if (r.left == 0) return false;
+                    if (r.left === 0) return false;
 
                     if (r.left + r.width / 2 > e.originalEvent.clientX) {
-                        if (item.view.el == t) return true;
+                        if (item.view.el === t) return true;
 
                         $(t).insertBefore(item.view.$el);
                         return true;
@@ -169,8 +169,8 @@ define([
                 this.doNotRegenerate = true;
                 var list = this.items.pluck('actionName');
                 list = list.map(function (action, i) {
-                    if (action == 'global:default') {
-                        if (this.items.at(i).get('type') == 'dynamicSpace') {
+                    if (action === 'global:default') {
+                        if (this.items.at(i).get('type') === 'dynamicSpace') {
                             return '!dynamicSpace';
                         }
                     }
@@ -195,6 +195,4 @@ define([
                 });
             }
         });
-
-        return ToolbarView;
     });

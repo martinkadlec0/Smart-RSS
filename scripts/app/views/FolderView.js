@@ -121,7 +121,7 @@ function(BB, $, template, TopView, contextMenus, tplFolder) {
 		 * @param id {Number} ID of closed tab
 		 */
 		handleClearEvents: function(id) {
-			if (window == null || id == tabID) {
+			if (window == null || id === tabID) {
 				this.clearEvents();
 			}
 		},
@@ -171,7 +171,7 @@ function(BB, $, template, TopView, contextMenus, tplFolder) {
 		 * @method render
 		 */
 		render: function() {
-			if (this.renderInterval == 'first-time') return this.realRender();
+			if (this.renderInterval === 'first-time') return this.realRender();
 			if (this.renderInterval) return this;
 
 			var that = this;

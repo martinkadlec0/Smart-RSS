@@ -90,13 +90,13 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
     }
 
     function feedDownloaded(model, xhr) {
-        var index = loader.sourcesLoading.indexOf(model);
-        if (index > -1) {
-            loader.sourcesLoading.splice(index, 1);
+        const modelIndex = loader.sourcesLoading.indexOf(model);
+        if (modelIndex > -1) {
+            loader.sourcesLoading.splice(modelIndex, 1);
         }
-        var index = loader.currentRequests.indexOf(xhr);
-        if (index > -1) {
-            loader.currentRequests.splice(index, 1);
+        const xhrIndex = loader.currentRequests.indexOf(xhr);
+        if (xhrIndex > -1) {
+            loader.currentRequests.splice(xhrIndex, 1);
         }
     }
 
@@ -151,7 +151,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
         }
 
         let xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = (e) => {
+        xhr.onreadystatechange = () => {
 
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {

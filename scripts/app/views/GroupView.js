@@ -56,7 +56,7 @@ define(['backbone'], function(BB) {
 		 * @param model {models/Group} Model removed from list of groups
 		 */
 		handleRemove: function(model) {
-			if (model == this.model) {
+			if (model === this.model) {
 				this.handleReset();
 			}
 		},

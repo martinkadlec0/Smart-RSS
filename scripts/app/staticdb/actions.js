@@ -14,12 +14,6 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                     comm.trigger('hide-overlays');
                 }
             },
-            runTests: {
-                title: 'Run tests (dev dependencies needed)',
-                fn: function () {
-                    require(['../runtests']);
-                }
-            },
             openOptions: {
                 title: 'Options',
                 icon: 'options.png',
@@ -47,7 +41,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 icon: 'reload.png',
                 title: Locale.c.UPDATE,
                 fn: function () {
-                    var selectedItems = require('views/feedList').selectedItems;
+                    const selectedItems = require('views/feedList').selectedItems;
                     if (selectedItems.length) {
                         let models = selectedItems.map((item) => {
                             return item.model;
@@ -67,11 +61,11 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 icon: 'read.png',
                 title: Locale.c.MARK_ALL_AS_READ,
                 fn: function () {
-                    var s = require('views/feedList').getSelectedFeeds();
-                    if (!s.length) return;
+                    const selectedFeeds = require('views/feedList').getSelectedFeeds();
+                    if (!selectedFeeds.length) return;
 
                     bg.items.forEach(function (item) {
-                        if (item.get('unread') === true && s.indexOf(item.getSource()) >= 0) {
+                        if (item.get('unread') === true && selectedFeeds.indexOf(item.getSource()) >= 0) {
                             item.save({
                                 unread: false,
                                 visited: true
@@ -79,7 +73,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                         }
                     });
 
-                    s.forEach(function (source) {
+                    selectedFeeds.forEach(function (source) {
                         if (source.get('hasNew')) {
                             source.save({hasNew: false});
                         }
@@ -90,10 +84,10 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
             refetch: {
                 title: 'Refetch', /****localization needed****/
                 fn: function () {
-                    var s = require('views/feedList').getSelectedFeeds();
-                    if (!s.length) return;
+                    const selectedFeeds = require('views/feedList').getSelectedFeeds();
+                    if (!selectedFeeds.length) return;
 
-                    s.forEach(function (source) {
+                    selectedFeeds.forEach(function (source) {
                         bg.items.where({sourceID: source.get('id')}).forEach(function (item) {
                             item.destroy();
                         });
@@ -109,8 +103,8 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 fn: function () {
                     if (!confirm(Locale.c.REALLY_DELETE)) return;
 
-                    var feeds = require('views/feedList').getSelectedFeeds();
-                    var folders = require('views/feedList').getSelectedFolders();
+                    const feeds = require('views/feedList').getSelectedFeeds();
+                    const folders = require('views/feedList').getSelectedFolders();
 
                     feeds.forEach(function (feed) {
                         feed.destroy();
@@ -125,12 +119,10 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 icon: 'properties.png',
                 title: Locale.c.PROPERTIES,
                 fn: function () {
-                    var properties = app.feeds.properties;
-
-                    var feedList = require('views/feedList');
-
-                    var feeds = feedList.getSelectedFeeds();
-                    var folders = feedList.getSelectedFolders();
+                    const properties = app.feeds.properties;
+                    const feedList = require('views/feedList');
+                    const feeds = feedList.getSelectedFeeds();
+                    const folders = feedList.getSelectedFolders();
 
                     if (feedList.selectedItems.length === 1 && folders.length === 1) {
                         properties.show(folders[0]);
@@ -139,20 +131,21 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                     } else if (feeds.length > 0) {
                         properties.show(feeds);
                     }
-
                 }
             },
             addSource: {
                 icon: 'add.png',
                 title: Locale.c.ADD_RSS_SOURCE,
                 fn: function () {
-                    var url = (prompt(Locale.c.RSS_FEED_URL) || '').trim();
-                    if (!url) return;
+                    let url = (prompt(Locale.c.RSS_FEED_URL) || '').trim();
+                    if (!url) {
+                        return;
+                    }
 
-                    var folderID = 0;
-                    var list = require('views/feedList');
+                    let folderID = 0;
+                    const list = require('views/feedList');
                     if (list.selectedItems.length && list.selectedItems[0].$el.hasClass('folder')) {
-                        var fid = list.selectedItems[0].model.get('id');
+                        const fid = list.selectedItems[0].model.get('id');
                         // make sure source is not added to folder which is not in db
                         if (bg.folders.get(fid)) {
                             folderID = fid;
@@ -160,10 +153,10 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                     }
 
                     url = app.fixURL(url);
-                    var duplicate = bg.sources.findWhere({url: url});
+                    const duplicate = bg.sources.findWhere({url: url});
 
                     if (!duplicate) {
-                        var newFeed = bg.sources.create({
+                        const newFeed = bg.sources.create({
                             title: url,
                             url: url,
                             updateEvery: 180,
@@ -179,8 +172,10 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 icon: 'add_folder.png',
                 title: Locale.c.NEW_FOLDER,
                 fn: function () {
-                    var title = (prompt(Locale.c.FOLDER_NAME + ': ') || '').trim();
-                    if (!title) return;
+                    const title = (prompt(Locale.c.FOLDER_NAME + ': ') || '').trim();
+                    if (!title) {
+                        return;
+                    }
 
                     bg.folders.create({
                         title: title
@@ -331,7 +326,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 title: Locale.c.UNDELETE,
                 fn: function () {
                     var articleList = require('views/articleList');
-                    if (!articleList.selectedItems || !articleList.selectedItems.length || articleList.currentData.name != 'trash') return;
+                    if (!articleList.selectedItems || !articleList.selectedItems.length || articleList.currentData.name !== 'trash') return;
                     articleList.destroyBatch(articleList.selectedItems, articleList.undeleteItem);
                 }
             },
@@ -353,11 +348,11 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                     var list = require('views/articleList');
                     if (str === '') {
                         Array.from(document.querySelectorAll('.date-group')).map((element) => {
-                            element.style.display = 'block'
+                            element.style.display = 'block';
                         });
                     } else {
                         Array.from(document.querySelectorAll('.date-group')).map((element) => {
-                            element.style.display = 'none'
+                            element.style.display = 'none';
                         });
                     }
 

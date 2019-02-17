@@ -9,7 +9,7 @@ module.exports = function(grunt) {
             options: {
                 curly:    false, // true: force { }
                 eqnull:   true,  // true: enable something == null
-                eqeqeq:   false, // true: force ===
+                eqeqeq:   true, // true: force ===
                 immed:    true,  // true: immidiatly invocated fns has to be in ()
                 newcap:   true,  // true: construcotr has to have firt letter uppercased
                 noarg:    true,  // true: no arguments.caller and arguments.callee
@@ -24,10 +24,10 @@ module.exports = function(grunt) {
                 trailing: true,  // true: no trailing whitespaces
                 supernew: true,  // true: enable 'new Constructor' instead of 'new Constructor()'
                 onevar:   false, // true: only one var per fn
-                funcscope: false,   // false: no 'var' in blocks
+                funcscope: true,   // false: no 'var' in blocks
                 maxdepth: 5,        // max nesting depth
                 quotmark: 'single', // single: force '
-                '-W041': true,      // don't warn about something == false/true
+                // '-W041': true,      // don't warn about something == false/true
                 '-W117': true,      // don't warn about not defined vars until I refactorize bg.js,
                 esversion: 6,
                 futurehostile: true,

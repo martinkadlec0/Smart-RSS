@@ -24,7 +24,7 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 	var app = window.app = new (Layout.extend({
 		el: 'body',
 		fixURL: function(url) {
-			if (url.search(/[a-z]+:\/\//) == -1) {
+			if (url.search(/[a-z]+:\/\//) === -1) {
 				url = 'http://' + url;
 			}
 			return url;
@@ -59,14 +59,14 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 			}
 		},
 		handleClearEvents: function(id) {
-			if (window == null || id == tabID) {
+			if (window == null || id === tabID) {
 				bg.settings.off('change:layout', this.handleLayoutChange, this);
 				bg.settings.off('change:panelToggled', this.handleToggleChange, this);
 				bg.sources.off('clear-events', this.handleClearEvents, this);
 			}
 		},
 		handleLayoutChange: function() {
-			if (bg.settings.get('layout') == 'vertical') {
+			if (bg.settings.get('layout') === 'vertical') {
 				this.layoutToVertical();
 				this.articles.enableResizing(bg.settings.get('layout'), bg.settings.get('posC'));
 			} else {
@@ -129,7 +129,7 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 				$('body').removeClass('loading');
 				that.setFocus('articles');
 				that.handleLayoutChange();
-				
+
 			}, 0, this);
 		},
 		report: function() {
@@ -138,7 +138,7 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 		},
 		handleKeyDown: function(e) {
 			var ac = document.activeElement;
-			if (ac && (ac.tagName == 'INPUT' || ac.tagName == 'TEXTAREA')) {
+			if (ac && (ac.tagName === 'INPUT' || ac.tagName === 'TEXTAREA')) {
 				return;
 			}
 
@@ -173,7 +173,7 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 
 	// Prevent context-menu when alt is pressed
 	document.addEventListener('keyup', function(e) {
-		if (e.keyCode == 18) {
+		if (e.keyCode === 18) {
 			e.preventDefault();
 		}
 	});

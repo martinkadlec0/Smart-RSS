@@ -31,7 +31,7 @@ define(['backbone', 'models/Action', 'staticdb/actions'], function (BB, Action, 
          * @param action {string|models/Action}
          */
         execute: function (action) {
-            if (typeof action == 'string') {
+            if (typeof action === 'string') {
                 action = this.get(action);
             }
             if (!action) {

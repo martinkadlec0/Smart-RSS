@@ -126,7 +126,7 @@ define([
              * @param event {Event} Mouse or key event
              */
             handlePick: function (view, e) {
-                if (e.type == 'mousedown' && e.which == 1) {
+                if (e.type === 'mousedown' && e.which === 1) {
                     //view.showSourceItems(e);
                     app.actions.execute('feeds:showAndFocusArticles', e);
                 }
@@ -262,7 +262,7 @@ define([
              * @param id {Integer} id of the closed tab
              */
             handleClearEvents: function (id) {
-                if (window == null || id == tabID) {
+                if (window == null || id === tabID) {
                     bg.sources.off('reset', this.addSources, this);
                     bg.sources.off('add', this.addSource, this);
                     bg.sources.off('change:folderID', this.handleChangeFolder, this);
@@ -279,7 +279,7 @@ define([
             addSpecial: function (special) {
 
                 var view = new SpecialView({model: special});
-                if (view.model.get('position') == 'top') {
+                if (view.model.get('position') === 'top') {
                     this.$el.prepend(view.render().el);
                 } else {
                     this.$el.append(view.render().el);
@@ -329,7 +329,7 @@ define([
              */
             addSource: function (source, noManualSort) {
                 var view = new SourceView({model: source}, this);
-                this.placeSource(view, noManualSort === true ? true : false);
+                this.placeSource(view, noManualSort === true);
             },
 
             /**
@@ -392,7 +392,7 @@ define([
             insertBefore: function (what, where) {
                 var before = null;
                 where.some(function (el) {
-                    if (el.view.model != what.model && bg.sources.comparator(el.view.model, what.model) == 1) {
+                    if (el.view.model !== what.model && bg.sources.comparator(el.view.model, what.model) === 1) {
                         return before = el;
                     }
                 });
@@ -471,7 +471,7 @@ define([
                     }
                 }
 
-                return [... new Set(rt)];
+                return [...new Set(rt)];
             },
 
             /**

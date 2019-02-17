@@ -102,12 +102,13 @@ function(BB, $, template, formatDate, escapeHtml, stripTags, tplDownload, tplHea
 		 * @triggered when space is pressed in middle column
 		 */
 		handleSpace: function() {
-			var cw = $('iframe').get(0).contentWindow;
-			var d = $('iframe').get(0).contentWindow.document;
-			if (d.documentElement.clientHeight + $(d.body).scrollTop() >= d.body.offsetHeight ) {
+			const $iframe =$('iframe');
+			const contentWindow = $iframe.get(0).contentWindow;
+			const doc = $iframe.get(0).contentWindow.document;
+			if (doc.documentElement.clientHeight + $(doc.body).scrollTop() >= doc.body.offsetHeight ) {
 				app.trigger('give-me-next');
 			} else {
-				cw.scrollBy(0, d.documentElement.clientHeight * 0.85);
+				contentWindow.scrollBy(0, doc.documentElement.clientHeight * 0.85);
 			}
 		},
 
@@ -118,7 +119,7 @@ function(BB, $, template, formatDate, escapeHtml, stripTags, tplDownload, tplHea
 		 * @param id {Integer} id of the closed tab
 		 */
 		handleClearEvents: function(id) {
-			if (window == null || id == tabID) {
+			if (window == null || id === tabID) {
 				bg.items.off('change:pinned', this.handleItemsPin, this);
 				bg.sources.off('clear-events', this.handleClearEvents, this);
 			}
@@ -131,7 +132,7 @@ function(BB, $, template, formatDate, escapeHtml, stripTags, tplDownload, tplHea
 		 * @param model {Item} article that had its pin state changed
 		 */
 		handleItemsPin: function(model) {
-			if (model == this.model) {
+			if (model === this.model) {
 				this.$el.find('.pin-button').toggleClass('pinned', this.model.get('pinned'));
 			}
 		},
@@ -145,7 +146,7 @@ function(BB, $, template, formatDate, escapeHtml, stripTags, tplDownload, tplHea
 			var dateFormats = { normal: 'DD.MM.YYYY', iso: 'YYYY-MM-DD', us: 'MM/DD/YYYY' };
 			var pickedFormat = dateFormats[bg.settings.get('dateType') || 'normal'] || dateFormats['normal'];
 
-			var timeFormat = bg.settings.get('hoursFormat') == '12h' ? 'H:mm a' : 'hh:mm:ss';
+			var timeFormat = bg.settings.get('hoursFormat') === '12h' ? 'H:mm a' : 'hh:mm:ss';
 
 			return formatDate(new Date(unixtime), pickedFormat + ' ' + timeFormat);
 		},
@@ -214,7 +215,7 @@ function(BB, $, template, formatDate, escapeHtml, stripTags, tplDownload, tplHea
 		 * @param model {Item} The new article model
 		 */
 		handleNewSelected: function(model) {
-			if (model == this.model) return;
+			if (model === this.model) return;
 			this.model = model;
 			if (!this.model) {
 				// should not happen but happens
