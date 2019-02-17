@@ -4,15 +4,14 @@ define({
 		'shift+2': 'articles:focus',
 		'shift+3': 'content:focus',
 		'shift+4': 'content:focusSandbox',
-		'esc': 'global:hideOverlays',
-		'shift+insert': 'global:runTests'
+		'esc': 'global:hideOverlays'
 	},
 	feeds: {
 		'up': 'feeds:selectPrevious',
 		'down': 'feeds:selectNext',
 		'u': 'feeds:selectPrevious',
 		'j': 'feeds:selectNext',
-		
+
 		'ctrl+left': 'feeds:closeFolders',
 		'ctrl+right': 'feeds:openFolders',
 		'left': 'feeds:toggleFolder',
