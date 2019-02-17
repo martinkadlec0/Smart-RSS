@@ -3,6 +3,6 @@
  * @module App
  * @submodule preps/extendNative
  */
-define(['preps/extendNative'], function() {
-	return true;
+define(['preps/extendNative'], function () {
+    return true;
 });
