@@ -51,15 +51,19 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 
         if (loader.get('loading') === true) return;
 
-        var sourcesArr = sources.toArray();
+        let sourcesArr = sources.toArray();
 
         if (!force) {
             sourcesArr = sourcesArr.filter(function (source) {
-                if (source.get('updateEvery') === 0) return false;
+                if (source.get('updateEvery') === 0) {
+                    return false;
+                }
                 /****
                  why !source.get('lastUpdate') ? .. I think I wanted !source.get('lastUpdate') => true not the other way around
                  ****/
-                if (!source.get('lastUpdate')) return true;
+                if (!source.get('lastUpdate')) {
+                    return true;
+                }
                 return source.get('lastUpdate') <= Date.now() - source.get('updateEvery') * 60 * 1000;
 
             });
