@@ -40,6 +40,10 @@ define([], function () {
         return this[0];
     };
 
+    if (!Element.prototype.hasOwnProperty('matchesSelector')) {
+        Element.prototype.matchesSelector = Element.prototype.webkitMatchesSelector;
+    }
+
     /**
      * Get index of element in HTMLCollection (used by eg. Element#children)
      * @method indexOf

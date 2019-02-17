@@ -138,7 +138,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
         }
 
         let sourceToLoad = loader.sourcesToLoad.pop();
-        if (loader.sourcesLoading.includes(model)) {
+        if (loader.sourcesLoading.includes(sourceToLoad)) {
             return downloadURL();
         }
         loader.sourcesLoading.push(sourceToLoad);
