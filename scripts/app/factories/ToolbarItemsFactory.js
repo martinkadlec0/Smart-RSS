@@ -4,29 +4,26 @@
  * @submodule factories/ToolbarItemsFactory
  */
 define([
-	'views/ToolbarButtonView', 'views/ToolbarDynamicSpaceView', 'views/ToolbarSearchView'
-],
-function (ToolbarButtonView, ToolbarDynamicSpaceView, ToolbarSearchView) {
+        'views/ToolbarButtonView', 'views/ToolbarDynamicSpaceView', 'views/ToolbarSearchView'
+    ],
+    function (ToolbarButtonView, ToolbarDynamicSpaceView, ToolbarSearchView) {
 
-	var ToolbarItemsFactory = {
-		/**
-		 * Returns instance of toolbar item
-		 * @method create
-		 * @param name {string}
-		 * @param itemModel {Object}
-		 * @returns ToolbarDynamicSpaceView|ToolbarSearchView|ToolbarButtonView
-		 */
-		create: function(name, itemModel) {
-			if (name == 'dynamicSpace') {
-				return new ToolbarDynamicSpaceView({ model: itemModel });
-			} else if (name == 'search') {
-				return new ToolbarSearchView({ model: itemModel });
-			} else {
-				return new ToolbarButtonView({ model: itemModel });
-			}
-		}
-	};
-
-
-	return ToolbarItemsFactory;
-});
+        return {
+            /**
+             * Returns instance of toolbar item
+             * @method create
+             * @param name {string}
+             * @param itemModel {Object}
+             * @returns ToolbarDynamicSpaceView|ToolbarSearchView|ToolbarButtonView
+             */
+            create: function (name, itemModel) {
+                if (name === 'dynamicSpace') {
+                    return new ToolbarDynamicSpaceView({model: itemModel});
+                } else if (name === 'search') {
+                    return new ToolbarSearchView({model: itemModel});
+                } else {
+                    return new ToolbarButtonView({model: itemModel});
+                }
+            }
+        };
+    });
