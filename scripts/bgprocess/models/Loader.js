@@ -44,17 +44,6 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
         }
 
         addToList(sourcesToDownload);
-
-
-        startDownloading();
-        // loader.sourcesToLoad.forEach(downloadOne);
-    }
-
-
-    function downloadOne(model) {
-        if (loader.sourcesLoading.includes(model)) {
-            return false;
-        }
         startDownloading();
     }
 
@@ -166,7 +155,6 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
 
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
-                    // parsedData step needed for debugging
                     var parsedData = RSSParser.parse(xhr.responseXML, sourceToLoad.get('id'));
 
                     var hasNew = false;
@@ -247,11 +235,10 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
         if (sourceToLoad.get('username') || sourceToLoad.get('password')) {
             let username = sourceToLoad.get('username') || '';
             let password = sourceToLoad.getPass() || '';
+            xhr.withCredentials = true;
             xhr.setRequestHeader('Authorization', 'Basic ' + btoa(`${username}:${password}`));
         }
 
-
-        // loader.currentRequest = xhr;
         loader.currentRequests.push(xhr);
         xhr.send();
     }
@@ -269,11 +256,9 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
             loaded: 0,
             loading: false
         },
-        currentRequest: null,
         currentRequests: [],
         itemsDownloaded: false,
         sourcesToLoad: [],
-        sourceLoading: null,
         sourcesLoading: [],
         addSources: function (s) {
             if (s instanceof Source) {
@@ -295,7 +280,6 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
         },
         download: download,
         downloadURL: downloadURL,
-        downloadOne: downloadOne,
         downloadAll: downloadAll,
         playNotificationSound: playNotificationSound
     });

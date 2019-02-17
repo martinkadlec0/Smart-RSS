@@ -5,11 +5,11 @@ define(['chai', 'preps/extendNative'], function(chai) {
 		var source;
 		var allUnread = bg.info.get('allCountUnread');
 		var allTotal = bg.info.get('allCountTotal');
-		
+
 		this.timeout(10000);
 
 		describe('Adding feed', function() {
-		
+
 			before(function(done) {
 				source = bg.sources.create({
 					url: 'http://smartrss.martinkadlec.eu/test1.rss'
@@ -36,15 +36,15 @@ define(['chai', 'preps/extendNative'], function(chai) {
 				expect(bg.info.get('allCountTotal')).to.equal(allTotal + 3);
 			});
 
-			
 
-			
+
+
 		});
 
 		describe('Updating feed', function() {
 			before(function(done) {
 				source.save({ url: 'http://smartrss.martinkadlec.eu/test2.rss' });
-				bg.loader.downloadOne(source);
+				bg.loader.download(source);
 
 				source.on('update', function() {
 					done();
@@ -116,7 +116,7 @@ define(['chai', 'preps/extendNative'], function(chai) {
 			});
 
 			after(function(done) {
-				folder1.destroy().then(function() { 
+				folder1.destroy().then(function() {
 					done();
 				});
 			});
@@ -138,7 +138,7 @@ define(['chai', 'preps/extendNative'], function(chai) {
 			});
 
 			after(function(done) {
-				folder2.destroy().then(function() { 
+				folder2.destroy().then(function() {
 					done();
 				});
 			});
@@ -167,11 +167,11 @@ define(['chai', 'preps/extendNative'], function(chai) {
 		var sourceItems = [];
 		var allUnread = bg.info.get('allCountUnread');
 		var allTotal = bg.info.get('allCountTotal');
-		
+
 		this.timeout(5000);
 
 		describe('Marking article as read', function() {
-		
+
 			before(function(done) {
 				source = bg.sources.create({
 					url: 'http://smartrss.martinkadlec.eu/test1.rss'
@@ -194,16 +194,16 @@ define(['chai', 'preps/extendNative'], function(chai) {
 			it('should decrease all feeds unread counter', function() {
 				expect(bg.info.get('allCountUnread')).to.equal(allUnread + 2);
 			});
-			
+
 			after(function(done) {
 				source.destroy();
 				setTimeout(done, 50);
 			});
-			
+
 		});
 
 		describe('Moving article to trash', function() {
-		
+
 			before(function(done) {
 				source = bg.sources.create({
 					url: 'http://smartrss.martinkadlec.eu/test1.rss'
@@ -234,16 +234,16 @@ define(['chai', 'preps/extendNative'], function(chai) {
 			it('should decrease all feeds total counter', function() {
 				expect(bg.info.get('allCountTotal')).to.equal(allTotal + 2);
 			});
-			
+
 			after(function(done) {
 				source.destroy();
 				setTimeout(done, 50);
 			});
-			
+
 		});
 
 		describe('Destroying article', function() {
-		
+
 			before(function(done) {
 				source = bg.sources.create({
 					url: 'http://smartrss.martinkadlec.eu/test1.rss'
@@ -271,12 +271,12 @@ define(['chai', 'preps/extendNative'], function(chai) {
 			it('should decrease all feeds total counter', function() {
 				expect(bg.info.get('allCountTotal')).to.equal(allTotal + 2);
 			});
-			
+
 			after(function(done) {
 				source.destroy();
 				setTimeout(done, 50);
 			});
-			
+
 		});
 
 	});

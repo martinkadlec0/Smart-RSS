@@ -71,7 +71,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                     if (!s.length) return;
 
                     bg.items.forEach(function (item) {
-                        if (item.get('unread') == true && s.indexOf(item.getSource()) >= 0) {
+                        if (item.get('unread') === true && s.indexOf(item.getSource()) >= 0) {
                             item.save({
                                 unread: false,
                                 visited: true
@@ -132,9 +132,9 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                     var feeds = feedList.getSelectedFeeds();
                     var folders = feedList.getSelectedFolders();
 
-                    if (feedList.selectedItems.length == 1 && folders.length == 1) {
+                    if (feedList.selectedItems.length === 1 && folders.length === 1) {
                         properties.show(folders[0]);
-                    } else if (!folders.length && feeds.length == 1) {
+                    } else if (!folders.length && feeds.length === 1) {
                         properties.show(feeds[0]);
                     } else if (feeds.length > 0) {
                         properties.show(feeds);
@@ -208,7 +208,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
             closeFolders: {
                 title: 'Close folders',
                 fn: function (e) {
-                    var folders = $('.folder.opened');
+                    var folders = Array.from(document.querySelectorAll('.folder.opened'));
                     if (!folders.length) return;
                     folders.each(function (i, folder) {
                         if (folder.view) {
@@ -220,7 +220,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
             openFolders: {
                 title: 'Open folders',
                 fn: function (e) {
-                    var folders = $('.folder:not(.opened)');
+                    var folders = Array.from(document.querySelectorAll('.folder:not(.opened)'));
                     if (!folders.length) return;
                     folders.each(function (i, folder) {
                         if (folder.view) {
@@ -249,8 +249,11 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                     var ids = feeds.map((feed) => {
                         return feed.id;
                     });
-                    var special = $('.special.selected').get(0);
-                    if (special) special = special.view.model;
+                    var special = Array.from(document.querySelectorAll('.special.selected'))[0];
+                    if (special) {
+                        special = special.view.model;
+                    }
+
 
                     app.trigger('select:' + feedList.el.id, {
                         action: 'new-select',
@@ -304,7 +307,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                     var list = require('views/articleList');
                     if (list.currentData.feeds.length) {
                         list.currentData.feeds.forEach(function (id) {
-                            bg.loader.downloadOne(bg.sources.get(id));
+                            bg.loader.download(bg.sources.get(id));
                         });
                     } else {
                         bg.loader.downloadAll(true); // true = force
@@ -316,7 +319,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 title: Locale.c.DELETE,
                 fn: function (e) {
                     var list = require('views/articleList');
-                    if (list.currentData.name == 'trash' || e.shiftKey) {
+                    if (list.currentData.name === 'trash' || e.shiftKey) {
                         list.destroyBatch(list.selectedItems, list.removeItemCompletely);
                     } else {
                         list.destroyBatch(list.selectedItems, list.removeItem);
@@ -345,17 +348,21 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
             search: {
                 title: Locale.c.SEARCH_TIP,
                 fn: function (e) {
-                    e = e || {currentTarget: $('input[type=search]').get(0)};
+                    e = e || {currentTarget: Array.from(document.querySelectorAll('input[type=search]'))[0]};
                     var str = e.currentTarget.value || '';
                     var list = require('views/articleList');
-                    if (str == '') {
-                        $('.date-group').css('display', 'block');
+                    if (str === '') {
+                        Array.from(document.querySelectorAll('.date-group')).map((element) => {
+                            element.style.display = 'block'
+                        });
                     } else {
-                        $('.date-group').css('display', 'none');
+                        Array.from(document.querySelectorAll('.date-group')).map((element) => {
+                            element.style.display = 'none'
+                        });
                     }
 
                     var searchInContent = false;
-                    if (str[0] && str[0] == ':') {
+                    if (str[0] && str[0] === ':') {
                         str = str.replace(/^:/, '', str);
                         searchInContent = true;
                     }
@@ -377,7 +384,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
             focusSearch: {
                 title: 'Focus Search',
                 fn: function () {
-                    $('input[type=search]').focus();
+                    document.querySelectorAll('input[type=search]').focus();
                 }
             },
             focus: {
@@ -458,14 +465,14 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                     var filter = articleList.currentData.filter;
                     if (f.length) {
                         (filter ? bg.items.where(articleList.currentData.filter) : bg.items).forEach(function (item) {
-                            if (item.get('unread') == true && f.indexOf(item.get('sourceID')) >= 0) {
+                            if (item.get('unread') === true && f.indexOf(item.get('sourceID')) >= 0) {
                                 item.save({unread: false, visited: true});
                             }
                         });
-                    } else if (articleList.currentData.name == 'all-feeds') {
+                    } else if (articleList.currentData.name === 'all-feeds') {
                         if (confirm(Locale.c.MARK_ALL_QUESTION)) {
                             bg.items.forEach(function (item) {
-                                if (item.get('unread') == true) {
+                                if (item.get('unread') === true) {
                                     item.save({unread: false, visited: true});
                                 }
                             });
@@ -566,11 +573,6 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                     reader.onload = function () {
                         window.open(this.result.replace('data:text/html;', 'data:text/html;charset=utf-8;'));
                     };
-                    /*var url = URL.createObjectURL(blob);
-                    window.open(url);
-                    setTimeout(function() {
-                        URL.revokeObjectURL(url);
-                    }, 30000);*/
                 }
             }
         },
@@ -591,11 +593,6 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                     reader.onload = function () {
                         window.open(this.result.replace('data:text/html;', 'data:text/html;charset=utf-8;'));
                     };
-                    /*var url = URL.createObjectURL(blob);
-                    window.open(url);
-                    setTimeout(function() {
-                        URL.revokeObjectURL(url);
-                    }, 30000);*/
                 }
             },
             print: {
@@ -629,7 +626,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                     askRmPinned = bg.settings.get('askRmPinned');
 
                     if (e.shiftKey) {
-                        if (contentView.model.get('pinned') && askRmPinned && askRmPinned != 'none') {
+                        if (contentView.model.get('pinned') && askRmPinned && askRmPinned !== 'none') {
                             let conf = confirm(Locale.c.PIN_QUESTION_A + contentView.model.escape('title') + Locale.c.PIN_QUESTION_B);
                             if (!conf) {
                                 return;
@@ -638,7 +635,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
 
                         contentView.model.markAsDeleted();
                     } else {
-                        if (contentView.model.get('pinned') && askRmPinned == 'all') {
+                        if (contentView.model.get('pinned') && askRmPinned === 'all') {
                             let conf = confirm(Locale.c.PIN_QUESTION_A + contentView.model.escape('title') + Locale.c.PIN_QUESTION_B);
                             if (!conf) {
                                 return;
@@ -695,7 +692,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 title: 'Page up',
                 fn: function () {
                     var cw = $('iframe').get(0).contentWindow;
-                    var d = $('iframe').get(0).contentWindow.document;
+                    var d = cw.document;
                     cw.scrollBy(0, -d.documentElement.clientHeight * 0.85);
                 }
             },
@@ -703,7 +700,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 title: 'Page down',
                 fn: function () {
                     var cw = $('iframe').get(0).contentWindow;
-                    var d = $('iframe').get(0).contentWindow.document;
+                    var d = cw.document;
                     cw.scrollBy(0, d.documentElement.clientHeight * 0.85);
                 }
             },
@@ -711,7 +708,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 title: 'Scroll to bottom',
                 fn: function () {
                     var cw = $('iframe').get(0).contentWindow;
-                    var d = $('iframe').get(0).contentWindow.document;
+                    var d = cw.document;
                     cw.scrollTo(0, d.documentElement.offsetHeight);
                 }
             },
