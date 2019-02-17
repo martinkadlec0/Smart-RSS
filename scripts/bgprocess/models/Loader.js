@@ -17,27 +17,25 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
     }
 
     function addToList(sourcesToLoad) {
-        sourcesToLoad.forEach((model)=>{
+        sourcesToLoad.forEach((model) => {
             if (model instanceof Folder) {
-            addToList(sources.where({folderID: model.id}));
+                addToList(sources.where({folderID: model.id}));
             } else if (model instanceof Source) {
                 loader.addSources(model);
             }
         });
     }
 
-    function startDownloading(){
+    function startDownloading() {
         animation.start();
         loader.set('loading', true);
 
         // TODO: load number of concurrent loads from config
-        downloadURL();
-        downloadURL();
-        downloadURL();
-        downloadURL();
-        downloadURL();
-        downloadURL();
-        downloadURL();
+        let concurrentDownloads = settings.get('concurrentDownloads');
+        for (let i = 0; i < concurrentDownloads; i++) {
+            downloadURL();
+        }
+
     }
 
 

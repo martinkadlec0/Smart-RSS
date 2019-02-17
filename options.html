@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>Smart RSS - Options</title>
 	<link rel="stylesheet" href="styles/option.css">
-	
+
 	<script src="scripts/libs/jquery.min.js"></script>
 	<script src="scripts/options/options.js"></script>
 </head>
@@ -177,6 +177,14 @@
 						</label>
 					</div>
 				</section>
+				<section>
+					<div class="settings-row learn-more" title="">
+						<label class="web-content-select-label">
+							<span class="selectLabel">Concurrent downloads:</span>
+							<input type="number" id="concurrentDownloads" min="1" max="32" step="1" />
+						</label>
+					</div>
+				</section>
 
 				<section>
 					<h3 class="section-header">Sound notifications</h3>
@@ -265,7 +273,7 @@
 						</label>
 					</div>
 				</section>
-				
+
 				<section>
 					<h3 class="section-header">Version</h3>
 					<p id="version"></p>
