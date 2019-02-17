@@ -10,15 +10,15 @@ define(['backbone', 'models/ToolbarButton'], function (BB, ToolbarButton) {
      * @constructor
      * @extends Backbone.Collection
      */
-    var ToolbarItems = BB.Collection.extend({
+    const ToolbarItems = BB.Collection.extend({
         model: ToolbarButton,
 
         comparator: function (firstItem, secondItem) {
             if (!firstItem.view || !secondItem.view) {
                 return 0;
             }
-            var firstRectangle = firstItem.view.el.getBoundingClientRect();
-            var secondRectangle = secondItem.view.el.getBoundingClientRect();
+            const firstRectangle = firstItem.view.el.getBoundingClientRect();
+            const secondRectangle = secondItem.view.el.getBoundingClientRect();
 
             return firstRectangle.left > secondRectangle.left ? 1 : -1;
         }

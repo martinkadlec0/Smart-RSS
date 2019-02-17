@@ -10,7 +10,7 @@ define(['backbone', 'models/MenuItem'], function (BB, MenuItem) {
      * @constructor
      * @extends Backbone.Collection
      */
-    var MenuCollection = BB.Collection.extend({
+    const MenuCollection = BB.Collection.extend({
         model: MenuItem
     });
 

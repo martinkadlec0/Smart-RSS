@@ -10,7 +10,7 @@ define(['backbone', 'models/Group'], function (BB, Group) {
      * @constructor
      * @extends Backbone.Collection
      */
-    var Groups = BB.Collection.extend({
+    const Groups = BB.Collection.extend({
         model: Group
     });
 

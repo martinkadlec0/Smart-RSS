@@ -10,7 +10,7 @@ define(['backbone', 'models/Action', 'staticdb/actions'], function (BB, Action, 
      * @constructor
      * @extends Backbone.Collection
      */
-    var Actions = BB.Collection.extend({
+    const Actions = BB.Collection.extend({
         model: Action,
 
         /**
