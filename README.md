@@ -35,7 +35,30 @@ grunt stylus
 ```
 
 
-When you are done editing the code you should compile all the js files:
+When you are done editing the code you can compile all the js files:
 ```
 grunt rjs
 ```
+
+Files required for extension to run after building:
+````
+images/*
+scripts/app/modules/Locale.js
+scripts/app/libs/*
+scripts/nls/*
+scripts/options/*
+scripts/bgprocess-compiled.js
+scripts/domReady.js
+scripts/main-compiled.js
+version.js
+sounds/*
+styles/main-compiled.css
+styles/options.css
+index.html
+manifest.json
+options.html
+rss.html
+rss_content.html
+````
+
+additionally you have to modify index.html and rss.html to load compiled files instead, when you do you can bundle the extension according to your browsers instructions
