@@ -5,7 +5,7 @@
  * @param string {String} String with html to be escaped
  */
 define([], function() {
-	var entityMap = {
+	const entityMap = {
 		'&': '&amp;',
 		'<': '&lt;',
 		'>': '&gt;',
