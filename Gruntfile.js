@@ -24,7 +24,7 @@ module.exports = function(grunt) {
                 trailing: true,  // true: no trailing whitespaces
                 supernew: true,  // true: enable 'new Constructor' instead of 'new Constructor()'
                 onevar:   false, // true: only one var per fn
-                funcscope: true,   // false: no 'var' in blocks
+                funcscope: false,   // false: no 'var' in blocks
                 maxdepth: 5,        // max nesting depth
                 quotmark: 'single', // single: force '
                 // '-W041': true,      // don't warn about something == false/true
