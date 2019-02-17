@@ -38,7 +38,6 @@ function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLay
 
 			window.addEventListener('blur', function(e) {
 				this.hideContextMenus();
-				//$('.focused').removeClass('focused');
 
 				if (e.target instanceof window.Window) {
 					comm.trigger('stop-blur');
