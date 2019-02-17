@@ -29,8 +29,6 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
     function startDownloading() {
         animation.start();
         loader.set('loading', true);
-
-        // TODO: load number of concurrent loads from config
         let concurrentDownloads = settings.get('concurrentDownloads');
         for (let i = 0; i < concurrentDownloads; i++) {
             downloadURL();
@@ -48,7 +46,8 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
         addToList(sourcesToDownload);
 
 
-        loader.sourcesToLoad.forEach(downloadOne);
+        startDownloading();
+        // loader.sourcesToLoad.forEach(downloadOne);
     }
 
 
@@ -150,16 +149,14 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
         }
 
         let sourceToLoad = loader.sourcesToLoad.pop();
+        if (loader.sourcesLoading.includes(model)) {
+            return downloadURL();
+        }
         loader.sourcesLoading.push(sourceToLoad);
 
         autoremoveItems(sourceToLoad);
 
 
-        // if (sourceToLoad.get('username') || sourceToLoad.get('password')) {
-        //     options.username = sourceToLoad.get('username') || '';
-        //     options.password = sourceToLoad.getPass() || '';
-        // }
-        //
         if (settings.get('showSpinner')) {
             sourceToLoad.set('isLoading', true);
         }
@@ -247,6 +244,12 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
         xhr.setRequestHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
         xhr.setRequestHeader('Pragma', 'no-cache');
         xhr.setRequestHeader('X-Time-Stamp', Date.now());
+        if (sourceToLoad.get('username') || sourceToLoad.get('password')) {
+            let username = sourceToLoad.get('username') || '';
+            let password = sourceToLoad.getPass() || '';
+            xhr.setRequestHeader('Authorization', 'Basic ' + btoa(`${username}:${password}`));
+        }
+
 
         // loader.currentRequest = xhr;
         loader.currentRequests.push(xhr);
