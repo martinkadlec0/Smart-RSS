@@ -1,13 +1,3 @@
-/**
- * Smart RSS extension
- * COPYRIGHT by Martin Kadlec
- * This extension is meant for Opera only. Do not reuse any of the code for any other browser.
- * You are allowed to do any changes for personal use in Opera Browser.
- * Ask before publishing modified versions.
- * Do not upload any modified version of this extension to addons.opera.com!
- */
-
-
 require.config({
 
 	baseUrl: 'scripts/bgprocess',
@@ -49,7 +39,7 @@ require.config({
  */
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
- 	if (message.action == 'get-tab-id') {
+ 	if (message.action === 'get-tab-id') {
  		sendResponse({
  			action: 'response-tab-id',
  			value: sender.tab.id
