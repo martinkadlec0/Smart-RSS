@@ -15,13 +15,17 @@ request.addEventListener('error', function (e) {
 
 request.addEventListener('success', function (e) {
     db = this.result;
-    if (content) startImport();
+    if (content) {
+        startImport();
+    }
 });
 
 onmessage = function (e) {
     if (e.data.action === 'file-content') {
         content = e.data.value;
-        if (db) startImport();
+        if (db) {
+            startImport();
+        }
     }
 };
 
@@ -51,21 +55,27 @@ function startImport() {
     if (importedFolders) {
         for (let i = 0, j = importedFolders.length; i < j; i++) {
             handleReq(folders.add(importedFolders[i]));
-            if (!(i % 10)) postMessage({action: 'message', value: 'Folders: ' + i + '/' + j});
+            if (!(i % 10)) {
+                postMessage({action: 'message', value: 'Folders: ' + i + '/' + j});
+            }
         }
     }
 
     if (importedSources) {
         for (let i = 0, j = importedSources.length; i < j; i++) {
             handleReq(sources.add(importedSources[i]));
-            if (!(i % 10)) postMessage({action: 'message', value: 'Feeds: ' + i + '/' + j});
+            if (!(i % 10)) {
+                postMessage({action: 'message', value: 'Feeds: ' + i + '/' + j});
+            }
         }
     }
 
     if (importedItems) {
         for (let i = 0, j = importedItems.length; i < j; i++) {
             handleReq(items.add(importedItems[i]));
-            if (!(i % 10)) postMessage({action: 'message', value: 'Articles: ' + i + '/' + j});
+            if (!(i % 10)) {
+                postMessage({action: 'message', value: 'Articles: ' + i + '/' + j});
+            }
         }
     }
 
