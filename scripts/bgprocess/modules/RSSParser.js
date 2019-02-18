@@ -5,7 +5,6 @@
 define(['md5'], function (md5) {
 
 
-
     /**
      * RSS Parser
      * @class RSSParser
@@ -80,12 +79,12 @@ define(['md5'], function (md5) {
             });
 
             var last = items[items.length - 1];
-            last.oldId = last.id;
-            if (!last.id) {
-                last.id = md5(last.sourceID + last.title + last.date);
-            } else {
-                last.id = md5(last.sourceID + last.id);
-            }
+            // last.oldId = last.id;
+            // if (!last.id) {
+            //     last.id = md5(last.sourceID + last.title + last.date);
+            // } else {
+            //     last.id = md5(last.sourceID + last.id);
+            // }
 
 
             if (last.date === 0) {
@@ -98,28 +97,33 @@ define(['md5'], function (md5) {
     }
 
     function rssGetGuid(node) {
-        if (!node) return false;
-        var guid = node.querySelector('guid');
-        return guid ? guid.textContent : '';
+        if (!node) {
+            return false;
+        }
+        let guid = node.querySelector('guid');
+
+        return guid ? guid.textContent : rssGetLink(node) || '';
     }
 
     function rssGetLink(node) {
-        if (!node) return false;
-
-
+        if (!node) {
+            return false;
+        }
         var link = node.querySelector('link[rel="alternate"]');
-
         if (!link) {
-
-
-            if (!link) link = node.querySelector('link[type="text/html"]');
-
+            if (!link) {
+                link = node.querySelector('link[type="text/html"]');
+            }
             // prefer non atom links over atom links because of http://logbuch-netzpolitik.de/
-            if (!link || link.prefix === 'atom') link = node.querySelector('link');
-
-            if (!link) link = node.querySelector('link[type="text/html"]');
-            if (!link) link = node.querySelector('link');
-
+            if (!link || link.prefix === 'atom') {
+                link = node.querySelector('link');
+            }
+            if (!link) {
+                link = node.querySelector('link[type="text/html"]');
+            }
+            if (!link) {
+                link = node.querySelector('link');
+            }
         }
 
         if (!link) {

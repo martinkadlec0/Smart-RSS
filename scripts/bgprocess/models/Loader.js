@@ -153,116 +153,21 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'md5'], function (
         if (settings.get('showSpinner')) {
             sourceToLoad.set('isLoading', true);
         }
+        let proxy = sourceToLoad.get('proxyThroughFeedly');
 
         let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = () => {
 
-        if (!sourceToLoad.get('proxyThroughFeedly')) {
-            xhr.onreadystatechange = () => {
-
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        var parsedData = RSSParser.parse(xhr.responseXML, sourceToLoad.get('id'));
-
-                        var hasNew = false;
-                        var createdNo = 0;
-                        parsedData.forEach(function (item) {
-
-                            var existingItem = items.get(item.id) || items.get(item.oldId);
-                            if (!existingItem) {
-                                hasNew = true;
-                                items.create(item, {sort: false});
-                                createdNo++;
-                            } else if (existingItem.get('deleted') === false && existingItem.get('content') !== item.content) {
-                                existingItem.save({
-                                    content: item.content
-                                });
-                            }
-                        });
-
-                        items.sort({silent: true});
-                        if (hasNew) {
-                            items.trigger('render-screen');
-                            loader.itemsDownloaded = true;
-                        }
-
-                        // remove old deleted content
-                        var fetchedIDs = parsedData.map((item) => {
-                            return item.id;
-                        });
-                        var fetchedOldIDs = parsedData.map((item) => {
-                            return item.oldId;
-                        });
-                        items.where({
-                            sourceID: sourceToLoad.get('id'),
-                            deleted: true
-                        }).forEach(function (item) {
-                            if (fetchedIDs.indexOf(item.id) === -1 && fetchedOldIDs.indexOf(item.id) === -1) {
-                                item.destroy();
-                            }
-                        });
-
-                        // tip to optimize: var count = items.where.call(countAll, {unread: true }).length
-                        var countAll = items.where({sourceID: sourceToLoad.get('id'), trashed: false}).length;
-                        var count = items.where({
-                            sourceID: sourceToLoad.get('id'),
-                            unread: true,
-                            trashed: false
-                        }).length;
-
-                        sourceToLoad.save({
-                            'count': count,
-                            'countAll': countAll,
-                            'lastUpdate': Date.now(),
-                            'hasNew': hasNew || sourceToLoad.get('hasNew')
-                        });
-
-                        info.set({
-                            allCountUnvisited: info.get('allCountUnvisited') + createdNo
-                        });
-
-                        sourceToLoad.trigger('update', {ok: true});
-
-                    } else {
-                        console.log('Failed load RSS: ' + sourceToLoad.get('url'));
-                        sourceToLoad.trigger('update', {ok: false});
-                    }
-                    loader.set('loaded', loader.get('loaded') + 1);
-
-                    // reset alarm to make sure next call isn't too soon + to make sure alarm acutaly exists (it doesn't after import)
-                    sourceToLoad.trigger('reset-alarm', sourceToLoad);
-                    sourceToLoad.set('isLoading', false);
-
-                    feedDownloaded(sourceToLoad, xhr);
-                    downloadURL();
-                }
-
-
-            };
-            xhr.open('GET', sourceToLoad.get('url'));
-            xhr.setRequestHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
-            xhr.setRequestHeader('Pragma', 'no-cache');
-            xhr.setRequestHeader('X-Time-Stamp', Date.now());
-            if (sourceToLoad.get('username') || sourceToLoad.get('password')) {
-                let username = sourceToLoad.get('username') || '';
-                let password = sourceToLoad.getPass() || '';
-                xhr.withCredentials = true;
-                xhr.setRequestHeader('Authorization', 'Basic ' + btoa(`${username}:${password}`));
-            }
-        } else {
-            xhr.onreadystatechange = () => {
-
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    let parsedData = [];
+                    if (proxy) {
                         let response = JSON.parse(xhr.responseText);
-                        console.log(response);
                         let sourceID = sourceToLoad.get('id');
-
-                        let newItems = [];
                         response.items.forEach(function (item) {
                             let canonical = item.canonical ? item.canonical[0] : item.alternate[0];
-                            newItems.push({
-                                oldId: item.originId,
-                                id: item.originId ? md5(sourceID + item.originId) : md5(item.originId + item.title + item.published),
+                            parsedData.push({
+                                id: item.originId,
                                 title: item.title,
                                 url: canonical.href,
                                 date: item.updated ? item.updated : (item.published ? item.published : Date.now()),
@@ -277,93 +182,104 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'md5'], function (
                                 dateCreated: Date.now()
                             });
                         });
-
-
-                        var hasNew = false;
-                        var createdNo = 0;
-                        newItems.forEach(function (item) {
-
-                            var existingItem = items.get(item.id) || items.get(item.oldId);
-                            if (!existingItem) {
-                                hasNew = true;
-                                items.create(item, {sort: false});
-                                createdNo++;
-                            } else if (existingItem.get('deleted') === false && existingItem.get('content') !== item.content) {
-                                existingItem.save({
-                                    content: item.content
-                                });
-                            }
-                        });
-
-                        items.sort({silent: true});
-                        if (hasNew) {
-                            items.trigger('render-screen');
-                            loader.itemsDownloaded = true;
-                        }
-
-                        // remove old deleted content
-                        var fetchedIDs = newItems.map((item) => {
-                            return item.id;
-                        });
-                        var fetchedOldIDs = newItems.map((item) => {
-                            return item.oldId;
-                        });
-                        items.where({
-                            sourceID: sourceToLoad.get('id'),
-                            deleted: true
-                        }).forEach(function (item) {
-                            if (fetchedIDs.indexOf(item.id) === -1 && fetchedOldIDs.indexOf(item.id) === -1) {
-                                item.destroy();
-                            }
-                        });
-
-                        // tip to optimize: var count = items.where.call(countAll, {unread: true }).length
-                        var countAll = items.where({sourceID: sourceToLoad.get('id'), trashed: false}).length;
-                        var count = items.where({
-                            sourceID: sourceToLoad.get('id'),
-                            unread: true,
-                            trashed: false
-                        }).length;
-
-                        sourceToLoad.save({
-                            'count': count,
-                            'countAll': countAll,
-                            'lastUpdate': Date.now(),
-                            'hasNew': hasNew || sourceToLoad.get('hasNew')
-                        });
-
-                        info.set({
-                            allCountUnvisited: info.get('allCountUnvisited') + createdNo
-                        });
-
-                        sourceToLoad.trigger('update', {ok: true});
-
                     } else {
-                        console.log('Failed load RSS: ' + sourceToLoad.get('url'));
-                        sourceToLoad.trigger('update', {ok: false});
+                        parsedData = RSSParser.parse(xhr.responseXML, sourceToLoad.get('id'));
+
                     }
-                    loader.set('loaded', loader.get('loaded') + 1);
+                    var hasNew = false;
+                    var createdNo = 0;
+                    parsedData.forEach(function (item) {
+                        var existingItem = items.get(item.id);
+                        if (!existingItem) {
+                            hasNew = true;
+                            items.create(item, {sort: false});
+                            createdNo++;
+                        } else if (existingItem.get('deleted') === false && existingItem.get('content') !== item.content) {
+                            existingItem.save({
+                                content: item.content
+                            });
+                        }
+                    });
 
-                    // reset alarm to make sure next call isn't too soon + to make sure alarm acutaly exists (it doesn't after import)
-                    sourceToLoad.trigger('reset-alarm', sourceToLoad);
-                    sourceToLoad.set('isLoading', false);
+                    items.sort({silent: true});
+                    if (hasNew) {
+                        items.trigger('render-screen');
+                        loader.itemsDownloaded = true;
+                    }
 
-                    feedDownloaded(sourceToLoad, xhr);
-                    downloadURL();
+                    // remove old deleted content
+                    var fetchedIDs = parsedData.map((item) => {
+                        return item.id;
+                    });
+                    items.where({
+                        sourceID: sourceToLoad.get('id'),
+                        deleted: true
+                    }).forEach(function (item) {
+                        if (fetchedIDs.indexOf(item.id) === -1) {
+                            item.destroy();
+                        }
+                    });
+
+                    // tip to optimize: var count = items.where.call(countAll, {unread: true }).length
+                    var countAll = items.where({sourceID: sourceToLoad.get('id'), trashed: false}).length;
+                    var count = items.where({
+                        sourceID: sourceToLoad.get('id'),
+                        unread: true,
+                        trashed: false
+                    }).length;
+
+                    sourceToLoad.save({
+                        'count': count,
+                        'countAll': countAll,
+                        'lastUpdate': Date.now(),
+                        'hasNew': hasNew || sourceToLoad.get('hasNew')
+                    });
+
+                    info.set({
+                        allCountUnvisited: info.get('allCountUnvisited') + createdNo
+                    });
+
+                    sourceToLoad.trigger('update', {ok: true});
+
+                } else {
+                    console.log('Failed load source: ' + sourceToLoad.get('url') + proxy ? 'using feedly proxy' : '');
+                    sourceToLoad.trigger('update', {ok: false});
                 }
+                loader.set('loaded', loader.get('loaded') + 1);
+
+                // reset alarm to make sure next call isn't too soon + to make sure alarm acutaly exists (it doesn't after import)
+                sourceToLoad.trigger('reset-alarm', sourceToLoad);
+                sourceToLoad.set('isLoading', false);
+
+                feedDownloaded(sourceToLoad, xhr);
+                downloadURL();
+            }
 
 
-            };
-            // TODO: download only newer than latest
-            let feedlyUrl = 'https://cloud.feedly.com/v3/streams/contents?streamId=feed%2F' + encodeURIComponent(sourceToLoad.get('url')) + '&count=' + (1000);// + (a ? '&newerThan=' + (a + 1) : '');
-            console.log(feedlyUrl);
-            xhr.open('GET', feedlyUrl);
-            xhr.setRequestHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
-            xhr.setRequestHeader('Pragma', 'no-cache');
-            xhr.setRequestHeader('X-Time-Stamp', Date.now());
+        };
+        let url = sourceToLoad.get('url');
+        if (proxy) {
+            let i = items.where({sourceID: sourceID});
+            let date = 0;
+
+            i.forEach((item) => {
+                if (item.date > date) {
+                    date = item.date;
+                }
+            });
+            url = 'https://cloud.feedly.com/v3/streams/contents?streamId=feed%2F' + encodeURIComponent(url) + '&count=' + (1000) + ('&newerThan=' + (date));
         }
 
-        loader.currentRequests.push(xhr);
+        xhr.open('GET', url);
+        xhr.setRequestHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+        xhr.setRequestHeader('Pragma', 'no-cache');
+        xhr.setRequestHeader('X-Time-Stamp', Date.now());
+        if (!proxy && (sourceToLoad.get('username') || sourceToLoad.get('password'))) {
+            let username = sourceToLoad.get('username') || '';
+            let password = sourceToLoad.getPass() || '';
+            xhr.withCredentials = true;
+            xhr.setRequestHeader('Authorization', 'Basic ' + btoa(`${username}:${password}`));
+        }
         xhr.send();
     }
 
@@ -410,4 +326,5 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'md5'], function (
 
     return Loader;
 
-});
+})
+;
