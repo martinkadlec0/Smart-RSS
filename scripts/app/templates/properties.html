@@ -1,18 +1,18 @@
 <% if (typeof title != 'undefined') { %>
 <label>
-	{{NAME}}: 
+	{{NAME}}:
 	<input type="text" id="prop-title" placeholder="{{FETCH_TITLE_TIP}}" title="{{FETCH_TITLE_TIP}}" value="<%- title %>"/>
 </label>
 <% } %>
 
-<% if (typeof url != 'undefined') { %> 
+<% if (typeof url != 'undefined') { %>
 <label>{{ADDRESS}}: <input type="url" id="prop-url" value="<%= url %>" /></label>
 <% } %>
 
 <label>{{UPDATE}}: <select id="prop-update-every">
-	<% if (typeof updateEveryDiffers != 'undefined' && updateEveryDiffers == true) { %> 
+	<% if (typeof updateEveryDiffers != 'undefined' && updateEveryDiffers == true) { %>
 		<option value="-1">&lt;mixed&gt;</option>
-	<% } %> 
+	<% } %>
 	<option value="0">{{NEVER}}</option>
 	<option value="5">{{EVERY_5_MINUTES}}</option>
 	<option value="15">{{EVERY_15_MINUTES}}</option>
@@ -26,18 +26,21 @@
 	<option value="10080">{{EVERY_WEEK}}</option>
 </select></label>
 
-<% if (typeof url != 'undefined') { %> 
+<% if (typeof url != 'undefined') { %>
 <div id="advanced-switch">{{MORE}}</div>
 <div id="properties-advanced">
 	<label>{{USERNAME}}: <input type="text" id="prop-username" value="<%= username %>" /></label>
 	<label>{{PASSWORD}}: <input type="password" id="prop-password" value="<%= password %>" /></label>
 
-<% } %> 
+
+	<label>Proxy: <input type="checkbox" id="prop-proxy" value="<%= proxyThroughFeedly %>" /></label>
+
+<% } %>
 
 	<label>{{AUTOREMOVE}}: <select id="prop-autoremove">
-		<% if (typeof autoremoveDiffers != 'undefined' && autoremoveDiffers == true) { %> 
+		<% if (typeof autoremoveDiffers != 'undefined' && autoremoveDiffers == true) { %>
 			<option value="-1">&lt;mixed&gt;</option>
-		<% } %> 
+		<% } %>
 		<option value="0">{{NEVER}}</option>
 		<option value="1">{{OLDER_THAN_DAY}}</option>
 		<option value="7">{{OLDER_THAN_WEEK}}</option>

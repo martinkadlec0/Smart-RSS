@@ -23,11 +23,11 @@ define(['backbone'], function (BB) {
             password: '',
             hasNew: false,
             isLoading: false,
-            autoremove: 0 // in days
+            autoremove: 0, // in days
+            proxyThroughFeedly: false
         },
 
         initialize: function () {
-            // in case user quits Opera when the source is being updated
             this.set('isLoading', false);
         },
 

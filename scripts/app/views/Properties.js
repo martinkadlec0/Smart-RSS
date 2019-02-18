@@ -37,7 +37,8 @@ define([
                         url: app.fixURL($('#prop-url').val()),
                         username: $('#prop-username').val(),
                         updateEvery: parseFloat($('#prop-update-every').val()),
-                        autoremove: parseFloat($('#prop-autoremove').val(), 10)
+                        autoremove: parseFloat($('#prop-autoremove').val(), 10),
+                        proxyThroughFeedly: document.getElementById('prop-proxy').checked
                     });
                 } else if (this.current instanceof bg.Folder) {
                     this.current.save({
@@ -100,6 +101,9 @@ define([
                     if (this.current.get('autoremove')) {
                         $('#prop-autoremove').val(this.current.get('autoremove'));
                     }
+                    if (this.current.get('proxyThroughFeedly')) {
+                        document.getElementById('prop-proxy').checked = true;
+                    }
                 } else {
                     var isFolder = this.current instanceof bg.Folder;
                     var listOfSources = isFolder ? bg.sources.where({folderID: this.current.id}) : this.current;
@@ -113,12 +117,16 @@ define([
                     if (listOfSources.length) {
                         params.firstUpdate = listOfSources[0].get('updateEvery');
                         params.updateEveryDiffers = listOfSources.some(function (c) {
-                            if (params.firstUpdate !== c.get('updateEvery')) return true;
+                            if (params.firstUpdate !== c.get('updateEvery')) {
+                                return true;
+                            }
                         });
 
                         params.firstAutoremove = listOfSources[0].get('autoremove');
                         params.autoremoveDiffers = listOfSources.some(function (c) {
-                            if (params.firstAutoremove !== c.get('autoremove')) return true;
+                            if (params.firstAutoremove !== c.get('autoremove')) {
+                                return true;
+                            }
                         });
                     }
 
@@ -136,8 +144,12 @@ define([
                      * Set <select>s's values
                      */
 
-                    if (!params.updateEveryDiffers) $('#prop-update-every').val(params.firstUpdate);
-                    if (!params.autoremoveDiffers) $('#prop-autoremove').val(params.firstAutoremove);
+                    if (!params.updateEveryDiffers) {
+                        $('#prop-update-every').val(params.firstUpdate);
+                    }
+                    if (!params.autoremoveDiffers) {
+                        $('#prop-autoremove').val(params.firstAutoremove);
+                    }
                 }
 
                 return this;

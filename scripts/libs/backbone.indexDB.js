@@ -133,7 +133,7 @@
 			var tx;
 
 			window.addEventListener('message', function(e) {
-				if (e.data.action == 'clear-tx') {
+				if (e.data.action === 'clear-tx') {
 					tx = null;
 				}
 			});
@@ -200,7 +200,7 @@
 
 				switch (method) {
 					case 'read':
-						model.id != undefined ? store.find(model, cbh) : store.findAll(cbh);
+						model.id !== undefined ? store.find(model, cbh) : store.findAll(cbh);
 						break;
 					case 'create':
 						store.create(model, nothing);

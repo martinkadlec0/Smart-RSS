@@ -41,7 +41,7 @@ chrome.runtime.getBackgroundPage(function(bg) {
 	window.bg = bg;
 
 	chrome.runtime.sendMessage({ action: 'get-tab-id'}, function(response) {
-		if (response.action == 'response-tab-id') {
+		if (response.action === 'response-tab-id') {
 			tabID = response.value;
 		}
 	});
