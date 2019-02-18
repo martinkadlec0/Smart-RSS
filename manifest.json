@@ -29,7 +29,7 @@
 		"webRequestBlocking",
 		"<all_urls>"
 	],
-	"content_security_policy": "script-src 'self' 'unsafe-eval' https://cdnjs.cloudflare.com/ajax/libs/mocha/ https://raw.github.com/chaijs/chai/master/; object-src 'unsafe-eval';",
+	"content_security_policy": "script-src 'self' 'unsafe-eval' object-src 'unsafe-eval';",
 	"browser_action": {
 		"default_title": "Smart RSS",
 		"default_icon": {
