@@ -21,13 +21,13 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                     window.open('options.html');
                 }
             },
-            report: {
-                title: 'Report a problem',
-                icon: 'report.png',
-                fn: function () {
-                    app.report();
-                }
-            }
+            // report: {
+            //     title: 'Report a problem',
+            //     icon: 'report.png',
+            //     fn: function () {
+            //         app.report();
+            //     }
+            // }
         },
         feeds: {
             updateAll: {
