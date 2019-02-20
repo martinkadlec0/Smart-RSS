@@ -2,7 +2,7 @@
  * @module BgProcess
  * @submodule modules/RSSParser
  */
-define(['md5'], function (md5) {
+define([], function () {
 
 
     /**
@@ -79,13 +79,6 @@ define(['md5'], function (md5) {
             });
 
             var last = items[items.length - 1];
-            // last.oldId = last.id;
-            // if (!last.id) {
-            //     last.id = md5(last.sourceID + last.title + last.date);
-            // } else {
-            //     last.id = md5(last.sourceID + last.id);
-            // }
-
 
             if (last.date === 0) {
                 last.date = Date.now();
@@ -224,17 +217,25 @@ define(['md5'], function (md5) {
 
     function rssGetContent(node) {
         var desc = node.querySelector('encoded');
-        if (desc) return desc.textContent;
+        if (desc) {
+            return desc.textContent;
+        }
 
         desc = node.querySelector('description');
-        if (desc) return desc.textContent;
+        if (desc) {
+            return desc.textContent;
+        }
 
         // content over summary because of "http://neregate.com/blog/feed/atom/"
         desc = node.querySelector('content');
-        if (desc) return desc.textContent;
+        if (desc) {
+            return desc.textContent;
+        }
 
         desc = node.querySelector('summary');
-        if (desc) return desc.textContent;
+        if (desc) {
+            return desc.textContent;
+        }
 
         return '&nbsp;';
     }
