@@ -164,21 +164,24 @@ define(['jquery'], function ($) {
         },
         handleSelectableMouseDown: function (e) {
             if (e.which === 2) {
-                return browser.tabs.create({url: e.currentTarget.view.model.attributes.url, active: false});
+                // return browser.tabs.create({url: e.currentTarget.view.model.attributes.url, active: false});
+                return true;
             }
+            e.preventDefault();
             const item = e.currentTarget.view;
             if (this.selectedItems.length > 1 && item.$el.hasClass('selected') && !e.ctrlKey && !e.shiftKey) {
                 this.selectFlag = true;
-                return;
+                return false;
             }
             this.select(item, e);
+            return false;
         },
         handleSelectableMouseUp: function (e) {
-            const item = e.currentTarget.view;
-            if (e.which === 1 && this.selectedItems.length > 1 && this.selectFlag) {
-                this.select(item, e);
-                this.selectFlag = false;
-            }
+            // const item = e.currentTarget.view;
+            // if (e.which === 1 && this.selectedItems.length > 1 && this.selectFlag) {
+            //     this.select(item, e);
+            //     this.selectFlag = false;
+            // }
         }
     };
 });

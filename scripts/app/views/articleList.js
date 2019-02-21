@@ -115,7 +115,7 @@ define([
 
             events: {
                 'dragstart .item': 'handleDragStart',
-                'mousedown .item': 'handleMouseDown',
+                'click .item': 'handleMouseDown',
                 'mouseup .item': 'handleMouseUp',
                 'dblclick .item': 'handleItemDblClick',
                 'mousedown .item-pin,.item-pinned': 'handleClickPin'

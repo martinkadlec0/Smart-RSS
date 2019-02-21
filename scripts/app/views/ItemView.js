@@ -20,7 +20,7 @@ define([
          * @default 'div'
          * @type String
          */
-        tagName: 'div',
+        tagName: 'a',
 
         /**
          * Class name of article item element
@@ -169,6 +169,7 @@ define([
 
             this.$el.css('height', '');
             var data = this.model.toJSON();
+            this.$el.attr('href', data.url);
 
             data.date = this.getItemDate(data.date);
             data.title = stripTags(data.title).trim() || '&lt;no title&gt;';
