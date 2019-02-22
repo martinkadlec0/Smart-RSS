@@ -6,7 +6,7 @@
 	},
 	"description": "RSS Reader",
 	"manifest_version": 2,
-	"version": "2.0",
+	"version": "2.0.3",
 	"background": {
 		"page": "index.html"
 	},
@@ -20,13 +20,9 @@
 	"permissions": [
 		"https://*/*",
 		"http://*/*",
-		"storage",
 		"unlimitedStorage",
 		"alarms",
 		"tabs",
-		"contextMenus",
-		"webRequest",
-		"webRequestBlocking",
 		"<all_urls>"
 	],
 	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'unsafe-eval';",
