@@ -10,14 +10,7 @@
 	"background": {
 		"page": "index.html"
 	},
-	"web_accessible_resources": [
-		"libs/jquery.min.js",
-		"libs/underscore.min.js",
-		"libs/backbone.min.js",
-		"libs/backbone.indexDB.js",
-		"images/icon16_v2.png"
-	],
-	"permissions": [				
+	"permissions": [
 		"unlimitedStorage",
 		"alarms",
 		"tabs",
