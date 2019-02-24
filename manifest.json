@@ -17,9 +17,7 @@
 		"libs/backbone.indexDB.js",
 		"images/icon16_v2.png"
 	],
-	"permissions": [
-		"https://*/*",
-		"http://*/*",
+	"permissions": [				
 		"unlimitedStorage",
 		"alarms",
 		"tabs",
