@@ -167,8 +167,11 @@ define(['jquery'], function ($) {
                 // return browser.tabs.create({url: e.currentTarget.view.model.attributes.url, active: false});
                 return true;
             }
-            e.preventDefault();
             const item = e.currentTarget.view;
+            console.log(item);
+            if (item.el.classList.contains('item')) {
+                e.preventDefault();
+            }
             if (this.selectedItems.length > 1 && item.$el.hasClass('selected') && !e.ctrlKey && !e.shiftKey) {
                 this.selectFlag = true;
                 return false;
@@ -177,11 +180,11 @@ define(['jquery'], function ($) {
             return false;
         },
         handleSelectableMouseUp: function (e) {
-            // const item = e.currentTarget.view;
-            // if (e.which === 1 && this.selectedItems.length > 1 && this.selectFlag) {
-            //     this.select(item, e);
-            //     this.selectFlag = false;
-            // }
+            const item = e.currentTarget.view;
+            if (e.which === 1 && this.selectedItems.length > 1 && this.selectFlag) {
+                this.select(item, e);
+                this.selectFlag = false;
+            }
         }
     };
 });
