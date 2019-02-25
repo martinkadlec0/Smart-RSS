@@ -241,7 +241,7 @@ chrome.runtime.getBackgroundPage(function (bg) {
                     $smartImported.html('Loading data to memory!');
 
                     bg.fetchAll().always(function () {
-                        bg.info.autoSetData();
+                        bg.info.refreshSpecialCounters();
                         $smartImported.html('Import fully completed!');
                         bg.loader.downloadAll(true);
                     });

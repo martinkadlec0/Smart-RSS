@@ -4,12 +4,15 @@
  */
 define(['backbone', 'modules/RSSParser', 'modules/Animation', 'md5'], function (BB, RSSParser, animation, md5) {
 
-    function autoremoveItems(source) {
-        if (!parseFloat(source.get('autoremove'))) return;
+    // remove items with age above treshold
+    function removeOldItems(source) {
+        if (!parseInt(source.get('autoremove'))) {
+            return;
+        }
 
         items.where({sourceID: source.get('id'), deleted: false, pinned: false}).forEach(function (item) {
-            var date = item.get('dateCreated') || item.get('date');
-            var removalInMs = source.get('autoremove') * 24 * 60 * 60 * 1000;
+            const date = item.get('dateCreated') || item.get('date');
+            const removalInMs = source.get('autoremove') * 24 * 60 * 60 * 1000;
             if (date + removalInMs < Date.now()) {
                 item.markAsDeleted();
             }
@@ -27,13 +30,16 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'md5'], function (
     }
 
     function startDownloading() {
-        animation.start();
+        // don't overlap, better use less concurrent downloads or even pause for a minute
+        if (loader.get('loading')) {
+            return;
+        }
         loader.set('loading', true);
+        animation.start();
         let concurrentDownloads = settings.get('concurrentDownloads');
         for (let i = 0; i < concurrentDownloads; i++) {
             downloadURL();
         }
-
     }
 
 
@@ -48,37 +54,39 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'md5'], function (
     }
 
     function downloadAll(force) {
-
-        if (loader.get('loading') === true) return;
-
         let sourcesArr = sources.toArray();
 
         if (!force) {
+            let globalUpdateFrequency = settings.get('updateFrequency');
             sourcesArr = sourcesArr.filter(function (source) {
-                if (source.get('updateEvery') === 0) {
+                let sourceUpdateFrequency = source.get('updateEvery');
+                if (sourceUpdateFrequency === 0) {
                     return false;
                 }
-                /****
-                 why !source.get('lastUpdate') ? .. I think I wanted !source.get('lastUpdate') => true not the other way around
-                 ****/
+                let updateFrequency = sourceUpdateFrequency > 0 ? sourceUpdateFrequency : globalUpdateFrequency;
+                if (updateFrequency === 0) {
+                    return false;
+                }
                 if (!source.get('lastUpdate')) {
                     return true;
                 }
-                return source.get('lastUpdate') <= Date.now() - source.get('updateEvery') * 60 * 1000;
-
+                return source.get('lastUpdate') <= Date.now() - updateFrequency * 60 * 1000;
             });
         }
 
-        if (sourcesArr.length) {
-            loader.addSources(sourcesArr);
-            startDownloading();
+        // no sources to load yet
+        if (sourcesArr.length === 0) {
+            return;
         }
 
+        // add sources to list
+        loader.addSources(sourcesArr);
+        startDownloading();
     }
 
     function playNotificationSound() {
 
-        var audio;
+        let audio;
         if (!settings.get('useSound') || settings.get('useSound') === ':user') {
             audio = new Audio(settings.get('defaultSound'));
         } else if (settings.get('useSound') === ':none') {
@@ -90,7 +98,6 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'md5'], function (
             audio.volume = parseFloat(settings.get('soundVolume'));
             audio.play();
         }
-
     }
 
     function feedDownloaded(model, xhr) {
@@ -108,21 +115,18 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'md5'], function (
         if (loader.itemsDownloaded && settings.get('soundNotifications')) {
             playNotificationSound();
         }
-
         loader.set('maxSources', 0);
         loader.set('loaded', 0);
         loader.set('loading', false);
-
         loader.itemsDownloaded = false;
         animation.stop();
     }
 
     function downloadURL() {
-        if (!loader.sourcesToLoad.length) {
-
+        if (loader.sourcesToLoad.length === 0) {
             // IF DOWNLOADING FINISHED, DELETED ITEMS WITH DELETED SOURCE (should not really happen)
-            var sourceIDs = sources.pluck('id');
-            var foundSome = false;
+            const sourceIDs = sources.pluck('id');
+            let foundSome = false;
             items.toArray().forEach(function (item) {
                 if (sourceIDs.indexOf(item.get('sourceID')) === -1) {
                     console.log('DELETING ITEM BECAUSE OF MISSING SOURCE');
@@ -132,13 +136,9 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'md5'], function (
             });
 
             if (foundSome) {
-                info.autoSetData();
+                info.refreshSpecialCounters();
             }
-
-            downloadStopped();
-
-
-            return;
+            return downloadStopped();
         }
 
         let sourceToLoad = loader.sourcesToLoad.pop();
@@ -147,7 +147,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'md5'], function (
         }
         loader.sourcesLoading.push(sourceToLoad);
 
-        autoremoveItems(sourceToLoad);
+        removeOldItems(sourceToLoad);
 
 
         if (settings.get('showSpinner')) {
@@ -157,7 +157,6 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'md5'], function (
 
         let xhr = new XMLHttpRequest();
         xhr.onreadystatechange = () => {
-
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     let parsedData = [];
@@ -242,20 +241,15 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'md5'], function (
                     sourceToLoad.trigger('update', {ok: true});
 
                 } else {
-                    console.log('Failed load source: ' + sourceToLoad.get('url') + proxy ? 'using feedly proxy' : '');
+                    console.log('Failed load source: ' + sourceToLoad.get('url') + (proxy ? 'using feedly proxy' : ''));
                     sourceToLoad.trigger('update', {ok: false});
                 }
                 loader.set('loaded', loader.get('loaded') + 1);
-
-                // reset alarm to make sure next call isn't too soon + to make sure alarm acutaly exists (it doesn't after import)
-                sourceToLoad.trigger('reset-alarm', sourceToLoad);
                 sourceToLoad.set('isLoading', false);
 
                 feedDownloaded(sourceToLoad, xhr);
                 downloadURL();
             }
-
-
         };
         let url = sourceToLoad.get('url');
         if (proxy) {
@@ -280,6 +274,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'md5'], function (
             xhr.withCredentials = true;
             xhr.setRequestHeader('Authorization', 'Basic ' + btoa(`${username}:${password}`));
         }
+        // console.log('loading source ' + sourceToLoad.get('url') + (proxy ? ' using feedly proxy' : ''));
         xhr.send();
     }
 
@@ -300,10 +295,13 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'md5'], function (
         itemsDownloaded: false,
         sourcesToLoad: [],
         sourcesLoading: [],
+        loading: false,
         addSources: function (s) {
             if (s instanceof Source) {
-                this.sourcesToLoad.push(s);
-                this.set('maxSources', this.get('maxSources') + 1);
+                if (!this.sourcesToLoad.includes(s)) {
+                    this.sourcesToLoad.push(s);
+                    this.set('maxSources', this.get('maxSources') + 1);
+                }
             } else if (Array.isArray(s)) {
                 this.sourcesToLoad = this.sourcesToLoad.concat(s);
                 this.set('maxSources', this.get('maxSources') + s.length);

@@ -53,7 +53,7 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
             trashCountTotal: 0
         },
         badgeTimeout: null,
-        autoSetData: function () {
+        refreshSpecialCounters: function () {
             this.set({
                 allCountUnread: items.where({trashed: false, deleted: false, unread: true}).length,
                 allCountTotal: items.where({trashed: false, deleted: false}).length,

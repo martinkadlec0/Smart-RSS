@@ -107,51 +107,45 @@ define([
                  * Load counters for specials
                  */
 
-                info.autoSetData();
+                info.refreshSpecialCounters();
 
                 /**
                  * Set events
                  */
 
                 sources.on('add', function (source) {
-                    if (source.get('updateEvery') > 0) {
-                        chrome.alarms.create('source-' + source.get('id'), {
-                            delayInMinutes: source.get('updateEvery'),
-                            periodInMinutes: source.get('updateEvery')
-                        });
-                    }
                     loader.download(source);
                 });
 
                 sources.on('change:updateEvery reset-alarm', function (source) {
-                    if (source.get('updateEvery') > 0) {
-                        chrome.alarms.create('source-' + source.get('id'), {
-                            delayInMinutes: source.get('updateEvery'),
-                            periodInMinutes: source.get('updateEvery')
-                        });
-                    } else {
-                        chrome.alarms.clear('source-' + source.get('id'));
-                    }
+                    // if (source.get('updateEvery') > 0) {
+                    //     chrome.alarms.create('source-' + source.get('id'), {
+                    //         delayInMinutes: source.get('updateEvery'),
+                    //         periodInMinutes: source.get('updateEvery')
+                    //     });
+                    // } else {
+                    //     chrome.alarms.clear('source-' + source.get('id'));
+                    // }
                 });
 
-                chrome.alarms.onAlarm.addListener(function (alarm) {
-                    var sourceID = alarm.name.replace('source-', '');
-                    if (sourceID) {
-                        var source = sources.findWhere({
-                            id: sourceID
-                        });
-                        if (source) {
-                            if (!loader.download(source)) {
-                                setTimeout(loader.download, 30000, source);
-                            }
-                        } else {
-                            console.log('No source with ID: ' + sourceID);
-                            chrome.alarms.clear(alarm.name);
-                        }
-
-                    }
-
-                });
+                // chrome.alarms.onAlarm.addListener(function (alarm) {
+                //     var sourceID = alarm.name.replace('source-', '');
+                //     if (sourceID) {
+                //         var source = sources.findWhere({
+                //             id: sourceID
+                //         });
+                //         if (source) {
+                //             if (!loader.download(source)) {
+                //                 setTimeout(loader.download, 30000, source);
+                //             }
+                //         } else {
+                //             console.log('No source with ID: ' + sourceID);
+                //             chrome.alarms.clear(alarm.name);
+                //         }
+                //
+                //     }
+                //
+                // });
 
                 sources.on('change:url', function (source) {
                     loader.download(source);
@@ -175,9 +169,17 @@ define([
                 /**
                  * Init
                  */
+                    chrome.alarms.create('scheduler', {
+                        delayInMinutes: 0,
+                        periodInMinutes: 1
+                    });
 
+                chrome.alarms.onAlarm.addListener( (alarm)=> {
+                    if(alarm.name==='scheduler'){
+                        loader.downloadAll();
+                    }
+                });
 
-                setTimeout(loader.downloadAll, 30000);
                 appStarted.resolve();
 
                 /**
