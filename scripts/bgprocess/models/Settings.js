@@ -58,7 +58,8 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
 			soundVolume: 1, // min: 0, max: 1
 			showSpinner: true,
 			concurrentDownloads: 5,
-			updateFrequency: 15 // in minutes
+			updateFrequency: 15, // in minutes
+			disableAutoUpdate: false
 		},
 
 		/**

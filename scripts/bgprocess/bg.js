@@ -176,6 +176,10 @@ define([
 
                 chrome.alarms.onAlarm.addListener( (alarm)=> {
                     if(alarm.name==='scheduler'){
+                        if(settings.get('disableAutoUpdate') === true){
+                            console.log('auto updating disabled');
+                            return;
+                        }
                         loader.downloadAll();
                     }
                 });
