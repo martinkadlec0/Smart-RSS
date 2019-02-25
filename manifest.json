@@ -14,7 +14,9 @@
 		"unlimitedStorage",
 		"alarms",
 		"tabs",
-		"<all_urls>"
+		"<all_urls>",
+		"https://code.fb.com/*",
+		"https://dev.opera.com/*"
 	],
 	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'unsafe-eval';",
 	"browser_action": {
