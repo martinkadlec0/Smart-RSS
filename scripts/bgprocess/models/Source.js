@@ -15,7 +15,7 @@ define(['backbone'], function (BB) {
             title: '',
             url: 'about:blank',
             base: '',
-            updateEvery: -1, // in minutes
+            updateEvery: -1, // in minutes, -1 to use global default
             lastUpdate: 0,
             count: 0, // unread
             countAll: 0,
