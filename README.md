@@ -29,36 +29,13 @@ To check for jshint errors:
 grunt jshint
 ```
 
-To compile stylus files to css:
+To create package uploadable to various extension repositories 
 ```
-grunt stylus
+grunt release
 ```
+this will automatically bump version in manifest.json, commit the change and create zip file
 
-
-When you are done editing the code you can compile all the js files:
+To create zip file only use 
 ```
-grunt rjs
+grunt package
 ```
-
-Files required for extension to run after building:
-````
-images/*
-scripts/app/modules/Locale.js
-scripts/app/libs/*
-scripts/nls/*
-scripts/options/*
-scripts/bgprocess-compiled.js
-scripts/domReady.js
-scripts/main-compiled.js
-version.js
-sounds/*
-styles/main-compiled.css
-styles/options.css
-index.html
-manifest.json
-options.html
-rss.html
-rss_content.html
-````
-
-additionally you have to modify index.html and rss.html to load compiled files instead, when you do you can bundle the extension according to your browsers instructions
