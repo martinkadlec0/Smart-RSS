@@ -122,31 +122,11 @@ module.exports = function(grunt) {
                 }
             }
         },
-
-
-        stylus: {
-            compile: {
-                options: {
-                    compress: false,
-                    //imports: ['nib']
-                },
-                files: {
-                    //'styles/options-compiled.css': 'options.styl', // 1:1 compile
-                    'styles/main-compiled.css': [
-                        'styles/global.styl',
-                        'styles/feeds.styl',
-                        'styles/articles.styl',
-                        'styles/content.styl'
-                    ]
-                }
-            }
-        }
     });
 
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
-    grunt.loadNpmTasks('grunt-contrib-stylus');
 
     // Default task(s).
     grunt.registerTask('default', ['jshint']);
