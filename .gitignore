@@ -4,3 +4,5 @@ docs/*
 styles/main-compiled.css
 scripts/main-compiled.*
 scripts/bgprocess-compiled.*
+package.zip
+package-lock.json
