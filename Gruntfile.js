@@ -4,7 +4,6 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
-
         jshint: {
             options: {
                 curly: false, // true: force { }
@@ -62,27 +61,54 @@ module.exports = function (grunt) {
                     if (skipped.includes(name)) {
                         return null;
                     }
-                    if(filepath.includes('node_modules')){
+                    if (filepath.includes('node_modules')) {
                         return null;
                     }
-                    console.log(name);
-
 
                     return filepath;
-
-
                 },
                 src: ['**/*'],
-                dest: 'package.zip',
+                dest: 'package.zip'
             }
         }
     });
 
-
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-zip');
+
+    grunt.registerTask('bump-version', '', function () {
+        let manifest = grunt.file.readJSON('manifest.json');
+        let version = manifest.version;
+
+        let versionArr = version.split('.');
+        versionArr[2] = parseInt(versionArr[2]) + 1;
+        version = versionArr.join('.');
+
+        manifest.version = version;
+        grunt.file.write('manifest.json', JSON.stringify(manifest, null, 2));
+        let {exec} = require('child_process');
+        let done = this.async();
+        exec('git add manifest.json', (err, stdout, stderr) => {
+            if (err) {
+                // node couldn't execute the command
+                console.log(`stderr: ${stderr}`);
+                done(false);
+                return;
+            }
+            exec('git commit -m "auto version bump"', (err, stdout, stderr) => {
+                console.log(`stdout: ${stdout}`);
+                if (err) {
+                    console.log(`stderr: ${stderr}`);
+                    done(false);
+                    return;
+                }
+                done(true);
+            });
+        });
+    });
 
     // Default task(s).
     grunt.registerTask('default', ['jshint']);
     grunt.registerTask('package', ['zip']);
+    grunt.registerTask('release', ['bump-version', 'zip']);
 };
