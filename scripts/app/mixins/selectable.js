@@ -18,7 +18,10 @@ define(['jquery'], function ($) {
         },
         selectFirst: function () {
             var first = $('.' + this.itemClass + ':not(.invisible)').get(0);
-            if (first) this.select(first.view);
+            if (first) {
+                this.select(first.view);
+                first.focus();
+            }
         },
         selectNext: function (e) {
             e = e || {};
@@ -53,7 +56,9 @@ define(['jquery'], function ($) {
             } else if (e.currentIsRemoved) {
                 app.trigger('no-items:' + this.el.id);
             }
-
+            if (next) {
+                next.focus();
+            }
         },
         selectPrev: function (e) {
             e = e || {};
@@ -86,6 +91,9 @@ define(['jquery'], function ($) {
                 }
             } else if (e.currentIsRemoved) {
                 app.trigger('no-items:' + this.el.id);
+            }
+            if (prev) {
+                prev.focus();
             }
         },
         select: function (view, e, forceSelect) {
@@ -168,7 +176,6 @@ define(['jquery'], function ($) {
                 return true;
             }
             const item = e.currentTarget.view;
-            console.log(item);
             if (item.el.classList.contains('item')) {
                 e.preventDefault();
             }

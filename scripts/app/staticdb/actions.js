@@ -20,7 +20,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 fn: function () {
                     window.open('options.html');
                 }
-            },
+            }
             // report: {
             //     title: 'Report a problem',
             //     icon: 'report.png',
@@ -315,6 +315,9 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 fn: function (e) {
                     var list = require('views/articleList');
                     if (list.currentData.name === 'trash' || e.shiftKey) {
+                        if (!confirm('Remove selected items permanently?')) {
+                            return;
+                        }
                         list.destroyBatch(list.selectedItems, list.removeItemCompletely);
                     } else {
                         list.destroyBatch(list.selectedItems, list.removeItem);
@@ -326,7 +329,9 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 title: Locale.c.UNDELETE,
                 fn: function () {
                     var articleList = require('views/articleList');
-                    if (!articleList.selectedItems || !articleList.selectedItems.length || articleList.currentData.name !== 'trash') return;
+                    if (!articleList.selectedItems || !articleList.selectedItems.length || articleList.currentData.name !== 'trash') {
+                        return;
+                    }
                     articleList.destroyBatch(articleList.selectedItems, articleList.undeleteItem);
                 }
             },
@@ -343,7 +348,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
             search: {
                 title: Locale.c.SEARCH_TIP,
                 fn: function (e) {
-                    e = e || {currentTarget: Array.from(document.querySelectorAll('input[type=search]'))[0]};
+                    e = e || {currentTarget: document.querySelector('input[type=search]')};
                     var str = e.currentTarget.value || '';
                     var list = require('views/articleList');
                     if (str === '') {
@@ -363,7 +368,9 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                     }
                     var rg = new RegExp(RegExp.escape(str), 'i');
                     list.views.some(function (view) {
-                        if (!view.model) return true;
+                        if (!view.model) {
+                            return true;
+                        }
                         if (rg.test(view.model.get('title')) || rg.test(view.model.get('author')) || (searchInContent && rg.test(view.model.get('content')))) {
                             view.$el.removeClass('invisible');
                         } else {
@@ -379,7 +386,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
             focusSearch: {
                 title: 'Focus Search',
                 fn: function () {
-                    document.querySelectorAll('input[type=search]').focus();
+                    document.querySelector('input[type=search]').focus();
                 }
             },
             focus: {
