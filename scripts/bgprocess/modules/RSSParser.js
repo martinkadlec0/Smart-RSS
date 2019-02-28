@@ -6,14 +6,11 @@ define(['../../libs/favicon'], function (faviconLoader) {
 
 
     function checkFavicon(source) {
-        function updateIconData(iconData) {
-            source.save(iconData);
-        }
 
         function googleFallback() {
             faviconLoader.image('https://www.google.com/s2/favicons?domain=' + encodeURIComponent(source.get('url')))
                 .then(response => {
-                    updateIconData(response);
+                    source.save(response);
                 });
         }
 
@@ -62,7 +59,7 @@ define(['../../libs/favicon'], function (faviconLoader) {
 
                         faviconLoader.image(iconAddress)
                             .then(response => {
-                                updateIconData(response);
+                                source.save(response);
                             })
                             .catch(() => {
                                 googleFallback();

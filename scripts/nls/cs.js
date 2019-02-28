@@ -100,12 +100,6 @@ define({
 	TITLE: 'Název',
 	AUTHOR: 'Autor',
 
-	EMAIL: 'E-Mail',
-	OPTIONAL: 'nepovinný',
-	SUBMIT: 'Odeslat',
-	INCLUDE_FEED_LIST: 'Přidat do hlášení seznam rss zdrojů',
-	REPORT: 'Prosím popište problém.',
-
 	SORTING: 'Hlavní řazení',
 	SECONDARY_SORTING: 'Vedlejší řazení'
 });
