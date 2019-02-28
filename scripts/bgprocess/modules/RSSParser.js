@@ -17,8 +17,7 @@ define(['../../libs/favicon'], function (faviconLoader) {
                 });
         }
 
-        if (true) {
-            // if (source.get('faviconExpires') < parseInt(Math.round((new Date()).getTime() / 1000))) {
+        if (source.get('faviconExpires') < parseInt(Math.round((new Date()).getTime() / 1000))) {
             let baseAddress = source.get('base');
             let xhr = new XMLHttpRequest();
             xhr.onreadystatechange = () => {
