@@ -1,5 +1,5 @@
 <% if (typeof isLoading == 'undefined' || !isLoading) { %>
-	<img src="http://www.google.com/s2/favicons?domain=<%= encodeURIComponent(url) %>" class="source-icon" />
+	<img src="<%= favicon %>" class="source-icon" />
 <% } else { %>
 	<img src="/images/feedupdate.svg" class="source-icon" />
 <% } %>

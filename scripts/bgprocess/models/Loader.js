@@ -2,7 +2,7 @@
  * @module BgProcess
  * @submodule models/Loader
  */
-define(['backbone', 'modules/RSSParser', 'modules/Animation', 'md5'], function (BB, RSSParser, animation, md5) {
+define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSSParser, animation) {
 
     // remove items with age above treshold
     function removeOldItems(source) {
@@ -156,6 +156,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'md5'], function (
         let proxy = sourceToLoad.get('proxyThroughFeedly');
 
         let xhr = new XMLHttpRequest();
+        xhr.overrideMimeType('application/xml');
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
@@ -183,7 +184,6 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'md5'], function (
                         });
                     } else {
                         parsedData = RSSParser.parse(xhr.responseXML, sourceToLoad.get('id'));
-
                     }
                     var hasNew = false;
                     var createdNo = 0;
@@ -274,7 +274,6 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'md5'], function (
             xhr.withCredentials = true;
             xhr.setRequestHeader('Authorization', 'Basic ' + btoa(`${username}:${password}`));
         }
-        // console.log('loading source ' + sourceToLoad.get('url') + (proxy ? ' using feedly proxy' : ''));
         xhr.send();
     }
 

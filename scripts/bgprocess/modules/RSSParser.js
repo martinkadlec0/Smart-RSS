@@ -2,7 +2,83 @@
  * @module BgProcess
  * @submodule modules/RSSParser
  */
-define([], function () {
+define(['../../libs/favicon'], function (faviconLoader) {
+
+
+    function checkFavicon(source) {
+        function updateIconData(iconData) {
+            source.save(iconData);
+        }
+
+        function googleFallback() {
+            faviconLoader.image('https://www.google.com/s2/favicons?domain=' + encodeURIComponent(source.get('url')))
+                .then(response => {
+                    updateIconData(response);
+                });
+        }
+
+        if (true) {
+            // if (source.get('faviconExpires') < parseInt(Math.round((new Date()).getTime() / 1000))) {
+            let baseAddress = source.get('base');
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        const parser = new DOMParser();
+                        const baseDocument = parser.parseFromString(xhr.responseText, 'text/html');
+                        const length = baseAddress.length;
+                        if (baseAddress[length - 1] === '/') {
+                            baseAddress = baseAddress.substring(0, length - 1);
+                        }
+                        let iconAddress = baseAddress + '/favicon.ico';
+                        const links = baseDocument.querySelectorAll('link');
+                        const iconLinks = Array.from(links).filter(link => {
+                            return link.hasAttribute('rel') && link.getAttribute('rel').includes('icon');
+                        });
+                        let foundIcon = '';
+                        iconLinks.forEach((link) => {
+                            if (link.hasAttribute('rel') && link.getAttribute('rel').includes('icon')) {
+                                if (link.hasAttribute('href')) {
+                                    foundIcon = link.getAttribute('href');
+                                } else {
+                                    foundIcon = link.textContent;
+                                }
+                            }
+                        });
+                        if (foundIcon) {
+                            if (!foundIcon.includes('//')) {
+                                if (foundIcon[0] === '.') {
+                                    foundIcon = foundIcon.substr(1);
+                                }
+                                if (foundIcon[0] === '/') {
+                                    foundIcon = foundIcon.substr(1);
+                                }
+                                iconAddress = baseAddress + '/' + foundIcon;
+                            } else {
+                                iconAddress = foundIcon;
+                            }
+                        }
+                        const prefix = source.get('url').includes('http://') ? 'http://' : 'https://';
+                        iconAddress = prefix + iconAddress.replace('http://', '').replace('https://', '').replace('//', '');
+
+                        faviconLoader.image(iconAddress)
+                            .then(response => {
+                                updateIconData(response);
+                            })
+                            .catch(() => {
+                                googleFallback();
+                            });
+
+                    } else {
+                        googleFallback();
+                    }
+                }
+
+            };
+            xhr.open('GET', baseAddress);
+            xhr.send();
+        }
+    }
 
 
     /**
@@ -28,6 +104,7 @@ define([], function () {
         var source = sources.findWhere({
             id: sourceID
         });
+
         if (title && (source.get('title') === source.get('url') || !source.get('title'))) {
             source.save('title', title);
         }
@@ -53,13 +130,21 @@ define([], function () {
         }
         /* END: ttl check */
 
-        var mainEl = xml.querySelector('rss, rdf, feed');
+        var mainEl = xml.querySelector('rss, rdf, feed, channel');
         if (mainEl) {
-            var baseStr = mainEl.getAttribute('xml:base') || mainEl.getAttribute('xmlns:base') || mainEl.getAttribute('base');
+            var baseStr = mainEl.getAttribute('xml:base') || mainEl.getAttribute('xmlns:base') || mainEl.getAttribute('base') || mainEl.querySelector('link').textContent || (mainEl.querySelector('link') && mainEl.querySelector('link:not([rel="self"])').getAttribute('href'));
+            if (!baseStr) {
+                baseStr = source.get('url');
+            }
             if (baseStr) {
+                const prefix = source.get('url').includes('http://') ? 'http://' : 'https://';
+                const urlParts = baseStr.replace('http://', '').replace('https://', '').replace('//', '').split(/[/?#]/);
+                baseStr = prefix + urlParts[0];
                 source.save({base: baseStr});
             }
         }
+        checkFavicon(source);
+
 
         [].forEach.call(nodes, function (node) {
             items.push({
