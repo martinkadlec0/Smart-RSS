@@ -8,25 +8,7 @@ define([
     ],
     function (BB, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 
-        function isScrolledIntoView(elem) {
-            if (!screen) {
-                bg.sources.trigger('clear-events', -1);
-                return false;
-            }
-
-            var docViewTop = 0;
-            var docViewBottom = screen.height;
-
-            var rect = elem.getBoundingClientRect();
-            var elemTop = rect.top;
-            var elemBottom = elemTop + rect.height;
-
-            return (elemBottom >= docViewTop) && (elemTop <= docViewBottom);
-            /*  && (elemBottom <= docViewBottom) &&  (elemTop >= docViewTop) ;*/
-        }
-
         var groups = new Groups();
-
 
         /**
          * List of articles
@@ -35,13 +17,6 @@ define([
          * @extends Backbone.View
          */
         var ArticleListView = BB.View.extend({
-            /**
-             * Height of one article item (changes with layout and rems)
-             * @property _itemHeight
-             * @default 0
-             * @type Number
-             */
-            _itemHeight: 0,
 
             /**
              * Tag name of article list element
@@ -76,15 +51,6 @@ define([
             views: [],
 
             /**
-             * Order list of yet rendered article views
-             * @property viewsToRender
-             * @default []
-             * @type Array
-             */
-            viewsToRender: [],
-
-
-            /**
              * Data received from feedList about current selection (feed ids, name of special, filter, unreadOnly)
              * @property currentData
              * @default { feeds: [], name: 'all-feeds', filter: { trashed: false}, unreadOnly: false }
@@ -104,14 +70,6 @@ define([
              * @type Boolean
              */
             noFocus: false,
-
-            /**
-             * All article views - unattached views
-             * @property reuseIndex
-             * @default 0
-             * @type Integer
-             */
-            reuseIndex: 0,
 
             events: {
                 'dragstart .item': 'handleDragStart',
@@ -136,8 +94,8 @@ define([
              * @triggered on mouse down on article
              * @param event {MouseEvent}
              */
-            handleMouseDown: function (e) {
-                this.handleSelectableMouseDown(e);
+            handleMouseDown: function (event) {
+                this.handleSelectableMouseDown(event);
             },
 
             /**
@@ -146,8 +104,8 @@ define([
              * @triggered on click on pin button
              * @param event {MouseEvent}
              */
-            handleClickPin: function (e) {
-                e.currentTarget.parentNode.view.handleClickPin(e);
+            handleClickPin: function (event) {
+                event.currentTarget.parentNode.view.handleClickPin(event);
             },
 
             /**
@@ -156,9 +114,9 @@ define([
              * @triggered on mouse up on article
              * @param event {MouseEvent}
              */
-            handleMouseUp: function (e) {
-                e.currentTarget.view.handleMouseUp(e);
-                this.handleSelectableMouseUp(e);
+            handleMouseUp: function (event) {
+                event.currentTarget.view.handleMouseUp(event);
+                this.handleSelectableMouseUp(event);
             },
 
             /**
@@ -166,14 +124,12 @@ define([
              * @method initialize
              */
             initialize: function () {
-
-                this.$el.addClass('lines-' + bg.settings.get('lines'));
+                this.el.classList.add('lines-' + bg.settings.get('lines'));
                 bg.items.on('reset', this.addItems, this);
                 bg.items.on('add', this.addItem, this);
                 bg.items.on('sort', this.handleSort, this);
                 bg.items.on('render-screen', this.handleRenderScreen, this);
                 bg.settings.on('change:lines', this.handleChangeLines, this);
-                bg.settings.on('change:layout', this.handleChangeLayout, this);
                 bg.sources.on('destroy', this.handleSourcesDestroy, this);
                 bg.sources.on('clear-events', this.handleClearEvents, this);
 
@@ -181,10 +137,6 @@ define([
 
                 this.on('attach', this.handleAttached, this);
                 this.on('pick', this.handlePick, this);
-
-
-                this.$el.on('scroll', this.handleScroll.bind(this));
-
             },
 
             /**
@@ -218,7 +170,6 @@ define([
              * @triggered when article list is attached to DOM
              */
             handleAttached: function () {
-
                 app.on('select:feed-list', function (data) {
                     this.el.scrollTop = 0;
                     this.unreadOnly = data.unreadOnly;
@@ -272,49 +223,17 @@ define([
              * @triggered when new items arr added or when source is destroyed
              */
             handleRenderScreen: function () {
-                this.redraw();
                 if ($('input[type=search]').val()) {
                     app.actions.execute('articles:search');
                 }
             },
 
-            /**
-             * Calls redraw when user scrolls in list
-             * @method handleScroll
-             * @triggered when list is scrolled (and is called from many other places)
-             */
-            handleScroll: function () {
-                this.redraw();
-            },
-
-            /**
-             * Renders unrendered articles in view
-             * @method redraw
-             */
-            redraw: function () {
-                var start = -1;
-                var count = 0;
-                for (var i = 0, j = this.viewsToRender.length; i < j; i++) {
-                    if ((start >= 0 && count % 10 !== 0) || isScrolledIntoView(this.viewsToRender[i].el)) {
-                        this.viewsToRender[i].render();
-                        count++;
-                        if (start === -1) start = i;
-                    } else if (start >= 0) {
-                        break;
-                    }
-                }
-
-
-                if (start >= 0 && count > 0) {
-                    this.viewsToRender.splice(start, count);
-                }
-            },
 
             /**
              * Unbinds all listeners to bg process
              * @method handleClearEvents
-             * @triggered when tab is closed/refershed
-             * @param id {Integer} id of the closed tab
+             * @triggered when tab is closed/refreshed
+             * @param id {Number} id of the closed tab
              */
             handleClearEvents: function (id) {
                 if (window === null || id === tabID) {
@@ -323,7 +242,6 @@ define([
                     bg.items.off('sort', this.handleSort, this);
                     bg.items.off('render-screen', this.handleRenderScreen, this);
                     bg.settings.off('change:lines', this.handleChangeLines, this);
-                    bg.settings.off('change:layout', this.handleChangeLayout, this);
 
                     bg.sources.off('destroy', this.handleSourcesDestroy, this);
 
@@ -331,18 +249,6 @@ define([
                 }
             },
 
-            /**
-             * Sets new article item height and rerenders list
-             * @method handleChangeLayout
-             * @triggered when layout setting is changed
-             */
-            handleChangeLayout: function () {
-                var that = this;
-                requestAnimationFrame(function () {
-                    that.setItemHeight();
-                    that.handleScroll();
-                });
-            },
 
             /**
              * Clears searchbox and sorts the list
@@ -351,23 +257,21 @@ define([
              */
             handleSort: function () {
                 $('#input-search').val('');
-
                 this.handleNewSelected(this.currentData);
-
             },
 
             /**
-             * Adds or removes neccesary one-line/twoline classes for given lines settings
+             * Adds or removes necessary one-line/twoline classes for given lines settings
              * @method handleChangeLines
              * @triggered when lines setting is changed
              * @param settings {Settings} bg.Settings
              */
             handleChangeLines: function (settings) {
-                this.$el.removeClass('lines-auto');
-                this.$el.removeClass('lines-one-line');
-                this.$el.removeClass('lines-two-lines');
-                // this.$el.removeClass('lines-' + settings.previous('lines')); // does not work for some reason
-                this.$el.addClass('lines-' + settings.get('lines'));
+                const classList = this.el.classList;
+                classList.remove('lines-auto');
+                classList.remove('lines-one-line');
+                classList.remove('lines-two-lines');
+                classList.remove('lines-' + settings.get('lines'));
             },
 
             /**
@@ -376,12 +280,12 @@ define([
              * @triggered on drag start
              * @param event {DragEvent}
              */
-            handleDragStart: function (e) {
+            handleDragStart: function (event) {
                 var ids = this.selectedItems.map(function (view) {
                     return view.model.id;
                 });
 
-                e.originalEvent.dataTransfer.setData('text/plain', JSON.stringify(ids));
+                event.originalEvent.dataTransfer.setData('text/plain', JSON.stringify(ids));
             },
 
             /**
@@ -391,8 +295,9 @@ define([
              */
             selectAfterDelete: function (view) {
                 if (view === this.selectedItems[0]) {
-                    var last = this.$el.find('.item:not(.invisible):last').get(0);
-                    if (last && view === last.view) {
+                    const children = Array.from(this.el.children);
+                    const length = children.length;
+                    if (children[length - 1].view === view) {
                         this.selectPrev({currentIsRemoved: true});
                     } else {
                         this.selectNext({currentIsRemoved: true});
@@ -434,16 +339,14 @@ define([
              * @param noManualSort {Boolean} true when adding items in a batch in right order
              */
             addItem: function (item, noManualSort) {
-
                 //Don't add newly fetched items to middle column, when they shouldn't be
                 if (noManualSort !== true && !this.inCurrentData(item)) {
                     return false;
                 }
 
-
                 var after = null;
                 if (noManualSort !== true) {
-                    $.makeArray($('#article-list .item, #article-list .date-group')).some(function (itemEl) {
+                    Array.from(($('#article-list .item, #article-list .date-group'))).some(function (itemEl) {
                         if (bg.items.comparator(itemEl.view.model, item) === 1) {
                             after = itemEl;
                             return true;
@@ -454,38 +357,22 @@ define([
                 var view;
 
                 if (!after) {
-                    if (this.reuseIndex >= this.views.length) {
-                        view = new ItemView({model: item}, this);
-                        if (!this._itemHeight) {
-                            view.render();
-                        } else {
-                            view.$el.css('height', this._itemHeight + 'px');
-                            view.prerender();
-                        }
-                        this.$el.append(view.$el);
-                        this.views.push(view);
-                    } else {
-                        view = this.views[this.reuseIndex];
-                        view.swapModel(item);
+                    console.log('to');
+                    view = new ItemView({model: item}, this);
+                    view.render();
+                    this.views.push(view);
+                    this.$el.append(view.$el);
+                    if (!this.selectedItems.length) {
+                        this.select(view);
                     }
-
-                    if (!this.selectedItems.length) this.select(view);
                 } else {
+                    console.log('tamto');
                     view = new ItemView({model: item}, this);
                     view.render().$el.insertBefore($(after));
-
-                    // weee, this is definitelly not working 100% right :D or is it?
                     var indexElement = after.view instanceof ItemView ? after : after.nextElementSibling;
                     var index = indexElement ? this.views.indexOf(indexElement.view) : -1;
-                    if (index === -1) index = this.reuseIndex;
-
                     this.views.splice(index, 0, view);
                 }
-
-                if (!this._itemHeight) {
-                    this._itemHeight = view.el.getBoundingClientRect().height;
-                }
-
 
                 if (!bg.settings.get('disableDateGroups') && bg.settings.get('sortBy') === 'date') {
                     var group = Group.getGroup(item.get('date'));
@@ -493,8 +380,7 @@ define([
                         groups.add(new Group(group), {before: view.el});
                     }
                 }
-
-                this.reuseIndex++;
+                // return view.$el;
             },
 
             /**
@@ -507,21 +393,9 @@ define([
             addGroup: function (model, col, opt) {
                 var before = opt.before;
                 var view = new GroupView({model: model}, groups);
-
-
                 view.render().$el.insertBefore(before);
             },
 
-            /**
-             * Gets the height of one article items and stores it.
-             * @method setItemHeight
-             */
-            setItemHeight: function () {
-                var firstItem = this.$el.find('.item:not(.invisible):first');
-                if (firstItem.length) {
-                    this._itemHeight = firstItem.get(0).getBoundingClientRect().height;
-                }
-            },
 
             /**
              * Removes everything from lists and adds new collectino of articles
@@ -529,44 +403,31 @@ define([
              * @param items {Backbone.Collection} bg.Items
              */
             addItems: function (items) {
+                let display = this.el.style.display;
+                this.el.style.display = 'none';
 
                 groups.reset();
-
 
                 /**
                  * Select removal
                  */
                 this.selectedItems = [];
-                this.viewsToRender = [];
-                this.$el.find('.selected').removeClass('.selected');
-                this.$el.find('.last-selected').removeClass('.last-selected');
+                this.el.innerHTML = '';
+
                 this.selectPivot = null;
-                /* --- */
-
-                //var st = Date.now();
-
-                this.setItemHeight();
-
-                this.reuseIndex = 0;
-
+                let els = [];
 
                 items.forEach(function (item) {
-                    this.addItem(item, true);
+                    els.push(this.addItem(item, true));
                 }, this);
 
-                for (var i = this.reuseIndex, j = this.views.length; i < j; i++) {
-                    if (!this.views[i].model) break;
-                    this.views[i].unplugModel();
-                }
+                // this.$el.append(els);
 
-                this.redraw();
 
                 if ($('input[type=search]').val()) {
                     app.actions.execute('articles:search');
                 }
-
-                //alert(Date.now() - st);
-
+                this.el.style.display = display;
             },
 
             /**
@@ -574,13 +435,8 @@ define([
              * @method clearOnSelect
              */
             clearOnSelect: function () {
-                // Smart RSS used to reset search on feed select change. It instead keeps the fitler now.
-                //$('input[type=search]').val('');
-
                 // if prev selected was trash, hide undelete buttons
                 if (this.currentData.name === 'trash') {
-                    /*$('[data-action="articles:update"]').css('display', 'block');
-                    $('[data-action="articles:undelete"]').css('display', 'none');*/
                     app.articles.toolbar.showItems('articles:update');
                     app.articles.toolbar.hideItems('articles:undelete');
                     $('#context-undelete').css('display', 'none');
@@ -633,7 +489,6 @@ define([
              * @param source {Source} Destroyed source
              */
             handleSourcesDestroy: function (source) {
-
                 var that = this;
                 var d = this.currentData;
                 var index = d.feeds.indexOf(source.id);
@@ -700,7 +555,6 @@ define([
                     }
                 }
                 view.model.markAsDeleted();
-                //this.destroyItem(view);
             },
 
             /**
@@ -749,10 +603,8 @@ define([
 
                         this.nextFrame = null;
                         this.nextFrameStore = [];
-                        this.handleScroll();
 
                         this.trigger('items-destroyed');
-
                     }.bind(this));
                 }
             },
@@ -764,10 +616,8 @@ define([
              */
             destroyItemFrame: function (view) {
                 // START: REMOVE DATE GROUP
-                /*var prev = view.el.previousElementSibling;
-                var next = view.el.nextElementSibling;*/
-                var prev = view.el.findPrev(':not(.unpluged)');
-                var next = view.el.findNext(':not(.unpluged)');
+                let prev = view.el.previousElementSibling;
+                let next = view.el.nextElementSibling;
                 if (prev && prev.classList.contains('date-group')) {
                     if (!next || next.classList.contains('date-group')) {
                         groups.remove(prev.view.model);
@@ -776,23 +626,15 @@ define([
                 // END: REMOVE DATE GROUP
 
                 view.clearEvents();
-                // view.undelegateEvents(); - I moved all events to _list_ so this shouldn't be neccesary
-                // view.$el.removeData() - i removed this as I don't use jquery .data, if I will in future I have to add it again
-                // view.$el.unbind(); - - I'm not adding any jquery events
-                // view.off(); - This takes from some reason quite a time, and does nothing because I'm not adding events on the view
                 view.remove();
 
                 var io = this.selectedItems.indexOf(view);
-                if (io >= 0) this.selectedItems.splice(io, 1);
+                if (io >= 0) {
+                    this.selectedItems.splice(io, 1);
+                }
                 io = this.views.indexOf(view);
-                if (io >= 0) this.views.splice(io, 1);
-                io = this.viewsToRender.indexOf(view);
-                if (io >= 0) this.viewsToRender.splice(io, 1);
-
-                this.reuseIndex--;
-                if (this.reuseIndex < 0) {
-                    this.reuseIndex = 0;
-                    console.log('reuse index under zero');
+                if (io >= 0) {
+                    this.views.splice(io, 1);
                 }
             },
 
@@ -808,7 +650,6 @@ define([
                     if (!opt.onlyToRead || item.model.get('unread') === true) {
                         item.model.save({unread: val, visited: true});
                     }
-
                 }, this);
             }
         });
