@@ -20,8 +20,8 @@ define(['../../libs/favicon'], function (faviconLoader) {
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
-                        const parser = new DOMParser();
-                        const baseDocument = parser.parseFromString(xhr.responseText, 'text/html');
+                        const text = xhr.responseText.replace(/<body(.*?)<\/body>/gm, '');
+                        const baseDocument = new DOMParser().parseFromString(text, 'text/html');
                         const length = baseAddress.length;
                         if (baseAddress[length - 1] === '/') {
                             baseAddress = baseAddress.substring(0, length - 1);
