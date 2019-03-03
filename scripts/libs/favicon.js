@@ -60,11 +60,6 @@ define([], function () {
         });
     }
 
-    function getFaviconDataURI(url) {
-        var paths = url.split(/\/+/);
-        /*toDataURI('https://www.google.com/s2/favicons?domain='+encodeURIComponent(paths[1]), true, 16, 16);*/
-        return toDataURI('https://icons.better-idea.org/icon?size=16&url=' + encodeURIComponent(paths[1]), true, 16, 16);
-    }
 
     /* Custom Base64 encoder. */
     function AB2B64(arrayBuffer) {

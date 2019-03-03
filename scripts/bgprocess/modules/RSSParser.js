@@ -32,16 +32,23 @@ define(['../../libs/favicon'], function (faviconLoader) {
                             return link.hasAttribute('rel') && link.getAttribute('rel').includes('icon');
                         });
                         let foundIcon = '';
+                        let tempIcon = '';
                         iconLinks.forEach((link) => {
                             if (link.hasAttribute('rel') && link.getAttribute('rel').includes('icon')) {
                                 if (link.hasAttribute('href')) {
-                                    foundIcon = link.getAttribute('href');
+                                    tempIcon = link.getAttribute('href');
+                                    if (!tempIcon.includes('svg')) {
+                                        foundIcon = tempIcon;
+                                    }
                                 } else {
-                                    foundIcon = link.textContent;
+                                    tempIcon = link.textContent;
+                                    if (!tempIcon.includes('svg')) {
+                                        foundIcon = tempIcon;
+                                    }
                                 }
                             }
                         });
-                        if (foundIcon) {
+                        if (foundIcon && !foundIcon.includes('svg')) {
                             if (!foundIcon.includes('//')) {
                                 if (foundIcon[0] === '.') {
                                     foundIcon = foundIcon.substr(1);
