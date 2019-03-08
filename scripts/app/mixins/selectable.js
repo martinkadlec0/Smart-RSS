@@ -7,17 +7,16 @@ define(['jquery'], function ($) {
         restartSelection: function () {
             if (this.selectedItems.length) {
                 this.selectedItems = [];
-                this.$el
-                    .find('.selected')
-                    .removeClass('selected');
-                this.$el
-                    .find('.last-selected')
-                    .removeClass('last-selected');
+                const selectedItems = this.el.querySelectorAll('.selected');
+                Array.from(selectedItems).forEach((element) => {
+                    element.classList.remove('selected');
+                });
+                this.el.querySelector('.last-selected').classList.remove('last-selected');
             }
             this.selectFirst();
         },
         selectFirst: function () {
-            var first = $('.' + this.itemClass + ':not(.invisible)').get(0);
+            const first = document.querySelector('.' + this.itemClass);
             if (first) {
                 this.select(first.view);
                 first.focus();
@@ -26,74 +25,64 @@ define(['jquery'], function ($) {
         selectNext: function (e) {
             e = e || {};
 
-            const selector = e.selectUnread ? '.unread:not(.invisible)' : '.' + this.itemClass + ':not(.invisible)';
-            let next;
+            const selector = e.selectUnread ? '.unread' : '.' + this.itemClass;
+            let nextElement;
+            let currentElement;
             if (e.selectUnread && this.selectPivot) {
-                next = this.selectPivot.el.nextElementSibling;
+                nextElement = this.selectPivot.el.nextElementSibling;
             } else {
-                next = this.$el.find('.last-selected');
-                if (next.length) {
-                    next = next.get(0).nextElementSibling;
-                } else {
-                    next = this.el.firstElementChild;
-                }
+                currentElement = this.el.querySelector('.last-selected');
+                nextElement = currentElement.nextElementSibling;
             }
-            while (next && !next.matchesSelector(selector)) {
-                next = next.nextElementSibling;
+            while (nextElement && !nextElement.matchesSelector(selector)) {
+                nextElement = nextElement.nextElementSibling;
             }
 
-            if (!next && !e.shiftKey && !e.ctrlKey && bg.settings.get('circularNavigation')) {
-                next = this.el.querySelector(selector);
-                if (e.currentIsRemoved && next && this.$el.find('.last-selected').get(0) === next) {
-                    next = [];
+            if (!nextElement && !e.shiftKey && !e.ctrlKey && bg.settings.get('circularNavigation')) {
+                nextElement = this.el.querySelector(selector + ':first-child');
+                if (e.currentIsRemoved && nextElement && this.el.querySelector('.last-selected') === nextElement) {
+                    nextElement = null;
                 }
             }
-            if (next && next.view) {
-                this.select(next.view, e, true);
-                if (!this.inView(next)) {
-                    next.scrollIntoView(false);
-                }
+            if (nextElement && nextElement.view) {
+                this.select(nextElement.view, e, true);
             } else if (e.currentIsRemoved) {
                 app.trigger('no-items:' + this.el.id);
             }
-            if (next) {
-                next.focus();
+            if (nextElement) {
+                nextElement.focus();
             }
         },
         selectPrev: function (e) {
             e = e || {};
-            const selector = e.selectUnread ? '.unread:not(.invisible)' : '.' + this.itemClass + ':not(.invisible)';
-            let prev;
+
+            const selector = e.selectUnread ? '.unread' : '.' + this.itemClass;
+            let previousElement;
+            let currentElement;
             if (e.selectUnread && this.selectPivot) {
-                prev = this.selectPivot.el.previousElementSibling;
+                previousElement = this.selectPivot.el.previousElementSibling;
             } else {
-                prev = this.$el.find('.last-selected');
-                if (prev.length) {
-                    prev = prev.get(0).previousElementSibling;
-                } else {
-                    prev = this.el.lastElementChild;
-                }
+                currentElement = this.el.querySelector('.last-selected');
+                previousElement = currentElement.previousElementSibling;
+
             }
-            while (prev && !prev.matchesSelector(selector)) {
-                prev = prev.previousElementSibling;
+            while (previousElement && !previousElement.matchesSelector(selector)) {
+                previousElement = previousElement.previousElementSibling;
             }
 
-            if (!prev && !e.shiftKey && !e.ctrlKey && bg.settings.get('circularNavigation')) {
-                prev = this.$el.find(selector + ':last').get(0);
-                if (e.currentIsRemoved && prev && this.$el.find('.last-selected').get(0) === prev) {
-                    prev = [];
+            if (!previousElement && !e.shiftKey && !e.ctrlKey && bg.settings.get('circularNavigation')) {
+                previousElement = this.el.querySelector(selector + ':last-child');
+                if (e.currentIsRemoved && previousElement && this.el.querySelector('.last-selected') === previousElement) {
+                    previousElement = null;
                 }
             }
-            if (prev && prev.view) {
-                this.select(prev.view, e, true);
-                if (!this.inView(prev)) {
-                    prev.scrollIntoView(true);
-                }
+            if (previousElement && previousElement.view) {
+                this.select(previousElement.view, e, true);
             } else if (e.currentIsRemoved) {
                 app.trigger('no-items:' + this.el.id);
             }
-            if (prev) {
-                prev.focus();
+            if (previousElement) {
+                previousElement.focus();
             }
         },
         select: function (view, e, forceSelect) {
@@ -102,8 +91,10 @@ define(['jquery'], function ($) {
             if ((e.shiftKey !== true && e.ctrlKey !== true) || (e.shiftKey && !this.selectPivot)) {
                 this.selectedItems = [];
                 this.selectPivot = view;
-                this.$el.find('.selected').removeClass('selected');
-
+                const selectedItems = this.el.querySelectorAll('.selected');
+                Array.from(selectedItems).forEach((element) => {
+                    element.classList.remove('selected');
+                });
 
                 if (!window || !window.frames) {
                     bg.logs.add({message: 'Event duplication bug! Clearing events now...'});
@@ -117,15 +108,18 @@ define(['jquery'], function ($) {
                 }.bind(this), 0);
 
             } else if (e.shiftKey && this.selectPivot) {
-                this.$el.find('.selected').removeClass('selected');
+                const selectedItems = this.el.querySelectorAll('.selected');
+                Array.from(selectedItems).forEach((element) => {
+                    element.classList.remove('selected');
+                });
                 this.selectedItems = [this.selectPivot];
-                this.selectedItems[0].$el.addClass('selected');
+                this.selectedItems[0].el.classList.add('selected');
 
                 if (this.selectedItems[0] !== view) {
                     if (this.selectedItems[0].$el.index() < view.$el.index()) {
                         this.selectedItems[0].$el
                             .nextUntil(view.$el)
-                            .not('.invisible,.date-group')
+                            .not('.date-group')
                             .each(function (i, el) {
                                 $(el).addClass('selected');
                                 that.selectedItems.push(el.view);
@@ -133,7 +127,7 @@ define(['jquery'], function ($) {
                     } else {
                         view.$el
                             .nextUntil(this.selectedItems[0].$el)
-                            .not('.invisible,.date-group')
+                            .not('.date-group')
                             .each(function (i, el) {
                                 $(el).addClass('selected');
                                 that.selectedItems.push(el.view);
