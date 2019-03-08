@@ -1,4 +1,4 @@
-define(['jquery'], function ($) {
+define([], function () {
 
     return {
         selectedItems: [],
@@ -87,7 +87,6 @@ define(['jquery'], function ($) {
         },
         select: function (view, e, forceSelect) {
             e = e || {};
-            let that = this;
             if ((e.shiftKey !== true && e.ctrlKey !== true) || (e.shiftKey && !this.selectPivot)) {
                 this.selectedItems = [];
                 this.selectPivot = view;
@@ -116,23 +115,42 @@ define(['jquery'], function ($) {
                 this.selectedItems[0].el.classList.add('selected');
 
                 if (this.selectedItems[0] !== view) {
-                    if (this.selectedItems[0].$el.index() < view.$el.index()) {
-                        this.selectedItems[0].$el
-                            .nextUntil(view.$el)
-                            .not('.date-group')
-                            .each(function (i, el) {
-                                $(el).addClass('selected');
-                                that.selectedItems.push(el.view);
-                            });
+                    const element = this.selectedItems[0].el;
+                    const currentIndex = [...element.parentNode.children].indexOf(element);
+                    const viewElement = view.el;
+                    const viewIndex = [...viewElement.parentNode.children].indexOf(viewElement);
+                    const siblings = [];
+                    if (currentIndex < viewIndex) {
+
+                        let sibling = element.nextElementSibling;
+                        while (sibling) {
+                            if (sibling.matches('.date-group')) {
+                                continue;
+                            }
+                            if (sibling === viewElement) {
+                                break;
+                            }
+                            siblings.push(sibling);
+                            sibling = sibling.nextElementSibling;
+                        }
+
                     } else {
-                        view.$el
-                            .nextUntil(this.selectedItems[0].$el)
-                            .not('.date-group')
-                            .each(function (i, el) {
-                                $(el).addClass('selected');
-                                that.selectedItems.push(el.view);
-                            });
+                        let sibling = viewElement.nextElementSibling;
+                        while (sibling) {
+                            if (sibling.matches('.date-group')) {
+                                continue;
+                            }
+                            if (sibling === element) {
+                                break;
+                            }
+                            siblings.push(sibling);
+                            sibling = sibling.nextElementSibling;
+                        }
                     }
+                    siblings.forEach((element) => {
+                        element.classList.add('selected');
+                        this.selectedItems.push(element.view);
+                    });
 
                 }
 
@@ -142,9 +160,9 @@ define(['jquery'], function ($) {
                     }.bind(this), 0);
                 }
 
-            } else if (e.ctrlKey && view.$el.hasClass('selected')) {
-                view.$el.removeClass('selected');
-                view.$el.removeClass('last-selected');
+            } else if (e.ctrlKey && view.el.classList.contains('selected')) {
+                view.el.classList.remove('selected');
+                view.el.classList.remove('last-selected');
                 this.selectPivot = null;
                 this.selectedItems.splice(this.selectedItems.indexOf(view), 1);
                 return;
@@ -152,18 +170,21 @@ define(['jquery'], function ($) {
                 this.selectPivot = view;
             }
 
-            this.$el.find('.last-selected').removeClass('last-selected');
+            const lastSelected = this.el.querySelector('.last-selected');
+            if (lastSelected) {
+                lastSelected.classList.remove('last-selected');
+            }
             if (this.selectedItems[0] !== view) {
                 this.selectedItems.push(view);
-                view.$el.addClass('selected');
+                view.el.classList.add('selected');
             }
-            view.$el.addClass('last-selected');
+            view.el.classList.add('last-selected');
         },
-        inView: function (cel) {
-            var $cel = $(cel);
-            return !($cel.position().top - this.$el.offset().top < 0 || $cel.position().top + cel.offsetHeight >= this.el.offsetHeight);
-
-        },
+        // inView: function (cel) {
+        //     var $cel = $(cel);
+        //     return !($cel.position().top - this.$el.offset().top < 0 || $cel.position().top + cel.offsetHeight >= this.el.offsetHeight);
+        //
+        // },
         handleSelectableMouseDown: function (e) {
             if (e.which === 2) {
                 // return browser.tabs.create({url: e.currentTarget.view.model.attributes.url, active: false});
