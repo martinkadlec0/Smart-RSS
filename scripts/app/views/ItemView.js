@@ -3,8 +3,8 @@
  * @submodule views/ItemView
  */
 define([
-    'backbone', 'jquery', '../../libs/template', 'helpers/formatDate', 'instances/contextMenus', 'helpers/stripTags', 'text!templates/item.html'
-], function (BB, $, template, formatDate, contextMenus, stripTags, tplItem) {
+    'backbone', '../../libs/template', 'helpers/formatDate', 'instances/contextMenus', 'helpers/stripTags', 'text!templates/item.html'
+], function (BB, template, formatDate, contextMenus, stripTags, tplItem) {
 
     /**
      * View of one article item in article list
@@ -17,7 +17,7 @@ define([
         /**
          * Tag name of article item element
          * @property tagName
-         * @default 'div'
+         * @default 'a'
          * @type String
          */
         tagName: 'a',
@@ -53,7 +53,6 @@ define([
          * @param list {Backbone.View} Reference to articleList
          */
         initialize: function (opt, list) {
-
             this.list = list;
             this.el.setAttribute('draggable', 'true');
             this.el.view = this;
@@ -70,60 +69,6 @@ define([
             bg.sources.on('clear-events', this.handleClearEvents, this);
         },
 
-        /**
-         * Swaps models of view.
-         * It reuses already created DOM when changing selected feeds/folders.
-         * @method swapModel
-         * @param newModel {Item} Item model to be used
-         */
-        swapModel: function (newModel) {
-            if (this.model === newModel) {
-                this.prerender();
-                return;
-            }
-            if (this.model) {
-                this.clearEvents();
-            }
-            this.model = newModel;
-            this.setEvents();
-            this.prerender();
-        },
-
-        /**
-         * Indiciates whether the item was prerendered (true) or already fully-rendered (false).
-         * When prerendered, only the classNames are set without any text content.
-         * Prerendering is used for not-visible items in the list.
-         * @property prerendered
-         * @default false
-         * @type Boolean
-         */
-        prerendered: false,
-
-        /**
-         * Prerenders view. (More info on prerenderer property).
-         * @method prerender
-         */
-        prerender: function () {
-            this.prerendered = true;
-            this.list.viewsToRender.push(this);
-            this.el.className = this.model.get('unread') ? 'item unread' : 'item';
-        },
-
-        /**
-         * Removes item content without removing the actuall DOM and Backbone view.
-         * When changing selected feed with _m_ items to another feed with _n_ items where n<m
-         * then the first n items use the swapModel method and the rest unplugModel method.
-         * @method unplugModel
-         */
-        unplugModel: function () {
-            if (this.model) {
-                this.el.className = 'unpluged';
-                this.clearEvents();
-                this.model = null;
-                this.el.innerHTML = '';
-                if (this.list._itemHeight) this.$el.css('height', this.list._itemHeight + 'px');
-            }
-        },
 
         /**
          * If the tab is closed, it will remove all events binded to bgprocess
@@ -155,28 +100,33 @@ define([
          * @chainable
          */
         render: function () {
+            const classList = this.el.classList;
+            if (!this.model.get('visited')) {
+                classList.add('unvisited');
+            } else {
+                classList.remove(('unvisited'));
+            }
+            if (this.model.get('unread')) {
+                classList.add('unread');
+            } else {
+                classList.remove('unread');
+            }
 
-            this.$el.toggleClass('unvisited', !this.model.get('visited'));
-            this.$el.toggleClass('unread', this.model.get('unread'));
-
-            var ca = this.model.changedAttributes();
-            if (ca) {
-                var caKeys = Object.keys(ca);
-                if ((('unread' in ca || 'visited' in ca) && caKeys.length === 1) || ('unread' in ca && 'visited' in ca && caKeys.length === 2)) {
+            const changedAttributes = this.model.changedAttributes();
+            if (changedAttributes) {
+                const caKeys = Object.keys(changedAttributes);
+                if ((('unread' in changedAttributes || 'visited' in changedAttributes) && caKeys.length === 1) || ('unread' in changedAttributes && 'visited' in changedAttributes && caKeys.length === 2)) {
                     return this;
                 }
             }
 
-            this.$el.css('height', '');
             var data = this.model.toJSON();
-            this.$el.attr('href', data.url);
+            this.el.setAttribute('href', data.url);
 
             data.date = this.getItemDate(data.date);
             data.title = stripTags(data.title).trim() || '&lt;no title&gt;';
 
-            //this.el.title = data.title + '\n' + formatDate(this.model.get('date'), pickedFormat + ' ' + timeFormatTitle);
-
-            this.$el.html(this.template(data));
+            this.el.innerHTML = this.template(data);
 
             return this;
         },
@@ -188,11 +138,10 @@ define([
          * @return String
          */
         getItemDate: function (date) {
-            var dateFormats = {normal: 'DD.MM.YYYY', iso: 'YYYY-MM-DD', us: 'MM/DD/YYYY'};
-            var pickedFormat = dateFormats[bg.settings.get('dateType') || 'normal'] || dateFormats['normal'];
+            const dateFormats = {normal: 'DD.MM.YYYY', iso: 'YYYY-MM-DD', us: 'MM/DD/YYYY'};
+            const pickedFormat = dateFormats[bg.settings.get('dateType') || 'normal'] || dateFormats['normal'];
 
-            var timeFormat = bg.settings.get('hoursFormat') === '12h' ? 'H:mm a' : 'hh:mm';
-            //var timeFormatTitle = bg.settings.get('hoursFormat') == '12h' ? 'H:mm a' : 'hh:mm:ss';
+            const timeFormat = bg.settings.get('hoursFormat') === '12h' ? 'H:mm a' : 'hh:mm';
 
             if (date) {
                 if (bg.settings.get('fullDate')) {
@@ -227,7 +176,7 @@ define([
          * @param event {MouseEvent}
          */
         showContextMenu: function (e) {
-            if (!this.$el.hasClass('selected')) {
+            if (!this.el.classList.contains('selected')) {
                 this.list.select(this, e);
             }
             contextMenus.get('items').currentSource = this.model;

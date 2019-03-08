@@ -370,9 +370,6 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                             view.$el.addClass('invisible');
                         }
                     });
-
-                    list.redraw();
-
                     list.restartSelection();
                 }
             },
