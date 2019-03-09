@@ -2,7 +2,7 @@ define(['jquery'], function ($) {
 
     var els = [];
 
-    var resizeWidth = bg.settings.get('thickFrameBorders') ? 10 : 6;
+    var resizeWidth = 6;
 
     function handleMouseDown(e) {
         this.resizing = true;
@@ -13,7 +13,7 @@ define(['jquery'], function ($) {
 
     function handleMouseMove(e) {
         if (this.resizing) {
-            var toLeft = bg.settings.get('thickFrameBorders') ? 5 : 1;
+            var toLeft = 1;
             e.preventDefault();
             if (this.layout === 'vertical') {
                 setPosition.call(this, e.clientY);
@@ -39,7 +39,7 @@ define(['jquery'], function ($) {
     }
 
     function setPosition(pos) {
-        var toLeft = bg.settings.get('thickFrameBorders') ? 5 : 1;
+        var toLeft = 1;
         if (this.layout === 'vertical') {
             this.resizer.style.width = this.$el.width() + 'px';
             this.resizer.style.left = this.el.offsetLeft + 'px';

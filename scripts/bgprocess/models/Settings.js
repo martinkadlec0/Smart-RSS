@@ -45,7 +45,6 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
 			articleFontSize: '100',
 			uiFontSize: '100',
 			disableDateGroups: false,
-			thickFrameBorders: false,
 			badgeMode: 'disabled',
 			circularNavigation: true,
 			sortBy: 'date',
