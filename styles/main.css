@@ -11,6 +11,10 @@ body {
     margin: 0;
     font-size: 100%;
     font-family: sans-serif;
+    /*overflow: hidden;*/
+}
+body {
+    overflow: hidden;
 }
 
 .visible {
@@ -163,11 +167,13 @@ input[type=search]:not(:focus):not(:valid) {
  */
 .regions {
     display: flex;
+    min-height: 100%;
+    max-height: 100%;
+}
+.subregions {
     flex-shrink: 1;
     flex-grow: 1;
     flex-basis: auto;
-    min-height: 100%;
-    max-height: 100%;
 }
 
 .regions.vertical {
@@ -568,9 +574,8 @@ input[type=search]:not(:focus):not(:valid) {
 }
 
 header {
-    display: none;
+    /*display: none;*/
     padding: 25px 15px 15px 30px;
-    font-family: sans-serif;
     border-bottom: 1px solid #c7cbd6;
     flex: 0 0 auto;
     overflow: hidden;
