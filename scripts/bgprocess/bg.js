@@ -4,10 +4,10 @@
 define([
         'jquery',
         'modules/Animation', 'models/Settings', 'models/Info', 'models/Source',
-        'collections/Sources', 'collections/Items', 'collections/Folders', 'models/Loader', 'collections/Logs',
+        'collections/Sources', 'collections/Items', 'collections/Folders', 'models/Loader',
         'models/Folder', 'models/Item', 'collections/Toolbars'
     ],
-    function ($, animation, Settings, Info, Source, Sources, Items, Folders, Loader, Logs, Folder, Item, Toolbars) {
+    function ($, animation, Settings, Info, Source, Sources, Items, Folders, Loader, Folder, Item, Toolbars) {
 
         /**
          * Update animations
@@ -47,8 +47,6 @@ define([
          * Non-db models & collections
          */
         window.loader = new Loader();
-        window.logs = new Logs();
-        logs.startLogging();
 
         /**
          * RSS Downloader
@@ -140,14 +138,14 @@ define([
                 /**
                  * Init
                  */
-                    chrome.alarms.create('scheduler', {
-                        delayInMinutes: 0,
-                        periodInMinutes: 1
-                    });
+                chrome.alarms.create('scheduler', {
+                    delayInMinutes: 0,
+                    periodInMinutes: 1
+                });
 
-                chrome.alarms.onAlarm.addListener( (alarm)=> {
-                    if(alarm.name==='scheduler'){
-                        if(settings.get('disableAutoUpdate') === true){
+                chrome.alarms.onAlarm.addListener((alarm) => {
+                    if (alarm.name === 'scheduler') {
+                        if (settings.get('disableAutoUpdate') === true) {
                             console.log('auto updating disabled');
                             return;
                         }

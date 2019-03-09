@@ -4,9 +4,9 @@
  */
 define([
         'jquery', 'layouts/Layout', 'views/ToolbarView', 'views/contentView', 'views/SandboxView',
-        'views/OverlayView', 'views/LogView', 'controllers/comm', 'domReady!'
+        'views/OverlayView', 'controllers/comm', 'domReady!'
     ],
-    function ($, Layout, ToolbarView, contentView, SandboxView, OverlayView, LogView, comm) {
+    function ($, Layout, ToolbarView, contentView, SandboxView, OverlayView, comm) {
 
         var toolbar = bg.toolbars.findWhere({region: 'content'});
 
@@ -35,7 +35,6 @@ define([
                     this.attach('toolbar', new ToolbarView({model: toolbar}));
                     this.attach('content', contentView);
                     this.attach('sandbox', new SandboxView());
-                    this.attach('log', new LogView());
                     this.attach('overlay', new OverlayView());
 
                     this.listenTo(comm, 'hide-overlays', this.hideOverlay);
