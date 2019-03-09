@@ -77,7 +77,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-zip');
 
     grunt.registerTask('bump-version', '', function () {
-        let manifest = grunt.file.readJSON('manifest.json');
+        const manifest = grunt.file.readJSON('manifest.json');
         let version = manifest.version;
 
         let versionArr = version.split('.');
@@ -102,13 +102,18 @@ module.exports = function (grunt) {
                     done(false);
                     return;
                 }
+                grunt.file.write('scripts/version.js', 'const version = \'' + version + '\';');
                 done(true);
             });
         });
     });
 
+    grunt.registerTask('restore-displayed-version', '', function(){
+        grunt.file.write('scripts/version.js', 'const version = \'dev build\';');
+    });
+
     // Default task(s).
     grunt.registerTask('default', ['jshint']);
     grunt.registerTask('package', ['zip']);
-    grunt.registerTask('release', ['bump-version', 'zip']);
+    grunt.registerTask('release', ['bump-version', 'zip', 'restore-displayed-version']);
 };
