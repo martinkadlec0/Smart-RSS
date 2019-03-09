@@ -1,12 +1,4 @@
-function utf8_to_b64(str) {
-    return btoa(unescape(encodeURIComponent(str)));
-}
-
-function b64_to_utf8(str) {
-    return atob(str);
-}
-
-var entityMap = {
+const entityMap = {
     '&': '&amp;',
     '<': '&lt;',
     '>': '&gt;',
@@ -47,50 +39,54 @@ JSON.safeParse = function (str) {
 };
 
 chrome.runtime.getBackgroundPage(function (bg) {
+    const documentReady = () => {
+        document.querySelector('#version').innerHTML = bg.version || 'dev build';
 
-    $(function () {
-
-        $('#version').html(bg.version || 'dev build');
-
-
-        $('select[id], input[type=number], input[type=range], input[type=range]').each(function (i, item) {
-            $(item).val(bg.settings.get(item.id));
+        [...document.querySelectorAll('select[id], input[type=number], input[type=range], input[type=range]')].forEach((item) => {
+            item.value = bg.settings.get(item.id);
             if (item.type === 'number') {
-                $(item).on('input', handleChange);
+                item.addEventListener('input', handleChange);
             } else {
-                $(item).change(handleChange);
+                item.addEventListener('change', handleChange);
             }
         });
 
-        $('input[type=checkbox]').each(function (i, item) {
-            $(item).get(0).checked = !!bg.settings.get(item.id);
-            $(item).change(handleCheck);
+        [...document.querySelectorAll('input[type=checkbox]')].forEach((item) => {
+            item.checked = !!bg.settings.get(item.id);
+            item.addEventListener('change', handleCheck);
         });
 
-        $('#useSound').change(function () {
+        document.querySelector('#useSound').addEventListener('change', () => {
             bg.loader.playNotificationSound();
         });
 
-        $('#default-sound').change(handleDefaultSound);
-        $('#export-smart').click(handleExportSmart);
-        $('#export-opml').click(handleExportOPML);
-        $('#clear-data').click(handleClearData);
-        $('#import-smart').change(handleImportSmart);
-        $('#import-opml').change(handleImportOPML);
-    });
+        document.querySelector('#default-sound').addEventListener('change', handleDefaultSound);
+        document.querySelector('#export-smart').addEventListener('click', handleExportSmart);
+        document.querySelector('#export-opml').addEventListener('click', handleExportOPML);
+        document.querySelector('#clear-data').addEventListener('click', handleClearData);
+        document.querySelector('#import-smart').addEventListener('change', handleImportSmart);
+        document.querySelector('#import-opml').addEventListener('change', handleImportOPML);
+    };
 
-    function handleChange(e) {
-        var t = e.target;
-        bg.settings.save(t.id, t.value);
+
+    if (document.readyState !== 'loading') {
+        documentReady();
+    } else {
+        document.addEventListener('DOMContentLoaded', documentReady);
     }
 
-    function handleCheck(e) {
-        var t = e.target;
-        bg.settings.save(t.id, t.checked);
+    function handleChange(event) {
+        const target = event.target;
+        bg.settings.save(target.id, target.value);
+    }
+
+    function handleCheck(event) {
+        const target = event.target;
+        bg.settings.save(target.id, target.checked);
     }
 
     function handleDefaultSound(e) {
-        var file = e.currentTarget.files[0];
+        const file = e.currentTarget.files[0];
         if (!file || file.size === 0) {
             return;
         }
@@ -105,75 +101,74 @@ chrome.runtime.getBackgroundPage(function (bg) {
             return;
         }
 
-        var reader = new FileReader();
+        const reader = new FileReader();
         reader.onload = function (e) {
             bg.settings.save('defaultSound', this.result);
         };
 
         reader.readAsDataURL(file);
-
     }
 
     function handleExportSmart() {
-        let $smartExported = $('#smart-exported');
-        var data = {
+        const smartExportStatus = document.querySelector('#smart-exported');
+        const data = {
             folders: bg.folders.toJSON(),
             sources: bg.sources.toJSON(),
             items: bg.items.toJSON()
         };
 
-        $smartExported.attr('href', '#');
-        $smartExported.removeAttr('download');
-        $smartExported.html('Exporting, please wait');
+        smartExportStatus.setAttribute('href', '#');
+        smartExportStatus.removeAttribute('download');
+        smartExportStatus.innerHTML = 'Exporting, please wait';
 
 
         setTimeout(() => {
-            var expr = new Blob([JSON.stringify(data)]);
-            $smartExported.attr('href', URL.createObjectURL(expr));
-            $smartExported.attr('download', 'exported-rss.smart');
-            $smartExported.html('Click to download exported data');
+            const expr = new Blob([JSON.stringify(data)]);
+            smartExportStatus.setAttribute('href', URL.createObjectURL(expr));
+            smartExportStatus.setAttribute('download', 'exported-rss.smart');
+            smartExportStatus.innerHTML = 'Click to download exported data';
         }, 20);
     }
 
     function handleExportOPML() {
 
         function addFolder(doc, title, id) {
-            var tmp = doc.createElement('outline');
-            tmp.setAttribute('text', escapeHtml(title));
-            tmp.setAttribute('title', escapeHtml(title));
-            tmp.setAttribute('id', id);
-            return tmp;
+            const folder = doc.createElement('outline');
+            folder.setAttribute('text', escapeHtml(title));
+            folder.setAttribute('title', escapeHtml(title));
+            folder.setAttribute('id', id);
+            return folder;
         }
 
         function addSource(doc, title, url) {
-            var tmp = doc.createElement('outline');
-            tmp.setAttribute('text', escapeHtml(title));
-            tmp.setAttribute('title', escapeHtml(title));
-            tmp.setAttribute('type', 'rss');
-            tmp.setAttribute('xmlUrl', url);
-            return tmp;
+            const source = doc.createElement('outline');
+            source.setAttribute('text', escapeHtml(title));
+            source.setAttribute('title', escapeHtml(title));
+            source.setAttribute('type', 'rss');
+            source.setAttribute('xmlUrl', url);
+            return source;
         }
 
         function addLine(doc, to, ctn) {
-            var line = doc.createTextNode(ctn || '\n\t');
+            const line = doc.createTextNode(ctn || '\n\t');
             to.appendChild(line);
         }
 
-        let $opmlExported =$('#opml-exported');
+        const opmlExportStatus = document.querySelector('#opml-exported');
 
-        $opmlExported.attr('href', '#');
-        $opmlExported.removeAttr('download');
-        $opmlExported.html('Exporting, please wait');
+        opmlExportStatus.setAttribute('href', '#');
+        opmlExportStatus.removeAttribute('download');
+        opmlExportStatus.innerHTML = 'Exporting, please wait';
 
-        var start = '<?xml version="1.0" encoding="utf-8"?>\n<opml version="1.0">\n<head>\n\t<title>Newsfeeds exported from Smart RSS</title>\n</head>\n<body>';
-        var end = '\n</body>\n</opml>';
+        const start = '<?xml version="1.0" encoding="utf-8"?>\n<opml version="1.0">\n<head>\n\t<title>Newsfeeds exported from Smart RSS</title>\n</head>\n<body>';
+        const end = '\n</body>\n</opml>';
 
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(start + end, 'application/xml');
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(start + end, 'application/xml');
 
 
         setTimeout(function () {
-            var body = doc.querySelector('body');
+            const body = doc.querySelector('body');
 
             bg.folders.forEach(function (folder) {
                 addLine(doc, body);
@@ -182,71 +177,65 @@ chrome.runtime.getBackgroundPage(function (bg) {
 
 
             bg.sources.forEach(function (source) {
-                //middle += '\n\t<outline text="' + escapeHtml(source.get('title')) + '" title="' + escapeHtml(source.get('title')) + '" type="rss" xmlUrl="' + escapeHtml(source.get('url')) + '" />';
-
                 if (source.get('folderID')) {
-                    var folder = body.querySelector('[id="' + source.get('folderID') + '"]');
+                    const folder = body.querySelector('[id="' + source.get('folderID') + '"]');
                     if (folder) {
                         addLine(doc, folder, '\n\t\t');
                         folder.appendChild(addSource(doc, source.get('title'), source.get('url')));
                     } else {
                         addLine(doc, body);
                         body.appendChild(addSource(doc, source.get('title'), source.get('url')));
-
                     }
-
                 } else {
                     addLine(doc, body);
                     body.appendChild(addSource(doc, source.get('title'), source.get('url')));
                 }
             });
 
-            var folders = body.querySelectorAll('[id]');
-            [].forEach.call(folders, function (folder) {
+            const folders = body.querySelectorAll('[id]');
+            [...folders].forEach((folder) => {
                 folder.removeAttribute('id');
             });
 
-            var expr = new Blob([(new XMLSerializer()).serializeToString(doc)]);
-            $opmlExported.attr('href', URL.createObjectURL(expr));
-            $opmlExported.attr('download', 'exported-rss.opml');
-            $opmlExported.html('Click to download exported data');
+            const expr = new Blob([(new XMLSerializer()).serializeToString(doc)]);
+            opmlExportStatus.setAttribute('href', URL.createObjectURL(expr));
+            opmlExportStatus.setAttribute('download', 'exported-rss.opml');
+            opmlExportStatus.innerHTML = 'Click to download exported data';
         }, 20);
     }
 
     function handleImportSmart(e) {
-        let $smartImported = $('#smart-imported');
-        var file = e.currentTarget.files[0];
+        const smartImportStatus = document.querySelector('#smart-imported');
+        const file = e.target.files[0];
         if (!file || file.size === 0) {
-            $smartImported.html('Wrong file');
+            smartImportStatus.innerHTML = 'Wrong file';
             return;
         }
+        smartImportStatus.innerHTML = 'Loading & parsing file';
 
-        $smartImported.html('Loading & parsing file');
-
-
-        var reader = new FileReader();
+        const reader = new FileReader();
         reader.onload = function (e) {
-            var data = JSON.safeParse(this.result);
+            const data = JSON.safeParse(this.result);
 
             if (!data || !data.items || !data.sources) {
-                $smartImported.html('Wrong file');
+                smartImportStatus.innerHTML = 'Wrong file';
                 return;
             }
 
-            $smartImported.html('Importing, please wait!');
+            smartImportStatus.innerHTML = 'Importing, please wait!';
 
-            var worker = new Worker('scripts/options/worker.js');
+            const worker = new Worker('scripts/options/worker.js');
             worker.onmessage = function (e) {
                 if (e.data.action === 'finished') {
-                    $smartImported.html('Loading data to memory!');
+                    smartImportStatus.innerHTML = 'Loading data to memory!';
 
                     bg.fetchAll().always(function () {
                         bg.info.refreshSpecialCounters();
-                        $smartImported.html('Import fully completed!');
+                        smartImportStatus.innerHTML = 'Import fully completed!';
                         bg.loader.downloadAll(true);
                     });
                 } else if (e.data.action === 'message') {
-                    $smartImported.html(e.data.value);
+                    smartImportStatus.innerHTML = e.data.value;
                 }
             };
             worker.postMessage({action: 'file-content', value: data});
@@ -256,9 +245,9 @@ chrome.runtime.getBackgroundPage(function (bg) {
             };
         };
 
-        var url = chrome.extension.getURL('rss.html');
+        const url = chrome.extension.getURL('rss.html');
         chrome.tabs.query({url: url}, function (tabs) {
-            for (var i = 0; i < tabs.length; i++) {
+            for (let i = 0; i < tabs.length; i++) {
                 chrome.tabs.remove(tabs[i].id);
             }
 
@@ -270,62 +259,66 @@ chrome.runtime.getBackgroundPage(function (bg) {
     }
 
     function handleImportOPML(e) {
-        let $opmlImported = $('#opml-imported');
-        var file = e.currentTarget.files[0];
+        const opmlImportStatus = document.querySelector('#opml-imported');
+        const file = e.target.files[0];
         if (!file || file.size === 0) {
-            $opmlImported.html('Wrong file');
+            opmlImportStatus.innerHTML = 'Wrong file';
             return;
         }
 
-        $opmlImported.html('Importing, please wait!');
+        opmlImportStatus.innerHTML = 'Importing, please wait!';
 
-        var reader = new FileReader();
+        const reader = new FileReader();
         reader.onload = function (e) {
-            var parser = new DOMParser();
-            var doc = parser.parseFromString(this.result, 'application/xml');
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(this.result, 'application/xml');
 
             if (!doc) {
-                $opmlImported.html('Wrong file');
+                opmlImportStatus.innerHTML = 'Wrong file';
                 return;
             }
 
-            var feeds = doc.querySelectorAll('body > outline[text], body > outline[title]');
+            const feeds = doc.querySelectorAll('body > outline[text], body > outline[title]');
 
-            for (var i = 0; i < feeds.length; i++) {
-                if (!feeds[i].hasAttribute('xmlUrl')) {
-                    var subfeeds = feeds[i].querySelectorAll('outline[xmlUrl]');
-                    var folderTitle = decodeHTML(feeds[i].getAttribute('title') || feeds[i].getAttribute('text'));
+            [...feeds].forEach((feed)=>{
+                if (!feed.hasAttribute('xmlUrl')) {
+                    const subfeeds = feed.querySelectorAll('outline[xmlUrl]');
+                    const folderTitle = decodeHTML(feed.getAttribute('title') || feed.getAttribute('text'));
 
-                    var duplicite = bg.folders.findWhere({title: folderTitle});
+                    const duplicate = bg.folders.findWhere({title: folderTitle});
 
-                    var folder = duplicite || bg.folders.create({
+                    const folder = duplicate || bg.folders.create({
                         title: folderTitle
                     }, {wait: true});
 
-                    for (var n = 0; n < subfeeds.length; n++) {
-                        if (bg.sources.findWhere({url: decodeHTML(subfeeds[n].getAttribute('xmlUrl'))})) continue;
+                    [...subfeeds].forEach((subfeed)=>{
+                        if (bg.sources.findWhere({url: decodeHTML(subfeed.getAttribute('xmlUrl'))})) {
+                            return;
+                        }
                         bg.sources.create({
-                            title: decodeHTML(subfeeds[n].getAttribute('title') || subfeeds[n].getAttribute('text')),
-                            url: decodeHTML(subfeeds[n].getAttribute('xmlUrl')),
-                            updateEvery: 180,
+                            title: decodeHTML(subfeed.getAttribute('title') || subfeed.getAttribute('text')),
+                            url: decodeHTML(subfeed.getAttribute('xmlUrl')),
+                            updateEvery: -1,
                             folderID: folder.get('id')
                         }, {wait: true});
+
+                    });
+                  } else {
+                    if (bg.sources.findWhere({url: decodeHTML(feed.getAttribute('xmlUrl'))})) {
+                        return;
                     }
-                } else {
-                    if (bg.sources.findWhere({url: decodeHTML(feeds[i].getAttribute('xmlUrl'))})) continue;
                     bg.sources.create({
-                        title: decodeHTML(feeds[i].getAttribute('title') || feeds[i].getAttribute('text')),
-                        url: decodeHTML(feeds[i].getAttribute('xmlUrl')),
-                        updateEvery: 180
+                        title: decodeHTML(feed.getAttribute('title') || feed.getAttribute('text')),
+                        url: decodeHTML(feed.getAttribute('xmlUrl')),
+                        updateEvery: -1
                     }, {wait: true});
                 }
-            }
+            });
 
-
-            $opmlImported.html('Import completed!');
+            opmlImportStatus.innerHTML = 'Import completed!';
 
             setTimeout(function () {
-                bg.loader.downloadAll();
+                bg.loader.downloadAll(true);
             }, 10);
         };
 
