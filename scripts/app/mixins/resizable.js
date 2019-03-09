@@ -122,14 +122,6 @@ define(['jquery'], function ($) {
             });
 
             document.body.appendChild(this.resizer);
-        },
-        disableResizing: function () {
-            if (this.resizer) {
-                els.splice(els.indexOf(this), 1);
-                document.body.removeChild(this.resizer);
-                this.resizer = null;
-                resetPositions.call(this);
-            }
         }
     };
 });

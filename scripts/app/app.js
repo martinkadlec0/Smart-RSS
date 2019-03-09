@@ -84,20 +84,6 @@ define([
                 bg.settings.save('panelToggled', !bg.settings.get('panelToggled'));
             },
 
-            /**
-             * Shows/hides the panel
-             * @method handleToggleChange
-             */
-            handleToggleChange: function () {
-                this.feeds.$el.toggleClass('hidden', !bg.settings.get('panelToggled'));
-                $('#panel-toggle').toggleClass('toggled', bg.settings.get('panelToggled'));
-
-                if (!bg.settings.get('panelToggled')) {
-                    this.feeds.disableResizing();
-                } else {
-                    this.feeds.enableResizing('horizontal', bg.settings.get('posA'));
-                }
-            },
             handleMouseDown: function (e) {
                 if (!e.target.matchesSelector('.context-menu, .context-menu *, .overlay, .overlay *')) {
                     this.hideContextMenus();
@@ -114,18 +100,11 @@ define([
                 this.attach('articles', new ArticlesLayout);
                 this.attach('content', new ContentLayout);
 
-
-                this.handleToggleChange();
+                this.feeds.enableResizing('horizontal', bg.settings.get('posA'));
+                this.articles.enableResizing('horizontal', bg.settings.get('posB'));
 
                 this.trigger('start');
                 this.trigger('start:after');
-
-                setTimeout(function (that) {
-                    $('body').removeClass('loading');
-                    that.setFocus('articles');
-                    that.handleLayoutChange();
-
-                }, 0, this);
             },
             handleKeyDown: function (e) {
                 let activeElement = document.activeElement;

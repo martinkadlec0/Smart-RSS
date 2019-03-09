@@ -55,16 +55,15 @@ define([
 
 
                 this.on('resize:after', this.handleResizeAfter);
-                this.on('resize', this.handleResize);
-                this.on('resize:enabled', this.handleResize);
-
             },
+
             /**
              * Saves the new layout size
              * @triggered after resize
              * @method handleResizeAfter
              */
             handleResizeAfter: function () {
+
                 if (bg.settings.get('layout') === 'horizontal') {
                     const width = this.el.offsetWidth;
                     bg.settings.save({posB: width});
@@ -72,23 +71,7 @@ define([
                     const height = this.el.offsetHeight;
                     bg.settings.save({posC: height});
                 }
-            },
-            /**
-             * Changes layout to one/two line according to width
-             * @triggered while resizing
-             * @method handleResize
-             */
-            handleResize: function () {
-                if (bg.settings.get('lines') === 'auto') {
-                    var oneRem = parseFloat(getComputedStyle(document.documentElement).fontSize);
-                    if (this.el.offsetWidth > 37 * oneRem) {
-                        this.articleList.$el.addClass('lines-one-line');
-                    } else {
-                        this.articleList.$el.removeClass('lines-one-line');
-                    }
-                }
             }
-
         });
 
         ArticlesLayout = ArticlesLayout.extend(resizable);

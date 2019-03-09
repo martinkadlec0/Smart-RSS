@@ -38,8 +38,6 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
 			icon: 'orange',
 			readOnVisit: false,
 			askOnOpening: true,
-			panelToggled: true,
-			enablePanelToggle: false,
 			fullDate: false,
 			hoursFormat: '24h',
 			articleFontSize: '100',
