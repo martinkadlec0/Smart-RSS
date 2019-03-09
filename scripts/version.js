@@ -1,1 +1,1 @@
-var version = 'dev build';
+const version = 'dev build';
