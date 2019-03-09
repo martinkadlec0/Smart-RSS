@@ -78,13 +78,11 @@ define(['jquery'], function ($) {
         resizer: null,
         layout: 'horizontal',
         enableResizing: function (layout, size) {
-
             layout = this.layout = layout || 'horizontal';
 
             if (size) {
                 this.$el.css('flex-basis', size + 'px');
             }
-
 
             els.push(this);
 
