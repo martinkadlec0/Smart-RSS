@@ -22,15 +22,12 @@ body {
 }
 
 .visible {
-    display: block !important;
+    display: block;
 }
 
-.invisible {
-    display: none !important;
-}
 
 .hidden {
-    display: none !important;
+    display: none;
 }
 
 label {
@@ -170,7 +167,7 @@ input[type=search]:not(:focus):not(:valid) {
 }
 
 .half-size {
-    width: 50% !important;
+    width: 50%;
     margin: 0;
     box-sizing: border-box;
 }
@@ -213,8 +210,8 @@ input[type=search]:not(:focus):not(:valid) {
 }
 
 .region:last-child {
-    border: none !important;
-    border-image: none !important;
+    border: none;
+    border-image: none;
 }
 
 #region-feeds {
@@ -322,11 +319,11 @@ input[type=search]:not(:focus):not(:valid) {
 }
 
 .selected .source-counter {
-    color: #000 !important;
+    color: #000;
 }
 
 .folder {
-    padding-left: 1px !important;
+    padding-left: 1px;
 }
 
 .drag-over {
@@ -479,7 +476,7 @@ input[type=search]:not(:focus):not(:valid) {
 }
 
 .selected {
-    color: #f1f1f1 !important;
+    color: #f1f1f1;
     background: #39f;
     border-bottom-color: #39f;
 }
@@ -499,7 +496,7 @@ input[type=search]:not(:focus):not(:valid) {
 
 .item:active *,
 .selected * {
-    color: #f1f1f1 !important;
+    color: #f1f1f1;
 }
 
 .unread {
@@ -507,11 +504,11 @@ input[type=search]:not(:focus):not(:valid) {
 }
 
 .unvisited {
-    color: #003bb3 !important;
+    color: #003bb3;
 }
 
 .unvisited .item-author {
-    color: #003bb3 !important;
+    color: #003bb3;
 }
 
 .item-title {
@@ -579,10 +576,6 @@ input[type=search]:not(:focus):not(:valid) {
     text-align: center;
     font-weight: bold;
     user-select: none;
-}
-
-.unpluged {
-    display: none !important;
 }
 
 /**
@@ -782,7 +775,7 @@ footer #button-hide-log {
 @media print {
     header,
     #toolbar {
-        display: none !important;
+        display: none;
     }
 }
 
