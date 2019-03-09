@@ -357,7 +357,6 @@ define([
                 var view;
 
                 if (!after) {
-                    console.log('to');
                     view = new ItemView({model: item}, this);
                     view.render();
                     this.views.push(view);
@@ -366,7 +365,6 @@ define([
                         this.select(view);
                     }
                 } else {
-                    console.log('tamto');
                     view = new ItemView({model: item}, this);
                     view.render().$el.insertBefore($(after));
                     var indexElement = after.view instanceof ItemView ? after : after.nextElementSibling;
