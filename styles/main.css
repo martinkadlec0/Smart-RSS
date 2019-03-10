@@ -74,6 +74,7 @@ label {
  */
 .toolbar {
     display: flex;
+    min-width: 0;
     flex: 0 0 auto;
     height: 32px;
     background:var(--grey-10);
@@ -202,6 +203,7 @@ input[type=search]:not(:focus):not(:valid) {
  */
 .regions {
     display: flex;
+    min-width: 0;
     min-height: 100%;
     max-height: 100%;
 }
@@ -217,10 +219,11 @@ input[type=search]:not(:focus):not(:valid) {
 }
 
 .region {
-    min-width: 100px;
+    /*min-width: 100px;*/
     min-height: 180px;
     border-right: var(--border);
     display: flex;
+    min-width: 0;
     flex-flow: column;
     align-items: stretch;
 }
@@ -285,6 +288,7 @@ input[type=search]:not(:focus):not(:valid) {
     width: 100%;
     padding: 3px 5px 3px 15px;
     display: flex;
+    min-width: 0;
     font-size: 0.9rem;
     cursor: pointer;
 }
@@ -391,6 +395,7 @@ input[type=search]:not(:focus):not(:valid) {
 
 #indicator.indicator-visible {
     display: flex;
+    min-width: 0;
 }
 
 #indicator-toolbar {
@@ -488,6 +493,7 @@ input[type=search]:not(:focus):not(:valid) {
     cursor: pointer;
     border-bottom: var(--border);
     display: flex;
+    min-width: 0;
     flex-flow: row wrap;
     text-decoration: none;
     color: inherit;
@@ -544,7 +550,7 @@ input[type=search]:not(:focus):not(:valid) {
     flex-shrink: 1;
     flex-grow: 1;
     flex-basis: 10px;
-    /*white-space: nowrap;*/
+    white-space: nowrap;
     min-width: 10px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -631,6 +637,7 @@ h1 a {
 
 #below-h1 {
     display: flex;
+    min-width: 0;
     flex-flow: row nowrap;
     width: 100%;
 }
@@ -640,7 +647,7 @@ header p {
     font-size: 0.9rem;
     margin: 0;
     padding: 0;
-    /*white-space: nowrap;*/
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
