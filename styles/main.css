@@ -290,7 +290,7 @@ input[type=search]:not(:focus):not(:valid) {
 }
 
 .list-item:hover .source-title {
-    color: #285078;
+    color: var(--blue-40);
     text-decoration: underline;
 }
 
@@ -514,7 +514,7 @@ input[type=search]:not(:focus):not(:valid) {
 
 .item:active *,
 .selected * {
-    color: #f1f1f1;
+    color: var(--grey-10);
 }
 
 .unread {
@@ -523,7 +523,7 @@ input[type=search]:not(:focus):not(:valid) {
 
 .unvisited,
 .unvisited .item-author {
-    color: #003bb3;
+    color: var(--blue-70);
 }
 
 .item-title {
@@ -544,10 +544,14 @@ input[type=search]:not(:focus):not(:valid) {
     flex-shrink: 1;
     flex-grow: 1;
     flex-basis: 10px;
-    white-space: nowrap;
+    /*white-space: nowrap;*/
     min-width: 10px;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.selected .item-author {
+    color: var(--grey-20);
 }
 
 .item-pin {
@@ -611,7 +615,7 @@ header {
 h1 {
     margin: 0 0 20px;
     padding: 0;
-    color: #484848;
+    color: var(--grey-70);
     font-size: 1.5rem;
     max-height: 6rem;
     overflow: hidden;
@@ -632,11 +636,11 @@ h1 a {
 }
 
 header p {
-    color: #b693ab;
+    color: var(--grey-50);
     font-size: 0.9rem;
     margin: 0;
     padding: 0;
-    white-space: nowrap;
+    /*white-space: nowrap;*/
     overflow: hidden;
     text-overflow: ellipsis;
 }
