@@ -1,3 +1,41 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+/* Photon Colors CSS Variables v3.2.0 */
+
+:root {
+
+    --blue-40: #45a1ff;
+    --blue-50: #0a84ff;
+    --blue-50-a30: rgba(10, 132, 255, 0.3);
+    --blue-60: #0060df;
+    --blue-70: #003eaa;
+    --blue-80: #002275;
+    --blue-90: #000f40;
+
+    --grey-10: #f9f9fa;
+    --grey-20: #ededf0;
+    --grey-30: #d7d7db;
+    --grey-40: #b1b1b3;
+    --grey-50: #737373;
+    --grey-60: #4a4a4f;
+    --grey-70: #38383d;
+    --grey-80: #2a2a2e;
+    --grey-90: #0c0c0d;
+
+    --white: #fff;
+}
+
+
+:root {
+    --border: 1px solid var(--grey-30);
+    --transparent-border: 1px solid transparent;
+    --overlay-border: 1px solid var(--grey-40);
+    --overlay-box-shadow: 2px 2px 2px var(--grey-50); /* the same as context menu box shadow */
+}
+
+
 * {
     box-sizing: border-box;
 }
@@ -11,8 +49,8 @@ body {
     margin: 0;
     font-size: 100%;
     font-family: sans-serif;
-    /*overflow: hidden;*/
 }
+
 body {
     overflow: hidden;
 }
@@ -38,8 +76,8 @@ label {
     display: flex;
     flex: 0 0 auto;
     height: 32px;
-    background: #f2f2f2;
-    border-bottom: 1px solid #a6a6a6;
+    background:var(--grey-10);
+    border-bottom: var(--border);
     align-items: stretch;
     justify-content: flex-start;
     padding: 3px 6px;
@@ -66,15 +104,15 @@ label {
 
 .button:hover,
 .button:active {
-    border-color: #c4c4c4;
+    border-color: var(--grey-30);
 }
 
 .button:active {
-    box-shadow: inset 0 1px 3px #bbb;
+    box-shadow: inset 0 1px 3px var(--grey-40);
 }
 
 /*[data-action="articles:undelete"] {*/
-    /*background: url("/images/delete_selected.png") no-repeat center center;*/
+/*background: url("/images/delete_selected.png") no-repeat center center;*/
 /*}*/
 
 #context-undelete {
@@ -88,12 +126,12 @@ input[type=search] {
     padding: 2px 5px;
     margin-bottom: 0;
     font-size: 0.8rem;
-    border: 1px solid #a6a6a6;
+    border: var(--border); /* second border */
     border-radius: 5px;
 }
 
 input[type=search]:not(:focus):not(:valid) {
-    background: url("/images/search.png") no-repeat right center #fff;
+    background: url("/images/search.png") no-repeat right center var(--white);
 }
 
 /**
@@ -102,15 +140,15 @@ input[type=search]:not(:focus):not(:valid) {
 .context-menu {
     min-width: 150px;
     max-width: 250px;
-    border: 1px solid #a0a0a0;
-    background: url("/images/context-border.png") repeat-y 27px top #f0f0f0;
+    border: var(--overlay-border);
+    background: url("/images/context-border.png") repeat-y 27px top var(--grey-10);
     position: absolute;
     top: 300px;
     left: 10px;
     overflow: hidden;
     z-index: 3;
     padding: 2px;
-    box-shadow: 2px 2px 2px #999;
+    box-shadow: var(--overlay-box-shadow);
     user-select: none;
     cursor: default;
     display: none;
@@ -129,7 +167,8 @@ input[type=search]:not(:focus):not(:valid) {
 
 .context-menu-item:hover {
     border-radius: 3px;
-    border-color: #aecff7;
+    /*background-color: var(--blue-40);*/
+    border-color: var(--blue-40);
 }
 
 /**
@@ -139,8 +178,8 @@ input[type=search]:not(:focus):not(:valid) {
     display: none;
     width: 20rem;
     min-height: 50px;
-    border: 1px solid #a0a0a0;
-    background: #f0f0f0;
+    border: var(--overlay-border);
+    background: var(--grey-10);
     position: absolute;
     top: 30px;
     right: 5px;
@@ -148,7 +187,7 @@ input[type=search]:not(:focus):not(:valid) {
     z-index: 2;
     padding: 5px;
     border-radius: 5px;
-    box-shadow: 2px 2px 2px #999;
+    box-shadow:  var(--overlay-box-shadow);
 }
 
 .overlay label {
@@ -170,6 +209,7 @@ input[type=search]:not(:focus):not(:valid) {
     min-height: 100%;
     max-height: 100%;
 }
+
 .subregions {
     flex-shrink: 1;
     flex-grow: 1;
@@ -183,7 +223,7 @@ input[type=search]:not(:focus):not(:valid) {
 .region {
     min-width: 100px;
     min-height: 180px;
-    border-right: 1px solid #a6a6a6;
+    border-right: var(--border);
     display: flex;
     flex-flow: column;
     align-items: stretch;
@@ -191,7 +231,7 @@ input[type=search]:not(:focus):not(:valid) {
 
 .vertical .region {
     border-right: none;
-    border-bottom: 1px solid #a6a6a6;
+    border-bottom: var(--border);
 }
 
 .region:last-child {
@@ -249,18 +289,10 @@ input[type=search]:not(:focus):not(:valid) {
     width: 100%;
     padding: 3px 5px 3px 15px;
     display: flex;
-    /*font-family: sans-serif;*/
     font-size: 0.9rem;
     cursor: pointer;
 }
 
-.selected {
-    background: #94c6f8;
-}
-
-/*.list-item:active {
-	background: rgb(51, 153, 255);
-}*/
 .list-item:hover .source-title {
     color: #285078;
     text-decoration: underline;
@@ -288,7 +320,7 @@ input[type=search]:not(:focus):not(:valid) {
     flex-grow: 0;
     flex-basis: auto;
     padding: 0 5px;
-    background: #e1e1e1;
+    background: var(--grey-20);
     border-radius: 3px;
     height: 100%;
     max-width: 50px;
@@ -296,15 +328,15 @@ input[type=search]:not(:focus):not(:valid) {
 }
 
 .source-counter:hover {
-    background: #d5d5d5;
+    background: var(--grey-30);
 }
 
 .selected .source-counter:hover {
-    background: #e8e8e8;
+    background: var(--grey-20);
 }
 
 .selected .source-counter {
-    color: #000;
+    color: var(--grey-90);
 }
 
 .folder {
@@ -312,7 +344,7 @@ input[type=search]:not(:focus):not(:valid) {
 }
 
 .drag-over {
-    background: #e3e3ff;
+    background: var(--grey-20);
 }
 
 .folder-arrow {
@@ -341,19 +373,19 @@ input[type=search]:not(:focus):not(:valid) {
     flex-basis: 1.75rem;
     line-height: 1.75rem;
     width: 100%;
-    border-top: 1px solid #a6a6a6;
+    border-top: var(--border);
     flex-flow: row;
     align-items: stretch;
     user-select: none;
 }
 
 #indicator-progress {
-    border-right: 1px solid #a6a6a6;
+    border-right: var(--border);
     font-family: sans-serif;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    background: linear-gradient(to right, #d1d1d1 0%, #eee 0%);
+    background: linear-gradient(to right, var(--grey-20) 0%, var(--grey-30) 0%);
     flex-shrink: 1;
     flex-grow: 1;
     flex-basis: auto;
@@ -380,22 +412,22 @@ input[type=search]:not(:focus):not(:valid) {
     background: url("../images/stop.png") no-repeat center center;
     border-radius: 3px;
     width: 28px;
-    border: 1px solid transparent;
+    border: var(--transparent-border);
 }
 
 #indicator-stop:hover,
 #indicator-stop:active {
-    border-color: #c4c4c4;
+    border-color: var(--grey-30);
 }
 
 #indicator-stop:active {
-    box-shadow: inset 0 1px 3px #bbb;
+    box-shadow: inset 0 1px 3px var(--grey-40);
 }
 
 #properties {
     padding: 10px;
-    background: #f2f2f2;
-    border-bottom: 1px solid #a6a6a6;
+    background: var(--grey-10);
+    border-bottom: var(--border);
     display: none;
 }
 
@@ -408,8 +440,8 @@ input[type=search]:not(:focus):not(:valid) {
 #properties button {
     width: 49%;
     margin-top: 5px;
-    background: #fff;
-    border: 1px solid #a6a6a6;
+    background: var(--white);
+    border: var(--border);
     border-radius: 4px;
     padding: 3px 0;
     cursor: pointer;
@@ -431,7 +463,6 @@ input[type=search]:not(:focus):not(:valid) {
     font-size: 0.75rem;
     cursor: pointer;
     padding-left: 16px;
-    /*font-family: sans-serif;*/
     background: url("/images/right.png") no-repeat left 45%;
 }
 
@@ -459,7 +490,7 @@ input[type=search]:not(:focus):not(:valid) {
     width: 100%;
     padding: 4px 5px 4px 5px;
     cursor: pointer;
-    border-bottom: 1px solid #ccc;
+    border-bottom: var(--border);
     display: flex;
     flex-flow: row wrap;
     text-decoration: none;
@@ -467,18 +498,18 @@ input[type=search]:not(:focus):not(:valid) {
 }
 
 .selected {
-    color: #f1f1f1;
-    background: #39f;
-    border-bottom-color: #39f;
+    color: var(--grey-10);
+    background: var(--blue-40);
+    border-bottom-color: var(--blue-40);
 }
 
 .region:not(.focused) .selected {
-    background: #94c6f7;
-    border-bottom-color: #ccc;
+    background: var(--blue-40);
+    border-bottom-color: var(--grey-30);
 }
 
 .last-selected {
-    outline: 1px dotted #808080;
+    outline: 1px dotted var(--grey-50);
 }
 
 .region:not(.focused) .last-selected {
@@ -494,10 +525,7 @@ input[type=search]:not(:focus):not(:valid) {
     font-weight: bold;
 }
 
-.unvisited {
-    color: #003bb3;
-}
-
+.unvisited,
 .unvisited .item-author {
     color: #003bb3;
 }
@@ -514,7 +542,7 @@ input[type=search]:not(:focus):not(:valid) {
 }
 
 .item-author {
-    color: #664666;
+    color: var(--grey-50);
     padding-top: 0.2rem;
     font-size: 0.75rem;
     flex-shrink: 1;
@@ -552,7 +580,7 @@ input[type=search]:not(:focus):not(:valid) {
 }
 
 .item-date {
-    color: #6d6d6d;
+    color: var(--grey-50);
     padding-top: 0.2rem;
     font-size: 0.75rem;
     flex: 1 1 20px;
@@ -562,8 +590,8 @@ input[type=search]:not(:focus):not(:valid) {
 }
 
 .date-group {
-    border-bottom: 1px solid #a6a6a6;
-    background: linear-gradient(to bottom, #fff 3px, #ececec);
+    border-bottom: var(--border);
+    background: linear-gradient(to bottom, var(--white) 3px, var(--grey-20));
     height: 22px;
     line-height: 22px;
     font-family: sans-serif;
@@ -574,9 +602,8 @@ input[type=search]:not(:focus):not(:valid) {
 }
 
 header {
-    /*display: none;*/
     padding: 25px 15px 15px 30px;
-    border-bottom: 1px solid #c7cbd6;
+    border-bottom: var(--border);
     flex: 0 0 auto;
     overflow: hidden;
 }
@@ -586,8 +613,7 @@ header {
 }
 
 h1 {
-    margin: 0;
-    margin-bottom: 20px;
+    margin: 0 0 20px;
     padding: 0;
     color: #484848;
     font-size: 1.5rem;
@@ -653,29 +679,14 @@ iframe {
 }
 
 footer {
-    border-top: 2px solid #999;
+    border-top: var(--border);
     padding: 5px 10px;
     font-size: 0.75rem;
     display: none;
     max-height: 300px;
     overflow-x: hidden;
     overflow-y: auto;
-    background: #fff;
-}
-
-footer .log {
-    padding: 5px 0;
-}
-
-footer .log:not(:last-of-type) {
-    border-bottom: 1px solid #ccc;
-}
-
-footer #button-hide-log {
-    margin: 0;
-    padding: 0 4px;
-    border: 1px solid #a6a6a6;
-    cursor: pointer;
+    background: var(--white);
 }
 
 @media print {
@@ -700,11 +711,11 @@ footer #button-hide-log {
 .overlay a {
     display: block;
     text-align: right;
-    margin: 3px;
-    margin-top: 8px;
+    margin: 8px 3px 3px;
     padding-top: 8px;
     font-size: 0.8rem;
     font-family: sans-serif;
-    color: #000;
-    border-top: 1px solid #a6a6a6;
+    color: inherit;
+    text-decoration: none;
+    border-top: var(--border);
 }
