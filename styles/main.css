@@ -49,6 +49,8 @@ body {
     margin: 0;
     font-size: 100%;
     font-family: sans-serif;
+    color: var(--grey-90);
+    background-color: var(--white);
 }
 
 body {
