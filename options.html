@@ -4,11 +4,9 @@
     <meta charset="utf-8">
     <title>Smart RSS - Options</title>
     <link href="styles/option.css" rel="stylesheet">
-
     <script src="scripts/options/options.js"></script>
 </head>
 <body>
-<!--<div id="tool-container">-->
 <div id="content">
     <div id="logo">
         <div id="logo-icon"></div>
@@ -60,6 +58,43 @@
 
     <section>
         <h3 class="section-header">Appearance</h3>
+        <div class="settings-row learn-more">
+            <label class="web-content-select-label">
+                <span class="selectLabel">Layout:</span>
+                <input alt="horizontal" src="images/layout_horizontal.png" type="image" value="horizontal"/>
+                <input alt="vertical" src="images/layout_vertical.png" type="image" value="vertical"/>
+            </label>
+        </div>
+        <div class="settings-row learn-more">
+            <label class="web-content-select-label" for="sortBy">
+                <span class="selectLabel">Sorting:</span>
+                <select class="half-size" data-name="sortBy" id="sortBy">
+                    <option value="date">Date</option>
+                    <option value="title">Title</option>
+                    <option value="author">Author</option>
+                </select>
+                <select class="half-size" data-name="sortOrder" id="sortOrder">
+                    <option value="desc">Descending</option>
+                    <option value="asc">Ascending</option>
+                </select>
+            </label>
+        </div>
+        <div class="settings-row learn-more">
+            <label class="web-content-select-label" for="sortBy2">
+                <span class="selectLabel">Secondary sorting:</span>
+                <select class="half-size" data-name="sortBy2" id="sortBy2">
+                    <option value="date">Date</option>
+                    <option value="title">Title</option>
+                    <option value="author">Author</option>
+                </select>
+                <select class="half-size" data-name="sortOrder2" id="sortOrder2">
+                    <option value="desc">Descending</option>
+                    <option value="asc">Ascending</option>
+                </select>
+            </label>
+        </div>
+
+
         <div class="settings-row learn-more" title="Color of icon that shows up in extension button when new articles are downloaded.">
             <label class="web-content-select-label">
                 <span class="selectLabel">New articles notification icon:</span>
@@ -275,6 +310,5 @@
         <p id="version"></p>
     </section>
 </div>
-<!-- content -->
 </body>
 </html>
