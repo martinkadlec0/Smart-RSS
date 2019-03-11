@@ -530,7 +530,7 @@ define([
             removeItem: function (view) {
                 askRmPinned = bg.settings.get('askRmPinned');
                 if (view.model.get('pinned') && askRmPinned === 'all') {
-                    var conf = confirm(Locale.c.PIN_QUESTION_A + view.model.escape('title') + Locale.c.PIN_QUESTION_B);
+                    var conf = confirm(Locale.PIN_QUESTION_A + view.model.escape('title') + Locale.PIN_QUESTION_B);
                     if (!conf) {
                         return;
                     }
@@ -547,7 +547,7 @@ define([
             removeItemCompletely: function (view) {
                 askRmPinned = bg.settings.get('askRmPinned');
                 if (view.model.get('pinned') && askRmPinned && askRmPinned !== 'none') {
-                    var conf = confirm(Locale.c.PIN_QUESTION_A + view.model.escape('title') + Locale.c.PIN_QUESTION_B);
+                    var conf = confirm(Locale.PIN_QUESTION_A + view.model.escape('title') + Locale.PIN_QUESTION_B);
                     if (!conf) {
                         return;
                     }

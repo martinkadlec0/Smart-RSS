@@ -20,7 +20,7 @@ define([
         },
         setTitle: function (unread, total) {
             this.$el.attr('title',
-                this.model.get('title') + ' (' + unread + ' ' + Locale.c.UNREAD + ', ' + total + ' ' + Locale.c.TOTAL + ')'
+                this.model.get('title') + ' (' + unread + ' ' + Locale.UNREAD + ', ' + total + ' ' + Locale.TOTAL + ')'
             );
         }
     });

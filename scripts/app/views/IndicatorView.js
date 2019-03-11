@@ -84,7 +84,7 @@ define(['backbone', 'modules/Locale', 'text!templates/indicator.html'], function
             if (l.get('maxSources') === 0) return;
             var perc = Math.round(l.get('loaded') * 100 / l.get('maxSources'));
             this.$el.find('#indicator-progress').css('background', 'linear-gradient(to right,  #c5c5c5 ' + perc + '%, #eee ' + perc + '%)');
-            this.$el.find('#indicator-progress').html(Locale.c.UPDATING_FEEDS + ' (' + l.get('loaded') + '/' + l.get('maxSources') + ')');
+            this.$el.find('#indicator-progress').html(Locale.UPDATING_FEEDS + ' (' + l.get('loaded') + '/' + l.get('maxSources') + ')');
             return this;
         }
     });

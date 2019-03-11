@@ -80,7 +80,7 @@ define([
                 title: Locale.MARK_ALL_AS_READ,
                 icon: 'read.png',
                 action: function () {
-                    if (confirm(Locale.c.MARK_ALL_QUESTION)) {
+                    if (confirm(Locale.MARK_ALL_QUESTION)) {
                         bg.items.forEach(function (item) {
                             item.save({unread: false, visited: true});
                         });
