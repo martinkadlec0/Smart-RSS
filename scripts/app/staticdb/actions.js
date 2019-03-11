@@ -483,13 +483,13 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                     articleList.$el.find('.selected').removeClass('selected');
                     articleList.selectedItems = [];
 
-                    articleList.$el.find('.item:not(.invisible)').each(function (i, item) {
+                    articleList.$el.find('.articles-list-item:not(.invisible)').each(function (i, item) {
                         item.view.$el.addClass('selected');
                         articleList.selectedItems.push(item.view);
                     });
 
                     articleList.$el.find('.last-selected').removeClass('last-selected');
-                    articleList.$el.find('.item:not(.invisible):last').addClass('last-selected');
+                    articleList.$el.find('.articles-list-item:not(.invisible):last').addClass('last-selected');
                 }
             },
             pin: {

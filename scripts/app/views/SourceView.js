@@ -7,7 +7,7 @@ define([
                 'mouseup': 'handleMouseUp',
                 'click': 'handleMouseDown',
             },*/
-            className: 'list-item source',
+            className: 'sources-list-item source',
             list: null,
             initialize: function (opt, list) {
                 this.list = list;

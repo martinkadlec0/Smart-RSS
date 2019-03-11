@@ -31,7 +31,7 @@ define([
              * @default 'list-item'
              * @type String
              */
-            itemClass: 'list-item',
+            itemClass: 'sources-list-item',
 
             /**
              * ID of feed list
@@ -49,8 +49,8 @@ define([
                 'dragover': 'handleDragOver',
                 'dragover .folder,[data-in-folder]': 'handleDragOver',
                 'dragleave .folder,[data-in-folder]': 'handleDragLeave',
-                'mousedown .list-item': 'handleMouseDown',
-                'mouseup .list-item': 'handleMouseUp'
+                'mousedown .sources-list-item': 'handleMouseDown',
+                'mouseup .sources-list-item': 'handleMouseUp'
             },
 
             /**
@@ -92,7 +92,7 @@ define([
                 }, this);
 
                 app.on('focus-feed', function (id) {
-                    var feed = $('.list-item[data-id=' + id + ']').get(0);
+                    var feed = $('.sources-list-item[data-id=' + id + ']').get(0);
                     if (!feed) return;
                     this.select(feed.view);
                     app.actions.execute('feeds:showAndFocusArticles');

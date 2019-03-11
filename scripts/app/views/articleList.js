@@ -40,7 +40,7 @@ define([
              * @default 'item'
              * @type string
              */
-            itemClass: 'item',
+            itemClass: 'articles-list-item',
 
             /**
              * Unordered list of all article views
@@ -72,10 +72,10 @@ define([
             noFocus: false,
 
             events: {
-                'dragstart .item': 'handleDragStart',
-                'click .item': 'handleMouseDown',
-                'mouseup .item': 'handleMouseUp',
-                'dblclick .item': 'handleItemDblClick',
+                'dragstart .articles-list-item': 'handleDragStart',
+                'click .articles-list-item': 'handleMouseDown',
+                'mouseup .articles-list-item': 'handleMouseUp',
+                'dblclick .articles-list-item': 'handleItemDblClick',
                 'mousedown .item-pin,.item-pinned': 'handleClickPin'
             },
 
@@ -346,7 +346,7 @@ define([
 
                 var after = null;
                 if (noManualSort !== true) {
-                    Array.from(($('#article-list .item, #article-list .date-group'))).some(function (itemEl) {
+                    Array.from(($('#article-list .articles-list-item, #article-list .date-group'))).some(function (itemEl) {
                         if (bg.items.comparator(itemEl.view.model, item) === 1) {
                             after = itemEl;
                             return true;
@@ -499,7 +499,7 @@ define([
 
                     this.clearOnSelect();
 
-                    if (document.querySelector('.item')) {
+                    if (document.querySelector('.articles-list-item')) {
                         this.once('items-destroyed', function () {
                             that.loadAllFeeds();
                         }, this);

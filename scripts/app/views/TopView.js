@@ -3,7 +3,7 @@ define([
 ], function (BB, $, template, Locale, tplSource) {
     return BB.View.extend({
         tagName: 'div',
-        className: 'list-item',
+        className: 'sources-list-item',
         template: template(tplSource),
         handleMouseUp: function (e) {
             if (e.which === 3) {

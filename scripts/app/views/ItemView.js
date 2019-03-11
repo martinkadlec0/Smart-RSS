@@ -28,7 +28,7 @@ define([
          * @default 'item'
          * @type String
          */
-        className: 'item',
+        className: 'articles-list-item',
 
         /**
          * Article item view template

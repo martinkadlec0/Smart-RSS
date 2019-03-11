@@ -21,7 +21,7 @@ function(BB, $, template, TopView, contextMenus, tplFolder) {
 		 * @default 'list-item folder'
 		 * @type String
 		 */
-		className: 'list-item folder',
+		className: 'sources-list-item folder',
 
 		/**
 		 * Folder view template

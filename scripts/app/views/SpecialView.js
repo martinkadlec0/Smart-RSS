@@ -3,7 +3,7 @@ define([
     ],
     function ($, template, TopView, tplSpecial) {
         return TopView.extend({
-            className: 'list-item special',
+            className: 'sources-list-item special',
             template: template(tplSpecial),
             /*events: {
                 'mouseup': 'handleMouseUp',

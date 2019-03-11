@@ -191,7 +191,7 @@ define([], function () {
                 return true;
             }
             const item = e.currentTarget.view;
-            if (item.el.classList.contains('item')) {
+            if (item.el.classList.contains('articles-list-item')) {
                 e.preventDefault();
             }
             if (this.selectedItems.length > 1 && item.$el.hasClass('selected') && !e.ctrlKey && !e.shiftKey) {
