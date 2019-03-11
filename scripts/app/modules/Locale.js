@@ -18,7 +18,7 @@ define(['../../nls/' + nl, '../../nls/en'], function (lang, en) {
         lang: lang,
         en: en,
         translate: function (name) {
-            return lang[name] ? lang[name] : (en[name] ? en[name] : name);
+            return lang[name] ? lang[name] : (en[name] ? en[name] + '*' : name + '!');
         },
         translateHTML: function (content) {
             return String(content).replace(/\{\{(\w+)\}\}/gm, (all, str) => {
