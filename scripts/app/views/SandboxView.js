@@ -1,27 +1,24 @@
 define(['backbone', 'modules/Locale'], function(BB, Locale) {
-	var SandboxView = BB.View.extend({
+	return BB.View.extend({
 		tagName: 'iframe',
 		loaded: false,
 		events: {
 			'load': 'handleLoad'
 		},
-		initialize: function() {
-			this.$el.attr('src', 'rss_content.html');
-			this.$el.attr('name', 'sandbox');
-			/*this.$el.attr('sandbox', 'allow-popups allow-same-origin');*/
-			this.$el.attr('frameborder', 0);
-			this.$el.attr('tabindex', -1);
+		initialize: function () {
+			this.el.setAttribute('src', 'rss_content.html');
+			this.el.setAttribute('name', 'sandbox');
+			this.el.setAttribute('frameborder', 0);
+			this.el.setAttribute('tabindex', -1);
 		},
-		render: function() {
+		render: function () {
 			return this;
 		},
-		handleLoad: function() {
+		handleLoad: function () {
 			this.loaded = true;
 			this.el.contentDocument.querySelector('#smart-rss-url').innerHTML = Locale.c.FULL_ARTICLE;
 			this.el.contentDocument.addEventListener('keydown', app.handleKeyDown);
 			this.trigger('load');
 		}
 	});
-
-	return SandboxView;
 });
