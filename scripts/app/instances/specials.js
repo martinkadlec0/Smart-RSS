@@ -1,10 +1,8 @@
-define([
-        'backbone', 'models/Special', 'instances/contextMenus', 'modules/Locale', 'views/feedList'
-    ],
+define(['backbone', 'models/Special', 'instances/contextMenus', 'modules/Locale', 'views/feedList'],
     function (BB, Special, contextMenus, Locale) {
         return {
             trash: new Special({
-                title: Locale.c.TRASH,
+                title: Locale.TRASH,
                 icon: 'trashsource.png',
                 filter: {trashed: true, deleted: false},
                 position: 'bottom',
@@ -16,9 +14,9 @@ define([
                     });
                     this.el.addEventListener('drop', function (e) {
                         e.preventDefault();
-                        var ids = JSON.parse(e.dataTransfer.getData('text/plain') || '[]') || [];
+                        const ids = JSON.parse(e.dataTransfer.getData('text/plain') || '[]') || [];
                         ids.forEach(function (id) {
-                            var item = bg.items.findWhere({id: id});
+                            const item = bg.items.findWhere({id: id});
                             if (item && !item.get('trashed')) {
                                 item.save({
                                     trashed: true
@@ -29,7 +27,7 @@ define([
                 }
             }),
             allFeeds: new Special({
-                title: Locale.c.ALL_FEEDS,
+                title: Locale.ALL_FEEDS,
                 icon: 'icon16_v2.png',
                 filter: {trashed: false},
                 position: 'top',
@@ -39,7 +37,7 @@ define([
                 }
             }),
             pinned: new Special({
-                title: Locale.c.PINNED,
+                title: Locale.PINNED,
                 icon: 'pinsource.png',
                 filter: {trashed: false, pinned: true},
                 position: 'bottom',

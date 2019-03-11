@@ -25,14 +25,14 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
         feeds: {
             updateAll: {
                 icon: 'reload.png',
-                title: Locale.c.UPDATE_ALL,
+                title: Locale.UPDATE_ALL,
                 fn: function () {
                     bg.loader.downloadAll(true);
                 }
             },
             update: {
                 icon: 'reload.png',
-                title: Locale.c.UPDATE,
+                title: Locale.UPDATE,
                 fn: function () {
                     const selectedItems = require('views/feedList').selectedItems;
                     if (selectedItems.length) {
@@ -52,10 +52,12 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
             },
             mark: {
                 icon: 'read.png',
-                title: Locale.c.MARK_ALL_AS_READ,
+                title: Locale.MARK_ALL_AS_READ,
                 fn: function () {
                     const selectedFeeds = require('views/feedList').getSelectedFeeds();
-                    if (!selectedFeeds.length) return;
+                    if (!selectedFeeds.length) {
+                        return;
+                    }
 
                     bg.items.forEach(function (item) {
                         if (item.get('unread') === true && selectedFeeds.indexOf(item.getSource()) >= 0) {
@@ -71,7 +73,6 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                             source.save({hasNew: false});
                         }
                     });
-
                 }
             },
             refetch: {
@@ -85,16 +86,14 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                             item.destroy();
                         });
                     });
-
                     app.actions.execute('feeds:update');
-
                 }
             },
             delete: {
                 icon: 'delete.png',
-                title: Locale.c.DELETE,
+                title: Locale.DELETE,
                 fn: function () {
-                    if (!confirm(Locale.c.REALLY_DELETE)) return;
+                    if (!confirm(Locale.REALLY_DELETE)) return;
 
                     const feeds = require('views/feedList').getSelectedFeeds();
                     const folders = require('views/feedList').getSelectedFolders();
@@ -110,7 +109,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
             },
             showProperties: {
                 icon: 'properties.png',
-                title: Locale.c.PROPERTIES,
+                title: Locale.PROPERTIES,
                 fn: function () {
                     const properties = app.feeds.properties;
                     const feedList = require('views/feedList');
@@ -128,16 +127,16 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
             },
             addSource: {
                 icon: 'add.png',
-                title: Locale.c.ADD_RSS_SOURCE,
+                title: Locale.ADD_RSS_SOURCE,
                 fn: function () {
-                    let url = (prompt(Locale.c.RSS_FEED_URL) || '').trim();
+                    let url = (prompt(Locale.RSS_FEED_URL) || '').trim();
                     if (!url) {
                         return;
                     }
 
                     let folderID = 0;
                     const list = require('views/feedList');
-                    if (list.selectedItems.length && list.selectedItems[0].$el.hasClass('folder')) {
+                    if (list.selectedItems.length && list.selectedItems[0].el.classList.contains('folder')) {
                         const fid = list.selectedItems[0].model.get('id');
                         // make sure source is not added to folder which is not in db
                         if (bg.folders.get(fid)) {
@@ -163,9 +162,9 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
             },
             addFolder: {
                 icon: 'add_folder.png',
-                title: Locale.c.NEW_FOLDER,
+                title: Locale.NEW_FOLDER,
                 fn: function () {
-                    const title = (prompt(Locale.c.FOLDER_NAME + ': ') || '').trim();
+                    const title = (prompt(Locale.FOLDER_NAME + ': ') || '').trim();
                     if (!title) {
                         return;
                     }
@@ -183,61 +182,63 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
             },
             selectNext: {
                 title: 'Select next',
-                fn: function (e) {
-                    require('views/feedList').selectNext(e);
+                fn: function (event) {
+                    require('views/feedList').selectNext(event);
                 }
             },
             selectPrevious: {
                 title: 'Select previous',
-                fn: function (e) {
-                    require('views/feedList').selectPrev(e);
+                fn: function (event) {
+                    require('views/feedList').selectPrev(event);
                 }
             },
             closeFolders: {
                 title: 'Close folders',
-                fn: function (e) {
-                    var folders = Array.from(document.querySelectorAll('.folder.opened'));
-                    if (!folders.length) return;
-                    folders.each(function (i, folder) {
+                fn: function (event) {
+                    const folders = Array.from(document.querySelectorAll('.folder.opened'));
+                    if (!folders.length) {
+                        return;
+                    }
+                    folders.forEach((folder) => {
                         if (folder.view) {
-                            folder.view.handleClickArrow(e);
+                            folder.view.handleClickArrow(event);
                         }
                     });
                 }
             },
             openFolders: {
                 title: 'Open folders',
-                fn: function (e) {
-                    var folders = Array.from(document.querySelectorAll('.folder:not(.opened)'));
+                fn: function (event) {
+                    const folders = Array.from(document.querySelectorAll('.folder:not(.opened)'));
                     if (!folders.length) return;
-                    folders.each(function (i, folder) {
+                    folders.forEach((folder) => {
                         if (folder.view) {
-                            folder.view.handleClickArrow(e);
+                            folder.view.handleClickArrow(event);
                         }
                     });
                 }
             },
             toggleFolder: {
                 title: 'Toggle folder',
-                fn: function (e) {
-                    e = e || {};
-                    var cs = require('views/feedList').selectedItems;
-                    if (cs.length && cs[0].$el.hasClass('folder')) {
-                        cs[0].handleClickArrow(e);
+                fn: function (event) {
+                    event = event || {};
+                    const selectedItems = require('views/feedList').selectedItems;
+                    if (selectedItems.length && selectedItems[0].el.classList.contains('folder')) {
+                        selectedItems[0].handleClickArrow(event);
                     }
                 }
             },
             showArticles: {
                 title: 'Show articles',
-                fn: function (e) {
-                    e = e || {};
-                    var t = e.target || {};
-                    var feedList = require('views/feedList');
-                    var feeds = feedList.getSelectedFeeds();
-                    var ids = feeds.map((feed) => {
+                fn: function (event) {
+                    event = event || {};
+                    const target = event.target || {};
+                    const feedList = require('views/feedList');
+                    const feeds = feedList.getSelectedFeeds();
+                    const ids = feeds.map((feed) => {
                         return feed.id;
                     });
-                    var special = Array.from(document.querySelectorAll('.special.selected'))[0];
+                    let special = Array.from(document.querySelectorAll('.special.selected'))[0];
                     if (special) {
                         special = special.view.model;
                     }
@@ -248,19 +249,19 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                         feeds: ids,
                         filter: special ? Object.assign({}, special.get('filter')) : null,
                         name: special ? special.get('name') : null,
-                        unreadOnly: !!e.altKey || t.className === 'source-counter'
+                        unreadOnly: !!event.altKey || target.className === 'source-counter'
                     });
 
 
                     if (special && special.get('name') === 'all-feeds') {
-                        bg.sources.forEach(function (source) {
+                        bg.sources.forEach((source) => {
                             if (source.get('hasNew')) {
                                 source.save({hasNew: false});
                             }
                         });
 
                     } else if (ids.length) {
-                        bg.sources.forEach(function (source) {
+                        bg.sources.forEach((source) => {
                             if (source.get('hasNew') && ids.indexOf(source.id) >= 0) {
                                 source.save({hasNew: false});
                             }
@@ -270,11 +271,11 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
             },
             showAndFocusArticles: {
                 title: 'Show and focus articles',
-                fn: function (e) {
-                    e = e || {};
-                    var cs = require('views/feedList').selectedItems;
-                    if (cs.length) {
-                        app.actions.execute('feeds:showArticles', e);
+                fn: function (event) {
+                    event = event || {};
+                    const selectedItems = require('views/feedList').selectedItems;
+                    if (selectedItems.length) {
+                        app.actions.execute('feeds:showArticles', event);
                         app.actions.execute('articles:focus');
                     }
                 }
@@ -283,31 +284,31 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
         articles: {
             mark: {
                 icon: 'read.png',
-                title: Locale.c.MARK_AS_READ,
+                title: Locale.MARK_AS_READ,
                 fn: function () {
                     require('views/articleList').changeUnreadState();
                 }
             },
             update: {
                 icon: 'reload.png',
-                title: Locale.c.UPDATE,
+                title: Locale.UPDATE,
                 fn: function () {
-                    var list = require('views/articleList');
+                    const list = require('views/articleList');
                     if (list.currentData.feeds.length) {
-                        list.currentData.feeds.forEach(function (id) {
+                        list.currentData.feeds.forEach((id) => {
                             bg.loader.download(bg.sources.get(id));
                         });
                     } else {
-                        bg.loader.downloadAll(true); // true = force
+                        bg.loader.downloadAll(true);
                     }
                 }
             },
             delete: {
                 icon: 'delete.png',
-                title: Locale.c.DELETE,
-                fn: function (e) {
-                    var list = require('views/articleList');
-                    if (list.currentData.name === 'trash' || e.shiftKey) {
+                title: Locale.DELETE,
+                fn: function (event) {
+                    const list = require('views/articleList');
+                    if (list.currentData.name === 'trash' || event.shiftKey) {
                         if (!confirm('Remove selected items permanently?')) {
                             return;
                         }
@@ -319,9 +320,9 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
             },
             undelete: {
                 icon: 'undelete.png',
-                title: Locale.c.UNDELETE,
+                title: Locale.UNDELETE,
                 fn: function () {
-                    var articleList = require('views/articleList');
+                    const articleList = require('views/articleList');
                     if (!articleList.selectedItems || !articleList.selectedItems.length || articleList.currentData.name !== 'trash') {
                         return;
                     }
@@ -329,48 +330,50 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 }
             },
             selectNext: {
-                fn: function (e) {
-                    require('views/articleList').selectNext(e);
+                fn: function (event) {
+                    require('views/articleList').selectNext(event);
                 }
             },
             selectPrevious: {
-                fn: function (e) {
-                    require('views/articleList').selectPrev(e);
+                fn: function (event) {
+                    require('views/articleList').selectPrev(event);
                 }
             },
             search: {
-                title: Locale.c.SEARCH_TIP,
-                fn: function (e) {
-                    e = e || {currentTarget: document.querySelector('input[type=search]')};
-                    var str = e.currentTarget.value || '';
-                    var list = require('views/articleList');
-                    if (str === '') {
-                        Array.from(document.querySelectorAll('.date-group')).map((element) => {
+                title: Locale.SEARCH_TIP,
+                fn: function (event) {
+                    event = event || {currentTarget: document.querySelector('input[type=search]')};
+                    let query = event.currentTarget.value || '';
+                    console.log(query);
+                    const list = require('views/articleList');
+                    if (query === '') {
+                        [...document.querySelectorAll('.date-group')].map((element) => {
                             element.style.display = 'block';
                         });
                     } else {
-                        Array.from(document.querySelectorAll('.date-group')).map((element) => {
+                        [...document.querySelectorAll('.date-group')].map((element) => {
                             element.style.display = 'none';
                         });
                     }
 
-                    var searchInContent = false;
-                    if (str[0] && str[0] === ':') {
-                        str = str.replace(/^:/, '', str);
+                    let searchInContent = false;
+                    if (query[0] && query[0] === ':') {
+                        query = query.replace(/^:/, '', query);
                         searchInContent = true;
                     }
-                    var rg = new RegExp(RegExp.escape(str), 'i');
+                    const expression = new RegExp(RegExp.escape(query), 'i');
+                    console.log(list.views);
                     list.views.some(function (view) {
                         if (!view.model) {
                             return true;
                         }
-                        if (rg.test(view.model.get('title')) || rg.test(view.model.get('author')) || (searchInContent && rg.test(view.model.get('content')))) {
-                            view.$el.removeClass('invisible');
+                        if (expression.test(view.model.get('title')) || expression.test(view.model.get('author')) || (searchInContent && expression.test(view.model.get('content')))) {
+                            view.el.classList.remove('hidden');
                         } else {
-                            view.$el.addClass('invisible');
+                            view.el.classList.add('hidden');
                         }
                     });
-                    list.restartSelection();
+                    // list.restartSelection();
                 }
             },
             focusSearch: {
@@ -386,40 +389,42 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 }
             },
             fullArticle: {
-                title: Locale.c.FULL_ARTICLE,
+                title: Locale.FULL_ARTICLE,
                 icon: 'full_article.png',
-                fn: function (e) {
-                    var articleList = app.articles.articleList;
-                    if (!articleList.selectedItems || !articleList.selectedItems.length) return;
+                fn: function (event) {
+                    const articleList = app.articles.articleList;
+                    if (!articleList.selectedItems || !articleList.selectedItems.length) {
+                        return;
+                    }
                     if (articleList.selectedItems.length > 10 && bg.settings.get('askOnOpening')) {
                         if (!confirm('Do you really want to open ' + articleList.selectedItems.length + ' articles?')) {
                             return;
                         }
                     }
                     articleList.selectedItems.forEach(function (item) {
-                        chrome.tabs.create({url: stripTags(item.model.get('url')), active: !e.shiftKey});
+                        chrome.tabs.create({url: stripTags(item.model.get('url')), active: !event.shiftKey});
                     });
                 }
             },
             oneFullArticle: {
                 title: 'One full article',
-                fn: function (e) {
-                    e = e || {};
-                    var articleList = app.articles.articleList;
-                    var view;
-                    if ('currentTarget' in e) {
-                        view = e.currentTarget.view;
+                fn: function (event) {
+                    event = event || {};
+                    const articleList = app.articles.articleList;
+                    let view;
+                    if ('currentTarget' in event) {
+                        view = event.currentTarget.view;
                     } else {
                         if (!articleList.selectedItems || !articleList.selectedItems.length) return;
                         view = articleList.selectedItems[0];
                     }
                     if (view.model) {
-                        chrome.tabs.create({url: stripTags(view.model.get('url')), active: !e.shiftKey});
+                        chrome.tabs.create({url: stripTags(view.model.get('url')), active: !event.shiftKey});
                     }
                 }
             },
             markAndNextUnread: {
-                title: Locale.c.MARK_AND_NEXT_UNREAD,
+                title: Locale.MARK_AND_NEXT_UNREAD,
                 icon: 'find_next.png',
                 fn: function () {
                     require('views/articleList').changeUnreadState({onlyToRead: true});
@@ -427,7 +432,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 }
             },
             markAndPrevUnread: {
-                title: Locale.c.MARK_AND_PREV_UNREAD,
+                title: Locale.MARK_AND_PREV_UNREAD,
                 icon: 'find_previous.png',
                 fn: function () {
                     require('views/articleList').changeUnreadState({onlyToRead: true});
@@ -435,34 +440,34 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 }
             },
             nextUnread: {
-                title: Locale.c.NEXT_UNREAD,
+                title: Locale.NEXT_UNREAD,
                 icon: 'forward.png',
                 fn: function () {
                     require('views/articleList').selectNext({selectUnread: true});
                 }
             },
             prevUnread: {
-                title: Locale.c.PREV_UNREAD,
+                title: Locale.PREV_UNREAD,
                 icon: 'back.png',
                 fn: function () {
                     require('views/articleList').selectPrev({selectUnread: true});
                 }
             },
             markAllAsRead: {
-                title: Locale.c.MARK_ALL_AS_READ,
+                title: Locale.MARK_ALL_AS_READ,
                 icon: 'read.png',
                 fn: function () {
-                    var articleList = require('views/articleList');
-                    var f = articleList.currentData.feeds;
+                    const articleList = require('views/articleList');
+                    const feeds = articleList.currentData.feeds;
                     var filter = articleList.currentData.filter;
-                    if (f.length) {
+                    if (feeds.length) {
                         (filter ? bg.items.where(articleList.currentData.filter) : bg.items).forEach(function (item) {
-                            if (item.get('unread') === true && f.indexOf(item.get('sourceID')) >= 0) {
+                            if (item.get('unread') === true && feeds.indexOf(item.get('sourceID')) >= 0) {
                                 item.save({unread: false, visited: true});
                             }
                         });
                     } else if (articleList.currentData.name === 'all-feeds') {
-                        if (confirm(Locale.c.MARK_ALL_QUESTION)) {
+                        if (confirm(Locale.MARK_ALL_QUESTION)) {
                             bg.items.forEach(function (item) {
                                 if (item.get('unread') === true) {
                                     item.save({unread: false, visited: true});
@@ -493,22 +498,26 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 }
             },
             pin: {
-                title: Locale.c.PIN,
+                title: Locale.PIN,
                 icon: 'pinsource_context.png',
                 fn: function () {
-                    var articleList = require('views/articleList');
-                    if (!articleList.selectedItems || !articleList.selectedItems.length) return;
-                    var val = !articleList.selectedItems[0].model.get('pinned');
+                    const articleList = require('views/articleList');
+                    if (!articleList.selectedItems || !articleList.selectedItems.length) {
+                        return;
+                    }
+                    const isPinned = !articleList.selectedItems[0].model.get('pinned');
                     articleList.selectedItems.forEach(function (item) {
-                        item.model.save({pinned: val});
+                        item.model.save({pinned: isPinned});
                     });
                 }
             },
             spaceThrough: {
                 title: 'Space Through',
                 fn: function () {
-                    var articleList = require('views/articleList');
-                    if (!articleList.selectedItems || !articleList.selectedItems.length) return;
+                    const articleList = require('views/articleList');
+                    if (!articleList.selectedItems || !articleList.selectedItems.length) {
+                        return;
+                    }
                     app.trigger('space-pressed');
                 }
             },
@@ -541,7 +550,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 }
             },
             download: {
-                title: Locale.c.DOWNLOAD,
+                title: Locale.DOWNLOAD,
                 icon: 'save.png',
                 fn: function () {
                     var contentView = require('views/contentView');
@@ -570,7 +579,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
         },
         content: {
             download: {
-                title: Locale.c.DOWNLOAD,
+                title: Locale.DOWNLOAD,
                 icon: 'save.png',
                 fn: function () {
                     var contentView = require('views/contentView');
@@ -588,7 +597,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 }
             },
             print: {
-                title: Locale.c.PRINT,
+                title: Locale.PRINT,
                 icon: 'print.png',
                 fn: function () {
                     var contentView = require('views/contentView');
@@ -597,7 +606,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 }
             },
             mark: {
-                title: Locale.c.MARK_AS_READ,
+                title: Locale.MARK_AS_READ,
                 icon: 'read.png',
                 fn: function () {
                     var contentView = require('views/contentView');
@@ -609,7 +618,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 }
             },
             delete: {
-                title: Locale.c.DELETE,
+                title: Locale.DELETE,
                 icon: 'delete.png',
                 fn: function (e) {
                     var contentView = require('views/contentView');
@@ -619,7 +628,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
 
                     if (e.shiftKey) {
                         if (contentView.model.get('pinned') && askRmPinned && askRmPinned !== 'none') {
-                            let conf = confirm(Locale.c.PIN_QUESTION_A + contentView.model.escape('title') + Locale.c.PIN_QUESTION_B);
+                            let conf = confirm(Locale.PIN_QUESTION_A + contentView.model.escape('title') + Locale.PIN_QUESTION_B);
                             if (!conf) {
                                 return;
                             }
@@ -628,7 +637,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                         contentView.model.markAsDeleted();
                     } else {
                         if (contentView.model.get('pinned') && askRmPinned === 'all') {
-                            let conf = confirm(Locale.c.PIN_QUESTION_A + contentView.model.escape('title') + Locale.c.PIN_QUESTION_B);
+                            let conf = confirm(Locale.PIN_QUESTION_A + contentView.model.escape('title') + Locale.PIN_QUESTION_B);
                             if (!conf) {
                                 return;
                             }
@@ -642,28 +651,28 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 }
             },
             showConfig: {
-                title: Locale.c.SETTINGS,
+                title: Locale.SETTINGS,
                 icon: 'config.png',
                 fn: function () {
-                        let url = chrome.extension.getURL('options.html');
-                        chrome.tabs.query({
-                            url: url
-                        }, function (tabs) {
-                            if (tabs[0]) {
-                                if (tabs[0].active && closeIfActive) {
-                                    chrome.tabs.remove(tabs[0].id);
-                                } else {
-                                    chrome.tabs.update(tabs[0].id, {
-                                        active: true
-                                    });
-                                }
+                    let url = chrome.extension.getURL('options.html');
+                    chrome.tabs.query({
+                        url: url
+                    }, function (tabs) {
+                        if (tabs[0]) {
+                            if (tabs[0].active && closeIfActive) {
+                                chrome.tabs.remove(tabs[0].id);
                             } else {
-                                chrome.tabs.create({
-                                    'url': url
-                                }, function () {
+                                chrome.tabs.update(tabs[0].id, {
+                                    active: true
                                 });
                             }
-                        });
+                        } else {
+                            chrome.tabs.create({
+                                'url': url
+                            }, function () {
+                            });
+                        }
+                    });
                 }
             },
             focus: {

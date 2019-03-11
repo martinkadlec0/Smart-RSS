@@ -50,7 +50,6 @@ define(['backbone', 'helpers/unixutc', 'helpers/getWOY', 'modules/Locale'], func
             const dt = new Date(date);
             currentDate = currentDate || new Date();
 
-
             const dtt = parseInt(unixutc(dt) / 86400000, 10);
             dct = dct || parseInt(unixutc(currentDate) / 86400000, 10);
 
@@ -64,40 +63,41 @@ define(['backbone', 'helpers/unixutc', 'helpers/getWOY', 'modules/Locale'], func
                 }, 10000);
             }
 
-            var itemMidnight = new Date(dt);
+            const itemMidnight = new Date(dt);
             itemMidnight.setHours(0, 0, 0, 0);
 
-            var group;
-            var dtwoy, dcwoy;
+            let group;
+            let dtwoy;
+            let dcwoy;
 
             if (dtt >= dct) {
                 group = {
-                    title: Locale.c.TODAY.toUpperCase(),
+                    title: Locale.TODAY.toUpperCase(),
                     date: todayMidnight.getTime() + 86400000 * 5000 // 5000 = make sure "today" is the first element in list
                 };
             } else if (dtt + 1 === dct) {
                 group = {
-                    title: Locale.c.YESTERDAY.toUpperCase(),
+                    title: Locale.YESTERDAY.toUpperCase(),
                     date: todayMidnight.getTime()
                 };
             } else if ((dtwoy = getWOY(dt)) === (dcwoy = getWOY(currentDate)) && dtt + 7 >= dct) {
                 group = {
-                    title: Locale.c[days[dt.getDay()]].toUpperCase(),
+                    title: Locale[days[dt.getDay()]].toUpperCase(),
                     date: itemMidnight.getTime() + 86400000
                 };
             } else if (dtwoy + 1 === dcwoy && dtt + 14 >= dct) {
                 group = {
-                    title: Locale.c.LAST_WEEK.toUpperCase(),
+                    title: Locale.LAST_WEEK.toUpperCase(),
                     date: todayMidnight.getTime() - 86400000 * (((todayMidnight.getDay() || 7) - 1) || 1)
                 };
             } else if (dt.getMonth() === currentDate.getMonth() && dt.getFullYear() === currentDate.getFullYear()) {
                 group = {
-                    title: Locale.c.EARLIER_THIS_MONTH.toUpperCase(),
+                    title: Locale.EARLIER_THIS_MONTH.toUpperCase(),
                     date: todayMidnight.getTime() - 86400000 * ((todayMidnight.getDay() || 7) - 1) - 7 * 86400000
                 };
             } else if (dt.getFullYear() === currentDate.getFullYear()) {
                 group = {
-                    title: Locale.c[months[dt.getMonth()]].toUpperCase(),
+                    title: Locale[months[dt.getMonth()]].toUpperCase(),
                     date: (new Date(dt.getFullYear(), dt.getMonth() + 1, 1)).getTime()
                 };
             } else {
@@ -106,9 +106,7 @@ define(['backbone', 'helpers/unixutc', 'helpers/getWOY', 'modules/Locale'], func
                     date: (new Date(dt.getFullYear() + 1, 0, 1)).getTime()
                 };
             }
-
             return group;
-
         };
     })();
 
