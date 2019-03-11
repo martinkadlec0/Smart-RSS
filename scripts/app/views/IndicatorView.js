@@ -26,7 +26,7 @@ define(['backbone', 'modules/Locale', 'text!templates/indicator.html'], function
          * @method initialize
          */
         initialize: function () {
-            this.$el.html(tplIndicator);
+            this.el.innerHTML = tplIndicator;
             bg.loader.on('change:loading', this.handleLoadingChange, this);
             bg.loader.on('change:loaded', this.render, this);
             bg.loader.on('change:maxSources', this.render, this);
@@ -63,13 +63,12 @@ define(['backbone', 'modules/Locale', 'text!templates/indicator.html'], function
          * @method handleLoadingChange
          */
         handleLoadingChange: function () {
-            var that = this;
             if (bg.loader.get('loading') === true) {
                 this.render();
-                this.$el.addClass('indicator-visible');
+                this.el.classList.add('indicator-visible');
             } else {
-                setTimeout(function () {
-                    that.$el.removeClass('indicator-visible');
+                setTimeout(() => {
+                    this.el.classList.remove('indicator-visible');
                 }, 500);
             }
         },
@@ -80,11 +79,13 @@ define(['backbone', 'modules/Locale', 'text!templates/indicator.html'], function
          * @chainable
          */
         render: function () {
-            var l = bg.loader;
-            if (l.get('maxSources') === 0) return;
-            var perc = Math.round(l.get('loaded') * 100 / l.get('maxSources'));
-            this.$el.find('#indicator-progress').css('background', 'linear-gradient(to right,  #c5c5c5 ' + perc + '%, #eee ' + perc + '%)');
-            this.$el.find('#indicator-progress').html(Locale.UPDATING_FEEDS + ' (' + l.get('loaded') + '/' + l.get('maxSources') + ')');
+            const loader = bg.loader;
+            if (loader.get('maxSources') === 0) {
+                return;
+            }
+            const percentage = Math.round(loader.get('loaded') * 100 / loader.get('maxSources'));
+            this.el.querySelector('#indicator-progress').style.background = 'linear-gradient(to right,  #c5c5c5 ' + percentage + '%, #eee ' + percentage + '%)';
+            this.el.querySelector('#indicator-progress').innerHTML = Locale.UPDATING_FEEDS + ' (' + loader.get('loaded') + '/' + loader.get('maxSources') + ')';
             return this;
         }
     });
