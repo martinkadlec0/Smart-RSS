@@ -8,8 +8,6 @@ require.config({
 		underscore: '../libs/underscore.min',
 		backbone: '../libs/backbone.min',
 		backboneDB: '../libs/backbone.indexDB',
-		locale: '../local/local',
-		md5: '../libs/md5',
 		text: '../text',
 		domReady: '../domReady'
 	},
@@ -28,9 +26,6 @@ require.config({
 		underscore: {
 			exports: '_'
 		},
-		md5: {
-			exports: 'CryptoJS'
-		}
 	}
 });
 
