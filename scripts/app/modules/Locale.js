@@ -2,7 +2,7 @@
  * @module App
  * @submodule modules/Locale
  */
-var nl = bg.settings.get('lang') || 'en';
+const nl = bg.settings.get('lang') || 'en';
 define(['../../nls/' + nl, '../../nls/en'], function (lang, en) {
 
     /**
@@ -11,26 +11,27 @@ define(['../../nls/' + nl, '../../nls/en'], function (lang, en) {
      * @constructor
      * @extends Object
      */
-    var Locale = {
+    const Locale = {
         get c() {
             return lang || en;
         },
-        translate: function (str) {
-            str = String(str);
-            if (lang) {
-                return lang[str];
-            }
-            if (en) {
-                return en[str];
-            }
-            return str;
+        lang: lang,
+        en: en,
+        translate: function (name) {
+            return lang[name] ? lang[name] : (en[name] ? en[name] : name);
         },
         translateHTML: function (content) {
-            return String(content).replace(/\{\{(\w+)\}\}/gm, function (all, str) {
-                return lang[str] || en[str] || str;
+            return String(content).replace(/\{\{(\w+)\}\}/gm, (all, str) => {
+                return this.translate(str);
             });
         }
     };
 
-    return Locale;
+    const handler = {
+        get(target, name) {
+            return target[name] ? target[name] : target.translate(name);
+        }
+    };
+
+    return new Proxy(Locale, handler);
 });
