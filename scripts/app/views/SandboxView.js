@@ -16,7 +16,7 @@ define(['backbone', 'modules/Locale'], function(BB, Locale) {
 		},
 		handleLoad: function () {
 			this.loaded = true;
-			this.el.contentDocument.querySelector('#smart-rss-url').innerHTML = Locale.c.FULL_ARTICLE;
+			this.el.contentDocument.querySelector('#smart-rss-url').innerHTML = Locale.translate('FULL_ARTICLE');
 			this.el.contentDocument.addEventListener('keydown', app.handleKeyDown);
 			this.trigger('load');
 		}
