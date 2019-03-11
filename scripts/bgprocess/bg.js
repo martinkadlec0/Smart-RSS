@@ -52,9 +52,6 @@ define([
          * RSS Downloader
          */
 
-        // $.support.cors = true;
-
-
         /**
          * Fetch all
          */
@@ -161,7 +158,6 @@ define([
 
                 animation.stop();
 
-
                 /**
                  * onclick:button -> open RSS
                  */
@@ -202,7 +198,7 @@ define([
         });
 
         function openRSS(closeIfActive, focusSource) {
-            var url = chrome.extension.getURL('rss.html');
+            let url = chrome.extension.getURL('rss.html');
             chrome.tabs.query({
                 url: url
             }, function (tabs) {

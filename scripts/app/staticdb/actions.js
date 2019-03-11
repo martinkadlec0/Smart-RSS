@@ -645,7 +645,25 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 title: Locale.c.SETTINGS,
                 icon: 'config.png',
                 fn: function () {
-                    app.content.overlay.show();
+                        let url = chrome.extension.getURL('options.html');
+                        chrome.tabs.query({
+                            url: url
+                        }, function (tabs) {
+                            if (tabs[0]) {
+                                if (tabs[0].active && closeIfActive) {
+                                    chrome.tabs.remove(tabs[0].id);
+                                } else {
+                                    chrome.tabs.update(tabs[0].id, {
+                                        active: true
+                                    });
+                                }
+                            } else {
+                                chrome.tabs.create({
+                                    'url': url
+                                }, function () {
+                                });
+                            }
+                        });
                 }
             },
             focus: {

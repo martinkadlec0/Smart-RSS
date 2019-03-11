@@ -4,9 +4,9 @@
  */
 define([
         'jquery', 'layouts/Layout', 'views/ToolbarView', 'views/contentView', 'views/SandboxView',
-        'views/OverlayView', 'controllers/comm', 'domReady!'
+        'controllers/comm', 'domReady!'
     ],
-    function ($, Layout, ToolbarView, contentView, SandboxView, OverlayView, comm) {
+    function ($, Layout, ToolbarView, contentView, SandboxView, comm) {
 
         var toolbar = bg.toolbars.findWhere({region: 'content'});
 
@@ -35,9 +35,6 @@ define([
                     this.attach('toolbar', new ToolbarView({model: toolbar}));
                     this.attach('content', contentView);
                     this.attach('sandbox', new SandboxView());
-                    this.attach('overlay', new OverlayView());
-
-                    this.listenTo(comm, 'hide-overlays', this.hideOverlay);
                 });
 
                 this.$el.on('focus', function () {
@@ -63,18 +60,7 @@ define([
                     }.bind(this), 0);
                 });
 
-            },
-
-            /**
-             * Hides config overlay
-             * @method hideOverlay
-             */
-            hideOverlay: function () {
-                if (this.overlay.isVisible()) {
-                    this.overlay.hide();
-                }
             }
-
         });
 
         return ContentLayout;

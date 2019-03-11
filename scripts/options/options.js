@@ -66,6 +66,15 @@ chrome.runtime.getBackgroundPage(function (bg) {
         document.querySelector('#clear-data').addEventListener('click', handleClearData);
         document.querySelector('#import-smart').addEventListener('change', handleImportSmart);
         document.querySelector('#import-opml').addEventListener('change', handleImportOPML);
+
+
+        [...document.querySelectorAll('input[type=image]')].forEach((element) => {
+            element.addEventListener('click', handleLayoutChangeClick);
+        });
+
+
+        let layout = bg.settings.get('layout');
+        handleLayoutChange(layout);
     };
 
 
@@ -73,6 +82,23 @@ chrome.runtime.getBackgroundPage(function (bg) {
         documentReady();
     } else {
         document.addEventListener('DOMContentLoaded', documentReady);
+    }
+
+
+    function handleLayoutChangeClick(e) {
+        let layout = e.currentTarget.value;
+        handleLayoutChange(layout);
+        bg.settings.save('layout', layout);
+    }
+
+    function handleLayoutChange(layout) {
+        if (layout === 'vertical') {
+            document.querySelector('input[value=horizontal]').setAttribute('src', '/images/layout_horizontal.png');
+            document.querySelector('input[value=vertical]').setAttribute('src', '/images/layout_vertical_selected.png');
+        } else {
+            document.querySelector('input[value=horizontal]').setAttribute('src', '/images/layout_horizontal_selected.png');
+            document.querySelector('input[value=vertical]').setAttribute('src', '/images/layout_vertical.png');
+        }
     }
 
     function handleChange(event) {
@@ -280,7 +306,7 @@ chrome.runtime.getBackgroundPage(function (bg) {
 
             const feeds = doc.querySelectorAll('body > outline[text], body > outline[title]');
 
-            [...feeds].forEach((feed)=>{
+            [...feeds].forEach((feed) => {
                 if (!feed.hasAttribute('xmlUrl')) {
                     const subfeeds = feed.querySelectorAll('outline[xmlUrl]');
                     const folderTitle = decodeHTML(feed.getAttribute('title') || feed.getAttribute('text'));
@@ -291,7 +317,7 @@ chrome.runtime.getBackgroundPage(function (bg) {
                         title: folderTitle
                     }, {wait: true});
 
-                    [...subfeeds].forEach((subfeed)=>{
+                    [...subfeeds].forEach((subfeed) => {
                         if (bg.sources.findWhere({url: decodeHTML(subfeed.getAttribute('xmlUrl'))})) {
                             return;
                         }
@@ -303,7 +329,7 @@ chrome.runtime.getBackgroundPage(function (bg) {
                         }, {wait: true});
 
                     });
-                  } else {
+                } else {
                     if (bg.sources.findWhere({url: decodeHTML(feed.getAttribute('xmlUrl'))})) {
                         return;
                     }

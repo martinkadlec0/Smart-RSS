@@ -85,7 +85,7 @@ define([
             },
 
             handleMouseDown: function (e) {
-                if (!e.target.matchesSelector('.context-menu, .context-menu *, .overlay, .overlay *')) {
+                if (!e.target.matchesSelector('.context-menu, .context-menu *')) {
                     this.hideContextMenus();
                 }
             },
