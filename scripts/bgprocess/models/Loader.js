@@ -141,7 +141,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
             return downloadStopped();
         }
 
-        let sourceToLoad = loader.sourcesToLoad.pop();
+        let sourceToLoad = loader.sourcesToLoad.shift();
         if (loader.sourcesLoading.includes(sourceToLoad)) {
             return downloadURL();
         }
