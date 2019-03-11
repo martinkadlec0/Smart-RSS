@@ -1,6 +1,6 @@
 define([
-    'backbone', 'jquery', '../../libs/template', 'modules/Locale', 'text!templates/source.html', 'views/feedList'
-], function (BB, $, template, Locale, tplSource) {
+    'backbone', '../../libs/template', 'modules/Locale', 'text!templates/source.html', 'views/feedList'
+], function (BB, template, Locale, tplSource) {
     return BB.View.extend({
         tagName: 'div',
         className: 'sources-list-item',
@@ -19,7 +19,7 @@ define([
             };
         },
         setTitle: function (unread, total) {
-            this.$el.attr('title',
+            this.el.setAttribute('title',
                 this.model.get('title') + ' (' + unread + ' ' + Locale.UNREAD + ', ' + total + ' ' + Locale.TOTAL + ')'
             );
         }
