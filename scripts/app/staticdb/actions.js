@@ -555,7 +555,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                     var list = {};
                     list.articles = articleList.selectedItems.map(function (itemView) {
                         var attrs = Object.create(itemView.model.attributes);
-                        attrs.date = contentView.getFormatedDate(attrs.date);
+                        attrs.date = contentView.getFormattedDate(attrs.date);
                         return attrs;
                     });
 
@@ -577,7 +577,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                     if (!contentView.model) return;
                     var tpl = contentView.downloadTemplate;
                     var attrs = Object.create(contentView.model.attributes);
-                    attrs.date = contentView.getFormatedDate(attrs.date);
+                    attrs.date = contentView.getFormattedDate(attrs.date);
                     var list = {articles: [attrs]};
                     var blob = new Blob([tpl(list)], {type: 'text\/html'});
                     var reader = new FileReader();

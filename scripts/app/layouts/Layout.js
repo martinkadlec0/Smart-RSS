@@ -33,7 +33,7 @@ define(['backbone'], function (BB) {
          * @param view {Backbone.View} Backbone view to be the attached region
          */
         attach: function (name, view) {
-            let old = this[name];
+            const old = this[name];
 
             this[name] = view;
             if (!view.el.parentNode) {

@@ -10,18 +10,13 @@ define([
 
         document.documentElement.style.fontSize = bg.settings.get('uiFontSize') + '%';
 
-        var templates = $('script[type="text/template"]');
-        templates.each(function (i, el) {
-            el.innerHTML = Locale.translateHTML(el.innerHTML);
-        });
-
         document.addEventListener('contextmenu', function (e) {
             if (!e.target.matchesSelector('#region-content header, #region-content header *')) {
                 e.preventDefault();
             }
         });
 
-        var app = window.app = new (Layout.extend({
+        const app = window.app = new (Layout.extend({
             el: 'body',
             fixURL: function (url) {
                 if (url.search(/[a-z]+:\/\//) === -1) {
@@ -30,28 +25,22 @@ define([
                 return url;
             },
             events: {
-                'mousedown': 'handleMouseDown',
-                'click #panel-toggle': 'handleClickToggle'
+                'mousedown': 'handleMouseDown'
             },
             initialize: function () {
                 this.actions = new Actions();
 
-                window.addEventListener('blur', function (e) {
+                window.addEventListener('blur', (e) => {
                     this.hideContextMenus();
-
                     if (e.target instanceof window.Window) {
                         comm.trigger('stop-blur');
                     }
-
-                }.bind(this));
+                });
 
                 bg.settings.on('change:layout', this.handleLayoutChange, this);
                 bg.settings.on('change:panelToggled', this.handleToggleChange, this);
                 bg.sources.on('clear-events', this.handleClearEvents, this);
 
-                if (bg.settings.get('enablePanelToggle')) {
-                    $('#panel-toggle').css('display', 'block');
-                }
             },
             handleClearEvents: function (id) {
                 if (window == null || id === tabID) {
@@ -70,18 +59,10 @@ define([
                 }
             },
             layoutToVertical: function () {
-                $('.regions .regions').addClass('vertical');
+                document.querySelector('.subregions').classList.add('vertical');
             },
             layoutToHorizontal: function () {
-                $('.regions .regions').removeClass('vertical');
-            },
-
-            /**
-             * Saves the panel toggle state (panel visible/hidden)
-             * @method handleClickToggle
-             */
-            handleClickToggle: function () {
-                bg.settings.save('panelToggled', !bg.settings.get('panelToggled'));
+                document.querySelector('.subregions').classList.remove('vertical');
             },
 
             handleMouseDown: function (e) {
@@ -91,9 +72,6 @@ define([
             },
             hideContextMenus: function () {
                 comm.trigger('hide-overlays', {blur: true});
-            },
-            focusLayout: function (e) {
-                this.setFocus(e.currentTarget.getAttribute('name'));
             },
             start: function () {
                 this.attach('feeds', new FeedsLayout);
@@ -113,14 +91,13 @@ define([
                     return;
                 }
 
-                var shortcut = '';
+                let shortcut = '';
                 if (e.ctrlKey) {
                     shortcut += 'ctrl+';
                 }
                 if (e.shiftKey) {
                     shortcut += 'shift+';
                 }
-
 
                 if (e.keyCode > 46 && e.keyCode < 91) {
                     shortcut += String.fromCharCode(e.keyCode).toLowerCase();
@@ -130,8 +107,8 @@ define([
                     return;
                 }
 
-                let activeRegion = activeElement.parentNode.parentNode;
-                var activeRegionName = activeRegion.getAttribute('name');
+                const activeRegion = activeElement.parentNode.parentNode;
+                const activeRegionName = activeRegion.getAttribute('name');
                 if (activeRegionName && activeRegionName in shortcuts) {
                     if (shortcut in shortcuts[activeRegionName]) {
                         app.actions.execute(shortcuts[activeRegionName][shortcut], e);
@@ -148,16 +125,7 @@ define([
             }
         }));
 
-        // Prevent context-menu when alt is pressed
-        document.addEventListener('keyup', function (e) {
-            if (e.keyCode === 18) {
-                e.preventDefault();
-            }
-        });
-
-
         document.addEventListener('keydown', app.handleKeyDown);
-
 
         return app;
     });
