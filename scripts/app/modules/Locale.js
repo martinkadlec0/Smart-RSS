@@ -17,8 +17,12 @@ define(['../../nls/' + nl, '../../nls/en'], function (lang, en) {
         },
         translate: function (str) {
             str = String(str);
-            if (lang) return lang[str];
-            if (en) return en[str];
+            if (lang) {
+                return lang[str];
+            }
+            if (en) {
+                return en[str];
+            }
             return str;
         },
         translateHTML: function (content) {
@@ -29,5 +33,4 @@ define(['../../nls/' + nl, '../../nls/en'], function (lang, en) {
     };
 
     return Locale;
-
 });
