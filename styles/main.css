@@ -61,9 +61,6 @@ body {
     display: block;
 }
 
-.hidden {
-    display: none;
-}
 
 label {
     font-family: sans-serif;
@@ -728,4 +725,8 @@ footer {
     color: inherit;
     text-decoration: none;
     border-top: var(--border);
+}
+
+.hidden {
+    display: none;
 }
