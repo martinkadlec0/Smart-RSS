@@ -60,7 +60,7 @@ define([
                 }
             },
             /**
-             * List of hidden toolbar items. The reason for storing hidden items is so that we can show all hiden items when customizing ui.
+             * List of hidden toolbar items. The reason for storing hidden items is so that we can show all hidden items when customizing ui.
              * @param hiddenItems
              * @type Array
              */
