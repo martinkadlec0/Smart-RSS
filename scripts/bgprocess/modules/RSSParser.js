@@ -98,13 +98,13 @@ define(['../../libs/favicon'], function (faviconLoader) {
         }
 
 
-        var nodes = xml.querySelectorAll('item');
+        let nodes = xml.querySelectorAll('item');
         if (!nodes.length) {
             nodes = xml.querySelectorAll('entry');
         }
 
-        var title = getFeedTitle(xml);
-        var source = sources.findWhere({
+        const title = getFeedTitle(xml);
+        const source = sources.findWhere({
             id: sourceID
         });
 
@@ -115,7 +115,7 @@ define(['../../libs/favicon'], function (faviconLoader) {
         /**
          * TTL check
          */
-        var ttl = xml.querySelector('channel > ttl, feed > ttl, rss > ttl');
+        let ttl = xml.querySelector('channel > ttl, feed > ttl, rss > ttl');
         if (ttl && source.get('lastUpdate') === 0) {
             ttl = parseInt(ttl.textContent, 10);
             var values = [300, 600, 1440, 10080];
@@ -133,9 +133,9 @@ define(['../../libs/favicon'], function (faviconLoader) {
         }
         /* END: ttl check */
 
-        var mainEl = xml.querySelector('rss, rdf, feed, channel');
+        const mainEl = xml.querySelector('rss, rdf, feed, channel');
         if (mainEl) {
-            var baseStr = mainEl.getAttribute('xml:base') || mainEl.getAttribute('xmlns:base') || mainEl.getAttribute('base') || mainEl.querySelector('link').textContent || (mainEl.querySelector('link') && mainEl.querySelector('link:not([rel="self"])').getAttribute('href'));
+            let baseStr = mainEl.getAttribute('xml:base') || mainEl.getAttribute('xmlns:base') || mainEl.getAttribute('base') || mainEl.querySelector('link').textContent || (mainEl.querySelector('link') && mainEl.querySelector('link:not([rel="self"])').getAttribute('href'));
             if (!baseStr) {
                 baseStr = source.get('url');
             }
@@ -149,7 +149,7 @@ define(['../../libs/favicon'], function (faviconLoader) {
         checkFavicon(source);
 
 
-        [].forEach.call(nodes, function (node) {
+        [...nodes].forEach((node) => {
             items.push({
                 id: rssGetGuid(node),
                 title: rssGetTitle(node),
@@ -166,13 +166,12 @@ define(['../../libs/favicon'], function (faviconLoader) {
                 dateCreated: Date.now()
             });
 
-            var last = items[items.length - 1];
+            const last = items[items.length - 1];
 
             if (last.date === 0) {
                 last.date = Date.now();
             }
         });
-
 
         return items;
     }
@@ -190,7 +189,7 @@ define(['../../libs/favicon'], function (faviconLoader) {
         if (!node) {
             return false;
         }
-        var link = node.querySelector('link[rel="alternate"]');
+        let link = node.querySelector('link[rel="alternate"]');
         if (!link) {
             if (!link) {
                 link = node.querySelector('link[type="text/html"]');
@@ -208,8 +207,8 @@ define(['../../libs/favicon'], function (faviconLoader) {
         }
 
         if (!link) {
-            var guid = node.querySelector('guid');
-            var tmp;
+            const guid = node.querySelector('guid');
+            let tmp;
             if (guid && (tmp = guid.textContent.match(/:\/\//)) && tmp.length) {
                 link = guid;
             }
@@ -223,7 +222,7 @@ define(['../../libs/favicon'], function (faviconLoader) {
     }
 
     function getFeedTitle(xml) {
-        var title = xml.querySelector('channel > title, feed > title, rss > title');
+        let title = xml.querySelector('channel > title, feed > title, rss > title');
         if (!title || !(title.textContent).trim()) {
             title = xml.querySelector('channel > description, feed > description, rss > description');
         }
@@ -241,19 +240,19 @@ define(['../../libs/favicon'], function (faviconLoader) {
 
     function replaceUTCAbbr(str) {
         str = String(str);
-        var rep = {
+        const rep = {
             'CET': '+0100', 'CEST': '+0200', 'EST': '', 'WET': '+0000', 'WEZ': '+0000', 'WEST': '+0100',
             'EEST': '+0300', 'BST': '+0100', 'EET': '+0200', 'IST': '+0100', 'KUYT': '+0400', 'MSD': '+0400',
             'MSK': '+0400', 'SAMT': '+0400'
         };
-        var reg = new RegExp('(' + Object.keys(rep).join('|') + ')', 'gi');
-        return str.replace(reg, function (all, abbr) {
+        const reg = new RegExp('(' + Object.keys(rep).join('|') + ')', 'gi');
+        return str.replace(reg, (all, abbr) => {
             return rep[abbr];
         });
     }
 
     function rssGetDate(node) {
-        var pubDate = node.querySelector('pubDate, published');
+        let pubDate = node.querySelector('pubDate, published');
         if (pubDate) {
             return (new Date(replaceUTCAbbr(pubDate.textContent))).getTime() || 0;
         }
@@ -272,7 +271,7 @@ define(['../../libs/favicon'], function (faviconLoader) {
     }
 
     function rssGetAuthor(node, title) {
-        var creator = node.querySelector('creator, author > name');
+        let creator = node.querySelector('creator, author > name');
         if (creator) {
             creator = creator.textContent.trim();
         }
@@ -304,7 +303,7 @@ define(['../../libs/favicon'], function (faviconLoader) {
     }
 
     function rssGetContent(node) {
-        var desc = node.querySelector('encoded');
+        let desc = node.querySelector('encoded');
         if (desc) {
             return desc.textContent;
         }
@@ -314,7 +313,6 @@ define(['../../libs/favicon'], function (faviconLoader) {
             return desc.textContent;
         }
 
-        // content over summary because of "http://neregate.com/blog/feed/atom/"
         desc = node.querySelector('content');
         if (desc) {
             return desc.textContent;
