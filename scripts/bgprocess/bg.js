@@ -14,9 +14,8 @@ define([
          */
         animation.start();
 
-
-        window.appStarted = new (jQuery.Deferred)();
-        window.settingsLoaded = new (jQuery.Deferred)();
+        window.appStarted = new ($.Deferred)();
+        window.settingsLoaded = new ($.Deferred)();
 
         /**
          * Items
@@ -36,7 +35,7 @@ define([
         window.folders = new Folders();
 
         /**
-         * This is used for when new feed is subsribed and smart rss tab is opened to focus the newly added feed
+         * This is used for when new feed is subscribed and smart rss tab is opened to focus the newly added feed
          */
         window.sourceToFocus = null;
 
@@ -60,16 +59,16 @@ define([
                 allDef.resolve();
                 return;
             }
-            var one = arr.shift();
+            const one = arr.shift();
             one.always(function () {
                 fetchOne(arr, allDef);
             });
         }
 
         function fetchAll() {
-            var allDef = new (jQuery.Deferred)();
-            var deferreds = [];
-            var settingsDef;
+            const allDef = new (jQuery.Deferred)();
+            const deferreds = [];
+            let settingsDef;
             deferreds.push(folders.fetch({silent: true}));
             deferreds.push(sources.fetch({silent: true}));
             deferreds.push(items.fetch({silent: true}));
@@ -181,14 +180,14 @@ define([
             if (message.action === 'new-rss' && message.value) {
                 message.value = message.value.replace(/^feed:/i, 'http:');
 
-                var duplicate = sources.findWhere({url: message.value});
+                const duplicate = sources.findWhere({url: message.value});
                 if (!duplicate) {
-                    var s = sources.create({
+                    const source = sources.create({
                         title: message.value,
                         url: message.value,
                         updateEvery: 180
                     }, {wait: true});
-                    openRSS(false, s.get('id'));
+                    openRSS(false, source.get('id'));
                 } else {
                     duplicate.trigger('change');
                     openRSS(false, duplicate.get('id'));
