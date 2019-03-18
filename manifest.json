@@ -25,6 +25,21 @@
       "19": "images/reload_anim_1.png"
     }
   },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*/*"
+      ],
+      "run_at": "document_start",
+      "js": [
+        "rssDetector/scan.js"
+      ]
+    }
+  ],
+  "page_action": {
+    "default_title": "RSS",
+    "default_popup": "rssDetector/popup.html"
+  },
   "options_ui": {
     "page": "options.html"
   },
