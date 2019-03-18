@@ -25,7 +25,7 @@ require.config({
 	}
 });
 
-var tabID = -1;
+let tabID = -1;
 
 chrome.runtime.getBackgroundPage(function(bg) {
 	/**
