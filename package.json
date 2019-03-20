@@ -5,9 +5,10 @@
   "homepage": "",
   "dependencies": {},
   "devDependencies": {
+    "adm-zip": "git+https://github.com/cthackers/adm-zip.git",
     "grunt": ">=0.4.1",
     "grunt-contrib-jshint": ">=0.6.4",
-    "grunt-zip": "^0.18.1"
+    "md5-file": "^4.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
