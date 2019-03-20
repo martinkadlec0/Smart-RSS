@@ -179,7 +179,9 @@ module.exports = function (grunt) {
             const AdmZip = require('adm-zip');
             const zipFile = new AdmZip();
             filesList.forEach((file) => {
-                const path = file.replace(root, '').split('\\').pop().split('/').pop();
+                let path = file.replace(root, '');
+                path = path.substring(0, path.lastIndexOf('/'));
+                path = path.substring(1, path.length);
                 zipFile.addLocalFile(file, path);
             });
             zipFile.writeZip(this.target + '_' + version + '.zip');
