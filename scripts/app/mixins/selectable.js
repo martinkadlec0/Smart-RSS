@@ -102,9 +102,9 @@ define([], function () {
                     return;
                 }
 
-                setTimeout(function () {
+                setTimeout(()=> {
                     this.trigger('pick', view, e);
-                }.bind(this), 0);
+                }, 0);
 
             } else if (e.shiftKey && this.selectPivot) {
                 const selectedItems = this.el.querySelectorAll('.selected');
@@ -124,7 +124,8 @@ define([], function () {
 
                         let sibling = element.nextElementSibling;
                         while (sibling) {
-                            if (sibling.matches('.date-group')) {
+                            if (sibling.classList.contains('date-group')) {
+                                sibling = sibling.nextElementSibling;
                                 continue;
                             }
                             if (sibling === viewElement) {
@@ -137,7 +138,8 @@ define([], function () {
                     } else {
                         let sibling = viewElement.nextElementSibling;
                         while (sibling) {
-                            if (sibling.matches('.date-group')) {
+                            if (sibling.classList.contains('date-group')) {
+                                sibling = sibling.nextElementSibling;
                                 continue;
                             }
                             if (sibling === element) {
@@ -194,7 +196,7 @@ define([], function () {
             if (item.el.classList.contains('articles-list-item')) {
                 e.preventDefault();
             }
-            if (this.selectedItems.length > 1 && item.$el.hasClass('selected') && !e.ctrlKey && !e.shiftKey) {
+            if (this.selectedItems.length > 1 && item.el.classList.contains('selected') && !e.ctrlKey && !e.shiftKey) {
                 this.selectFlag = true;
                 return false;
             }
