@@ -4,17 +4,83 @@
  */
 define([], function () {
 
-    var defaultImage = '';
+    function checkFavicon(source) {
+        return new Promise((resolve, reject) => {
+            const googleFallback = () => {
+                return toDataURI('https://www.google.com/s2/favicons?domain=' + encodeURIComponent(source.get('url')));
+            };
 
-    /**
-     * Image specific data URI converter
-     * @class toDataURI
-     * @constructor
-     * @extends Object
-     */
+            let baseAddress = source.get('base');
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        const text = xhr.responseText.replace(/<body(.*?)<\/body>/gm, '');
+                        const baseDocument = new DOMParser().parseFromString(text, 'text/html');
+                        const length = baseAddress.length;
+                        if (baseAddress[length - 1] === '/') {
+                            baseAddress = baseAddress.substring(0, length - 1);
+                        }
+                        let iconAddress = baseAddress + '/favicon.ico';
+                        const links = baseDocument.querySelectorAll('link');
+                        const iconLinks = Array.from(links).filter(link => {
+                            return link.hasAttribute('rel') && link.getAttribute('rel').includes('icon');
+                        });
+                        let foundIcon = '';
+                        let tempIcon = '';
+                        iconLinks.forEach((link) => {
+                            if (link.hasAttribute('href')) {
+                                tempIcon = link.getAttribute('href');
+                            } else {
+                                tempIcon = link.textContent;
+                            }
+                            if (!tempIcon.includes('svg')) {
+                                foundIcon = tempIcon;
+                            }
+                        });
+                        if (foundIcon) {
+                            if (!foundIcon.includes('//')) {
+                                if (foundIcon[0] === '.') {
+                                    foundIcon = foundIcon.substr(1);
+                                }
+                                if (foundIcon[0] === '/') {
+                                    foundIcon = foundIcon.substr(1);
+                                }
+                                iconAddress = baseAddress + '/' + foundIcon;
+                            } else {
+                                iconAddress = foundIcon;
+                            }
+                        }
+                        const schema = source.get('url').includes('http://') ? 'http://' : 'https://';
+                        iconAddress = schema + iconAddress.replace('http://', '').replace('https://', '').replace('//', '');
+
+                        toDataURI(iconAddress)
+                            .then(response => {
+                                resolve(response);
+                            })
+                            .catch(() => {
+                                resolve(googleFallback());
+                            });
+                    } else {
+                        resolve(googleFallback());
+                    }
+                }
+            };
+            xhr.open('GET', baseAddress);
+            xhr.send();
+        });
+    }
+
+
+    // /**
+    //  * Image specific data URI converter
+    //  * @class toDataURI
+    //  * @constructor
+    //  * @extends Object
+    //  */
     function toDataURI(url) {
         return new Promise(function (resolve, reject) {
-            let xhr = new window.XMLHttpRequest();
+            const xhr = new window.XMLHttpRequest();
             xhr.responseType = 'arraybuffer';
             xhr.onerror = function () {
                 reject('[modules/toDataURI] XMLHttpRequest error on', url);
@@ -34,16 +100,15 @@ define([], function () {
                                 const cacheControlHeader = xhr.getResponseHeader('cache-control');
                                 let maxAge = 60 * 60 * 24 * 7;
                                 if (cacheControlHeader && cacheControlHeader.includes('max-age=')) {
-                                    maxAge = /max-age=([0-9]+).*/gi.exec(cacheControlHeader)[1];
+                                    const newMaxAge = parseInt(/max-age=([0-9]+).*/gi.exec(cacheControlHeader)[1]);
+                                    maxAge = newMaxAge > 0 ? newMaxAge : maxAge;
                                 }
-                                expires = parseInt(Math.round((new Date()).getTime() / 1000)) + parseInt(maxAge);
+                                expires = parseInt(Math.round((new Date()).getTime() / 1000)) + maxAge;
                             }
 
-
-                            let imgData = 'data:' + type + ';base64,' + AB2B64(xhr.response);
+                            const imgData = 'data:' + type + ';base64,' + AB2B64(xhr.response);
                             resizeTo(imgData, 16, 16, function (parsedImgData) {
                                 resolve({favicon: parsedImgData, faviconExpires: expires});
-
                             });
 
                         }
@@ -51,7 +116,6 @@ define([], function () {
                         resolve({
                             faviconExpires: parseInt(Math.round((new Date()).getTime() / 1000)) + 60 * 60 * 24 * 30
                         });
-                        // reject('[modules/toDataURI] HTTP error on', url);
                     }
                 }
             };
@@ -63,18 +127,18 @@ define([], function () {
 
     /* Custom Base64 encoder. */
     function AB2B64(arrayBuffer) {
-        var base64 = '';
-        var encodings = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+        let base64 = '';
+        const encodings = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
-        var bytes = new Uint8Array(arrayBuffer);
-        var byteLength = bytes.byteLength;
-        var byteRemainder = byteLength % 3;
-        var mainLength = byteLength - byteRemainder;
+        const bytes = new Uint8Array(arrayBuffer);
+        const byteLength = bytes.byteLength;
+        const byteRemainder = byteLength % 3;
+        const mainLength = byteLength - byteRemainder;
 
-        var a, b, c, d;
-        var chunk;
+        let a, b, c, d;
+        let chunk;
 
-        for (var i = 0; i < mainLength; i = i + 3) {
+        for (let i = 0; i < mainLength; i = i + 3) {
             chunk = (bytes[i] << 16) | (bytes[i + 1] << 8) | bytes[i + 2];
 
             a = (chunk & 16515072) >> 18; // 16515072 = (2^6 - 1) << 18
@@ -106,14 +170,13 @@ define([], function () {
     }
 
     function resizeTo(url, w, h, callback) {
-        var img, canvas, resized;
-        img = new Image();
+        const img = new Image();
         img.onload = function () {
-            canvas = document.createElement('canvas');
+            const canvas = document.createElement('canvas');
             canvas.width = img.width;
             canvas.height = img.height;
             canvas.getContext('2d').drawImage(img, 0, 0, img.width, img.height);
-            resized = document.createElement('canvas');
+            const resized = document.createElement('canvas');
             resized.width = w || 16;
             // in case we want proportional resize h = 0/null/undefined
             if (!h) {
@@ -292,6 +355,9 @@ define([], function () {
     return {
         image: function () {
             return toDataURI.apply(null, arguments);
+        },
+        checkFavicon: function () {
+            return checkFavicon.apply(null, arguments);
         }
     };
 });

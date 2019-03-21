@@ -2,7 +2,7 @@
  * @module BgProcess
  * @submodule models/Loader
  */
-define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSSParser, animation) {
+define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favicon'], function (BB, RSSParser, animation, Favicon) {
 
     // remove items with age above treshold
     function removeOldItems(source) {
@@ -153,13 +153,15 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
         if (settings.get('showSpinner')) {
             sourceToLoad.set('isLoading', true);
         }
-        let proxy = sourceToLoad.get('proxyThroughFeedly');
+        const proxy = sourceToLoad.get('proxyThroughFeedly');
 
         let xhr = new XMLHttpRequest();
         xhr.overrideMimeType('application/xml');
         xhr.onreadystatechange = () => {
+            let ok = false;
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
+                    ok = true;
                     let parsedData = [];
                     if (proxy) {
                         let response = JSON.parse(xhr.responseText);
@@ -185,10 +187,10 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
                     } else {
                         parsedData = RSSParser.parse(xhr.responseXML, sourceToLoad.get('id'));
                     }
-                    var hasNew = false;
-                    var createdNo = 0;
+                    let hasNew = false;
+                    let createdNo = 0;
                     parsedData.forEach(function (item) {
-                        var existingItem = items.get(item.id);
+                        const existingItem = items.get(item.id);
                         if (!existingItem) {
                             hasNew = true;
                             items.create(item, {sort: false});
@@ -207,7 +209,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
                     }
 
                     // remove old deleted content
-                    var fetchedIDs = parsedData.map((item) => {
+                    const fetchedIDs = parsedData.map((item) => {
                         return item.id;
                     });
                     items.where({
@@ -220,8 +222,8 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
                     });
 
                     // tip to optimize: var count = items.where.call(countAll, {unread: true }).length
-                    var countAll = items.where({sourceID: sourceToLoad.get('id'), trashed: false}).length;
-                    var count = items.where({
+                    const countAll = items.where({sourceID: sourceToLoad.get('id'), trashed: false}).length;
+                    const count = items.where({
                         sourceID: sourceToLoad.get('id'),
                         unread: true,
                         trashed: false
@@ -247,8 +249,23 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation'], function (BB, RSS
                 loader.set('loaded', loader.get('loaded') + 1);
                 sourceToLoad.set('isLoading', false);
 
-                feedDownloaded(sourceToLoad, xhr);
-                downloadURL();
+
+                if (ok && (sourceToLoad.get('faviconExpires') < parseInt(Math.round((new Date()).getTime() / 1000)))) {
+                    console.log('checking favicon for' + sourceToLoad.get('url'));
+                    Favicon.checkFavicon(sourceToLoad)
+                        .then((response) => {
+                            sourceToLoad.save(response);
+                            feedDownloaded(sourceToLoad, xhr);
+                            downloadURL();
+                        }, () => {
+                            console.log('failed to load favicon for' + sourceToLoad.get('url'));
+                            feedDownloaded(sourceToLoad, xhr);
+                            downloadURL();
+                        });
+                } else {
+                    feedDownloaded(sourceToLoad, xhr);
+                    downloadURL();
+                }
             }
         };
         let url = sourceToLoad.get('url');

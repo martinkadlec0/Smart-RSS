@@ -2,88 +2,7 @@
  * @module BgProcess
  * @submodule modules/RSSParser
  */
-define(['../../libs/favicon'], function (faviconLoader) {
-
-
-    function checkFavicon(source) {
-
-        function googleFallback() {
-            faviconLoader.image('https://www.google.com/s2/favicons?domain=' + encodeURIComponent(source.get('url')))
-                .then(response => {
-                    source.save(response);
-                });
-        }
-
-        if (source.get('faviconExpires') < parseInt(Math.round((new Date()).getTime() / 1000))) {
-            let baseAddress = source.get('base');
-            let xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        const text = xhr.responseText.replace(/<body(.*?)<\/body>/gm, '');
-                        const baseDocument = new DOMParser().parseFromString(text, 'text/html');
-                        const length = baseAddress.length;
-                        if (baseAddress[length - 1] === '/') {
-                            baseAddress = baseAddress.substring(0, length - 1);
-                        }
-                        let iconAddress = baseAddress + '/favicon.ico';
-                        const links = baseDocument.querySelectorAll('link');
-                        const iconLinks = Array.from(links).filter(link => {
-                            return link.hasAttribute('rel') && link.getAttribute('rel').includes('icon');
-                        });
-                        let foundIcon = '';
-                        let tempIcon = '';
-                        iconLinks.forEach((link) => {
-                            if (link.hasAttribute('rel') && link.getAttribute('rel').includes('icon')) {
-                                if (link.hasAttribute('href')) {
-                                    tempIcon = link.getAttribute('href');
-                                    if (!tempIcon.includes('svg')) {
-                                        foundIcon = tempIcon;
-                                    }
-                                } else {
-                                    tempIcon = link.textContent;
-                                    if (!tempIcon.includes('svg')) {
-                                        foundIcon = tempIcon;
-                                    }
-                                }
-                            }
-                        });
-                        if (foundIcon && !foundIcon.includes('svg')) {
-                            if (!foundIcon.includes('//')) {
-                                if (foundIcon[0] === '.') {
-                                    foundIcon = foundIcon.substr(1);
-                                }
-                                if (foundIcon[0] === '/') {
-                                    foundIcon = foundIcon.substr(1);
-                                }
-                                iconAddress = baseAddress + '/' + foundIcon;
-                            } else {
-                                iconAddress = foundIcon;
-                            }
-                        }
-                        const prefix = source.get('url').includes('http://') ? 'http://' : 'https://';
-                        iconAddress = prefix + iconAddress.replace('http://', '').replace('https://', '').replace('//', '');
-
-                        faviconLoader.image(iconAddress)
-                            .then(response => {
-                                source.save(response);
-                            })
-                            .catch(() => {
-                                googleFallback();
-                            });
-
-                    } else {
-                        googleFallback();
-                    }
-                }
-
-            };
-            xhr.open('GET', baseAddress);
-            xhr.send();
-        }
-    }
-
-
+define([], function () {
     /**
      * RSS Parser
      * @class RSSParser
@@ -146,8 +65,6 @@ define(['../../libs/favicon'], function (faviconLoader) {
                 source.save({base: baseStr});
             }
         }
-        checkFavicon(source);
-
 
         [...nodes].forEach((node) => {
             items.push({
