@@ -57,10 +57,6 @@ body {
     overflow: hidden;
 }
 
-.visible {
-    display: block;
-}
-
 
 label {
     font-family: sans-serif;
@@ -431,6 +427,10 @@ input[type=search]:not(:focus):not(:valid) {
     display: none;
 }
 
+#properties label {
+    display: block;
+}
+
 #properties input,
 #properties select {
     width: 100%;
@@ -447,32 +447,6 @@ input[type=search]:not(:focus):not(:valid) {
     cursor: pointer;
 }
 
-#properties button:first-of-type {
-    margin-right: 2%;
-}
-
-#properties-advanced {
-    margin: 5px 0;
-    display: none;
-}
-
-#advanced-switch {
-    user-select: none;
-    margin: 5px 0;
-    font-weight: bold;
-    font-size: 0.75rem;
-    cursor: pointer;
-    padding-left: 16px;
-    background: url("/images/right.png") no-repeat left 45%;
-}
-
-#advanced-switch:hover {
-    text-decoration: underline;
-}
-
-#advanced-switch.switched {
-    background: url("/images/down.png") no-repeat left 45%;
-}
 
 #toolbar {
     flex: 0 0 auto;
@@ -730,3 +704,7 @@ footer {
 .hidden {
     display: none;
 }
+
+/*.visible {*/
+/*display: block;*/
+/*}*/
