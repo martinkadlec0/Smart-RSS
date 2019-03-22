@@ -185,7 +185,18 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                             });
                         });
                     } else {
-                        parsedData = RSSParser.parse(xhr.responseXML, sourceToLoad.get('id'));
+                        const response = xhr.responseText;
+                        const data = new DOMParser().parseFromString(response, 'text/xml');
+                        if ([...data.querySelectorAll('parsererror')].length > 0) {
+                            console.log('Failed load source: ' + sourceToLoad.get('url') + (proxy ? 'using feedly proxy' : ''));
+                            sourceToLoad.trigger('update', {ok: false});
+                            sourceToLoad.save({
+                                favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACfUlEQVR42pXSb0gTYRwH8O/Ns8AXeg36gxG0YhBmLOhVryxIkggxs6BSEQpCU0nNGWRIFpWIUUaaOMmcIspIUqvp7MUU8oUEXZtTXGpoggbl1N3t/mxed1uad9aLfvBwv4P7fp7n4X6EJEmw2qfe74wjEziGBesPkKyfjWL8HBlgOJJj+ShRCJLbdm8fmvTMZj+rzZ7BhiIUoMvhHT2TbEzAP6r4uQvHD1NwOCc+B73j6XWWa5MqoL3b5b6QeujgxpAkL3EVCMnrlsWFgjQDnnhIfHrVN2ZcmUpvfFk0vg602D6OZWccObAREEJAcDWC3HnhgjljP74zQYx4FjE6MIRHNZnEOmBpHZ64knnU+Lew0j9ocanv5KXVQH2TczL3ctK+8LHlwDBJYNfrfuhPJGP+XR9+ZqRAdC9B9hBgQnB2vFEDtXWOmcK85D3C77Cpuhp0aSn0Nns4bMrKAm21Im5BgsiKaH/aoQZqHr+dK7p+Kn6IiIQpgwG+kRHQVVXhMEVR8Hm9oO12RH8RYKvTAA+rexaKS07vmOpxYCHtJExlZaD0evjcblVYKZ1XQFe9Brh3v+tHkTlNzwrE+p21Ox+TP3bOSgiyAnobOtVA5V3bUoH5bOy33v5NYSo6Gr7padDyaZTiPDz6LBqgoqKTyb95LsYTo9u0sykxEZQgwDc/D3p5Gcwoj4EmDVB+u4PLLTu/NSASmNMTSMrJgbO5Gd0pV5Fqb4ApNjYc9k1IkDgBg80aoNTcxueXX9zi5wnwQWAlnogMzFd5MvZG+sVxCYL8qpOBD1YNUHKjLVRYeUnHCH8mUHkq2FqvzIio/AUeGGxsVQPFJa0S/rPWgF+LDojwZf7f9QAAAABJRU5ErkJggg==',
+                                faviconExpires: parseInt(Math.round((new Date()).getTime() / 1000)) + 60 * 60
+                            });
+                        }
+                        parsedData = RSSParser.parse(data, sourceToLoad.get('id'));
+
                     }
                     let hasNew = false;
                     let createdNo = 0;
@@ -245,6 +256,10 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                 } else {
                     console.log('Failed load source: ' + sourceToLoad.get('url') + (proxy ? 'using feedly proxy' : ''));
                     sourceToLoad.trigger('update', {ok: false});
+                    sourceToLoad.save({
+                        favicon: '/images/brokenFeed.png',
+                        faviconExpires: parseInt(Math.round((new Date()).getTime() / 1000)) + 60 * 60
+                    });
                 }
                 loader.set('loaded', loader.get('loaded') + 1);
                 sourceToLoad.set('isLoading', false);

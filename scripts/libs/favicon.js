@@ -3,13 +3,10 @@
  * @submodule modules/toDataURI
  */
 define([], function () {
+    const defaultIcon = '/images/feed.png';
 
     function checkFavicon(source) {
         return new Promise((resolve, reject) => {
-            const googleFallback = () => {
-                return toDataURI('https://www.google.com/s2/favicons?domain=' + encodeURIComponent(source.get('url')));
-            };
-
             let baseAddress = source.get('base');
             let xhr = new XMLHttpRequest();
             xhr.onreadystatechange = () => {
@@ -17,9 +14,9 @@ define([], function () {
                     if (xhr.status === 200) {
                         const text = xhr.responseText.replace(/<body(.*?)<\/body>/gm, '');
                         const baseDocument = new DOMParser().parseFromString(text, 'text/html');
-                        const length = baseAddress.length;
-                        if (baseAddress[length - 1] === '/') {
-                            baseAddress = baseAddress.substring(0, length - 1);
+                        const baseAddressLength = baseAddress.length;
+                        if (baseAddress[baseAddressLength - 1] === '/') {
+                            baseAddress = baseAddress.substring(0, baseAddressLength - 1);
                         }
                         let iconAddress = baseAddress + '/favicon.ico';
                         const links = baseDocument.querySelectorAll('link');
@@ -59,10 +56,16 @@ define([], function () {
                                 resolve(response);
                             })
                             .catch(() => {
-                                resolve(googleFallback());
+                                resolve({
+                                    favicon: defaultIcon,
+                                    faviconExpires: parseInt(Math.round((new Date()).getTime() / 1000)) + 60 * 60 * 24 * 30
+                                });
                             });
                     } else {
-                        resolve(googleFallback());
+                        resolve({
+                            favicon: defaultIcon,
+                            faviconExpires: parseInt(Math.round((new Date()).getTime() / 1000)) + 60 * 60 * 24 * 30
+                        });
                     }
                 }
             };
@@ -113,9 +116,7 @@ define([], function () {
 
                         }
                     } else {
-                        resolve({
-                            faviconExpires: parseInt(Math.round((new Date()).getTime() / 1000)) + 60 * 60 * 24 * 30
-                        });
+                        reject({});
                     }
                 }
             };

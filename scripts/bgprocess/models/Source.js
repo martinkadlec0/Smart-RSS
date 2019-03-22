@@ -25,7 +25,7 @@ define(['backbone'], function (BB) {
             isLoading: false,
             autoremove: 0, // in days
             proxyThroughFeedly: false,
-            favicon: 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
+            favicon: '/images/feed.png',
             faviconExpires: 0
         },
 
