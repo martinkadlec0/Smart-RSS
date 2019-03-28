@@ -10,7 +10,7 @@ define(['backbone'], function (BB) {
 	 * @constructor
 	 * @extends Backbone.Model
 	 */
-	var Toolbar = BB.Model.extend({
+	let Toolbar = BB.Model.extend({
 		defaults: {
 			/**
 			 * @attribute region
@@ -27,7 +27,7 @@ define(['backbone'], function (BB) {
 			position: 'top',
 
 			/**
-			 * List of actions. Each action = one button/search on toolbar 
+			 * List of actions. Each action = one button/search on toolbar
 			 * @attribute actions
 			 * @type Array
 			 * @default []
