@@ -4,7 +4,7 @@
  */
 define(['backbone', 'modules/Animation'], function (BB, animation) {
 
-    var handleAllCountChange = function (model) {
+    let handleAllCountChange = function (model) {
         if (settings.get('badgeMode') === 'disabled') {
             if (model === settings) chrome.browserAction.setBadgeText({text: ''});
             return;
@@ -19,10 +19,12 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
                 info.on('change:allCountUnvisited', handleAllCountChange);
             }
         }
-        if (info.badgeTimeout) return;
+        if (info.badgeTimeout) {
+            return;
+        }
 
         info.badgeTimeout = setTimeout(function () {
-            var val;
+            let val;
             if (settings.get('badgeMode') === 'unread') {
                 val = info.get('allCountUnread') > 99 ? '+' : info.get('allCountUnread');
             } else {
@@ -70,8 +72,8 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
             });
 
             folders.forEach(function (folder) {
-                var count = 0;
-                var countAll = 0;
+                let count = 0;
+                let countAll = 0;
                 sources.where({folderID: folder.id}).forEach(function (source) {
                     count += source.get('count');
                     countAll += source.get('countAll');
@@ -90,24 +92,23 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
 
 
             sources.on('destroy', function (source) {
-                var trashUnread = 0;
-                var trashAll = 0;
-                var allUnvisited = 0;
+                let trashUnread = 0;
+                let trashAll = 0;
+                let allUnvisited = 0;
                 items.where({sourceID: source.get('id')}).forEach(function (item) {
                     if (!item.get('deleted')) {
-                        if (!item.get('visited')) allUnvisited++;
-                        if (item.get('trashed')) trashAll++;
-                        if (item.get('trashed') && item.get('unread')) trashUnread++;
+                        if (!item.get('visited')) {
+                            allUnvisited++;
+                        }
+                        if (item.get('trashed')) {
+                            trashAll++;
+                        }
+                        if (item.get('trashed') && item.get('unread')) {
+                            trashUnread++;
+                        }
                     }
                     item.destroy();
                 });
-
-                /****
-                 * probably not neccesary because I  save all the removed items to batch and then
-                 * in next frame I remove them at once and all handleScroll anyway
-                 ****/
-                //items.trigger('render-screen');
-
 
                 info.set({
                     allCountUnread: info.get('allCountUnread') - source.get('count'),
@@ -119,7 +120,7 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
 
                 if (source.get('folderID')) {
 
-                    var folder = folders.findWhere({id: source.get('folderID')});
+                    const folder = folders.findWhere({id: source.get('folderID')});
                     if (folder) {
                         folder.set({
                             count: folder.get('count') - source.get('count'),
@@ -131,16 +132,10 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
                 if (source.get('hasNew')) {
                     animation.handleIconChange();
                 }
-
-                try {
-                    chrome.alarms.clear('source-' + source.get('id'));
-                } catch (e) {
-                    console.log('Alarm error: ' + e);
-                }
             });
 
             items.on('change:unread', function (model) {
-                var source = model.getSource();
+                const source = model.getSource();
                 if (!model.previous('trashed') && source !== sourceJoker) {
                     if (model.get('unread') === true) {
                         source.set({
@@ -163,7 +158,7 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
             });
 
             items.on('change:trashed', function (model) {
-                var source = model.getSource();
+                const source = model.getSource();
                 if (source !== sourceJoker && model.get('unread') === true) {
                     if (model.get('trashed') === true) {
                         source.set({
@@ -225,10 +220,14 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
                 });
 
                 // FOLDER
-                if (!(source.get('folderID'))) return;
+                if (!(source.get('folderID'))) {
+                    return;
+                }
 
-                var folder = folders.findWhere({id: source.get('folderID')});
-                if (!folder) return;
+                const folder = folders.findWhere({id: source.get('folderID')});
+                if (!folder) {
+                    return;
+                }
 
                 folder.set({count: folder.get('count') + source.get('count') - source.previous('count')});
             });
@@ -240,20 +239,26 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
                 });
 
                 // FOLDER
-                if (!(source.get('folderID'))) return;
+                if (!(source.get('folderID'))) {
+                    return;
+                }
 
-                var folder = folders.findWhere({id: source.get('folderID')});
-                if (!folder) return;
+                const folder = folders.findWhere({id: source.get('folderID')});
+                if (!folder) {
+                    return;
+                }
 
                 folder.set({countAll: folder.get('countAll') + source.get('countAll') - source.previous('countAll')});
             });
 
             sources.on('change:folderID', function (source) {
-                var folder;
+                let folder;
                 if (source.get('folderID')) {
 
                     folder = folders.findWhere({id: source.get('folderID')});
-                    if (!folder) return;
+                    if (!folder) {
+                        return;
+                    }
 
                     folder.set({
                         count: folder.get('count') + source.get('count'),
@@ -263,7 +268,9 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
 
                 if (source.previous('folderID')) {
                     folder = folders.findWhere({id: source.previous('folderID')});
-                    if (!folder) return;
+                    if (!folder) {
+                        return;
+                    }
 
                     folder.set({
                         count: Math.max(folder.get('count') - source.get('count'), 0),
