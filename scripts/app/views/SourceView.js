@@ -2,11 +2,7 @@ define([
         'backbone', 'views/TopView', 'instances/contextMenus'
     ],
     function (BB, TopView, contextMenus) {
-        var SourceView = TopView.extend({
-            /*events: {
-                'mouseup': 'handleMouseUp',
-                'click': 'handleMouseDown',
-            },*/
+        return TopView.extend({
             className: 'sources-list-item source',
             list: null,
             initialize: function (opt, list) {
@@ -31,7 +27,7 @@ define([
                 bg.sources.off('clear-events', this.handleClearEvents, this);
             },
             showContextMenu: function (e) {
-                if (!this.$el.hasClass('selected')) {
+                if (!this.el.classList.contains('selected')) {
                     app.feeds.feedList.select(this, e);
                 }
                 contextMenus.get('source').currentSource = this.model;
@@ -43,31 +39,24 @@ define([
             handleModelDestroy: function () {
                 this.list.destroySource(this);
             },
-            renderInterval: 'first-time',
             render: function () {
-                if (this.renderInterval === 'first-time') return this.realRender();
-                if (this.renderInterval) return this;
-
-                var that = this;
-                this.renderInterval = requestAnimationFrame(function () {
-                    that.realRender();
-                });
-                return this;
-            },
-            realRender: function () {
-                this.$el.toggleClass('has-unread', !!this.model.get('count'));
+                if (!!this.model.get('count')) {
+                    this.el.classList.add('has-unread');
+                } else {
+                    this.el.classList.remove('has-unread');
+                }
 
                 if (this.model.get('folderID')) {
                     this.el.dataset.inFolder = this.model.get('folderID');
                 } else {
-                    this.$el.removeClass('invisible');
+                    this.element.classList.remove('invisible');
                     delete this.el.dataset.inFolder;
                 }
 
                 this.setTitle(this.model.get('count'), this.model.get('countAll'));
 
-                this.$el.html(this.template(this.model.toJSON()));
-                this.renderInterval = null;
+                this.el.innerHTML = this.template(this.model.toJSON());
+
 
                 if (bg.sourceToFocus === this.model.get('id')) {
                     setTimeout(function () {
@@ -79,6 +68,4 @@ define([
                 return this;
             }
         });
-
-        return SourceView;
     });
