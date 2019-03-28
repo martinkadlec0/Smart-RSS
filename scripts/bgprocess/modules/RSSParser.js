@@ -10,7 +10,7 @@ define([], function () {
      * @extends Object
      */
     function parseRSS(xml, sourceID) {
-        var items = [];
+        let items = [];
 
         if (!xml || !(xml instanceof XMLDocument)) {
             return items;
@@ -37,11 +37,11 @@ define([], function () {
         let ttl = xml.querySelector('channel > ttl, feed > ttl, rss > ttl');
         if (ttl && source.get('lastUpdate') === 0) {
             ttl = parseInt(ttl.textContent, 10);
-            var values = [300, 600, 1440, 10080];
+            let values = [300, 600, 1440, 10080];
             if (ttl > 10080) {
                 source.save({updateEvery: 10080});
             } else if (ttl > 180) {
-                for (var i = 0; i < values.length; i++) {
+                for (let i = 0; i < values.length; i++) {
                     if (ttl <= values[i]) {
                         ttl = values[i];
                         break;
@@ -70,7 +70,7 @@ define([], function () {
             items.push({
                 id: rssGetGuid(node),
                 title: rssGetTitle(node),
-                url: rssGetLink(node),
+                url: rssGetLink(node, source.get('base')),
                 date: rssGetDate(node),
                 author: rssGetAuthor(node, title),
                 content: rssGetContent(node),
@@ -102,7 +102,7 @@ define([], function () {
         return guid ? guid.textContent : rssGetLink(node) || '';
     }
 
-    function rssGetLink(node) {
+    function rssGetLink(node, base) {
         if (!node) {
             return false;
         }
@@ -132,8 +132,22 @@ define([], function () {
         }
 
         if (link) {
-            return link.textContent || link.getAttribute('href');
+            let address = link.textContent || link.getAttribute('href');
+
+            if (!address.startsWith('http')) {
+                if (address.startsWith('/')) {
+                    address = address.substr(1);
+                }
+                if (base.endsWith('/')) {
+                    base = substring(0, base.length - 1);
+                }
+                address = base + '/' + address;
+            }
+
+
+            return address;
         }
+
 
         return false;
     }
