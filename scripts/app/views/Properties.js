@@ -26,20 +26,27 @@ define([
                 }
 
                 const updateEvery = parseInt(document.querySelector('#prop-update-every').value);
-                const autoremove = parseInt(document.querySelector('#prop-autoremove').value);
+                const autoRemove = parseInt(document.querySelector('#prop-autoremove').value);
 
                 if (this.current instanceof bg.Source) {
                     /* encrypt the password */
                     this.current.setPass(document.querySelector('#prop-password').value);
 
+                    const folder = document.querySelector('#prop-parent').value;
                     this.current.save({
                         title: document.querySelector('#prop-title').value,
                         url: app.fixURL(document.querySelector('#prop-url').value),
                         username: document.querySelector('#prop-username').value,
+                        folderID: document.querySelector('#prop-parent').value,
                         updateEvery: parseInt(document.querySelector('#prop-update-every').value),
                         autoremove: parseInt(document.querySelector('#prop-autoremove').value),
                         proxyThroughFeedly: document.querySelector('#prop-proxy').checked
                     });
+                    console.log(folder);
+                    if (folder === '0') {
+                        this.current.unset('folderID');
+                    }
+                    this.render();
                 } else {
                     let iterator = [];
                     if (this.current instanceof bg.Folder) {
@@ -55,9 +62,9 @@ define([
                             source.save({updateEvery: updateEvery});
                         });
                     }
-                    if (autoremove >= -1) {
+                    if (autoRemove >= -1) {
                         iterator.forEach(function (source) {
-                            source.save({autoremove: autoremove});
+                            source.save({autoremove: autoRemove});
                         });
                     }
                 }
@@ -78,8 +85,23 @@ define([
                     /* decrypt password */
                     const properties = this.current.toJSON();
                     properties.password = this.current.getPass();
+                    while (this.el.firstChild) {
+                        this.el.removeChild(this.el.firstChild);
+                    }
+                    this.el.insertAdjacentHTML('beforeend', this.template(properties));
 
-                    this.$el.html(this.template(properties));
+
+                    let folders = bg.folders;
+                    let parentSelect = document.querySelector('#prop-parent');
+                    folders.forEach((folder) => {
+                        const option = document.createElement('option');
+                        option.insertAdjacentHTML('beforeEnd', folder.get('title'));
+                        option.setAttribute('value', folder.get('id'));
+                        if (folder.get('id') === this.current.get('folderID')) {
+                            option.setAttribute('selected', '');
+                        }
+                        parentSelect.insertAdjacentElement('beforeend', option);
+                    });
 
                     if (this.current.get('updateEvery')) {
                         document.querySelector('#prop-update-every').value = this.current.get('updateEvery');
@@ -121,10 +143,13 @@ define([
                      * Create HTML
                      */
 
+                    while (this.el.firstChild) {
+                        this.el.removeChild(this.el.firstChild);
+                    }
                     if (isFolder) {
-                        this.el.innerHTML = this.template(Object.assign(params, this.current.attributes));
+                        this.el.insertAdjacentHTML('beforeend', this.template(Object.assign(params, this.current.attributes)));
                     } else {
-                        this.el.innerHTML = this.template(params);
+                        this.el.insertAdjacentHTML('beforeend', this.template(params));
                     }
 
                     /**

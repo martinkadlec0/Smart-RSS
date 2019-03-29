@@ -6,7 +6,7 @@
 <% } %>
 
 <% if (typeof url != 'undefined') { %>
-<label>{{ADDRESS}}: <input type="url" id="prop-url" value="<%= url %>"/></label>
+<label>{{ADDRESS}}: <input id="prop-url" type="url" value="<%= url %>"/></label>
 <% } %>
 
 <label>{{UPDATE}}: <select id="prop-update-every">
@@ -29,13 +29,18 @@
 
 <% if (typeof url != 'undefined') { %>
 
+
+<label>{{PARENT}}: <select id="prop-parent">
+    <option selected value="0">{{ROOT_FOLDER}}</option>
+</select></label>
+
 <details>
     <summary>{{MORE}}</summary>
-    <label>{{USERNAME}}: <input type="text" id="prop-username" value="<%= username %>"/></label>
-    <label>{{PASSWORD}}: <input type="password" id="prop-password" value="<%= password %>"/></label>
+    <label>{{USERNAME}}: <input id="prop-username" type="text" value="<%= username %>"/></label>
+    <label>{{PASSWORD}}: <input id="prop-password" type="password" value="<%= password %>"/></label>
 
 
-    <label>Proxy: <input type="checkbox" id="prop-proxy" value="<%= proxyThroughFeedly %>"/></label>
+    <label>Proxy: <input id="prop-proxy" type="checkbox" value="<%= proxyThroughFeedly %>"/></label>
 
     <% } %>
 
@@ -52,6 +57,7 @@
 
     <% if (typeof url != 'undefined') { %>
 </details>
+
 
 <% } %>
 
