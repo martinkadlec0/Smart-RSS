@@ -49,7 +49,7 @@ define([
                 if (this.model.get('folderID')) {
                     this.el.dataset.inFolder = this.model.get('folderID');
                 } else {
-                    this.element.classList.remove('invisible');
+                    this.el.classList.remove('invisible');
                     delete this.el.dataset.inFolder;
                 }
 
