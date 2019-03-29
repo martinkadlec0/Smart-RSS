@@ -3,9 +3,9 @@ let list;
 const init = () => {
     document.addEventListener('click', (event) => {
         if (event.target.matches('li')) {
-            return copyLink(event);
+
+            return handleLinkClick(event);
         }
-        return true;
     }, false);
     chrome.tabs.query({active: true, lastFocusedWindow: true}, (tabs) => {
         chrome.tabs.sendMessage(tabs[0].id, {action: 'get-list'}, handleData);
@@ -22,29 +22,36 @@ if (document.readyState === 'complete') {
     });
 }
 
-const copyLink = (event) => {
+const handleLinkClick = (event) => {
+    document.body.addEventListener('click', closePopup);
+    setTimeout(closePopup, 5e3);
+    event.stopPropagation();
+    if (browser) {
+        return browser.runtime.sendMessage({action: 'new-rss', value: event.target.getAttribute('data-url')});
+    }
+    // TODO: get ids of Chromium and Chropera extensions and send message to them
+
     const textArea = document.createElement('textarea');
-    console.log(event.target.getAttribute('data-url'));
     textArea.value = event.target.getAttribute('data-url');
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
     document.body.style.minWidth = document.body.offsetWidth + 'px';
-    if (document.execCommand('copy')) {
-        document.body.innerHTML = '<p>URL was copied to the clipboard!<p>';
-    } else {
-        document.body.innerHTML = '<p>URL copying failed.<p>';
+    while (document.body.firstChild) {
+        document.body.removeChild(document.body.firstChild);
     }
-    document.body.addEventListener('click', closePopup);
-    setTimeout(closePopup, 5e3);
-    event.stopPropagation();
+    if (document.execCommand('copy')) {
+        document.body.insertAdjacentHTML('beforeend', '<p>URL was copied to the clipboard!<p>');
+    } else {
+        document.body.insertAdjacentHTML('beforeend', '<p>URL copying failed.<p>');
+    }
 };
 
 
 const renderButton = (data) => {
     const element = document.createElement('li');
     element.setAttribute('data-url', data.url);
-    element.innerHTML = '• ' + data.title;
+    element.insertAdjacentHTML('beforeend', '• ' + data.title);
     list.appendChild(element);
 };
 

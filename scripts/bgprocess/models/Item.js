@@ -10,7 +10,7 @@ define(['backbone'], function (BB) {
      * @constructor
      * @extends Backbone.Model
      */
-    var Item = BB.Model.extend({
+    let Item = BB.Model.extend({
         defaults: {
             title: '<no title>',
             author: '<no author>',
@@ -40,15 +40,19 @@ define(['backbone'], function (BB) {
         _source: null,
         getSource: function () {
             if (!this._source) {
-                this._source = sources.findWhere({id: this.get('sourceID')}) || sourceJoker;
+                this._source = sources.findWhere({id: this.get('sourceID')});
             }
             return this._source;
         },
         query: function (o) {
-            if (!o) return true;
-            for (var i in o) {
+            if (!o) {
+                return true;
+            }
+            for (let i in o) {
                 if (o.hasOwnProperty(i)) {
-                    if (this.get(i) !== o[i]) return false;
+                    if (this.get(i) !== o[i]) {
+                        return false;
+                    }
                 }
             }
             return true;

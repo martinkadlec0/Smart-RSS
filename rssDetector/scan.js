@@ -12,8 +12,7 @@
         });
 
         if (feedsData.length > 0) {
-            chrome.runtime.sendMessage({action: 'show-rss-icon'}, () => {
-            });
+            chrome.runtime.sendMessage({action: 'show-rss-icon'});
         }
         chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
             if (message.action === 'get-list') {

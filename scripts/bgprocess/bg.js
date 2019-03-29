@@ -2,20 +2,73 @@
  * @module BgProcess
  */
 define([
-        'jquery',
         'modules/Animation', 'models/Settings', 'models/Info', 'models/Source',
         'collections/Sources', 'collections/Items', 'collections/Folders', 'models/Loader',
         'models/Folder', 'models/Item', 'collections/Toolbars'
     ],
-    function ($, animation, Settings, Info, Source, Sources, Items, Folders, Loader, Folder, Item, Toolbars) {
+    function (animation, Settings, Info, Source, Sources, Items, Folders, Loader, Folder, Item, Toolbars) {
+        /**
+         * Messages
+         */
+
+        function onAddSourceMessage(message) {
+            if (!message.hasOwnProperty('action')) {
+                return;
+            }
+
+            if (message.action === 'new-rss' && message.value) {
+                message.value = message.value.replace(/^feed:/i, 'https:');
+
+                const duplicate = sources.findWhere({url: message.value});
+
+                if (!duplicate) {
+                    const source = sources.create({
+                        title: message.value,
+                        url: message.value
+                    }, {wait: true});
+                    openRSS(false, source.get('id'));
+                } else {
+                    duplicate.trigger('change');
+                    openRSS(false, duplicate.get('id'));
+                }
+
+            }
+        }
+
+        chrome.runtime.onMessageExternal.addListener(onAddSourceMessage);
+        chrome.runtime.onMessage.addListener(onAddSourceMessage);
+
+        function openRSS(closeIfActive, focusSource) {
+            let url = chrome.extension.getURL('rss.html');
+            chrome.tabs.query({url: url},
+                function (tabs) {
+                    if (tabs[0]) {
+                        if (tabs[0].active && closeIfActive) {
+                            chrome.tabs.remove(tabs[0].id);
+                        } else {
+                            chrome.tabs.update(tabs[0].id, {
+                                active: true
+                            });
+                            if (focusSource) {
+                                window.sourceToFocus = focusSource;
+                            }
+                        }
+                    } else {
+                        window.sourceToFocus = focusSource;
+                        chrome.tabs.create({
+                            'url': url
+                        }, function () {
+                        });
+                    }
+                });
+        }
+
+        window.openRSS = openRSS;
 
         /**
          * Update animations
          */
         animation.start();
-
-        window.appStarted = new ($.Deferred)();
-        window.settingsLoaded = new ($.Deferred)();
 
         /**
          * Items
@@ -29,7 +82,6 @@ define([
          */
         window.settings = new Settings();
         window.info = new Info();
-        window.sourceJoker = new Source({id: 'joker'});
         window.sources = new Sources();
         window.items = new Items();
         window.folders = new Folders();
@@ -41,66 +93,48 @@ define([
 
         window.toolbars = new Toolbars();
 
-
-        /**
-         * Non-db models & collections
-         */
         window.loader = new Loader();
 
-        /**
-         * RSS Downloader
-         */
 
-        /**
-         * Fetch all
-         */
-        function fetchOne(arr, allDef) {
-            if (!arr.length) {
-                allDef.resolve();
-                return;
-            }
-            const one = arr.shift();
-            one.always(function () {
-                fetchOne(arr, allDef);
+        function fetchOne(tasks) {
+            return new Promise((resolve, reject) => {
+                if (tasks.length === 0) {
+                    resolve(true);
+                    return;
+                }
+                const oneTask = tasks.shift();
+                oneTask.always(function () {
+                    resolve(fetchOne(tasks));
+                });
             });
         }
 
         function fetchAll() {
-            const allDef = new (jQuery.Deferred)();
-            const deferreds = [];
-            let settingsDef;
-            deferreds.push(folders.fetch({silent: true}));
-            deferreds.push(sources.fetch({silent: true}));
-            deferreds.push(items.fetch({silent: true}));
-            deferreds.push(toolbars.fetch({silent: true}));
-            deferreds.push(settingsDef = settings.fetch({silent: true}));
+            const tasks = [];
+            tasks.push(folders.fetch({silent: true}));
+            tasks.push(sources.fetch({silent: true}));
+            tasks.push(items.fetch({silent: true}));
+            tasks.push(toolbars.fetch({silent: true}));
+            tasks.push(settings.fetch({silent: true}));
 
-            fetchOne(deferreds, allDef);
-
-            settingsDef.always(function () {
-                settingsLoaded.resolve();
-            });
-
-
-            return allDef.promise();
+            return fetchOne(tasks);
         }
 
         window.fetchAll = fetchAll;
         window.fetchOne = fetchOne;
 
 
-        /**
-         * Init
-         */
+        window.appStarted = new Promise((resolve, reject) => {
+
+            /**
+             * Init
+             */
 
 
-        (function () {
-            fetchAll().always(function () {
-
+            fetchAll().then(function () {
                 /**
                  * Load counters for specials
                  */
-
                 info.refreshSpecialCounters();
 
                 /**
@@ -117,11 +151,9 @@ define([
                 });
 
                 sources.on('change:title', function (source) {
-                    // if url was changed as well change:url listener will download the source
                     if (!source.get('title')) {
                         loader.download(source);
                     }
-
                     sources.sort();
                 });
 
@@ -149,78 +181,19 @@ define([
                     }
                 });
 
-                appStarted.resolve();
-
-                /**
-                 * Set icon
-                 */
-
-                animation.stop();
-
                 /**
                  * onclick:button -> open RSS
                  */
                 chrome.browserAction.onClicked.addListener(function () {
                     openRSS(true);
                 });
+                /**
+                 * Set icon
+                 */
 
+                animation.stop();
+                resolve(true);
             });
-        })();
-
-        /**
-         * Messages
-         */
-
-        chrome.runtime.onMessageExternal.addListener(function (message) {
-            // if.sender.id != blahblah -> return;
-            if (!message.hasOwnProperty('action')) {
-                return;
-            }
-
-            if (message.action === 'new-rss' && message.value) {
-                message.value = message.value.replace(/^feed:/i, 'http:');
-
-                const duplicate = sources.findWhere({url: message.value});
-                if (!duplicate) {
-                    const source = sources.create({
-                        title: message.value,
-                        url: message.value,
-                        updateEvery: 180
-                    }, {wait: true});
-                    openRSS(false, source.get('id'));
-                } else {
-                    duplicate.trigger('change');
-                    openRSS(false, duplicate.get('id'));
-                }
-
-            }
         });
-
-        function openRSS(closeIfActive, focusSource) {
-            let url = chrome.extension.getURL('rss.html');
-            chrome.tabs.query({
-                url: url
-            }, function (tabs) {
-                if (tabs[0]) {
-                    if (tabs[0].active && closeIfActive) {
-                        chrome.tabs.remove(tabs[0].id);
-                    } else {
-                        chrome.tabs.update(tabs[0].id, {
-                            active: true
-                        });
-                        if (focusSource) {
-                            window.sourceToFocus = focusSource;
-                        }
-                    }
-                } else {
-                    window.sourceToFocus = focusSource;
-                    chrome.tabs.create({
-                        'url': url
-                    }, function () {
-                    });
-                }
-            });
-        }
-
 
     });

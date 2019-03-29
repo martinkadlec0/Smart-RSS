@@ -136,7 +136,7 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
 
             items.on('change:unread', function (model) {
                 const source = model.getSource();
-                if (!model.previous('trashed') && source !== sourceJoker) {
+                if (!model.previous('trashed')) {
                     if (model.get('unread') === true) {
                         source.set({
                             'count': source.get('count') + 1
@@ -150,7 +150,7 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
                             source.save('hasNew', false);
                         }
                     }
-                } else if (!model.get('deleted') && source !== sourceJoker) {
+                } else if (!model.get('deleted')) {
                     info.set({
                         trashCountUnread: info.get('trashCountUnread') + (model.get('unread') ? 1 : -1)
                     });
@@ -159,7 +159,7 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
 
             items.on('change:trashed', function (model) {
                 const source = model.getSource();
-                if (source !== sourceJoker && model.get('unread') === true) {
+                if (model.get('unread') === true) {
                     if (model.get('trashed') === true) {
                         source.set({
                             'count': source.get('count') - 1,
@@ -183,7 +183,7 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
                             'trashCountUnread': info.get('trashCountUnread') + (model.get('trashed') ? 1 : -1)
                         });
                     }
-                } else if (source !== sourceJoker) {
+                } else {
                     source.set({
                         'countAll': source.get('countAll') + (model.get('trashed') ? -1 : 1)
                     });
