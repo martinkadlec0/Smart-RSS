@@ -185,7 +185,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                             });
                         });
                     } else {
-                        const response = xhr.responseText;
+                        const response = xhr.responseText.trim();
                         const data = new DOMParser().parseFromString(response, 'text/xml');
                         if ([...data.querySelectorAll('parsererror')].length > 0) {
                             console.log('Failed load source: ' + sourceToLoad.get('url') + (proxy ? 'using feedly proxy' : ''));
