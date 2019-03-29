@@ -149,7 +149,7 @@ define([
             handleClickArrow: function (event) {
                 let opened = !this.model.get('opened');
                 this.model.save('opened', opened);
-                const items = document.querySelectorAll('.source[data-in-folder=' + this.model.get('id') + ']');
+                const items = document.querySelectorAll('.source[data-in-folder="' + this.model.get('id') + '"]');
                 [...items].forEach((item) => {
                     if (opened) {
                         item.classList.remove('hidden');
