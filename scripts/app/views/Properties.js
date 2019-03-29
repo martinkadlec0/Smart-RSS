@@ -42,7 +42,6 @@ define([
                         autoremove: parseInt(document.querySelector('#prop-autoremove').value),
                         proxyThroughFeedly: document.querySelector('#prop-proxy').checked
                     });
-                    console.log(folder);
                     if (folder === '0') {
                         this.current.unset('folderID');
                     }
