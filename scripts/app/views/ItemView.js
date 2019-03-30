@@ -121,10 +121,12 @@ define([
             }
 
             var data = this.model.toJSON();
-            this.el.setAttribute('href', data.url);
-
             data.date = this.getItemDate(data.date);
             data.title = stripTags(data.title).trim() || '&lt;no title&gt;';
+            this.el.setAttribute('href', data.url);
+            this.el.setAttribute('title', data.title);
+
+
 
             this.el.innerHTML = this.template(data);
 
