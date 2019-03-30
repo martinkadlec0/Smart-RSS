@@ -71,7 +71,7 @@ define([
 
 
         /**
-         * If the tab is closed, it will remove all events binded to bgprocess
+         * If the tab is closed, it will remove all events bound to bgprocess
          * @method handleClearEvents
          * @triggered when bgprocesses triggers clear-events event
          * @param id {Number} ID of closed tab
@@ -120,23 +120,24 @@ define([
                 }
             }
 
-            var data = this.model.toJSON();
-            data.date = this.getItemDate(data.date);
-            data.title = stripTags(data.title).trim() || '&lt;no title&gt;';
-            this.el.setAttribute('href', data.url);
-            this.el.setAttribute('title', data.title);
+            let article = this.model.toJSON();
+            article.date = this.getItemDate(article.date);
+            article.title = stripTags(article.title).trim() || '&lt;no title&gt;';
+            this.el.setAttribute('href', article.url);
+            this.el.setAttribute('title', article.title);
 
-
-
-            this.el.innerHTML = this.template(data);
+            while (this.el.firstChild) {
+                this.el.removeChild(this.el.firstChild);
+            }
+            this.el.insertAdjacentHTML('beforeend', this.template(article));
 
             return this;
         },
 
         /**
-         * Returns formated date according to user settings and time interval
+         * Returns formatted date according to user settings and time interval
          * @method getItemDate
-         * @param date {Integer} UTC time
+         * @param date {Number} UTC time
          * @return String
          */
         getItemDate: function (date) {
@@ -166,9 +167,9 @@ define([
          * @triggered on mouse up + condition for right click only
          * @param event {MouseEvent}
          */
-        handleMouseUp: function (e) {
-            if (e.which === 3) {
-                this.showContextMenu(e);
+        handleMouseUp: function (event) {
+            if (event.button === 2) {
+                this.showContextMenu(event);
             }
         },
 
@@ -177,12 +178,12 @@ define([
          * @method showContextMenu
          * @param event {MouseEvent}
          */
-        showContextMenu: function (e) {
+        showContextMenu: function (event) {
             if (!this.el.classList.contains('selected')) {
-                this.list.select(this, e);
+                this.list.select(this, event);
             }
             contextMenus.get('items').currentSource = this.model;
-            contextMenus.get('items').show(e.clientX, e.clientY);
+            contextMenus.get('items').show(event.clientX, event.clientY);
         },
 
         /**
@@ -212,8 +213,8 @@ define([
          * @method when user clicked on pin button in article item
          * @triggered when model is destroyed
          */
-        handleClickPin: function (e) {
-            e.stopPropagation();
+        handleClickPin: function (event) {
+            event.stopPropagation();
             this.model.save({pinned: !this.model.get('pinned')});
         }
     });
