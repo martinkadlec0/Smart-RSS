@@ -215,7 +215,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
 
                     items.sort({silent: true});
                     if (hasNew) {
-                        items.trigger('render-screen');
+                        items.trigger('search');
                         loader.itemsDownloaded = true;
                     }
 

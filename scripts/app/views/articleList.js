@@ -8,7 +8,7 @@ define([
     ],
     function (BB, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
 
-        var groups = new Groups();
+        const groups = new Groups();
 
         /**
          * List of articles
@@ -16,7 +16,7 @@ define([
          * @constructor
          * @extends Backbone.View
          */
-        var ArticleListView = BB.View.extend({
+        let ArticleListView = BB.View.extend({
 
             /**
              * Tag name of article list element
@@ -109,7 +109,7 @@ define([
             },
 
             /**
-             * Calls neccesary slect methods
+             * Calls necessary select methods
              * @method handleMouseUp
              * @triggered on mouse up on article
              * @param event {MouseEvent}
@@ -124,12 +124,10 @@ define([
              * @method initialize
              */
             initialize: function () {
-                this.el.classList.add('lines-' + bg.settings.get('lines'));
                 bg.items.on('reset', this.addItems, this);
                 bg.items.on('add', this.addItem, this);
                 bg.items.on('sort', this.handleSort, this);
-                bg.items.on('render-screen', this.handleRenderScreen, this);
-                bg.settings.on('change:lines', this.handleChangeLines, this);
+                bg.items.on('search', this.handleSearch, this);
                 bg.sources.on('destroy', this.handleSourcesDestroy, this);
                 bg.sources.on('clear-events', this.handleClearEvents, this);
 
@@ -202,15 +200,14 @@ define([
              * @chainable
              */
             loadAllFeeds: function () {
-                var that = this;
-                setTimeout(function () {
+                setTimeout(() => {
                     app.trigger('select-all-feeds');
 
-                    var unread = bg.items.where({trashed: false, unread: true});
+                    const unread = bg.items.where({trashed: false, unread: true});
                     if (unread.length) {
-                        that.addItems(unread);
+                        this.addItems(unread);
                     } else {
-                        that.addItems(bg.items.where({trashed: false}));
+                        this.addItems(bg.items.where({trashed: false}));
                     }
                 }, 0);
 
@@ -219,11 +216,11 @@ define([
 
             /**
              * Renders unrendered articles in view by calling handleScroll
-             * @method handleRenderScreen
+             * @method handleSearch
              * @triggered when new items arr added or when source is destroyed
              */
-            handleRenderScreen: function () {
-                if ($('input[type=search]').val()) {
+            handleSearch: function () {
+                if (trim(document.querySelector('input[type="search"]').value) !== '') {
                     app.actions.execute('articles:search');
                 }
             },
@@ -240,11 +237,9 @@ define([
                     bg.items.off('reset', this.addItems, this);
                     bg.items.off('add', this.addItem, this);
                     bg.items.off('sort', this.handleSort, this);
-                    bg.items.off('render-screen', this.handleRenderScreen, this);
-                    bg.settings.off('change:lines', this.handleChangeLines, this);
+                    bg.items.off('search', this.handleSearch, this);
 
                     bg.sources.off('destroy', this.handleSourcesDestroy, this);
-
                     bg.sources.off('clear-events', this.handleClearEvents, this);
                 }
             },
@@ -256,22 +251,8 @@ define([
              * @triggered when sort setting is changed
              */
             handleSort: function () {
-                $('#input-search').val('');
+                document.querySelector('input[type="search"]').value = '';
                 this.handleNewSelected(this.currentData);
-            },
-
-            /**
-             * Adds or removes necessary one-line/twoline classes for given lines settings
-             * @method handleChangeLines
-             * @triggered when lines setting is changed
-             * @param settings {Settings} bg.Settings
-             */
-            handleChangeLines: function (settings) {
-                const classList = this.el.classList;
-                classList.remove('lines-auto');
-                classList.remove('lines-one-line');
-                classList.remove('lines-two-lines');
-                classList.remove('lines-' + settings.get('lines'));
             },
 
             /**
@@ -281,7 +262,7 @@ define([
              * @param event {DragEvent}
              */
             handleDragStart: function (event) {
-                var ids = this.selectedItems.map(function (view) {
+                const ids = this.selectedItems.map(function (view) {
                     return view.model.id;
                 });
 
@@ -304,9 +285,9 @@ define([
                     }
                 } else {
                     // if first item is the last item to be deleted, selecting it will trigger error - rAF to get around it
-                    requestAnimationFrame(function () {
+                    requestAnimationFrame(() => {
                         this.selectFirst();
-                    }.bind(this));
+                    });
                 }
             },
 
@@ -318,14 +299,14 @@ define([
              * @param item {Item} bg.Item
              */
             inCurrentData: function (item) {
-                var f = this.currentData.feeds;
-                if (!f.length) {
+                const feeds = this.currentData.feeds;
+                if (!feeds.length) {
                     if (!this.currentData.filter) {
                         return true;
                     } else if (item.query(this.currentData.filter)) {
                         return true;
                     }
-                } else if (f.indexOf(item.get('sourceID')) >= 0) {
+                } else if (feeds.indexOf(item.get('sourceID')) >= 0) {
                     return true;
                 }
 
@@ -344,9 +325,9 @@ define([
                     return false;
                 }
 
-                var after = null;
+                let after = null;
                 if (noManualSort !== true) {
-                    Array.from(($('#article-list .articles-list-item, #article-list .date-group'))).some(function (itemEl) {
+                    [...document.querySelectorAll('#article-list .articles-list-item, #article-list .date-group')].some(function (itemEl) {
                         if (bg.items.comparator(itemEl.view.model, item) === 1) {
                             after = itemEl;
                             return true;
@@ -354,31 +335,29 @@ define([
                     });
                 }
 
-                var view;
+                const view = new ItemView({model: item}, this);
 
                 if (!after) {
-                    view = new ItemView({model: item}, this);
                     view.render();
                     this.views.push(view);
-                    this.$el.append(view.$el);
+                    this.el.insertAdjacentElement('beforeend', view.el);
                     if (!this.selectedItems.length) {
                         this.select(view);
                     }
                 } else {
-                    view = new ItemView({model: item}, this);
-                    view.render().$el.insertBefore($(after));
-                    var indexElement = after.view instanceof ItemView ? after : after.nextElementSibling;
-                    var index = indexElement ? this.views.indexOf(indexElement.view) : -1;
+                    // is this block even executed?
+                    after.insertAdjacentElement('afterend', view.render().el);
+                    const indexElement = after.view instanceof ItemView ? after : after.nextElementSibling;
+                    const index = indexElement ? this.views.indexOf(indexElement.view) : -1;
                     this.views.splice(index, 0, view);
                 }
 
                 if (!bg.settings.get('disableDateGroups') && bg.settings.get('sortBy') === 'date') {
-                    var group = Group.getGroup(item.get('date'));
+                    const group = Group.getGroup(item.get('date'));
                     if (!groups.findWhere({title: group.title})) {
                         groups.add(new Group(group), {before: view.el});
                     }
                 }
-                // return view.$el;
             },
 
             /**
@@ -389,9 +368,9 @@ define([
              * @param opt {Object} options { before: insertBeforeItem }
              */
             addGroup: function (model, col, opt) {
-                var before = opt.before;
-                var view = new GroupView({model: model}, groups);
-                view.render().$el.insertBefore(before);
+                const before = opt.before;
+                const view = new GroupView({model: model}, groups);
+                before.insertAdjacentElement('beforebegin', view.render().el);
             },
 
 
@@ -410,19 +389,18 @@ define([
                  * Select removal
                  */
                 this.selectedItems = [];
-                this.el.innerHTML = '';
+                while (this.el.firstChild) {
+                    this.el.removeChild(this.el.firstChild);
+                }
 
                 this.selectPivot = null;
-                let els = [];
 
                 items.forEach(function (item) {
-                    els.push(this.addItem(item, true));
+                    this.addItem(item, true);
                 }, this);
 
-                // this.$el.append(els);
 
-
-                if ($('input[type=search]').val()) {
+                if (document.querySelector('input[type="search"]').value !== '') {
                     app.actions.execute('articles:search');
                 }
                 this.el.style.display = display;
@@ -437,7 +415,7 @@ define([
                 if (this.currentData.name === 'trash') {
                     app.articles.toolbar.showItems('articles:update');
                     app.articles.toolbar.hideItems('articles:undelete');
-                    $('#context-undelete').css('display', 'none');
+                    document.querySelector('#context-undelete').style.display = 'none';
                 }
 
                 this.currentData = {
@@ -458,7 +436,7 @@ define([
                 this.clearOnSelect();
                 this.currentData = data;
 
-                var searchIn = null;
+                let searchIn = null;
                 if (data.filter) {
                     searchIn = bg.items.where(data.filter);
                 } else {
@@ -468,11 +446,13 @@ define([
                 // if newly selected is trash
                 if (this.currentData.name === 'trash') {
                     app.articles.toolbar.hideItems('articles:update').showItems('articles:undelete');
-                    $('#context-undelete').css('display', 'block');
+                    document.querySelector('#context-undelete').style.display = 'block';
                 }
 
-                var items = searchIn.filter(function (item) {
-                    if (!item.get('unread') && this.unreadOnly) return false;
+                const items = searchIn.filter((item) => {
+                    if (!item.get('unread') && this.unreadOnly) {
+                        return false;
+                    }
                     return data.name || data.feeds.indexOf(item.get('sourceID')) >= 0;
                 }, this);
 
@@ -487,21 +467,19 @@ define([
              * @param source {Source} Destroyed source
              */
             handleSourcesDestroy: function (source) {
-                var that = this;
-                var d = this.currentData;
-                var index = d.feeds.indexOf(source.id);
+                const data = this.currentData;
+                const index = data.feeds.indexOf(source.id);
 
                 if (index >= 0) {
-                    d.feeds.splice(index, 1);
+                    data.feeds.splice(index, 1);
                 }
 
-                if (!d.feeds.length && !d.filter) {
-
+                if (!data.feeds.length && !data.filter) {
                     this.clearOnSelect();
 
                     if (document.querySelector('.articles-list-item')) {
-                        this.once('items-destroyed', function () {
-                            that.loadAllFeeds();
+                        this.once('items-destroyed', () => {
+                            this.loadAllFeeds();
                         }, this);
                     } else {
                         this.loadAllFeeds();
@@ -530,13 +508,13 @@ define([
             removeItem: function (view) {
                 askRmPinned = bg.settings.get('askRmPinned');
                 if (view.model.get('pinned') && askRmPinned === 'all') {
-                    var conf = confirm(Locale.PIN_QUESTION_A + view.model.escape('title') + Locale.PIN_QUESTION_B);
-                    if (!conf) {
+                    const confirmation = confirm(Locale.PIN_QUESTION_A + view.model.escape('title') + Locale.PIN_QUESTION_B);
+                    if (!confirmation) {
                         return;
                     }
                 }
                 view.model.save({trashed: true, visited: true});
-                //this.destroyItem(view);
+                this.destroyItem(view);
             },
 
             /**
@@ -547,8 +525,8 @@ define([
             removeItemCompletely: function (view) {
                 askRmPinned = bg.settings.get('askRmPinned');
                 if (view.model.get('pinned') && askRmPinned && askRmPinned !== 'none') {
-                    var conf = confirm(Locale.PIN_QUESTION_A + view.model.escape('title') + Locale.PIN_QUESTION_B);
-                    if (!conf) {
+                    const confirmation = confirm(Locale.PIN_QUESTION_A + view.model.escape('title') + Locale.PIN_QUESTION_B);
+                    if (!confirmation) {
                         return;
                     }
                 }
@@ -562,7 +540,7 @@ define([
              * @param fn {Function} Function to be called on each view
              */
             destroyBatch: function (arr, fn) {
-                for (var i = 0, j = arr.length; i < j; i++) {
+                for (let i = 0, j = arr.length; i < j; i++) {
                     fn.call(this, arr[i]);
                 }
             },
@@ -591,11 +569,11 @@ define([
             destroyItem: function (view) {
                 this.nextFrameStore.push(view);
                 if (!this.nextFrame) {
-                    this.nextFrame = requestAnimationFrame(function () {
-                        for (var i = 0, j = this.nextFrameStore.length - 1; i < j; i++) {
+                    this.nextFrame = requestAnimationFrame( ()=> {
+                        for (let i = 0, j = this.nextFrameStore.length - 1; i < j; i++) {
                             this.destroyItemFrame(this.nextFrameStore[i]);
                         }
-                        var lastView = this.nextFrameStore[this.nextFrameStore.length - 1];
+                        const lastView = this.nextFrameStore[this.nextFrameStore.length - 1];
                         this.selectAfterDelete(lastView);
                         this.destroyItemFrame(lastView);
 
@@ -603,7 +581,7 @@ define([
                         this.nextFrameStore = [];
 
                         this.trigger('items-destroyed');
-                    }.bind(this));
+                    });
                 }
             },
 
@@ -626,7 +604,7 @@ define([
                 view.clearEvents();
                 view.remove();
 
-                var io = this.selectedItems.indexOf(view);
+                let io = this.selectedItems.indexOf(view);
                 if (io >= 0) {
                     this.selectedItems.splice(io, 1);
                 }
@@ -639,14 +617,14 @@ define([
             /**
              * Toggles unread state of selected items (with onlyToRead option)
              * @method changeUnreadState
-             * @param opt {Object} Options { onlyToRead: bool }
+             * @param options {Object} Options { onlyToRead: bool }
              */
-            changeUnreadState: function (opt) {
-                opt = opt || {};
-                var val = this.selectedItems.length && !opt.onlyToRead ? !this.selectedItems[0].model.get('unread') : false;
+            changeUnreadState: function (options) {
+                options = options || {};
+                const unread = this.selectedItems.length && !options.onlyToRead ? !this.selectedItems[0].model.get('unread') : false;
                 this.selectedItems.forEach(function (item) {
-                    if (!opt.onlyToRead || item.model.get('unread') === true) {
-                        item.model.save({unread: val, visited: true});
+                    if (!options.onlyToRead || item.model.get('unread') === true) {
+                        item.model.save({unread: unread, visited: true});
                     }
                 }, this);
             }
