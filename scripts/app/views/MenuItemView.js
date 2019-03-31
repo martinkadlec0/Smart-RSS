@@ -12,18 +12,22 @@ define(['backbone'], function (BB) {
             }
         },
         render: function () {
-            if (this.model.get('icon')) {
-                this.$el.css('background', 'url(/images/' + this.model.get('icon') + ') no-repeat left center');
+
+            while (this.el.firstChild) {
+                this.el.removeChild(this.el.firstChild);
             }
-            this.$el.html(this.model.get('title'));
+            this.el.insertAdjacentHTML('beforeend', '<img class="context-menu-icon" alt="" src=""/>' + this.model.get('title'));
+            if (this.model.get('icon')) {
+                this.el.querySelector('img').setAttribute('src', '/images/' + this.model.get('icon'));
+            }
             return this;
         },
         handleClick: function (e) {
-            var action = this.model.get('action');
+            const action = this.model.get('action');
             if (action && typeof action === 'function') {
                 action(e, app.feeds.feedList);
-                this.contextMenu.hide();
             }
+            this.contextMenu.hide();
         }
     });
 });

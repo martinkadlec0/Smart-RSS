@@ -139,11 +139,22 @@ input[type=search]:not(:focus):not(:valid) {
     left: 10px;
     overflow: hidden;
     z-index: 3;
-    padding: 2px;
+    padding: 0;
     box-shadow: var(--overlay-box-shadow);
     user-select: none;
     cursor: default;
     display: none;
+}
+
+.context-menu-icon {
+    vertical-align: middle;
+    margin-right: 6px;
+    width: 22px;
+    height: 18px;
+}
+
+.context-menu-icon[src=""] {
+    visibility: hidden;
 }
 
 .context-menu-item {
@@ -153,14 +164,17 @@ input[type=search]:not(:focus):not(:valid) {
     overflow: hidden;
     text-overflow: ellipsis;
     cursor: pointer;
-    padding: 4px 3px 4px 30px;
-    border: 1px solid transparent;
+    padding-top: 5px;
+    padding-right: 6px;
+    padding-left: 3px;
+    padding-bottom: 5px;
+    /*border: 1px solid transparent;*/
 }
 
 .context-menu-item:hover {
-    border-radius: 3px;
-    /*background-color: var(--blue-40);*/
-    border-color: var(--blue-40);
+    border-radius: 0px;
+    background-color: var(--blue-40);
+    /*border-color: var(--blue-40);*/
 }
 
 /**
@@ -704,6 +718,7 @@ footer {
 .hidden {
     display: none;
 }
+
 
 /*.visible {*/
 /*display: block;*/
