@@ -75,12 +75,29 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                     });
                 }
             },
+            openHome: {
+                title: 'Open Home',
+                fn: function () {
+                    const selectedFeeds = require('views/feedList').getSelectedFeeds();
+                    if (!selectedFeeds.length) {
+                        return;
+                    }
+                    selectedFeeds.forEach((source) => {
+                        chrome.tabs.create({
+                            'url': source.get('base'),
+                            active: false
+                        });
+
+                    });
+                }
+            },
             refetch: {
                 title: 'Refetch', /****localization needed****/
                 fn: function () {
                     const selectedFeeds = require('views/feedList').getSelectedFeeds();
-                    if (!selectedFeeds.length) return;
-
+                    if (!selectedFeeds.length) {
+                        return;
+                    }
                     selectedFeeds.forEach(function (source) {
                         bg.items.where({sourceID: source.get('id')}).forEach(function (item) {
                             item.destroy();

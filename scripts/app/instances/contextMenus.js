@@ -32,6 +32,12 @@ define([
                 }
             },
             {
+                title: Locale.OPENHOME,
+                action: function () {
+                    app.actions.execute('feeds:openHome');
+                }
+            },
+            {
                 title: Locale.PROPERTIES,
                 icon: 'properties.png',
                 action: function () {
