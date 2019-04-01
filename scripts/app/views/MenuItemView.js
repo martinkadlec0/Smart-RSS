@@ -12,7 +12,6 @@ define(['backbone'], function (BB) {
             }
         },
         render: function () {
-
             while (this.el.firstChild) {
                 this.el.removeChild(this.el.firstChild);
             }
