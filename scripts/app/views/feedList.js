@@ -14,7 +14,7 @@ define([
          * @constructor
          * @extends Backbone.View
          */
-        var FeedListView = BB.View.extend({
+        let FeedListView = BB.View.extend({
 
             selectedItems: [],
             /**
@@ -79,24 +79,30 @@ define([
              * @triggered when feed list is attached to DOM
              */
             handleAttach: function () {
-                app.on('select-all-feeds', function () {
-                    var allFeeds = $('.special:first').get(0);
-                    if (!allFeeds) return;
+                app.on('select-all-feeds', () => {
+                    const allFeeds = document.querySelector('.special:nth-of-type(1)');
+                    if (!allFeeds) {
+                        return;
+                    }
                     this.select(allFeeds.view);
-                }, this);
+                });
 
-                app.on('select-folder', function (id) {
-                    var folder = $('.folder[data-id=' + id + ']').get(0);
-                    if (!folder) return;
+                app.on('select-folder', (id) => {
+                    const folder = document.querySelector('.folder[data-id="' + id + '"]');
+                    if (!folder) {
+                        return;
+                    }
                     this.select(folder.view);
-                }, this);
+                });
 
-                app.on('focus-feed', function (id) {
-                    var feed = $('.sources-list-item[data-id=' + id + ']').get(0);
-                    if (!feed) return;
+                app.on('focus-feed', (id) => {
+                    const feed = document.querySelector('.sources-list-item[data-id="' + id + '"]');
+                    if (!feed) {
+                        return;
+                    }
                     this.select(feed.view);
                     app.actions.execute('feeds:showAndFocusArticles');
-                }, this);
+                });
 
                 this.insertFeeds();
             },
@@ -125,10 +131,9 @@ define([
              * @param view {TopView} Picked source, folder or special
              * @param event {Event} Mouse or key event
              */
-            handlePick: function (view, e) {
-                if (e.type === 'mousedown' && e.which === 1) {
-                    //view.showSourceItems(e);
-                    app.actions.execute('feeds:showAndFocusArticles', e);
+            handlePick: function (view, event) {
+                if (event.type === 'mousedown' && event.which === 1) {
+                    app.actions.execute('feeds:showAndFocusArticles', event);
                 }
             },
 
@@ -138,9 +143,8 @@ define([
              * @triggered on mouse down
              * @param event {Event} Mouse event
              */
-            handleMouseDown: function (e) {
-                //e.currentTarget.view.handleMouseDown(e);
-                this.handleSelectableMouseDown(e);
+            handleMouseDown: function (event) {
+                this.handleSelectableMouseDown(event);
             },
 
             /**
@@ -149,9 +153,9 @@ define([
              * @triggered on mouse up
              * @param event {Event} Mouse event
              */
-            handleMouseUp: function (e) {
-                e.currentTarget.view.handleMouseUp(e);
-                this.handleSelectableMouseUp(e);
+            handleMouseUp: function (event) {
+                event.currentTarget.view.handleMouseUp(event);
+                this.handleSelectableMouseUp(event);
             },
 
             /**
@@ -160,14 +164,14 @@ define([
              * @triggered on drag over
              * @param event {DragEvent} Drag event
              */
-            handleDragOver: function (e) {
-                var f = e.currentTarget.dataset.inFolder;
-                if (f) {
-                    $('.folder[data-id=' + f + ']').addClass('drag-over');
-                } else if ($(e.currentTarget).hasClass('folder')) {
-                    $(e.currentTarget).addClass('drag-over');
+            handleDragOver: function (event) {
+                const folder = event.currentTarget.dataset.inFolder;
+                if (folder) {
+                    document.querySelector('.folder[data-id="' + folder + '"]').classList.add('drag-over');
+                } else if (event.currentTarget.classList.contains('folder')) {
+                    event.currentTarget.classList.add('drag-over');
                 }
-                e.preventDefault();
+                event.preventDefault();
             },
 
             /**
@@ -176,12 +180,12 @@ define([
              * @triggered on drag leave
              * @param event {DragEvent} Drag event
              */
-            handleDragLeave: function (e) {
-                var f = e.currentTarget.dataset.inFolder;
-                if (f) {
-                    $('.folder[data-id=' + f + ']').removeClass('drag-over');
-                } else if ($(e.currentTarget).hasClass('folder')) {
-                    $(e.currentTarget).removeClass('drag-over');
+            handleDragLeave: function (event) {
+                const folder = event.currentTarget.dataset.inFolder;
+                if (folder) {
+                    document.querySelector('.folder[data-id="' + folder + '"]').classList.remove('drag-over');
+                } else if (event.currentTarget.classList.contains('folder')) {
+                    event.currentTarget.classList.remove('drag-over');
                 }
             },
 
@@ -191,34 +195,36 @@ define([
              * @triggered on drop
              * @param event {DragEvent} Drag event
              */
-            handleDrop: function (e) {
+            handleDrop: function (event) {
 
-                var oe = e.originalEvent;
-                e.preventDefault();
+                event.preventDefault();
 
-                $('.drag-over').removeClass('drag-over');
+                const elem = document.querySelector('.drag-over');
+                if (elem) {
+                    elem.classList.remove('drag-over');
+                }
 
-                var ids = JSON.parse(oe.dataTransfer.getData('dnd-sources'));
-                if (!ids || !ids.length) return;
+                const ids = JSON.parse(event.originalEvent.dataTransfer.getData('dnd-sources'));
+                if (!ids || ids.length === 0) {
+                    return;
+                }
 
-
-                for (var i = 0; i < ids.length; i++) {
-                    var id = ids[i];
-                    var item = bg.sources.findWhere({id: id});
-                    if (!item) continue;
-
-                    var folderID;
-                    if ($(e.currentTarget).hasClass('folder')) {
-                        folderID = e.currentTarget.dataset.id;
+                ids.forEach((id) => {
+                    const item = bg.sources.findWhere({id: id});
+                    if (!item) {
+                        return;
+                    }
+                    let folderID;
+                    if (event.currentTarget.classList.contains('folder')) {
+                        folderID = event.currentTarget.dataset.id;
                     } else {
-                        folderID = e.currentTarget.dataset.inFolder;
+                        folderID = event.currentTarget.dataset.inFolder;
                     }
 
                     item.save({folderID: folderID});
+                });
 
-                }
-
-                e.stopPropagation();
+                event.stopPropagation();
             },
 
             /**
@@ -227,19 +233,18 @@ define([
              * @triggered on drag start
              * @param event {DragEvent} Drag event
              */
-            handleDragStart: function (e) {
-                //var id = e.currentTarget.view.model.get('id');
+            handleDragStart: function (event) {
                 let models = this.selectedItems.map((item) => {
                     return item.model;
                 });
-                var ids = [];
-                models.forEach(function (model) {
+                const ids = [];
+                models.forEach((model) => {
                     if (model instanceof bg.Source) {
                         ids.push(model.id);
                     }
                 });
 
-                e.originalEvent.dataTransfer.setData('dnd-sources', JSON.stringify(ids));
+                event.originalEvent.dataTransfer.setData('dnd-sources', JSON.stringify(ids));
             },
 
             /**
@@ -249,8 +254,10 @@ define([
              * @param source {Source} Source tha has its folderID changed
              */
             handleChangeFolder: function (source) {
-                source = $('.source[data-id=' + source.get('id') + ']').get(0);
-                if (!source) return;
+                source = document.querySelector('.source[data-id="' + source.get('id') + '"]');
+                if (!source) {
+                    return;
+                }
 
                 this.placeSource(source.view);
             },
@@ -259,7 +266,7 @@ define([
              * Unbinds all listeners to bg process
              * @method handleClearEvents
              * @triggered when tab is closed/refershed
-             * @param id {Integer} id of the closed tab
+             * @param id {Number} id of the closed tab
              */
             handleClearEvents: function (id) {
                 if (window == null || id === tabID) {
@@ -277,12 +284,11 @@ define([
              * @param special {models/Special} Special model to add
              */
             addSpecial: function (special) {
-
-                var view = new SpecialView({model: special});
+                const view = new SpecialView({model: special});
                 if (view.model.get('position') === 'top') {
-                    this.$el.prepend(view.render().el);
+                    this.el.insertAdjacentElement('afterbegin', view.render().el);
                 } else {
-                    this.$el.append(view.render().el);
+                    this.el.insertAdjacentElement('beforeend', view.render().el);
                 }
 
             },
@@ -293,15 +299,17 @@ define([
              * @param folder {models/Folder} Folder model to add
              */
             addFolder: function (folder) {
-                var view = new FolderView({model: folder}, this);
-                var folderViews = $('.folder').toArray();
+                const view = new FolderView({model: folder}, this);
+                const folderViews = [...document.querySelectorAll('.folder')];
                 if (folderViews.length) {
                     this.insertBefore(view.render(), folderViews);
-                } else if ($('.special:first').length) {
-                    // .special-first = all feeds, with more "top" specials this will have to be changed
-                    view.render().$el.insertAfter($('.special:first'));
                 } else {
-                    this.$el.append(view.render().$el);
+                    const special = document.querySelector('.special:nth-of-type(1)');
+                    if (special) {
+                        special.insertAdjacentElement('afterend', view.render.el());
+                    } else {
+                        this.el.insertAdjacentElement('beforeend', view.render().el);
+                    }
                 }
             },
 
@@ -311,14 +319,19 @@ define([
              * @param folders {Array} Array of folder models to add
              */
             addFolders: function (folders) {
-                var that = this;
-                $('.folder').each(function (i, folder) {
-                    if (!folder.view || !(folder instanceof FolderView)) return;
-                    that.destroySource(folder.view);
-                });
-                folders.forEach(function (folder) {
+                const existingFolders = [...document.querySelectorAll('.folder')];
+                if (existingFolders.length > 0) {
+                    existingFolders.forEach((folder) => {
+                        if (!folder.view || !(folder instanceof FolderView)) {
+                            return;
+                        }
+                        this.destroySource(folder.view);
+                    });
+                }
+
+                folders.forEach((folder) => {
                     this.addFolder(folder);
-                }, this);
+                });
             },
 
             /**
@@ -339,55 +352,59 @@ define([
              * @param noManualSort {Boolean} When false, the rigt place is computed
              */
             placeSource: function (view, noManualSort) {
-                var folder = null;
-                var source = view.model;
+                let sourceViews;
+                const source = view.model;
                 if (source.get('folderID')) {
-                    folder = $('.folder[data-id=' + source.get('folderID') + ']');
-                    if (!folder.length) folder = null;
+                    const folder = document.querySelector('.folder[data-id="' + source.get('folderID') + '"]');
+                    if (folder) {
+                        sourceViews = [...document.querySelectorAll('.source[data-in-folder="' + source.get('folderID') + '"]')];
+                        if (sourceViews.length && noManualSort) {
+                            sourceViews[sourceViews.length - 1].insertAdjacentElement('afterend', view.render().el);
+                        } else if (sourceViews.length) {
+                            this.insertBefore(view, sourceViews);
+                        } else {
+                            folder.insertAdjacentElement('afterend', view.render().el);
+                        }
+
+                        if (!folder.view.model.get('opened')) {
+                            view.el.classList.add('hidden');
+                        }
+
+                        return;
+                    }
                 }
 
-                var sourceViews;
-
-                if (folder) {
-                    sourceViews = $('.source[data-in-folder=' + source.get('folderID') + ']').toArray();
-                    if (sourceViews.length && noManualSort) {
-                        view.render().$el.insertAfter(sourceViews.last());
-                    } else if (sourceViews.length) {
-                        this.insertBefore(view.render(), sourceViews);
-                    } else {
-                        view.render().$el.insertAfter(folder);
-                    }
-
-                    if (!folder.get(0).view.model.get('opened')) {
-                        view.$el.addClass('invisible');
-                    }
-
-                    return;
-                }
-
-
-                var fls;
-                sourceViews = $('.source:not([data-in-folder])').toArray();
+                sourceViews = [...document.querySelectorAll('.source:not([data-in-folder])')];
 
                 if (sourceViews.length && noManualSort) {
-                    view.render().$el.insertAfter(sourceViews.last());
-                } else if (sourceViews.length) {
-                    this.insertBefore(view.render(), sourceViews);
-                } else if ((fls = $('[data-in-folder],.folder')).length) {
-                    view.render().$el.insertAfter(fls.last());
-                } else if ($('.special:first').length) {
-                    // .special-first = all feeds, with more "top" specials this will have to be changed
-                    view.render().$el.insertAfter($('.special:first'));
-                } else {
-                    this.$el.append(view.render().$el);
+                    sourceViews[sourceViews.length - 1].insertAdjacentElement('afterend', view.render().el);
+                    return;
+
                 }
+                if (sourceViews.length) {
+                    this.insertBefore(view, sourceViews);
+                    return;
+                }
+                const fls = [...document.querySelectorAll('[data-in-folder],.folder')];
+                if (fls.length) {
+                    fls[fls.length - 1].insertAdjacentElement('afterend', view.render().el);
+                    return;
+                }
+                const first = document.querySelector('.special:nth-of-type(1)');
+                if (first) {
+                    // .special-first = all feeds, with more "top" specials this will have to be changed
+                    first.insertAdjacentElement('afterend', view.render().el);
+                    return;
+                }
+                this.el.insertAdjacentElement('beforeend', view.render().el);
+
             },
 
             /**
              * Insert element after another element
              * @method insertBefore
              * @param what {HTMLElement} Element to add
-             * @param where {HTMLElement} Element to add after
+             * @param where {Array} Element to add after
              */
             insertBefore: function (what, where) {
                 var before = null;
@@ -397,16 +414,17 @@ define([
                     }
                 });
                 if (before) {
-                    what.$el.insertBefore(before);
-                } else {
-                    if (what instanceof FolderView) {
-                        var folderSources = $('[data-in-folder=' + where.last().view.model.get('id') + ']');
-                        if (folderSources.length) {
-                            where.last(folderSources.last());
-                        }
-                    }
-                    what.$el.insertAfter(where.last());
+                    before.insertAdjacentElement('beforebegin', what.render().el);
+                    return;
                 }
+                if (what instanceof FolderView) {
+                    const folderSources = [...document.querySelectorAll('[data-in-folder="' + where[where.length - 1].view.model.get('id') + '"]')];
+                    if (folderSources.length) {
+                        where[where.length - 1] = folderSources[folderSources.length - 1];
+                    }
+                }
+                where[where.length - 1].insertAdjacentElement('afterend', what.render().el);
+
             },
 
             /**
@@ -415,20 +433,21 @@ define([
              * @param sources {Array} Array of source models to add
              */
             addSources: function (sources) {
-                var that = this;
-                $('.source').each(function (i, source) {
-                    if (!source.view || !(source instanceof SourceView)) return;
-                    that.destroySource(source.view);
+                [...document.querySelectorAll('.source')].forEach((source) => {
+                    if (!source.view || !(source instanceof SourceView)) {
+                        return;
+                    }
+                    this.destroySource(source.view);
                 });
-                sources.forEach(function (source) {
+                sources.forEach((source) => {
                     this.addSource(source, true);
-                }, this);
+                });
             },
 
             /**
              * Destroy feed
              * @method removeSource
-             * @param view {views/SourceView} View containg the model to be destroyed
+             * @param view {views/SourceView} View containing the model to be destroyed
              */
             removeSource: function (view) {
                 view.model.destroy();
@@ -446,7 +465,7 @@ define([
                 view.$el.removeData().unbind();
                 view.off();
                 view.remove();
-                var indexOf = this.selectedItems.indexOf(view);
+                const indexOf = this.selectedItems.indexOf(view);
                 if (indexOf >= 0) {
                     this.selectedItems.splice(indexOf, 1);
                 }
@@ -458,20 +477,21 @@ define([
              * @param arr {Array} List of selected items
              */
             getSelectedFeeds: function (arr) {
-                var selectedItems = arr || this.selectedItems.map((item) => {
+                const selectedItems = arr || this.selectedItems.map((item) => {
                     return item.model;
                 });
-                var rt = [];
-                for (var i = 0; i < selectedItems.length; i++) {
-                    if (selectedItems[i] instanceof bg.Source) {
-                        rt.push(selectedItems[i]);
-                    } else if (selectedItems[i] instanceof bg.Folder) {
-                        var folderFeeds = bg.sources.where({folderID: selectedItems[i].id});
-                        rt.push.apply(rt, this.getSelectedFeeds(folderFeeds));
+                const rt = [];
+                selectedItems.forEach((item) => {
+                    if (item instanceof bg.Source) {
+                        rt.push(item);
+                        return;
                     }
-                }
-
-                return [...new Set(rt)];
+                    if (item instanceof bg.Folder) {
+                        const folderFeeds = bg.sources.where({folderID: item.id});
+                        rt.push(...this.getSelectedFeeds(folderFeeds));
+                    }
+                });
+                return rt;
             },
 
             /**
@@ -480,18 +500,15 @@ define([
              * @param arr {Array} List of selected items
              */
             getSelectedFolders: function (arr) {
-                var si = arr || this.selectedItems.map((item) => {
+                const si = arr || this.selectedItems.map((item) => {
                     return item.model;
                 });
-                var rt = [];
-                for (var i = 0; i < si.length; i++) {
-                    if (si[i] instanceof bg.Folder) {
-                        rt.push(si[i]);
-                        /*var folderFeeds = bg.sources.where({ folderID: si[i].id });
-                        rt.push.apply(rt, this.getSelectedFeeds(folderFeeds));*/
+                const rt = [];
+                si.forEach((folder) => {
+                    if (folder instanceof bg.Folder) {
+                        rt.push(folder);
                     }
-                }
-
+                });
                 return rt;
             }
         });
