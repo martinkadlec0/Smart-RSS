@@ -6,6 +6,17 @@ Translations are in scripts/nls/*.js
 
 For technical bug reports use issues here on GitHub
 
+## For users
+
+Extension is available in following repositories:
+
+### AMO: https://addons.mozilla.org/pl/firefox/addon/smart-rss-reader/
+
+### Chrome Web Store: blocked by #24
+
+### Opera Extensions: Awaiting moderation (since 2019.03.08)
+
+
 ## For developers
 
 If you are interested in improving Smart RSS then there are few tips to get started. 
