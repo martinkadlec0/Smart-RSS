@@ -220,7 +220,7 @@ define([
              * @triggered when new items arr added or when source is destroyed
              */
             handleSearch: function () {
-                if (trim(document.querySelector('input[type="search"]').value) !== '') {
+                if (document.querySelector('input[type="search"]').value.trim() !== '') {
                     app.actions.execute('articles:search');
                 }
             },
