@@ -12,7 +12,7 @@ Extension is available in following repositories:
 
 ### AMO: https://addons.mozilla.org/pl/firefox/addon/smart-rss-reader/
 
-### Chrome Web Store: blocked by #24
+### Chrome Web Store: blocked by [#24](/../../issues/24)
 
 ### Opera Extensions: Awaiting moderation (since 2019.03.08)
 
