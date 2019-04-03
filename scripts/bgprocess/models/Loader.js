@@ -266,8 +266,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                 });
 
                 if (sourceToLoad.get('faviconExpires') < parseInt(Math.round((new Date()).getTime() / 1000))) {
-
-                    Favicon.checkFavicon(sourceToLoad)
+                    return Favicon.checkFavicon(sourceToLoad)
                         .then((response) => {
                             sourceToLoad.save(response);
                             return feedDownloaded(sourceToLoad, xhr);
@@ -276,7 +275,6 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                         });
                 }
                 feedDownloaded(sourceToLoad, xhr);
-
             }
         };
         let url = sourceToLoad.get('url');
