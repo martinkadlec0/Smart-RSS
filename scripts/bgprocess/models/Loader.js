@@ -266,12 +266,12 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                 });
 
                 if (sourceToLoad.get('faviconExpires') < parseInt(Math.round((new Date()).getTime() / 1000))) {
+
                     Favicon.checkFavicon(sourceToLoad)
                         .then((response) => {
                             sourceToLoad.save(response);
                             return feedDownloaded(sourceToLoad, xhr);
                         }, () => {
-                            console.log('failed to load favicon for' + sourceToLoad.get('url'));
                             return feedDownloaded(sourceToLoad, xhr);
                         });
                 }
@@ -291,7 +291,6 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             });
             url = 'https://cloud.feedly.com/v3/streams/contents?streamId=feed%2F' + encodeURIComponent(url) + '&count=' + (1000) + ('&newerThan=' + (date));
         }
-
         xhr.open('GET', url);
         xhr.setRequestHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
         xhr.setRequestHeader('Pragma', 'no-cache');
