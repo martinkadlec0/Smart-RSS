@@ -11,62 +11,56 @@ define([], function () {
             let xhr = new XMLHttpRequest();
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        const text = xhr.responseText.replace(/<body(.*?)<\/body>/gm, '');
-                        const baseDocument = new DOMParser().parseFromString(text, 'text/html');
-                        const baseAddressLength = baseAddress.length;
-                        if (baseAddress[baseAddressLength - 1] === '/') {
-                            baseAddress = baseAddress.substring(0, baseAddressLength - 1);
-                        }
-                        let iconAddress = baseAddress + '/favicon.ico';
-                        const links = baseDocument.querySelectorAll('link');
-                        const iconLinks = Array.from(links).filter(link => {
-                            return link.hasAttribute('rel') && link.getAttribute('rel').includes('icon');
-                        });
-                        let foundIcon = '';
-                        let tempIcon = '';
-                        iconLinks.forEach((link) => {
-                            if (link.hasAttribute('href')) {
-                                tempIcon = link.getAttribute('href');
-                            } else {
-                                tempIcon = link.textContent;
-                            }
-                            if (!tempIcon.includes('svg')) {
-                                foundIcon = tempIcon;
-                            }
-                        });
-                        if (foundIcon) {
-                            if (!foundIcon.includes('//')) {
-                                if (foundIcon[0] === '.') {
-                                    foundIcon = foundIcon.substr(1);
-                                }
-                                if (foundIcon[0] === '/') {
-                                    foundIcon = foundIcon.substr(1);
-                                }
-                                iconAddress = baseAddress + '/' + foundIcon;
-                            } else {
-                                iconAddress = foundIcon;
-                            }
-                        }
-                        const schema = source.get('url').includes('http://') ? 'http://' : 'https://';
-                        iconAddress = schema + iconAddress.replace('http://', '').replace('https://', '').replace('//', '');
-
-                        toDataURI(iconAddress)
-                            .then(response => {
-                                resolve(response);
-                            })
-                            .catch(() => {
-                                resolve({
-                                    favicon: defaultIcon,
-                                    faviconExpires: parseInt(Math.round((new Date()).getTime() / 1000)) + 60 * 60 * 24 * 30
-                                });
-                            });
-                    } else {
-                        resolve({
-                            favicon: defaultIcon,
-                            faviconExpires: parseInt(Math.round((new Date()).getTime() / 1000)) + 60 * 60 * 24 * 30
-                        });
+                    if (xhr.status !== 200) {
+                        resolve({});
                     }
+                    const text = xhr.responseText.replace(/<body(.*?)<\/body>/gm, '');
+                    const baseDocument = new DOMParser().parseFromString(text, 'text/html');
+                    const baseAddressLength = baseAddress.length;
+                    if (baseAddress[baseAddressLength - 1] === '/') {
+                        baseAddress = baseAddress.substring(0, baseAddressLength - 1);
+                    }
+                    let iconAddress = baseAddress + '/favicon.ico';
+                    const links = baseDocument.querySelectorAll('link');
+                    const iconLinks = Array.from(links).filter(link => {
+                        return link.hasAttribute('rel') && link.getAttribute('rel').includes('icon');
+                    });
+                    let foundIcon = '';
+                    let tempIcon = '';
+                    iconLinks.forEach((link) => {
+                        if (link.hasAttribute('href')) {
+                            tempIcon = link.getAttribute('href');
+                        } else {
+                            tempIcon = link.textContent;
+                        }
+                        if (!tempIcon.includes('svg')) {
+                            foundIcon = tempIcon;
+                        }
+                    });
+                    if (foundIcon) {
+                        if (!foundIcon.includes('//')) {
+                            if (foundIcon[0] === '.') {
+                                foundIcon = foundIcon.substr(1);
+                            }
+                            if (foundIcon[0] === '/') {
+                                foundIcon = foundIcon.substr(1);
+                            }
+                            iconAddress = baseAddress + '/' + foundIcon;
+                        } else {
+                            iconAddress = foundIcon;
+                        }
+                    }
+                    const schema = source.get('url').includes('http://') ? 'http://' : 'https://';
+                    iconAddress = schema + iconAddress.replace('http://', '').replace('https://', '').replace('//', '');
+
+                    toDataURI(iconAddress)
+                        .then(response => {
+                            resolve(response);
+                        })
+                        .catch(() => {
+                            resolve({});
+                        });
+
                 }
             };
             xhr.open('GET', baseAddress);
