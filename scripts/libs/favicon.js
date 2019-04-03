@@ -3,8 +3,6 @@
  * @submodule modules/toDataURI
  */
 define([], function () {
-    const defaultIcon = '/images/feed.png';
-
     function checkFavicon(source) {
         return new Promise((resolve, reject) => {
             let baseAddress = source.get('base');
@@ -25,35 +23,47 @@ define([], function () {
                     const iconLinks = Array.from(links).filter(link => {
                         return link.hasAttribute('rel') && link.getAttribute('rel').includes('icon');
                     });
-                    let foundIcon = '';
+                    let size = 0;
                     let tempIcon = '';
-                    iconLinks.forEach((link) => {
-                        if (link.hasAttribute('href')) {
-                            tempIcon = link.getAttribute('href');
-                        } else {
-                            tempIcon = link.textContent;
+                    iconLinks.some((link) => {
+                        tempIcon = link.getAttribute('href');
+                        if (!tempIcon) {
+                            return false;
                         }
-                        if (!tempIcon.includes('svg')) {
-                            foundIcon = tempIcon;
+                        if (tempIcon.includes('svg')) {
+                            return false;
+                        }
+                        const localSize = link.getAttribute('sizes');
+                        if (!localSize) {
+                            if (size === 0) {
+                                iconAddress = tempIcon;
+                            }
+                            return false;
+                        }
+                        if (localSize === '16x16') {
+                            iconAddress = tempIcon;
+                            return true;
+                        }
+                        const side = parseInt(localSize.split('x')[0]);
+                        if (side > size) {
+                            size = side;
+                            iconAddress = tempIcon;
                         }
                     });
-                    if (foundIcon) {
-                        if (!foundIcon.includes('//')) {
-                            if (foundIcon[0] === '.') {
-                                foundIcon = foundIcon.substr(1);
-                            }
-                            if (foundIcon[0] === '/') {
-                                foundIcon = foundIcon.substr(1);
-                            }
-                            iconAddress = baseAddress + '/' + foundIcon;
-                        } else {
-                            iconAddress = foundIcon;
+                    const schema = baseAddress.includes('http://') ? 'http://' : 'https://';
+
+                    if (!iconAddress.includes('//')) {
+                        if (iconAddress[0] === '.') {
+                            iconAddress = iconAddress.substr(1);
                         }
+                        if (iconAddress[0] === '/') {
+                            iconAddress = iconAddress.substr(1);
+                        }
+                        iconAddress = baseAddress + '/' + iconAddress;
                     }
-                    const schema = source.get('url').includes('http://') ? 'http://' : 'https://';
                     iconAddress = schema + iconAddress.replace('http://', '').replace('https://', '').replace('//', '');
 
-                    toDataURI(iconAddress)
+                    toDataURI(iconAddress, size)
                         .then(response => {
                             resolve(response);
                         })
@@ -75,7 +85,7 @@ define([], function () {
     //  * @constructor
     //  * @extends Object
     //  */
-    function toDataURI(url) {
+    function toDataURI(url, size = 0) {
         return new Promise(function (resolve, reject) {
             const xhr = new window.XMLHttpRequest();
             xhr.responseType = 'arraybuffer';
@@ -104,10 +114,14 @@ define([], function () {
                             }
 
                             const imgData = 'data:' + type + ';base64,' + AB2B64(xhr.response);
+                            if (size === 16) {
+                                console.log('16', url);
+                                resolve({favicon: imgData, faviconExpires: expires});
+                            }
                             resizeTo(imgData, 16, 16, function (parsedImgData) {
+                                console.log(url);
                                 resolve({favicon: parsedImgData, faviconExpires: expires});
                             });
-
                         }
                     } else {
                         reject({});
