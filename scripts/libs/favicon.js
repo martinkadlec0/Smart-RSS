@@ -115,11 +115,9 @@ define([], function () {
 
                             const imgData = 'data:' + type + ';base64,' + AB2B64(xhr.response);
                             if (size === 16) {
-                                console.log('16', url);
                                 resolve({favicon: imgData, faviconExpires: expires});
                             }
                             resizeTo(imgData, 16, 16, function (parsedImgData) {
-                                console.log(url);
                                 resolve({favicon: parsedImgData, faviconExpires: expires});
                             });
                         }
