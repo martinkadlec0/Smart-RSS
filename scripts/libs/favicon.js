@@ -7,6 +7,9 @@ define([], function () {
         return new Promise((resolve, reject) => {
             let baseAddress = source.get('base');
             let xhr = new XMLHttpRequest();
+            xhr.ontimeout = () => {
+                resolve({});
+            };
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4) {
                     if (xhr.status !== 200) {
@@ -74,6 +77,7 @@ define([], function () {
                 }
             };
             xhr.open('GET', baseAddress);
+            xhr.timeout = 1000 * 30;
             xhr.send();
         });
     }
@@ -91,6 +95,9 @@ define([], function () {
             xhr.responseType = 'arraybuffer';
             xhr.onerror = function () {
                 reject('[modules/toDataURI] XMLHttpRequest error on', url);
+            };
+            xhr.ontimeout = () => {
+                resolve({});
             };
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -127,6 +134,7 @@ define([], function () {
                 }
             };
             xhr.open('GET', url, true);
+            xhr.timeout = 1000 * 30;
             xhr.send();
         });
     }

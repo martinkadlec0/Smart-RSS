@@ -171,6 +171,9 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
         const proxy = sourceToLoad.get('proxyThroughFeedly');
 
         const xhr = new XMLHttpRequest();
+        xhr.ontimeout = () => {
+            return feedDownloaded(sourceToLoad, xhr, false);
+        };
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
                 if (xhr.status !== 200) {
@@ -204,7 +207,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                     const data = new DOMParser().parseFromString(response, 'text/xml');
                     if ([...data.querySelectorAll('parsererror')].length > 0) {
                         console.log('Failed load source: ' + sourceToLoad.get('url') + (proxy ? 'using Feedly proxy' : ''));
-                        return feedDownloaded(soutceToLoad, xhr, false);
+                        return feedDownloaded(sourceToLoad, xhr, false);
                     }
                     parsedData = RSSParser.parse(data, sourceToLoad.get('id'));
 
@@ -290,6 +293,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             url = 'https://cloud.feedly.com/v3/streams/contents?streamId=feed%2F' + encodeURIComponent(url) + '&count=' + (1000) + ('&newerThan=' + (date));
         }
         xhr.open('GET', url);
+        xhr.timeout = 1000 * 30;
         xhr.setRequestHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
         xhr.setRequestHeader('Pragma', 'no-cache');
         xhr.setRequestHeader('X-Time-Stamp', Date.now());
