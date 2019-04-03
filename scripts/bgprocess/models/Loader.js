@@ -266,7 +266,6 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                 });
 
                 if (sourceToLoad.get('faviconExpires') < parseInt(Math.round((new Date()).getTime() / 1000))) {
-                    console.log('checking favicon for' + sourceToLoad.get('url'));
                     Favicon.checkFavicon(sourceToLoad)
                         .then((response) => {
                             sourceToLoad.save(response);
