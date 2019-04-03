@@ -7,7 +7,7 @@ const entityMap = {
 };
 
 function escapeHtml(string) {
-    var str = String(string).replace(/[&<>"']/gm, function (s) {
+    let str = String(string).replace(/[&<>"']/gm, function (s) {
         return entityMap[s];
     });
     str = str.replace(/\s/, function (f) {
@@ -19,7 +19,7 @@ function escapeHtml(string) {
 
 function decodeHTML(str) {
     str = str || '';
-    var map = {'gt': '>', 'lt': '<', 'amp': '&', 'quot': '"'};
+    let map = {'gt': '>', 'lt': '<', 'amp': '&', 'quot': '"'};
     return str.replace(/&(#(?:x[0-9a-f]+|\d+)|[a-z]+);?/gmi, function ($0, $1) {
         if ($1[0] === '#') {
             return String.fromCharCode($1[1].toLowerCase() === 'x' ? parseInt($1.substr(2), 16) : parseInt($1.substr(1), 10));
@@ -64,6 +64,7 @@ chrome.runtime.getBackgroundPage(function (bg) {
         document.querySelector('#export-smart').addEventListener('click', handleExportSmart);
         document.querySelector('#export-opml').addEventListener('click', handleExportOPML);
         document.querySelector('#clear-data').addEventListener('click', handleClearData);
+        document.querySelector('#clear-favicons').addEventListener('click', handleClearFavicons);
         document.querySelector('#import-smart').addEventListener('change', handleImportSmart);
         document.querySelector('#import-opml').addEventListener('change', handleImportOPML);
 
@@ -362,4 +363,18 @@ chrome.runtime.getBackgroundPage(function (bg) {
         chrome.alarms.clearAll();
         chrome.runtime.reload();
     }
+
+    function handleClearFavicons() {
+        if (!confirm('Do you really want to remove all favicons?')) {
+            return;
+        }
+
+        bg.sources.toArray().forEach((source) => {
+            source.save({
+                favicon: '/images/feed.png',
+                faviconExpires: 0
+            });
+        });
+    }
+
 });
