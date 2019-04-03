@@ -49,14 +49,13 @@ define([
                 if (this.model.get('folderID')) {
                     this.el.dataset.inFolder = this.model.get('folderID');
                 } else {
-                    this.el.classList.remove('invisible');
+                    this.el.classList.remove('hidden');
                     delete this.el.dataset.inFolder;
                 }
 
                 this.setTitle(this.model.get('count'), this.model.get('countAll'));
 
                 this.el.innerHTML = this.template(this.model.toJSON());
-
 
                 if (bg.sourceToFocus === this.model.get('id')) {
                     setTimeout(function () {

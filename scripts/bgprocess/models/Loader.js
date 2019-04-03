@@ -38,7 +38,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
         animation.start();
         let concurrentDownloads = settings.get('concurrentDownloads');
         for (let i = 0; i < concurrentDownloads; i++) {
-            downloadURL();
+            downloadNext();
         }
     }
 
@@ -70,7 +70,10 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                 if (!source.get('lastUpdate')) {
                     return true;
                 }
-                return source.get('lastUpdate') <= Date.now() - updateFrequency * 60 * 1000;
+                const multiplier = 1 + source.get('errorCount');
+                const finalFrequency = Math.min(updateFrequency * 60 * 1000 * multiplier, 7 * 24 * 60 * 60 * 1000) - 60 * 1000;
+                // reduce by a minute to not delay loading by extra minute if new load starts early
+                return source.get('lastUpdate') <= Date.now() - finalFrequency;
             });
         }
 
@@ -100,7 +103,17 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
         }
     }
 
-    function feedDownloaded(model, xhr) {
+    function feedDownloaded(model, xhr, success = true) {
+        const data = {
+            isLoading: false,
+            errorCount: success ? 0 : model.get('errorCount') + 1
+        };
+        if (success) {
+            data.successfullyLoaded = Date.now();
+        }
+        model.save(data);
+        model.trigger('update', {ok: success});
+        loader.set('loaded', loader.get('loaded') + 1);
         const modelIndex = loader.sourcesLoading.indexOf(model);
         if (modelIndex > -1) {
             loader.sourcesLoading.splice(modelIndex, 1);
@@ -109,6 +122,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
         if (xhrIndex > -1) {
             loader.currentRequests.splice(xhrIndex, 1);
         }
+        downloadNext();
     }
 
     function downloadStopped() {
@@ -122,9 +136,10 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
         animation.stop();
     }
 
-    function downloadURL() {
+
+    function downloadNext() {
         if (loader.sourcesToLoad.length === 0) {
-            // IF DOWNLOADING FINISHED, DELETED ITEMS WITH DELETED SOURCE (should not really happen)
+            // IF DOWNLOADING FINISHED, DELETE ITEMS WITH DELETED SOURCE (should not really happen)
             const sourceIDs = sources.pluck('id');
             let foundSome = false;
             items.toArray().forEach(function (item) {
@@ -143,7 +158,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
 
         let sourceToLoad = loader.sourcesToLoad.shift();
         if (loader.sourcesLoading.includes(sourceToLoad)) {
-            return downloadURL();
+            return downloadNext();
         }
         loader.sourcesLoading.push(sourceToLoad);
 
@@ -155,137 +170,119 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
         }
         const proxy = sourceToLoad.get('proxyThroughFeedly');
 
-        let xhr = new XMLHttpRequest();
-        xhr.overrideMimeType('application/xml');
+        const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = () => {
-            let ok = false;
             if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    ok = true;
-                    let parsedData = [];
-                    if (proxy) {
-                        let response = JSON.parse(xhr.responseText);
-                        let sourceID = sourceToLoad.get('id');
-                        response.items.forEach(function (item) {
-                            let canonical = item.canonical ? item.canonical[0] : item.alternate[0];
-                            parsedData.push({
-                                id: item.originId,
-                                title: item.title,
-                                url: canonical.href,
-                                date: item.updated ? item.updated : (item.published ? item.published : Date.now()),
-                                author: item.author ? item.author : '',
-                                content: item.content ? item.content.content : item.summary.content,
-                                sourceID: sourceID,
-                                unread: true,
-                                deleted: false,
-                                trashed: false,
-                                visited: false,
-                                pinned: false,
-                                dateCreated: Date.now()
-                            });
-                        });
-                    } else {
-                        const response = xhr.responseText.trim();
-                        const data = new DOMParser().parseFromString(response, 'text/xml');
-                        if ([...data.querySelectorAll('parsererror')].length > 0) {
-                            console.log('Failed load source: ' + sourceToLoad.get('url') + (proxy ? 'using feedly proxy' : ''));
-                            sourceToLoad.trigger('update', {ok: false});
-                            sourceToLoad.save({
-                                favicon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACfUlEQVR42pXSb0gTYRwH8O/Ns8AXeg36gxG0YhBmLOhVryxIkggxs6BSEQpCU0nNGWRIFpWIUUaaOMmcIspIUqvp7MUU8oUEXZtTXGpoggbl1N3t/mxed1uad9aLfvBwv4P7fp7n4X6EJEmw2qfe74wjEziGBesPkKyfjWL8HBlgOJJj+ShRCJLbdm8fmvTMZj+rzZ7BhiIUoMvhHT2TbEzAP6r4uQvHD1NwOCc+B73j6XWWa5MqoL3b5b6QeujgxpAkL3EVCMnrlsWFgjQDnnhIfHrVN2ZcmUpvfFk0vg602D6OZWccObAREEJAcDWC3HnhgjljP74zQYx4FjE6MIRHNZnEOmBpHZ64knnU+Lew0j9ocanv5KXVQH2TczL3ctK+8LHlwDBJYNfrfuhPJGP+XR9+ZqRAdC9B9hBgQnB2vFEDtXWOmcK85D3C77Cpuhp0aSn0Nns4bMrKAm21Im5BgsiKaH/aoQZqHr+dK7p+Kn6IiIQpgwG+kRHQVVXhMEVR8Hm9oO12RH8RYKvTAA+rexaKS07vmOpxYCHtJExlZaD0evjcblVYKZ1XQFe9Brh3v+tHkTlNzwrE+p21Ox+TP3bOSgiyAnobOtVA5V3bUoH5bOy33v5NYSo6Gr7padDyaZTiPDz6LBqgoqKTyb95LsYTo9u0sykxEZQgwDc/D3p5Gcwoj4EmDVB+u4PLLTu/NSASmNMTSMrJgbO5Gd0pV5Fqb4ApNjYc9k1IkDgBg80aoNTcxueXX9zi5wnwQWAlnogMzFd5MvZG+sVxCYL8qpOBD1YNUHKjLVRYeUnHCH8mUHkq2FqvzIio/AUeGGxsVQPFJa0S/rPWgF+LDojwZf7f9QAAAABJRU5ErkJggg==',
-                                faviconExpires: parseInt(Math.round((new Date()).getTime() / 1000)) + 60 * 60
-                            });
-                        }
-                        parsedData = RSSParser.parse(data, sourceToLoad.get('id'));
-
-                    }
-                    let hasNew = false;
-                    let createdNo = 0;
-                    parsedData.forEach(function (item) {
-                        const existingItem = items.get(item.id);
-                        if (!existingItem) {
-                            hasNew = true;
-                            items.create(item, {sort: false});
-                            createdNo++;
-                        } else if (existingItem.get('deleted') === false && existingItem.get('content') !== item.content) {
-                            existingItem.save({
-                                content: item.content
-                            });
-                        }
-                    });
-
-                    items.sort({silent: true});
-                    if (hasNew) {
-                        items.trigger('search');
-                        loader.itemsDownloaded = true;
-                    }
-
-                    // remove old deleted content
-                    const fetchedIDs = parsedData.map((item) => {
-                        return item.id;
-                    });
-                    items.where({
-                        sourceID: sourceToLoad.get('id'),
-                        deleted: true
-                    }).forEach(function (item) {
-                        if (fetchedIDs.indexOf(item.id) === -1) {
-                            item.destroy();
-                        }
-                    });
-
-                    // tip to optimize: var count = items.where.call(countAll, {unread: true }).length
-                    const countAll = items.where({sourceID: sourceToLoad.get('id'), trashed: false}).length;
-                    const count = items.where({
-                        sourceID: sourceToLoad.get('id'),
-                        unread: true,
-                        trashed: false
-                    }).length;
-
-                    sourceToLoad.save({
-                        'count': count,
-                        'countAll': countAll,
-                        'lastUpdate': Date.now(),
-                        'hasNew': hasNew || sourceToLoad.get('hasNew')
-                    });
-
-                    info.set({
-                        allCountUnvisited: info.get('allCountUnvisited') + createdNo
-                    });
-
-                    sourceToLoad.trigger('update', {ok: true});
-
-                } else {
-                    console.log('Failed load source: ' + sourceToLoad.get('url') + (proxy ? 'using feedly proxy' : ''));
-                    sourceToLoad.trigger('update', {ok: false});
-                    sourceToLoad.save({
-                        favicon: '/images/brokenFeed.png',
-                        faviconExpires: parseInt(Math.round((new Date()).getTime() / 1000)) + 60 * 60
-                    });
+                if (xhr.status !== 200) {
+                    console.log('Failed load source: ' + sourceToLoad.get('url') + (proxy ? 'using Feedly proxy' : ''));
+                    return feedDownloaded(sourceToLoad, xhr, false);
                 }
-                loader.set('loaded', loader.get('loaded') + 1);
-                sourceToLoad.set('isLoading', false);
+                let parsedData = [];
+                if (proxy) {
+                    const response = JSON.parse(xhr.responseText);
+                    const sourceID = sourceToLoad.get('id');
+                    response.items.forEach(function (item) {
+                        let canonical = item.canonical ? item.canonical[0] : item.alternate[0];
+                        parsedData.push({
+                            id: item.originId,
+                            title: item.title,
+                            url: canonical.href,
+                            date: item.updated ? item.updated : (item.published ? item.published : Date.now()),
+                            author: item.author ? item.author : '',
+                            content: item.content ? item.content.content : item.summary.content,
+                            sourceID: sourceID,
+                            unread: true,
+                            deleted: false,
+                            trashed: false,
+                            visited: false,
+                            pinned: false,
+                            dateCreated: Date.now()
+                        });
+                    });
+                } else {
+                    const response = xhr.responseText.trim();
+                    const data = new DOMParser().parseFromString(response, 'text/xml');
+                    if ([...data.querySelectorAll('parsererror')].length > 0) {
+                        console.log('Failed load source: ' + sourceToLoad.get('url') + (proxy ? 'using Feedly proxy' : ''));
+                        return feedDownloaded(soutceToLoad, xhr, false);
+                    }
+                    parsedData = RSSParser.parse(data, sourceToLoad.get('id'));
 
+                }
+                let hasNew = false;
+                let createdNo = 0;
+                let lastArticle = sourceToLoad.get('lastArticle');
+                parsedData.forEach(function (item) {
+                    const existingItem = items.get(item.id);
+                    lastArticle = Math.max(lastArticle, item.date);
+                    if (!existingItem) {
+                        hasNew = true;
+                        items.create(item, {sort: false});
+                        createdNo++;
+                    } else if (existingItem.get('deleted') === false && existingItem.get('content') !== item.content) {
+                        existingItem.save({
+                            content: item.content
+                        });
+                    }
+                });
+                sourceToLoad.set('lastArticle', lastArticle);
 
-                if (ok && (sourceToLoad.get('faviconExpires') < parseInt(Math.round((new Date()).getTime() / 1000)))) {
+                items.sort({silent: true});
+                if (hasNew) {
+                    items.trigger('search');
+                    loader.itemsDownloaded = true;
+                }
+
+                // remove old deleted content
+                const fetchedIDs = parsedData.map((item) => {
+                    return item.id;
+                });
+                items.where({
+                    sourceID: sourceToLoad.get('id'),
+                    deleted: true
+                }).forEach(function (item) {
+                    if (fetchedIDs.indexOf(item.id) === -1) {
+                        item.destroy();
+                    }
+                });
+
+                // tip to optimize: var count = items.where.call(countAll, {unread: true }).length
+                const countAll = items.where({sourceID: sourceToLoad.get('id'), trashed: false}).length;
+                const count = items.where({
+                    sourceID: sourceToLoad.get('id'),
+                    unread: true,
+                    trashed: false
+                }).length;
+
+                sourceToLoad.save({
+                    'count': count,
+                    'countAll': countAll,
+                    'lastUpdate': Date.now(),
+                    'hasNew': hasNew || sourceToLoad.get('hasNew')
+                });
+
+                info.set({
+                    allCountUnvisited: info.get('allCountUnvisited') + createdNo
+                });
+
+                if (sourceToLoad.get('faviconExpires') < parseInt(Math.round((new Date()).getTime() / 1000))) {
                     console.log('checking favicon for' + sourceToLoad.get('url'));
                     Favicon.checkFavicon(sourceToLoad)
                         .then((response) => {
                             sourceToLoad.save(response);
-                            feedDownloaded(sourceToLoad, xhr);
-                            downloadURL();
+                            return feedDownloaded(sourceToLoad, xhr);
                         }, () => {
                             console.log('failed to load favicon for' + sourceToLoad.get('url'));
-                            feedDownloaded(sourceToLoad, xhr);
-                            downloadURL();
+                            return feedDownloaded(sourceToLoad, xhr);
                         });
-                } else {
-                    feedDownloaded(sourceToLoad, xhr);
-                    downloadURL();
                 }
+                feedDownloaded(sourceToLoad, xhr);
+
             }
         };
         let url = sourceToLoad.get('url');
         if (proxy) {
-            let i = items.where({sourceID: sourceID});
+            const i = items.where({sourceID: sourceID});
             let date = 0;
 
             i.forEach((item) => {
@@ -301,8 +298,8 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
         xhr.setRequestHeader('Pragma', 'no-cache');
         xhr.setRequestHeader('X-Time-Stamp', Date.now());
         if (!proxy && (sourceToLoad.get('username') || sourceToLoad.get('password'))) {
-            let username = sourceToLoad.get('username') || '';
-            let password = sourceToLoad.getPass() || '';
+            const username = sourceToLoad.get('username') || '';
+            const password = sourceToLoad.getPass() || '';
             xhr.withCredentials = true;
             xhr.setRequestHeader('Authorization', 'Basic ' + btoa(`${username}:${password}`));
         }
@@ -348,12 +345,11 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             downloadStopped();
         },
         download: download,
-        downloadURL: downloadURL,
+        downloadURL: downloadNext,
         downloadAll: downloadAll,
         playNotificationSound: playNotificationSound
     });
 
     return Loader;
 
-})
-;
+});

@@ -26,7 +26,10 @@ define(['backbone'], function (BB) {
             autoremove: 0, // in days
             proxyThroughFeedly: false,
             favicon: '/images/feed.png',
-            faviconExpires: 0
+            faviconExpires: 0,
+            errorCount: 0,
+            lastArticle: 0,
+            successfullyLoaded: 0
         },
 
         initialize: function () {
@@ -34,11 +37,13 @@ define(['backbone'], function (BB) {
         },
 
         getPass: function () {
-            var str = this.get('password');
-            if (str.indexOf('enc:') !== 0) return str;
+            const str = this.get('password');
+            if (str.indexOf('enc:') !== 0) {
+                return str;
+            }
 
-            var dec = '';
-            for (var i = 4; i < str.length; i++) {
+            let dec = '';
+            for (let i = 4; i < str.length; i++) {
                 dec += String.fromCharCode(str.charCodeAt(i) - 13);
             }
             return dec;
@@ -49,8 +54,8 @@ define(['backbone'], function (BB) {
                 return;
             }
 
-            var enc = 'enc:';
-            for (var i = 0; i < str.length; i++) {
+            let enc = 'enc:';
+            for (let i = 0; i < str.length; i++) {
                 enc += String.fromCharCode(str.charCodeAt(i) + 13);
             }
             this.set('password', enc);
