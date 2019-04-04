@@ -122,7 +122,9 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
         if (xhrIndex > -1) {
             loader.currentRequests.splice(xhrIndex, 1);
         }
-        downloadNext();
+        setTimeout(() => {
+            downloadNext();
+        }, 1000);
     }
 
     function downloadStopped() {
