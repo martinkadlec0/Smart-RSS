@@ -10,7 +10,7 @@ define([], function () {
             xhr.ontimeout = () => {
                 resolve({});
             };
-            xhr.onreadystatechange = () => {
+            xhr.onloadend = () => {
                 if (xhr.readyState === 4) {
                     if (xhr.status !== 200) {
                         resolve({});
@@ -99,7 +99,7 @@ define([], function () {
             xhr.ontimeout = () => {
                 resolve({});
             };
-            xhr.onreadystatechange = function () {
+            xhr.onloadend = function () {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     if (xhr.status === 200) {
                         const type = xhr.getResponseHeader('content-type');
@@ -133,7 +133,7 @@ define([], function () {
                     }
                 }
             };
-            xhr.open('GET', url, true);
+            xhr.open('GET', url);
             xhr.timeout = 1000 * 30;
             xhr.send();
         });

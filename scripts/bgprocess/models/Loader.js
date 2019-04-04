@@ -126,6 +126,9 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
     }
 
     function downloadStopped() {
+        if (loader.currentRequests.length > 0) {
+            return;
+        }
         if (loader.itemsDownloaded && settings.get('soundNotifications')) {
             playNotificationSound();
         }
@@ -174,11 +177,12 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
         xhr.ontimeout = () => {
             return feedDownloaded(sourceToLoad, xhr, false);
         };
-        xhr.onreadystatechange = () => {
+        xhr.onloadend = () => {
             if (xhr.readyState === 4) {
                 if (xhr.status !== 200) {
-                    console.log('Failed load source: ' + sourceToLoad.get('url') + (proxy ? 'using Feedly proxy' : ''));
-                    return feedDownloaded(sourceToLoad, xhr, false);
+                    console.log('Failed load source: ' + sourceToLoad.get('url') + (proxy ? 'using Feedly proxy' : '' + ' with statos code ' + xhr.status + xhr.statusText));
+                    let success = xhr.status === 0;
+                    return feedDownloaded(sourceToLoad, xhr, success);
                 }
                 let parsedData = [];
                 if (proxy) {
@@ -303,6 +307,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             xhr.withCredentials = true;
             xhr.setRequestHeader('Authorization', 'Basic ' + btoa(`${username}:${password}`));
         }
+        loader.currentRequests.push(xhr);
         xhr.send();
     }
 
@@ -313,7 +318,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
      * @constructor
      * @extends Backbone.Model
      */
-    var Loader = Backbone.Model.extend({
+    let Loader = Backbone.Model.extend({
         defaults: {
             maxSources: 0,
             loaded: 0,
@@ -336,12 +341,11 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             }
         },
         abortDownloading: function () {
+            loader.sourcesToLoad = [];
             loader.currentRequests.forEach((request) => {
                 request.abort();
             });
-            loader.sourcesToLoad = [];
             loader.sourcesLoading = [];
-
             downloadStopped();
         },
         download: download,
