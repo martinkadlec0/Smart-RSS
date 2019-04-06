@@ -16,6 +16,7 @@ define(['backbone'], function (BB) {
             url: 'about:blank',
             base: '',
             updateEvery: -1, // in minutes, -1 to use global default
+            lastChecked: 0,
             lastUpdate: 0,
             count: 0, // unread
             countAll: 0,
@@ -28,8 +29,7 @@ define(['backbone'], function (BB) {
             favicon: '/images/feed.png',
             faviconExpires: 0,
             errorCount: 0,
-            lastArticle: 0,
-            successfullyLoaded: 0
+            lastArticle: 0
         },
 
         initialize: function () {

@@ -41,25 +41,25 @@ define([
         function openRSS(closeIfActive, focusSource) {
             let url = chrome.extension.getURL('rss.html');
             chrome.tabs.query({url: url},
-                function (tabs) {
+                (tabs) => {
                     if (tabs[0]) {
                         if (tabs[0].active && closeIfActive) {
                             chrome.tabs.remove(tabs[0].id);
-                        } else {
-                            chrome.tabs.update(tabs[0].id, {
-                                active: true
-                            });
-                            if (focusSource) {
-                                window.sourceToFocus = focusSource;
-                            }
+                            return;
                         }
-                    } else {
-                        window.sourceToFocus = focusSource;
-                        chrome.tabs.create({
-                            'url': url
-                        }, function () {
+                        chrome.tabs.update(tabs[0].id, {
+                            active: true
                         });
+                        if (focusSource) {
+                            window.sourceToFocus = focusSource;
+                        }
+                        return;
                     }
+                    window.sourceToFocus = focusSource;
+                    chrome.tabs.create({
+                        'url': url
+                    }, () => {
+                    });
                 });
         }
 
