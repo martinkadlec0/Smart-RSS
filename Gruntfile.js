@@ -69,7 +69,8 @@ module.exports = function (grunt) {
                 removeFromManifest: [
                     'content_scripts',
                     'page_action',
-                    'applications'
+                    'applications',
+                    'developer'
                 ],
                 csp: 'chromium_content_security_policy'
             },
