@@ -53,6 +53,9 @@ module.exports = function (grunt) {
                     'package-lock.json',
                     'Gruntfile.js',
                     'rssDetector/manifest.json'
+                ],
+                removeFromManifest: [
+                    'chromium_content_security_policy'
                 ]
             },
             chromium: {
@@ -65,8 +68,10 @@ module.exports = function (grunt) {
                 ],
                 removeFromManifest: [
                     'content_scripts',
-                    'page_action'
-                ]
+                    'page_action',
+                    'applications'
+                ],
+                csp: 'chromium_content_security_policy'
             },
             detector: {
                 alwaysPackage: false,
@@ -102,14 +107,18 @@ module.exports = function (grunt) {
         const originalManifest = grunt.file.readJSON(manifestPath);
         const version = originalManifest.version;
 
+        let newManifest = Object.assign({}, originalManifest);
 
+        if (config.csp) {
+            newManifest['content_security_policy'] = newManifest[config.csp];
+            delete newManifest[config.csp];
+        }
         if (config.removeFromManifest.length > 0) {
-            let newManifest = Object.assign({}, originalManifest);
             config.removeFromManifest.forEach((item) => {
                 delete newManifest[item];
             });
-            grunt.file.write(manifestPath, JSON.stringify(newManifest, null, 2));
         }
+        grunt.file.write(manifestPath, JSON.stringify(newManifest, null, 2));
 
 
         const filesList = [];
@@ -126,7 +135,6 @@ module.exports = function (grunt) {
                     config.skipped.forEach((blacklisted) => {
                         if (filePath.includes(blacklisted)) {
                             skip = true;
-                            return;
                         }
                     });
                 }
@@ -155,13 +163,13 @@ module.exports = function (grunt) {
             filesList.forEach((item) => {
                 const hash = md5File.sync(item);
                 const fileName = item.split('\\').pop().split('/').pop();
-                if(fileName === 'manifest.json'){
+                if (fileName === 'manifest.json') {
                     return;
                 }
                 newVersions[fileName] = hash;
                 if (!versions[fileName] || versions[fileName] !== newVersions[fileName]) {
                     createPackage = true;
-                    console.log("diff", fileName);
+                    console.log('diff', fileName);
                 }
             });
 

@@ -20,6 +20,7 @@
     "https://dev.opera.com/*"
   ],
   "content_security_policy": "default-src * 'self' data: 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-eval'; style-src * 'self' data: 'unsafe-inline'; img-src * 'self' data:; object-src 'self'",
+  "chromium_content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "browser_action": {
     "default_title": "Smart RSS",
     "default_icon": {
