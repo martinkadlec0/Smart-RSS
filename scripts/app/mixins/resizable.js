@@ -28,7 +28,9 @@ define(['jquery'], function ($) {
     }
 
     function handleMouseUp() {
-        if (!this.resizing) return;
+        if (!this.resizing) {
+            return;
+        }
         $('iframe').css('pointer-events', 'auto');
         this.resizing = false;
         for (var i = 0; i < els.length; i++) {
@@ -51,7 +53,9 @@ define(['jquery'], function ($) {
     }
 
     function loadPosition(resetting) {
-        if (!this.resizer) return;
+        if (!this.resizer) {
+            return;
+        }
 
         if (this.layout === 'vertical') {
             setPosition.call(this, this.el.offsetTop + this.el.offsetHeight);
@@ -67,7 +71,9 @@ define(['jquery'], function ($) {
     function resetPositions() {
         requestAnimationFrame(function () {
             for (var i = 0; i < els.length; i++) {
-                if (els[i] === this) continue;
+                if (els[i] === this) {
+                    continue;
+                }
                 loadPosition.call(els[i], true);
             }
         }.bind(this));
