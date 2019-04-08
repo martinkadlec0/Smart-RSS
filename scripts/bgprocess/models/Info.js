@@ -6,7 +6,9 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
 
     let handleAllCountChange = function (model) {
         if (settings.get('badgeMode') === 'disabled') {
-            if (model === settings) chrome.browserAction.setBadgeText({text: ''});
+            if (model === settings) {
+                chrome.browserAction.setBadgeText({text: ''});
+            }
             return;
         }
 
