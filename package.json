@@ -6,8 +6,7 @@
   "dependencies": {},
   "devDependencies": {
     "adm-zip": "git+https://github.com/cthackers/adm-zip.git",
-    "grunt": ">=0.4.1",
-    "grunt-contrib-jshint": ">=0.6.4",
+    "grunt": "^1.0.4",
     "md5-file": "^4.0.0"
   },
   "scripts": {

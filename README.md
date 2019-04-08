@@ -37,7 +37,7 @@ npm install
 
 To check for jshint errors:
 ```
-grunt jshint
+jshint .
 ```
 
 To create package uploadable to various extension repositories 
