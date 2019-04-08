@@ -26,7 +26,9 @@ define([], function () {
             this.handleIconChange();
         },
         start: function () {
-            if (this.interval) return;
+            if (this.interval) {
+                return;
+            }
             this.interval = setInterval(() => {
                 this.update();
             }, 400);
