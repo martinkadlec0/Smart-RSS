@@ -10,7 +10,9 @@ define([
                 'click': 'handleMouseDown'
             },*/
             showContextMenu: function (e) {
-                if (!this.contextMenu) return;
+                if (!this.contextMenu) {
+                    return;
+                }
 
                 if (!this.$el.hasClass('selected')) {
                     app.feeds.feedList.select(this, e);
@@ -37,13 +39,13 @@ define([
             },
             changeInfo: function () {
                 if (this.model.get('name') === 'all-feeds') {
-                    var changed = bg.info.changedAttributes();
+                    const changed = bg.info.changedAttributes();
                     if (changed && typeof changed === 'object' && 'allCountUnread' in changed) {
                         this.render(true);
                     }
                     this.setTitle(bg.info.get('allCountUnread'), bg.info.get('allCountTotal'));
                 } else if (this.model.get('name') === 'trash') {
-                    var tot = bg.info.get('trashCountTotal');
+                    const tot = bg.info.get('trashCountTotal');
                     this.setTitle(bg.info.get('trashCountUnread'), tot);
 
                     /**
@@ -62,12 +64,14 @@ define([
                 }
             },
             render: function (noinfo) {
-                var data = this.model.toJSON();
+                const data = this.model.toJSON();
                 if (this.model.get('name') === 'all-feeds') {
                     data.count = bg.info.get('allCountUnread');
                 }
                 this.$el.html(this.template(data));
-                if (!noinfo) this.changeInfo();
+                if (!noinfo) {
+                    this.changeInfo();
+                }
                 return this;
             }
         });
