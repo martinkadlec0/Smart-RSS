@@ -99,7 +99,9 @@ define([
                 action: function () {
                     if (confirm(Locale.DELETE_ALL_Q)) {
                         bg.items.forEach(function (item) {
-                            if (item.get('deleted') === true) return;
+                            if (item.get('deleted') === true) {
+                                return;
+                            }
                             item.markAsDeleted();
                         });
                     }

@@ -4,23 +4,25 @@
  * @submodule helpers/escapeHtml
  * @param string {String} String with html to be escaped
  */
-define([], function() {
-	const entityMap = {
-		'&': '&amp;',
-		'<': '&lt;',
-		'>': '&gt;',
-		'"': '&quot;',
-		'\'': '&#39;'
-	};
+define([], function () {
+    const entityMap = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        '\'': '&#39;'
+    };
 
-	return function(str) {
-		str = String(str).replace(/[&<>"']/gm, function (s) {
-			return entityMap[s];
-		});
-		str = str.replace(/\s/, function(f) {
-			if (f === ' ') return ' ';
-			return '';
-		});
-		return str;
-	};
+    return function (str) {
+        str = String(str).replace(/[&<>"']/gm, function (s) {
+            return entityMap[s];
+        });
+        str = str.replace(/\s/, function (f) {
+            if (f === ' ') {
+                return ' ';
+            }
+            return '';
+        });
+        return str;
+    };
 });
