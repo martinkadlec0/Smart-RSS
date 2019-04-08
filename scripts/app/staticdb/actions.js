@@ -110,7 +110,9 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 icon: 'delete.png',
                 title: Locale.DELETE,
                 fn: function () {
-                    if (!confirm(Locale.REALLY_DELETE)) return;
+                    if (!confirm(Locale.REALLY_DELETE)) {
+                        return;
+                    }
 
                     const feeds = require('views/feedList').getSelectedFeeds();
                     const folders = require('views/feedList').getSelectedFolders();
@@ -227,7 +229,6 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 title: 'Open folders',
                 fn: function (event) {
                     const folders = Array.from(document.querySelectorAll('.folder:not(.opened)'));
-                    if (!folders.length) return;
                     folders.forEach((folder) => {
                         if (folder.view) {
                             folder.view.handleClickArrow(event);
@@ -432,7 +433,9 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                     if ('currentTarget' in event) {
                         view = event.currentTarget.view;
                     } else {
-                        if (!articleList.selectedItems || !articleList.selectedItems.length) return;
+                        if (!articleList.selectedItems || !articleList.selectedItems.length) {
+                            return;
+                        }
                         view = articleList.selectedItems[0];
                     }
                     if (view.model) {
@@ -600,7 +603,9 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 icon: 'save.png',
                 fn: function () {
                     var contentView = require('views/contentView');
-                    if (!contentView.model) return;
+                    if (!contentView.model) {
+                        return;
+                    }
                     var tpl = contentView.downloadTemplate;
                     var attrs = Object.create(contentView.model.attributes);
                     attrs.date = contentView.getFormattedDate(attrs.date);
@@ -618,7 +623,9 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 icon: 'print.png',
                 fn: function () {
                     var contentView = require('views/contentView');
-                    if (!contentView.model) return;
+                    if (!contentView.model) {
+                        return;
+                    }
                     window.print();
                 }
             },
@@ -627,7 +634,9 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 icon: 'read.png',
                 fn: function () {
                     var contentView = require('views/contentView');
-                    if (!contentView.model) return;
+                    if (!contentView.model) {
+                        return;
+                    }
                     contentView.model.save({
                         unread: !contentView.model.get('unread'),
                         visited: true
@@ -639,7 +648,9 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 icon: 'delete.png',
                 fn: function (e) {
                     var contentView = require('views/contentView');
-                    if (!contentView.model) return;
+                    if (!contentView.model) {
+                        return;
+                    }
 
                     askRmPinned = bg.settings.get('askRmPinned');
 
