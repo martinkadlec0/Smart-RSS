@@ -97,7 +97,7 @@ define([
 
 
         function fetchOne(tasks) {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 if (tasks.length === 0) {
                     resolve(true);
                     return;
@@ -124,7 +124,7 @@ define([
         window.fetchOne = fetchOne;
 
 
-        window.appStarted = new Promise((resolve, reject) => {
+        window.appStarted = new Promise((resolve) => {
 
             /**
              * Init
