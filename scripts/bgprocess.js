@@ -49,13 +49,13 @@ chrome.runtime.onConnect.addListener(function (port) {
 });
 
 
-requirejs(['bg'], function (bg) {
+requirejs(['bg'], function () {
     // bg started
 });
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
+chrome.runtime.onMessage.addListener(function (request, sender) {
     if (request.action === 'show-rss-icon') {
-        var tab = sender.tab;
+        const tab = sender.tab;
         chrome.pageAction.setIcon({
             path: 'rssDetector/icon16.png',
             tabId: tab.id
