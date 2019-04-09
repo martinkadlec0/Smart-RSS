@@ -1,5 +1,5 @@
 /**
- * Get unix time with added/substracted UTC hours
+ * Get unix time with added/subtracted UTC hours
  * @module App
  * @submodule helpers/unixutc
  * @param date {string|Date} Get the week based on this date
