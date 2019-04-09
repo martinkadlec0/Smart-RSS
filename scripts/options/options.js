@@ -11,7 +11,9 @@ function escapeHtml(string) {
         return entityMap[s];
     });
     str = str.replace(/\s/, function (f) {
-        if (f === ' ') return ' ';
+        if (f === ' ') {
+            return ' ';
+        }
         return '';
     });
     return str;
@@ -129,7 +131,7 @@ chrome.runtime.getBackgroundPage(function (bg) {
         }
 
         const reader = new FileReader();
-        reader.onload = function (e) {
+        reader.onload = function () {
             bg.settings.save('defaultSound', this.result);
         };
 
@@ -241,7 +243,7 @@ chrome.runtime.getBackgroundPage(function (bg) {
         smartImportStatus.innerHTML = 'Loading & parsing file';
 
         const reader = new FileReader();
-        reader.onload = function (e) {
+        reader.onload = function () {
             const data = JSON.safeParse(this.result);
 
             if (!data || !data.items || !data.sources) {
@@ -296,7 +298,7 @@ chrome.runtime.getBackgroundPage(function (bg) {
         opmlImportStatus.innerHTML = 'Importing, please wait!';
 
         const reader = new FileReader();
-        reader.onload = function (e) {
+        reader.onload = function () {
             const parser = new DOMParser();
             const doc = parser.parseFromString(this.result, 'application/xml');
 
