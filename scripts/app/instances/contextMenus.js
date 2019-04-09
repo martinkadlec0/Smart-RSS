@@ -1,6 +1,4 @@
-define([
-        'backbone', 'views/ContextMenu', 'modules/Locale', 'views/feedList'
-    ],
+define(['backbone', 'views/ContextMenu', 'modules/Locale'],
     function (BB, ContextMenu, Locale) {
         const sourceContextMenu = new ContextMenu([
             {
@@ -223,16 +221,6 @@ define([
                     return this.list[name];
                 }
                 return null;
-            },
-            hideAll: function () {
-                Object.keys(this.list).forEach(function (item) {
-                    this.list[item].hide();
-                }, this);
-            },
-            areActive: function () {
-                return Object.keys(this.list).some(function (item) {
-                    return !!this.list[item].el.parentNode;
-                }, this);
             }
         }));
     });
