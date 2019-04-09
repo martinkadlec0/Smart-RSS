@@ -10,7 +10,7 @@ define(['backbone'], function (BB) {
      * @constructor
      * @extends Backbone.View
      */
-    var Layout = BB.View.extend({
+    let Layout = BB.View.extend({
 
         /**
          * Gives focus to layout region element
@@ -38,10 +38,11 @@ define(['backbone'], function (BB) {
             this[name] = view;
             if (!view.el.parentNode) {
                 if (old && old instanceof BB.View) {
-                    old.$el.replaceWith(view.el);
+                    old.el.insertAdjacentElement('beforebegin', view.el);
+                    old.el.parentElement.removeChild(old.el);
                     old.trigger('close');
                 } else {
-                    this.$el.append(view.el);
+                    this.el.insertAdjacentElement('beforeend', view.el);
                 }
             }
             view.trigger('attach');
