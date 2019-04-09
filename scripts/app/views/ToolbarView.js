@@ -1,7 +1,7 @@
 define([
-        'backbone', 'collections/ToolbarItems', 'jquery', 'factories/ToolbarItemsFactory'
+        'backbone', 'collections/ToolbarItems', 'factories/ToolbarItemsFactory'
     ],
-    function (BB, ToolbarItems, $, ToolbarItemsFactory) {
+    function (BB, ToolbarItems, ToolbarItemsFactory) {
         return BB.View.extend({
             tagName: 'div',
             className: 'toolbar',
@@ -9,7 +9,7 @@ define([
             doNotRegenerate: false,
             events: {
                 'click .button': 'handleButtonClick',
-                'input input[type=search]': 'handleButtonClick',
+                'input input[type=search]': 'handleButtonClick'
                 /**** replace with "drop" to implement dnd between toolbars ****/
                 // 'dragend': 'handleDragEnd',
                 // 'dragover': 'handleDragOver'
@@ -47,7 +47,9 @@ define([
              */
             handleChange: function () {
                 if (!this.doNotRegenerate) {
-                    this.$el.find('> *').remove();
+                    while (this.el.firstChild) {
+                        this.el.removeChild(this.el.firstChild);
+                    }
                     this.items.reset();
 
                     this.model.get('actions').forEach(this.createToolbarItem, this);
@@ -72,7 +74,12 @@ define([
              * @chainable
              */
             hideItems: function (action) {
-                var list = this.$el.find('> [data-action="' + action + '"]').hide().toArray();
+                const list = [...this.el.querySelectorAll('[data-action="' + action + '"]')];
+
+                list.forEach((item) => {
+                    item.classList.add('hidden');
+                });
+
                 this.hiddenItems = [...new Set(this.hiddenItems.concat(list))];
 
                 return this;
@@ -84,9 +91,9 @@ define([
              * @chainable
              */
             showItems: function (action) {
-                this.hiddenItems = this.hiddenItems.filter(function (item) {
+                this.hiddenItems = this.hiddenItems.filter((item) => {
                     if (item.dataset.action === action) {
-                        $(item).show();
+                        item.classList.remove('hidden');
                         return false;
                     }
                     return true;
@@ -122,7 +129,7 @@ define([
              * @param toolbarItem {ToolbarButton} Model added to the collection
              */
             addToolbarItem: function (toolbarItem) {
-                var view;
+                let view;
                 if (toolbarItem.get('actionName') === 'articles:search') {
                     view = ToolbarItemsFactory.create('search', toolbarItem);
                 } else if (toolbarItem.get('type') !== 'dynamicSpace') {
@@ -131,9 +138,9 @@ define([
                     view = ToolbarItemsFactory.create('dynamicSpace', toolbarItem);
                 }
 
-                this.$el.append(view.render().el);
+                this.el.insertAdjacentElement('beforeend', view.render().el);
                 toolbarItem.view = view;
-            },
+            }
 
             // handleDragEnd: function (e) {
             //     e.stopPropagation();

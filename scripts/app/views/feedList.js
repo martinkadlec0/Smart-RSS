@@ -3,10 +3,10 @@
  * @submodule views/feedList
  */
 define([
-        'backbone', 'jquery', 'views/SourceView', 'views/FolderView', 'views/SpecialView', 'models/Special',
+        'backbone', 'views/SourceView', 'views/FolderView', 'views/SpecialView', 'models/Special',
         'instances/contextMenus', 'mixins/selectable', 'instances/specials'
     ],
-    function (BB, $, SourceView, FolderView, SpecialView, Special, contextMenus, selectable, specials) {
+    function (BB, SourceView, FolderView, SpecialView, Special, contextMenus, selectable, specials) {
 
         /**
          * List of feeds (in left column)
@@ -462,7 +462,6 @@ define([
             destroySource: function (view) {
                 view.clearEvents();
                 view.undelegateEvents();
-                view.$el.removeData().unbind();
                 view.off();
                 view.remove();
                 const indexOf = this.selectedItems.indexOf(view);

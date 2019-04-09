@@ -3,10 +3,10 @@
  * @submodule views/articleList
  */
 define([
-        'backbone', 'jquery', 'collections/Groups', 'models/Group', 'views/GroupView',
+        'backbone', 'collections/Groups', 'models/Group', 'views/GroupView',
         'views/ItemView', 'mixins/selectable', 'modules/Locale'
     ],
-    function (BB, $, Groups, Group, GroupView, ItemView, selectable, Locale) {
+    function (BB, Groups, Group, GroupView, ItemView, selectable, Locale) {
 
         const groups = new Groups();
 

@@ -78,9 +78,7 @@ define([
              * @triggered when 'hide-overlays' comm message is sent
              */
             hide: function () {
-                // if (this.$el.css('display') === 'block') {
                 this.el.style.display = 'none';
-                // }
             },
 
             /**
@@ -93,7 +91,6 @@ define([
                 this.menuCollection = new MenuCollection(mc);
                 this.addItems(this.menuCollection);
                 document.body.insertAdjacentElement('beforeend', this.render().el);
-                // $('body').append(this.render().$el);
 
                 this.listenTo(comm, 'hide-overlays', this.hide);
             },

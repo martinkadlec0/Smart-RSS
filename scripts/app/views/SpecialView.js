@@ -1,7 +1,7 @@
 define([
-        'jquery', '../../libs/template', 'views/TopView', 'text!templates/special.html'
+        '../../libs/template', 'views/TopView', 'text!templates/special.html'
     ],
-    function ($, template, TopView, tplSpecial) {
+    function (template, TopView, tplSpecial) {
         return TopView.extend({
             className: 'sources-list-item special',
             template: template(tplSpecial),
@@ -14,7 +14,7 @@ define([
                     return;
                 }
 
-                if (!this.$el.hasClass('selected')) {
+                if (!this.el.classList.contains('selected')) {
                     app.feeds.feedList.select(this, e);
                 }
                 this.contextMenu.currentSource = this.model;
@@ -68,7 +68,7 @@ define([
                 if (this.model.get('name') === 'all-feeds') {
                     data.count = bg.info.get('allCountUnread');
                 }
-                this.$el.html(this.template(data));
+                this.el.innerHTML = this.template(data);
                 if (!noinfo) {
                     this.changeInfo();
                 }
