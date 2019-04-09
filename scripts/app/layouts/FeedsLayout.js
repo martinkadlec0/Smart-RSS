@@ -3,13 +3,13 @@
  * @submodule layouts/FeedsLayout
  */
 define([
-        'jquery', 'layouts/Layout', 'views/ToolbarView', 'views/feedList',
+        'layouts/Layout', 'views/ToolbarView', 'views/feedList',
         'instances/contextMenus', 'views/Properties', 'mixins/resizable', 'views/IndicatorView',
-        'controllers/comm',
+        'controllers/comm'
     ],
-    function ($, Layout, ToolbarView, feedList, contextMenus, Properties, resizable, IndicatorView, comm) {
+    function (Layout, ToolbarView, feedList, contextMenus, Properties, resizable, IndicatorView, comm) {
 
-        var toolbar = bg.toolbars.findWhere({region: 'feeds'});
+        const toolbar = bg.toolbars.findWhere({region: 'feeds'});
 
         /**
          * Feeds layout view
@@ -17,7 +17,7 @@ define([
          * @constructor
          * @extends Layout
          */
-        var FeedsLayout = Layout.extend({
+        let FeedsLayout = Layout.extend({
             /**
              * View element
              * @property el
@@ -40,8 +40,8 @@ define([
 
                 this.el.view = this;
 
-                this.$el.on('focus', function () {
-                    $(this).addClass('focused');
+                this.el.addEventListener('focus', (event) => {
+                    event.target.classList.add('focused');
                     clearTimeout(blurTimeout);
                 });
 
@@ -52,15 +52,15 @@ define([
                     focus = false;
                 });
 
-                this.$el.on('blur', function (e) {
-                    blurTimeout = setTimeout(function () {
-                        if (focus && !e.relatedTarget) {
+                this.el.addEventListener('blur', (event) => {
+                    blurTimeout = setTimeout(() => {
+                        if (focus && !event.relatedTarget) {
                             this.focus();
                             return;
                         }
-                        $(this).removeClass('focused');
+                        event.target.classList.remove('focused');
                         focus = true;
-                    }.bind(this), 0);
+                    }, 0);
                 });
 
                 this.on('resize:after', this.handleResize);
