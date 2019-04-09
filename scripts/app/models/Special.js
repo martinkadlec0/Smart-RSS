@@ -9,7 +9,7 @@ define(['backbone'], function (BB) {
      * @constructor
      * @extends Backbone.Model
      */
-    var Special = BB.Model.extend({
+    let Special = BB.Model.extend({
         defaults: {
             /**
              * Visible title of special. Chnages with localization.
