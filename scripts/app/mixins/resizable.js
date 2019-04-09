@@ -1,4 +1,4 @@
-define(['jquery'], function ($) {
+define([], function () {
 
     let els = [];
 
@@ -48,7 +48,7 @@ define(['jquery'], function ($) {
     function setPosition(pos) {
         const toLeft = 1;
         if (this.layout === 'vertical') {
-            this.resizer.style.width = this.$el.width() + 'px';
+            this.resizer.style.width = this.el.innerWidth + 'px';
             this.resizer.style.left = this.el.offsetLeft + 'px';
             this.resizer.style.top = pos - Math.round(resizeWidth / 2) - toLeft + 'px';
         } else {
@@ -103,7 +103,7 @@ define(['jquery'], function ($) {
             }
 
             if (layout === 'vertical') {
-                this.resizer.style.width = this.$el.width() + 'px';
+                this.resizer.style.width = this.el.innerWidth + 'px';
                 this.resizer.style.cursor = 'n-resize';
                 this.resizer.style.height = resizeWidth + 'px';
             } else {

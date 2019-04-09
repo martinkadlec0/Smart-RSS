@@ -55,7 +55,6 @@ define([
                 this.el.addEventListener('blur', (event) => {
                     blurTimeout = setTimeout(() => {
                         if (focus && !event.relatedTarget) {
-                            this.focus();
                             return;
                         }
                         event.target.classList.remove('focused');
