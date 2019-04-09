@@ -1,4 +1,4 @@
-define(['backbone', 'domReady!'], function (BB) {
+define(['backbone', ], function (BB) {
 	var ToolbarDynamicSpaceView = BB.View.extend({
 		tagName: 'div',
 		className: 'dynamic-space',

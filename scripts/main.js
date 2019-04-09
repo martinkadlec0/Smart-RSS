@@ -8,7 +8,6 @@ require.config({
         underscore: '../libs/underscore.min',
         backbone: '../libs/backbone.min',
         text: '../text',
-        domReady: '../libs/domReady'
     },
 
     shim: {

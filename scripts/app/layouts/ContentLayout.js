@@ -4,7 +4,7 @@
  */
 define([
         'jquery', 'layouts/Layout', 'views/ToolbarView', 'views/contentView', 'views/SandboxView',
-        'controllers/comm', 'domReady!'
+        'controllers/comm',
     ],
     function ($, Layout, ToolbarView, contentView, SandboxView, comm) {
 

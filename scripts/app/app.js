@@ -3,10 +3,10 @@
  */
 define([
         'controllers/comm',
-        'layouts/Layout', 'jquery', 'domReady!', 'collections/Actions', 'layouts/FeedsLayout', 'layouts/ArticlesLayout',
+        'layouts/Layout', 'jquery', 'collections/Actions', 'layouts/FeedsLayout', 'layouts/ArticlesLayout',
         'layouts/ContentLayout', 'staticdb/shortcuts'
     ],
-    function (comm, Layout, $, doc, Actions, FeedsLayout, ArticlesLayout, ContentLayout, shortcuts) {
+    function (comm, Layout, $, Actions, FeedsLayout, ArticlesLayout, ContentLayout, shortcuts) {
 
         document.documentElement.style.fontSize = bg.settings.get('uiFontSize') + '%';
 

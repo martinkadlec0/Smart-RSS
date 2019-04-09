@@ -4,7 +4,7 @@
  */
 define([
         'jquery', 'layouts/Layout', 'views/ToolbarView', 'views/articleList',
-        'mixins/resizable', 'controllers/comm', 'domReady!'
+        'mixins/resizable', 'controllers/comm'
     ],
     function ($, Layout, ToolbarView, articleList, resizable, comm) {
 

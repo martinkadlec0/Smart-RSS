@@ -1,4 +1,4 @@
-define(['backbone', 'jquery', 'modules/Locale', 'domReady!'], function (BB, $, Locale) {
+define(['backbone', 'jquery', 'modules/Locale', ], function (BB, $, Locale) {
     return BB.View.extend({
         tagName: 'div',
         className: 'button',
