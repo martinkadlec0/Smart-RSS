@@ -23,7 +23,7 @@ define([], function () {
                 currentElement = this.el.querySelector('.last-selected');
                 nextElement = currentElement.nextElementSibling;
             }
-            while (nextElement && !nextElement.matchesSelector(selector)) {
+            while (nextElement && !nextElement.matches(selector)) {
                 nextElement = nextElement.nextElementSibling;
             }
 
@@ -55,7 +55,7 @@ define([], function () {
                 previousElement = currentElement.previousElementSibling;
 
             }
-            while (previousElement && !previousElement.matchesSelector(selector)) {
+            while (previousElement && !previousElement.matches(selector)) {
                 previousElement = previousElement.previousElementSibling;
             }
 
