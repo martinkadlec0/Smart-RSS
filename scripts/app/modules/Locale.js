@@ -12,9 +12,6 @@ define(['../../nls/' + nl, '../../nls/en'], function (lang, en) {
      * @extends Object
      */
     const Locale = {
-        get c() {
-            return lang || en;
-        },
         lang: lang,
         en: en,
         translate: function (name) {
