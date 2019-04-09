@@ -10,7 +10,7 @@ define(['backbone'], function (BB) {
      * @constructor
      * @extends Backbone.Model
      */
-    var MenuItem = BB.Model.extend({
+    let MenuItem = BB.Model.extend({
         defaults: {
 
             /**
