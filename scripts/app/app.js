@@ -11,7 +11,7 @@ define([
         document.documentElement.style.fontSize = bg.settings.get('uiFontSize') + '%';
 
         document.addEventListener('contextmenu', function (e) {
-            if (!e.target.matchesSelector('#region-content header, #region-content header *')) {
+            if (!e.target.matches('#region-content header, #region-content header *')) {
                 e.preventDefault();
             }
         });
@@ -66,7 +66,7 @@ define([
             },
 
             handleMouseDown: function (e) {
-                if (!e.target.matchesSelector('.context-menu, .context-menu *')) {
+                if (!e.target.matches('.context-menu, .context-menu *')) {
                     this.hideContextMenus();
                 }
             },
