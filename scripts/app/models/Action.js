@@ -10,7 +10,7 @@ define(['backbone'], function (BB) {
      * @constructor
      * @extends Backbone.Model
      */
-    var Action = BB.Model.extend({
+    let Action = BB.Model.extend({
         /**
          * @property idAttribute
          * @type String
