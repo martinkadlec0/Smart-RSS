@@ -3,10 +3,10 @@
  * @submodule layouts/ArticlesLayout
  */
 define([
-        'jquery', 'layouts/Layout', 'views/ToolbarView', 'views/articleList',
+        'layouts/Layout', 'views/ToolbarView', 'views/articleList',
         'mixins/resizable', 'controllers/comm'
     ],
-    function ($, Layout, ToolbarView, articleList, resizable, comm) {
+    function (Layout, ToolbarView, articleList, resizable, comm) {
 
         var toolbar = bg.toolbars.findWhere({region: 'articles'});
 
@@ -30,10 +30,11 @@ define([
                     this.attach('articleList', articleList);
                 });
 
-                this.$el.on('focus', function () {
-                    $(this).addClass('focused');
+                this.el.addEventListener('focus', (event) => {
+                    event.target.classList.add('focused');
                     clearTimeout(blurTimeout);
                 });
+
 
                 let focus = true;
                 let blurTimeout;
@@ -42,18 +43,16 @@ define([
                     focus = false;
                 });
 
-                this.$el.on('blur', function (e) {
-                    blurTimeout = setTimeout(function () {
-                        if (focus && !e.relatedTarget) {
+                this.el.addEventListener('blur', (event) => {
+                    blurTimeout = setTimeout(() => {
+                        if (focus && !event.relatedTarget) {
                             this.focus();
                             return;
                         }
-                        $(this).removeClass('focused');
+                        event.target.classList.remove('focused');
                         focus = true;
-                    }.bind(this), 0);
+                    }, 0);
                 });
-
-
                 this.on('resize:after', this.handleResizeAfter);
             },
 
