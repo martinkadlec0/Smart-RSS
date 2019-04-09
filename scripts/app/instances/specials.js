@@ -1,4 +1,4 @@
-define(['backbone', 'models/Special', 'instances/contextMenus', 'modules/Locale', 'views/feedList'],
+define(['backbone', 'models/Special', 'instances/contextMenus', 'modules/Locale'],
     function (BB, Special, contextMenus, Locale) {
         return {
             trash: new Special({
