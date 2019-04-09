@@ -55,7 +55,7 @@ const renderButton = (data) => {
     list.appendChild(element);
 };
 
-const handleData = (message, sender, sendResponse) => {
+const handleData = (message) => {
     document.body.removeEventListener('click', closePopup);
     if (message.action === 'response-list') {
         message.value.forEach(renderButton);
