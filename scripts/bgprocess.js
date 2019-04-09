@@ -9,7 +9,7 @@ require.config({
         backbone: '../libs/backbone.min',
         backboneDB: '../libs/backbone.indexDB',
         text: '../text',
-        domReady: '../domReady'
+        domReady: '../libs/domReady'
     },
 
     shim: {

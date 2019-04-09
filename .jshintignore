@@ -2,4 +2,3 @@ node_modules
 scripts/libs
 scripts/version.js
 scripts/text.js
-scripts/domReady.js
