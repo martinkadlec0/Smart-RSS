@@ -1,28 +1,30 @@
 define(['jquery'], function ($) {
 
-    var els = [];
+    let els = [];
 
-    var resizeWidth = 6;
+    const resizeWidth = 6;
 
-    function handleMouseDown(e) {
+    function handleMouseDown(event) {
         this.resizing = true;
-        e.preventDefault();
-        $('iframe').css('pointer-events', 'none');
+        event.preventDefault();
+        [...document.querySelectorAll('iframe')].forEach((iframe) => {
+            iframe.style.pointerEvents = 'none';
+        });
+
         this.trigger('resize:before');
     }
 
-    function handleMouseMove(e) {
+    function handleMouseMove(event) {
         if (this.resizing) {
-            var toLeft = 1;
-            e.preventDefault();
+            const toLeft = 1;
+            event.preventDefault();
             if (this.layout === 'vertical') {
-                setPosition.call(this, e.clientY);
-                this.$el.css('flex-basis', Math.abs(e.clientY - this.el.offsetTop + toLeft));
+                setPosition.call(this, event.clientY);
+                this.el.style.flexBasis = Math.abs(event.clientY - this.el.offsetTop + toLeft) + 'px';
             } else {
-                setPosition.call(this, e.clientX);
-                this.$el.css('flex-basis', Math.abs(e.clientX - this.el.offsetLeft + toLeft));
+                setPosition.call(this, event.clientX);
+                this.el.style.flexBasis = Math.abs(event.clientX - this.el.offsetLeft + toLeft) + 'px';
             }
-
             this.trigger('resize');
         }
     }
@@ -31,17 +33,20 @@ define(['jquery'], function ($) {
         if (!this.resizing) {
             return;
         }
-        $('iframe').css('pointer-events', 'auto');
+        [...document.querySelectorAll('iframe')].forEach((iframe) => {
+            iframe.style.pointerEvents = 'auto';
+        });
         this.resizing = false;
-        for (var i = 0; i < els.length; i++) {
-            loadPosition.call(els[i]);
-        }
+        els.forEach((el) => {
+            loadPosition.call(el);
+        });
+
         this.trigger('resize');
         this.trigger('resize:after');
     }
 
     function setPosition(pos) {
-        var toLeft = 1;
+        const toLeft = 1;
         if (this.layout === 'vertical') {
             this.resizer.style.width = this.$el.width() + 'px';
             this.resizer.style.left = this.el.offsetLeft + 'px';
@@ -69,14 +74,14 @@ define(['jquery'], function ($) {
     }
 
     function resetPositions() {
-        requestAnimationFrame(function () {
-            for (var i = 0; i < els.length; i++) {
-                if (els[i] === this) {
-                    continue;
+        requestAnimationFrame(() => {
+            els.forEach((el) => {
+                if (el === this) {
+                    return;
                 }
-                loadPosition.call(els[i], true);
-            }
-        }.bind(this));
+                loadPosition.call(el, true);
+            });
+        });
     }
 
     return {
@@ -87,12 +92,11 @@ define(['jquery'], function ($) {
             layout = this.layout = layout || 'horizontal';
 
             if (size) {
-                this.$el.css('flex-basis', size + 'px');
+                this.el.style.flexBasis = size + 'px';
             }
 
             els.push(this);
 
-            var that = this;
             if (!this.resizer) {
                 this.resizer = document.createElement('div');
                 this.resizer.className = 'resizer';
@@ -110,22 +114,14 @@ define(['jquery'], function ($) {
 
 
             loadPosition.call(this);
-            requestAnimationFrame(function () {
+            requestAnimationFrame(() => {
                 this.trigger('resize:enabled');
-            }.bind(this));
+            });
 
-            this.resizer.addEventListener('mousedown', function (e) {
-                handleMouseDown.call(that, e);
-            });
-            document.addEventListener('mousemove', function (e) {
-                handleMouseMove.call(that, e);
-            });
-            document.addEventListener('mouseup', function (e) {
-                handleMouseUp.call(that, e);
-            });
-            window.addEventListener('resize', function (e) {
-                resetPositions.call(that, e);
-            });
+            this.resizer.addEventListener('mousedown', handleMouseDown.bind(this));
+            document.addEventListener('mousemove', handleMouseMove.bind(this));
+            document.addEventListener('mouseup', handleMouseUp.bind(this));
+            window.addEventListener('resize', resetPositions.bind(this));
 
             document.body.appendChild(this.resizer);
         }
