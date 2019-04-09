@@ -42,7 +42,6 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.loadNpmTasks('grunt-contrib-jshint');
 
 
     grunt.registerMultiTask('package', '', function () {
@@ -83,11 +82,12 @@ module.exports = function (grunt) {
 
         const scan = (dir) => {
             fs.readdirSync(dir).forEach((file) => {
-                const filePath = dir + '/' + file;
                 if (file[0] === '.') {
                     return;
                 }
 
+
+                const filePath = dir + '/' + file;
                 let skip = false;
                 if (config.skipped.length > 0) {
                     config.skipped.forEach((blacklisted) => {
