@@ -2,7 +2,7 @@
  * Returns formatted date string
  * @module App
  * @submodule helpers/formatDate
- * @param date {Integer|Date} Date to be formated
+ * @param date {Number|Date} Date to be formatted
  * @param formatString {String} String consisting of special characters
  * @example formatDate(new Date, 'YYYY-MM-DD hh:mm');
  */
