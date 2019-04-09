@@ -3,9 +3,9 @@
  * @submodule views/ContextMenu
  */
 define([
-        'backbone', 'jquery', 'collections/MenuCollection', 'views/MenuItemView', 'controllers/comm'
+        'backbone', 'collections/MenuCollection', 'views/MenuItemView', 'controllers/comm'
     ],
-    function (BB, $, MenuCollection, MenuItemView, comm) {
+    function (BB, MenuCollection, MenuItemView, comm) {
 
         /**
          * Context menu view
@@ -102,15 +102,15 @@ define([
              * @param y {Number} y-coordinate
              */
             show: function (x, y) {
-                if (x + this.$el.width() + 4 > document.body.offsetWidth) {
-                    x = document.body.offsetWidth - this.$el.width() - 8;
+                if (x + this.el.innerWidth + 4 > document.body.offsetWidth) {
+                    x = document.body.offsetWidth - this.el.innerWidth - 8;
                 }
-                if (y + this.$el.height() + 4 > document.body.offsetHeight) {
-                    y = document.body.offsetHeight - this.$el.height() - 8;
+                if (y + this.el.innerHeight + 4 > document.body.offsetHeight) {
+                    y = document.body.offsetHeight - this.el.innerHeight - 8;
                 }
-                this.$el.css('top', y + 'px');
-                this.$el.css('left', x + 'px');
-                this.$el.css('display', 'block');
+                this.el.style.left = x + 'px';
+                this.el.style.top = y +'px';
+                this.el.style.display = 'block';
             }
         });
 

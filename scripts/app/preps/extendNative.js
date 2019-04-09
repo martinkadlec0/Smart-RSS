@@ -1,6 +1,6 @@
 /**
  * Extends prototypes of native objects with various methods.
- * Removes prefixes for some nonstandard fucntions.
+ * Removes prefixes for some nonstandard functions.
  * @module App
  * @submodule preps/extendNative
  */
