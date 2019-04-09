@@ -1,5 +1,4 @@
-define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], function ($, stripTags, Locale, comm) {
-
+define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (stripTags, Locale, comm) {
     return {
         global: {
             default: {
@@ -36,7 +35,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 fn: function () {
                     const selectedItems = require('views/feedList').selectedItems;
                     if (selectedItems.length) {
-                        let models = selectedItems.map((item) => {
+                        const models = selectedItems.map((item) => {
                             return item.model;
                         });
                         bg.loader.download(models);
@@ -76,7 +75,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 }
             },
             openHome: {
-                title: 'Open Home',
+                title: Locale.OPEN_HOME,
                 fn: function () {
                     const selectedFeeds = require('views/feedList').getSelectedFeeds();
                     if (!selectedFeeds.length) {
@@ -92,7 +91,7 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                 }
             },
             refetch: {
-                title: 'Refetch', /****localization needed****/
+                title: Locale.REFETCH, /****localization needed****/
                 fn: function () {
                     const selectedFeeds = require('views/feedList').getSelectedFeeds();
                     if (!selectedFeeds.length) {
@@ -391,7 +390,6 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
                             view.el.classList.add('hidden');
                         }
                     });
-                    // list.restartSelection();
                 }
             },
             focusSearch: {
@@ -504,17 +502,19 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
             selectAll: {
                 title: 'Select All',
                 fn: function () {
-                    var articleList = require('views/articleList');
-                    articleList.$el.find('.selected').removeClass('selected');
-                    articleList.selectedItems = [];
-
-                    articleList.$el.find('.articles-list-item:not(.invisible)').each(function (i, item) {
-                        item.view.$el.addClass('selected');
-                        articleList.selectedItems.push(item.view);
+                    const articleList = require('views/articleList');
+                    [...articleList.el.querySelectorAll('.selected')].forEach((element) => {
+                        element.classList.remove('selected');
                     });
 
-                    articleList.$el.find('.last-selected').removeClass('last-selected');
-                    articleList.$el.find('.articles-list-item:not(.invisible):last').addClass('last-selected');
+                    articleList.selectedItems = [];
+
+                    [...articleList.el.querySelectorAll('.articles-list-item:not(.hidden)')].forEach((element) => {
+                        element.view.el.classList.add('selected');
+                    });
+
+                    articleList.el.querySelector('.last-selected').classList.remove('last-selected');
+                    articleList.el.querySelector('.articles-list-item:not(.hidden):last-child').classList.add('last-selected');
                 }
             },
             pin: {
@@ -718,14 +718,14 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
             scrollDown: {
                 title: 'Scroll down',
                 fn: function () {
-                    var cw = $('iframe').get(0).contentWindow;
+                    const cw = document.querySelector('iframe').contentWindow;
                     cw.scrollBy(0, 40);
                 }
             },
             scrollUp: {
                 title: 'Scroll up',
                 fn: function () {
-                    var cw = $('iframe').get(0).contentWindow;
+                    const cw = document.querySelector('iframe').contentWindow;
                     cw.scrollBy(0, -40);
                 }
             },
@@ -738,31 +738,31 @@ define(['jquery', 'helpers/stripTags', 'modules/Locale', 'controllers/comm'], fu
             pageUp: {
                 title: 'Page up',
                 fn: function () {
-                    var cw = $('iframe').get(0).contentWindow;
-                    var d = cw.document;
+                    const cw = document.querySelector('iframe').contentWindow;
+                    const d = cw.document;
                     cw.scrollBy(0, -d.documentElement.clientHeight * 0.85);
                 }
             },
             pageDown: {
                 title: 'Page down',
                 fn: function () {
-                    var cw = $('iframe').get(0).contentWindow;
-                    var d = cw.document;
+                    const cw = document.querySelector('iframe').contentWindow;
+                    const d = cw.document;
                     cw.scrollBy(0, d.documentElement.clientHeight * 0.85);
                 }
             },
             scrollToBottom: {
                 title: 'Scroll to bottom',
                 fn: function () {
-                    var cw = $('iframe').get(0).contentWindow;
-                    var d = cw.document;
+                    const cw = document.querySelector('iframe').contentWindow;
+                    const d = cw.document;
                     cw.scrollTo(0, d.documentElement.offsetHeight);
                 }
             },
             scrollToTop: {
                 title: 'Scroll to top',
                 fn: function () {
-                    var cw = $('iframe').get(0).contentWindow;
+                    const cw = document.querySelector('iframe').contentWindow;
                     cw.scrollTo(0, 0);
                 }
             }
