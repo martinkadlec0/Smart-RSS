@@ -4,7 +4,7 @@
 define([
         'controllers/comm',
         'layouts/Layout', 'collections/Actions', 'layouts/FeedsLayout', 'layouts/ArticlesLayout',
-        'layouts/ContentLayout', 'staticdb/shortcuts'
+        'layouts/ContentLayout', 'staticdb/shortcuts', 'preps/all'
     ],
     function (comm, Layout, Actions, FeedsLayout, ArticlesLayout, ContentLayout, shortcuts) {
 
