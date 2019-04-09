@@ -3,12 +3,12 @@
  * @submodule layouts/ContentLayout
  */
 define([
-        'jquery', 'layouts/Layout', 'views/ToolbarView', 'views/contentView', 'views/SandboxView',
-        'controllers/comm',
+        'layouts/Layout', 'views/ToolbarView', 'views/contentView', 'views/SandboxView',
+        'controllers/comm'
     ],
-    function ($, Layout, ToolbarView, contentView, SandboxView, comm) {
+    function (Layout, ToolbarView, contentView, SandboxView, comm) {
 
-        var toolbar = bg.toolbars.findWhere({region: 'content'});
+        const toolbar = bg.toolbars.findWhere({region: 'content'});
 
         /**
          * Content layout view
@@ -16,7 +16,7 @@ define([
          * @constructor
          * @extends Layout
          */
-        var ContentLayout = Layout.extend({
+        let ContentLayout = Layout.extend({
 
             /**
              * View element
@@ -37,8 +37,8 @@ define([
                     this.attach('sandbox', new SandboxView());
                 });
 
-                this.$el.on('focus', function () {
-                    $(this).addClass('focused');
+                this.el.addEventListener('focus', (event) => {
+                    event.target.classList.add('focused');
                     clearTimeout(blurTimeout);
                 });
 
@@ -49,15 +49,15 @@ define([
                     focus = false;
                 });
 
-                this.$el.on('blur', function (e) {
-                    blurTimeout = setTimeout(function () {
-                        if (focus && !e.relatedTarget) {
+                this.el.addEventListener('blur', (event) => {
+                    blurTimeout = setTimeout(() => {
+                        if (focus && !event.relatedTarget) {
                             this.focus();
                             return;
                         }
-                        $(this).removeClass('focused');
+                        event.target.classList.remove('focused');
                         focus = true;
-                    }.bind(this), 0);
+                    }, 0);
                 });
 
             }
