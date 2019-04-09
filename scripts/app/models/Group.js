@@ -10,7 +10,7 @@ define(['backbone', 'helpers/unixutc', 'helpers/getWOY', 'modules/Locale'], func
      * @constructor
      * @extends Backbone.Model
      */
-    var Group = BB.Model.extend({
+    let Group = BB.Model.extend({
         defaults: {
             /**
              * Title of the date group (Today, Yesterday, 2012, ...)
