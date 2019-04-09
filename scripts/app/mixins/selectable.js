@@ -4,17 +4,6 @@ define([], function () {
         selectedItems: [],
         selectPivot: null,
         selectFlag: false,
-        restartSelection: function () {
-            if (this.selectedItems.length) {
-                this.selectedItems = [];
-                const selectedItems = this.el.querySelectorAll('.selected');
-                Array.from(selectedItems).forEach((element) => {
-                    element.classList.remove('selected');
-                });
-                this.el.querySelector('.last-selected').classList.remove('last-selected');
-            }
-            this.selectFirst();
-        },
         selectFirst: function () {
             const first = document.querySelector('.' + this.itemClass);
             if (first) {
@@ -182,31 +171,25 @@ define([], function () {
             }
             view.el.classList.add('last-selected');
         },
-        // inView: function (cel) {
-        //     var $cel = $(cel);
-        //     return !($cel.position().top - this.$el.offset().top < 0 || $cel.position().top + cel.offsetHeight >= this.el.offsetHeight);
-        //
-        // },
-        handleSelectableMouseDown: function (e) {
-            if (e.which === 2) {
-                // return browser.tabs.create({url: e.currentTarget.view.model.attributes.url, active: false});
+        handleSelectableMouseDown: function (event) {
+            if (event.which === 2) {
                 return true;
             }
-            const item = e.currentTarget.view;
+            const item = event.currentTarget.view;
             if (item.el.classList.contains('articles-list-item')) {
-                e.preventDefault();
+                event.preventDefault();
             }
-            if (this.selectedItems.length > 1 && item.el.classList.contains('selected') && !e.ctrlKey && !e.shiftKey) {
+            if (this.selectedItems.length > 1 && item.el.classList.contains('selected') && !event.ctrlKey && !event.shiftKey) {
                 this.selectFlag = true;
                 return false;
             }
-            this.select(item, e);
+            this.select(item, event);
             return false;
         },
-        handleSelectableMouseUp: function (e) {
-            const item = e.currentTarget.view;
-            if (e.which === 1 && this.selectedItems.length > 1 && this.selectFlag) {
-                this.select(item, e);
+        handleSelectableMouseUp: function (event) {
+            const item = event.currentTarget.view;
+            if (event.which === 1 && this.selectedItems.length > 1 && this.selectFlag) {
+                this.select(item, event);
                 this.selectFlag = false;
             }
         }
