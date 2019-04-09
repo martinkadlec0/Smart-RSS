@@ -3,10 +3,10 @@
  * @submodule views/contentView
  */
 define([
-        'backbone', 'jquery', '../../libs/template', 'helpers/formatDate', 'helpers/escapeHtml', 'helpers/stripTags', 'text!templates/download.html',
+        'backbone', '../../libs/template', 'helpers/formatDate', 'helpers/escapeHtml', 'helpers/stripTags', 'text!templates/download.html',
         'text!templates/header.html'
     ],
-    function (BB, $, template, formatDate, escapeHtml, stripTags, tplDownload, tplHeader) {
+    function (BB, template, formatDate, escapeHtml, stripTags, tplDownload, tplHeader) {
 
         /**
          * Full view of one article (right column)
@@ -54,9 +54,14 @@ define([
              * @param event {MouseEvent}
              */
             handlePinClick: function (event) {
-                $(event.currentTarget).toggleClass('pinned');
+                const target = event.target;
+                if (target.classList.contains('pinned')) {
+                    target.classList.remove('pinned');
+                } else {
+                    target.classList.add('pinned');
+                }
                 this.model.save({
-                    pinned: $(event.currentTarget).hasClass('pinned')
+                    pinned: target.classList.contains('pinned')
                 });
             },
 
@@ -102,10 +107,10 @@ define([
              * @triggered when space is pressed in middle column
              */
             handleSpace: function () {
-                const $iframe = $('iframe');
-                const contentWindow = $iframe.get(0).contentWindow;
-                const doc = $iframe.get(0).contentWindow.document;
-                if (doc.documentElement.clientHeight + $(doc.body).scrollTop() >= doc.body.offsetHeight) {
+                const iframe = document.querySelector('iframe');
+                const contentWindow = iframe.contentWindow;
+                const doc = contentWindow.document;
+                if (doc.documentElement.clientHeight + doc.body.scrollTop >= doc.body.offsetHeight) {
                     app.trigger('give-me-next');
                 } else {
                     contentWindow.scrollBy(0, doc.documentElement.clientHeight * 0.85);
@@ -133,7 +138,12 @@ define([
              */
             handleItemsPin: function (model) {
                 if (model === this.model) {
-                    this.$el.find('.pin-button').toggleClass('pinned', this.model.get('pinned'));
+                    const pinButton = this.el.querySelector('.pin-button');
+                    if (this.model.get('pinned')) {
+                        pinButton.classList.add('pinned');
+                    } else {
+                        pinButton.classList.remove('pinned');
+                    }
                 }
             },
 
@@ -185,7 +195,7 @@ define([
                     const content = that.model.get('content');
 
 
-                    that.$el.html(that.template(data));
+                    that.el.innerHTML = that.template(data);
 
                     // first load might be too soon
                     const sandbox = app.content.sandbox;
@@ -234,7 +244,9 @@ define([
              * @method hide
              */
             hide: function () {
-                $('header,iframe').css('display', 'none');
+                [...document.querySelectorAll('header,iframe')].forEach((element) => {
+                    element.classList.add('hidden');
+                });
             },
 
             /**
@@ -242,7 +254,11 @@ define([
              * @method hide
              */
             show: function () {
-                $('header,iframe').css('display', 'block');
+                [...document.querySelectorAll('header,iframe')].forEach((element) => {
+                    element.classList.remove('hidden');
+                    element.style.display = 'block';
+                    // move to stylesheet
+                });
             }
         });
 
