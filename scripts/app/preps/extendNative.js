@@ -13,12 +13,12 @@ define([], function () {
      * @param value {Any} Value to set - optional
      * @return {Any} Last item of array, null if array is empty
      */
-    Array.prototype.last = function (val) {
+    Array.prototype.last = function (value) {
         if (!this.length) {
             return null;
         }
-        if (val) {
-            this[this.length - 1] = val;
+        if (value) {
+            this[this.length - 1] = value;
         }
         return this[this.length - 1];
     };
@@ -30,19 +30,15 @@ define([], function () {
      * @param value {Any} Value to set - optional
      * @return {Any} First item of array, null if array is empty
      */
-    Array.prototype.first = function (val) {
+    Array.prototype.first = function (value) {
         if (!this.length) {
             return null;
         }
-        if (val) {
-            this[0] = val;
+        if (value) {
+            this[0] = value;
         }
         return this[0];
     };
-
-    if (!Element.prototype.hasOwnProperty('matchesSelector')) {
-        Element.prototype.matchesSelector = Element.prototype.webkitMatchesSelector;
-    }
 
     /**
      * Get index of element in HTMLCollection (used by eg. Element#children)
@@ -54,40 +50,6 @@ define([], function () {
     HTMLCollection.prototype.indexOf = Array.prototype.indexOf;
 
     /**
-     * Git first next sibling that matches given selector
-     * @method findNext
-     * @extends Element
-     * @param query {String} CSS selector
-     * @return {HTMLELement|null} Found element
-     */
-    Element.prototype.findNext = function (query) {
-        let cur = this;
-        while (cur = cur.nextElementSibling) {
-            if (cur.matchesSelector(query)) {
-                return cur;
-            }
-        }
-        return null;
-    };
-
-    /**
-     * Git first previous sibling that matches given selector
-     * @method findPrev
-     * @extends Element
-     * @param query {String} CSS selector
-     * @return {HTMLELement|null} Found element
-     */
-    Element.prototype.findPrev = function (query) {
-        let cur = this;
-        while (cur = cur.previousElementSibling) {
-            if (cur.matchesSelector(query)) {
-                return cur;
-            }
-        }
-        return null;
-    };
-
-    /**
      * Escapes regexp characters in string
      * @method escape
      * @extends RegExp
@@ -95,7 +57,7 @@ define([], function () {
      * @param text {String} String to be escaped
      * @return {String} Escaped string
      */
-    RegExp.escape = function (str) {
-        return String(str).replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+    RegExp.escape = function (text) {
+        return String(text).replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
     };
 });
