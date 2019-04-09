@@ -3,17 +3,17 @@ self.IDBTransaction = self.IDBTransaction || self.webkitIDBTransaction || self.m
 self.IDBKeyRange = self.IDBKeyRange || self.webkitIDBKeyRange || self.msIDBKeyRange;
 
 
-var request = indexedDB.open('backbone-indexeddb', 4);
+const request = indexedDB.open('backbone-indexeddb', 4);
 
-var db;
-var content;
+let db;
+let content;
 
 
-request.addEventListener('error', function (e) {
+request.addEventListener('error', function () {
     throw 'Error code: ' + this.errorCode;
 });
 
-request.addEventListener('success', function (e) {
+request.addEventListener('success', function () {
     db = this.result;
     if (content) {
         startImport();
@@ -29,7 +29,7 @@ onmessage = function (e) {
     }
 };
 
-var writes = 0;
+let writes = 0;
 
 function handleReq(req) {
     writes++;
@@ -42,20 +42,20 @@ function handleReq(req) {
 }
 
 function startImport() {
-    var transaction = this.db.transaction(['folders-backbone', 'sources-backbone', 'items-backbone'], 'readwrite');
-    var folders = transaction.objectStore('folders-backbone');
-    var sources = transaction.objectStore('sources-backbone');
-    var items = transaction.objectStore('items-backbone');
+    const transaction = this.db.transaction(['folders-backbone', 'sources-backbone', 'items-backbone'], 'readwrite');
+    const folders = transaction.objectStore('folders-backbone');
+    const sources = transaction.objectStore('sources-backbone');
+    const items = transaction.objectStore('items-backbone');
 
-    var importedFolders = content.folders;
-    var importedSources = content.sources;
-    var importedItems = content.items;
+    const importedFolders = content.folders;
+    const importedSources = content.sources;
+    const importedItems = content.items;
 
 
     if (importedFolders) {
         for (let i = 0, j = importedFolders.length; i < j; i++) {
             handleReq(folders.add(importedFolders[i]));
-            if (!(i % 10)) {
+            if (i % 10 === 0) {
                 postMessage({action: 'message', value: 'Folders: ' + i + '/' + j});
             }
         }
@@ -64,7 +64,7 @@ function startImport() {
     if (importedSources) {
         for (let i = 0, j = importedSources.length; i < j; i++) {
             handleReq(sources.add(importedSources[i]));
-            if (!(i % 10)) {
+            if (i % 10 === 0) {
                 postMessage({action: 'message', value: 'Feeds: ' + i + '/' + j});
             }
         }
@@ -73,7 +73,7 @@ function startImport() {
     if (importedItems) {
         for (let i = 0, j = importedItems.length; i < j; i++) {
             handleReq(items.add(importedItems[i]));
-            if (!(i % 10)) {
+            if (i % 10 === 0) {
                 postMessage({action: 'message', value: 'Articles: ' + i + '/' + j});
             }
         }
