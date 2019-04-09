@@ -10,7 +10,7 @@ define(['backbone'], function (BB) {
      * @constructor
      * @extends Backbone.Model
      */
-    var ToolbarButton = BB.Model.extend({
+    let ToolbarButton = BB.Model.extend({
         defaults: {
 
             /**
