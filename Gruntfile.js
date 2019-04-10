@@ -191,17 +191,10 @@ module.exports = function (grunt) {
                     done(false);
                     return;
                 }
-                if (!root) {
-                    grunt.file.write('scripts/version.js', 'const version = \'' + version + '\';');
-                }
                 done(true);
             });
         });
     });
 
-    grunt.registerTask('restore-displayed-version', '', function () {
-        grunt.file.write('scripts/version.js', 'const version = \'dev build\';');
-    });
-
-    grunt.registerTask('release', ['bump-version', 'package', 'restore-displayed-version']);
+    grunt.registerTask('release', ['bump-version', 'package']);
 };

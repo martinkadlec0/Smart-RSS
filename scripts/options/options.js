@@ -42,7 +42,8 @@ JSON.safeParse = function (str) {
 
 chrome.runtime.getBackgroundPage(function (bg) {
     const documentReady = () => {
-        document.querySelector('#version').innerHTML = bg.version || 'dev build';
+        const version = chrome.runtime.getManifest().version;
+        document.querySelector('#version').innerHTML = version;
 
         [...document.querySelectorAll('select[id], input[type=number], input[type=range], input[type=range]')].forEach((item) => {
             item.value = bg.settings.get(item.id);
