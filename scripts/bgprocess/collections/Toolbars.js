@@ -30,7 +30,7 @@ define([
          * @constructor
          * @extends Backbone.Collection
          */
-        var Toolbars = BB.Collection.extend({
+        let Toolbars = BB.Collection.extend({
             model: Toolbar,
             indexedDB: new Backbone.IndexedDB('toolbars-backbone'),
             parse: function (data) {
@@ -45,7 +45,7 @@ define([
 
                 for (let i = 0; i < parsedData.length; i++) {
 
-                    let fromdb = getDataByRegion(data, parsedData[i].region);
+                    const fromdb = getDataByRegion(data, parsedData[i].region);
                     if (!fromdb || typeof fromdb !== 'object') {
                         continue;
                     }
