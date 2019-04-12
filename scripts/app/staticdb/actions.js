@@ -361,15 +361,15 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 fn: function (event) {
                     event = event || {currentTarget: document.querySelector('input[type=search]')};
                     let query = event.currentTarget.value || '';
-                    console.log(query);
                     const list = require('views/articleList');
                     if (query === '') {
                         [...document.querySelectorAll('.date-group')].map((element) => {
-                            element.style.display = 'block';
+                            element.classList.remove('hidden');
                         });
+                        return;
                     } else {
                         [...document.querySelectorAll('.date-group')].map((element) => {
-                            element.style.display = 'none';
+                            element.classList.add('hidden');
                         });
                     }
 
