@@ -68,18 +68,13 @@ define([], function () {
 
         [...nodes].forEach((node) => {
             items.push({
-                id: rssGetGuid(node),
+                id: rssGetGuid(node, source.get('base')),
                 title: rssGetTitle(node),
                 url: rssGetLink(node, source.get('base')),
                 date: rssGetDate(node),
                 author: rssGetAuthor(node, title),
                 content: rssGetContent(node),
                 sourceID: sourceID,
-                unread: true,
-                deleted: false,
-                trashed: false,
-                visited: false,
-                pinned: false,
                 dateCreated: Date.now()
             });
 
@@ -93,13 +88,13 @@ define([], function () {
         return items;
     }
 
-    function rssGetGuid(node) {
+    function rssGetGuid(node, base) {
         if (!node) {
             return false;
         }
         let guid = node.querySelector('guid');
 
-        return guid ? guid.textContent : rssGetLink(node) || '';
+        return guid ? guid.textContent : rssGetLink(node, base) || '';
     }
 
     function rssGetLink(node, base) {
@@ -108,19 +103,15 @@ define([], function () {
         }
         let link = node.querySelector('link[rel="alternate"]');
         if (!link) {
-            if (!link) {
-                link = node.querySelector('link[type="text/html"]');
-            }
-            // prefer non atom links over atom links because of http://logbuch-netzpolitik.de/
-            if (!link || link.prefix === 'atom') {
-                link = node.querySelector('link');
-            }
-            if (!link) {
-                link = node.querySelector('link[type="text/html"]');
-            }
-            if (!link) {
-                link = node.querySelector('link');
-            }
+            link = node.querySelector('link[type="text/html"]');
+        }
+        if (!link) {
+            link = node.querySelector('link[type="text/html"]');
+        }
+
+        // prefer non atom links over atom links because of http://logbuch-netzpolitik.de/
+        if (!link || link.prefix === 'atom') {
+            link = node.querySelector('link');
         }
 
         if (!link) {
@@ -130,26 +121,23 @@ define([], function () {
                 link = guid;
             }
         }
-
-        if (link) {
-            let address = link.textContent || link.getAttribute('href');
-
-            if (!address.startsWith('http')) {
-                if (address.startsWith('/')) {
-                    address = address.substr(1);
-                }
-                if (base.endsWith('/')) {
-                    base = substring(0, base.length - 1);
-                }
-                address = base + '/' + address;
-            }
-
-
-            return address;
+        if (!link) {
+            return false;
         }
 
+        let address = link.textContent || link.getAttribute('href');
 
-        return false;
+        if (!address.startsWith('http')) {
+            if (address.startsWith('/')) {
+                address = address.substr(1);
+            }
+            if (base.endsWith('/')) {
+                base = substring(0, base.length - 1);
+            }
+            address = base + '/' + address;
+        }
+
+        return address;
     }
 
     function getFeedTitle(xml) {
