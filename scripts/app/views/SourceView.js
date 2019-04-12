@@ -40,11 +40,22 @@ define([
                 this.list.destroySource(this);
             },
             render: function () {
-                if (!!this.model.get('count')) {
+                this.el.classList.remove('has-unread');
+                this.el.classList.remove('loading');
+                this.el.classList.remove('broken');
+
+
+                if (this.model.get('count') > 0) {
                     this.el.classList.add('has-unread');
-                } else {
-                    this.el.classList.remove('has-unread');
                 }
+                if (this.model.get('errorCount') > 0) {
+                    this.el.classList.add('broken');
+                }
+                if (this.model.get('isLoading')) {
+                    this.el.classList.remove('broken');
+                    this.el.classList.add('loading');
+                }
+
 
                 if (this.model.get('folderID')) {
                     this.el.dataset.inFolder = this.model.get('folderID');

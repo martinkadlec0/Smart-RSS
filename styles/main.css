@@ -370,6 +370,26 @@ input[type=search]:not(:focus):not(:valid) {
     font-weight: bold;
 }
 
+.source-counter {
+    visibility: hidden;
+}
+
+.has-unread > .source-counter {
+    visibility: visible;
+}
+
+
+.sources-list-item.broken .icon,
+.sources-list-item.loading .icon,
+.sources-list-item .loading,
+.sources-list-item .broken{
+    display: none;
+}
+.sources-list-item.broken .broken,
+.sources-list-item.loading .loading{
+    display: inline;
+}
+
 [data-in-folder] {
     padding-left: 30px;
 }

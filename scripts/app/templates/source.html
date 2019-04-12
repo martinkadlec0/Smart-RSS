@@ -1,14 +1,6 @@
-<% if (isLoading) { %>
-<img src="/images/feedupdate.svg" class="source-icon"/>
-<% } else { %>
-<% if (errorCount > 0) { %>
-<img src="/images/brokenFeed.png" class="source-icon"/>
-<% } else { %>
-<img src="<%= favicon %>" class="source-icon"/>
-
-<% }} %>
+<img src="/images/feedupdate.svg" class="source-icon loading"/>
+<img src="/images/brokenFeed.png" class="source-icon broken"/>
+<img src="<%= favicon %>" class="source-icon icon"/>
 
 <div class="source-title"><%- title %></div>
-<% if (count > 0) { %>
 <div class="source-counter"><%- count %></div>
-<% } %>
