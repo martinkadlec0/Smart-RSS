@@ -512,11 +512,12 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                     [...articleList.el.querySelectorAll('.articles-list-item:not(.hidden)')].forEach((element) => {
                         element.view.el.classList.add('selected');
                     });
-                    const lastSelected = articleList.el.querySelector('.last-selected');
 
+                    const lastSelected = articleList.el.querySelector('.last-selected');
                     if (lastSelected) {
                         lastSelected.classList.remove('last-selected');
                     }
+
                     const lastVisible = articleList.el.querySelector('.articles-list-item:not(.hidden):last-child');
                     if (lastVisible) {
                         lastVisible.classList.add('last-selected');
