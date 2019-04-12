@@ -590,15 +590,15 @@ input[type=search]:not(:focus):not(:valid) {
     flex: 0 0 0.4rem;
 }
 
-.unread:not(.unvisited) .item-pin:not(.pinned) {
+.unread:not(.unvisited):not(.pinned) .item-pin {
     background-image: url("../images/bullet_unread.png");
 }
 
-.unvisited .item-pin:not(.pinned) {
+.unvisited:not(.pinned) .item-pin {
     background-image: url("../images/bullet_unseen.png");
 }
 
-.pinned {
+.pinned .item-pin {
     background-image: url("../images/bullet_pinned.png");
 }
 

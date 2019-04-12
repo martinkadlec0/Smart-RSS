@@ -101,15 +101,18 @@ define([
          */
         render: function () {
             const classList = this.el.classList;
+            classList.remove('pinned');
+            classList.remove('unvisited');
+            classList.remove('unread');
+
             if (!this.model.get('visited')) {
                 classList.add('unvisited');
-            } else {
-                classList.remove(('unvisited'));
             }
             if (this.model.get('unread')) {
                 classList.add('unread');
-            } else {
-                classList.remove('unread');
+            }
+            if (this.model.get('pinned')) {
+                classList.add('pinned');
             }
 
             const changedAttributes = this.model.changedAttributes();
@@ -132,7 +135,8 @@ define([
             this.el.insertAdjacentHTML('beforeend', this.template(article));
 
             return this;
-        },
+        }
+        ,
 
         /**
          * Returns formatted date according to user settings and time interval
@@ -159,7 +163,8 @@ define([
             }
 
             return date;
-        },
+        }
+        ,
 
         /**
          * Shows context menu on right click
@@ -171,7 +176,8 @@ define([
             if (event.button === 2) {
                 this.showContextMenu(event);
             }
-        },
+        }
+        ,
 
         /**
          * Shows context menu for article item
@@ -184,7 +190,8 @@ define([
             }
             contextMenus.get('items').currentSource = this.model;
             contextMenus.get('items').show(event.clientX, event.clientY);
-        },
+        }
+        ,
 
         /**
          * When model is changed rerender it or remove it from DOM (depending on what is changed)
@@ -197,7 +204,8 @@ define([
             } else {
                 this.render();
             }
-        },
+        }
+        ,
 
         /**
          * When model is removed from DB/Backbone remove it from DOM as well
@@ -206,7 +214,8 @@ define([
          */
         handleModelDestroy: function () {
             this.list.destroyItem(this);
-        },
+        }
+        ,
 
         /**
          * Changes pin state (true/false)
