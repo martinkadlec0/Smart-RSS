@@ -384,7 +384,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                             return true;
                         }
                         const sourceId = view.model.get('SourceID');
-                        const sourceItem = querySelector('[data-id="' + sourceId + '"]');
+                        const sourceItem = document.querySelector('[data-id="' + sourceId + '"]');
                         if (!sourceItem) {
                             return true;
                         }
