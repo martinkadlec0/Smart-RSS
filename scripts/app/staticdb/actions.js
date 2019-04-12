@@ -590,23 +590,23 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 title: Locale.DOWNLOAD,
                 icon: 'save.png',
                 fn: function () {
-                    var contentView = require('views/contentView');
-                    var articleList = require('views/articleList');
+                    const contentView = require('views/contentView');
+                    const articleList = require('views/articleList');
                     if (!articleList.selectedItems.length) {
                         app.actions.execute('content:download');
                         return;
                     }
-                    var tpl = contentView.downloadTemplate;
+                    const tpl = contentView.downloadTemplate;
 
-                    var list = {};
+                    const list = {};
                     list.articles = articleList.selectedItems.map(function (itemView) {
-                        var attrs = Object.create(itemView.model.attributes);
+                        const attrs = Object.create(itemView.model.attributes);
                         attrs.date = contentView.getFormattedDate(attrs.date);
                         return attrs;
                     });
 
-                    var blob = new Blob([tpl(list)], {type: 'text\/html'});
-                    var reader = new FileReader();
+                    const blob = new Blob([tpl(list)], {type: 'text\/html'});
+                    const reader = new FileReader();
                     reader.readAsDataURL(blob);
                     reader.onload = function () {
                         window.open(this.result.replace('data:text/html;', 'data:text/html;charset=utf-8;'));
