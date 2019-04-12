@@ -379,11 +379,20 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                         searchInContent = true;
                     }
                     const expression = new RegExp(RegExp.escape(query), 'i');
-                    console.log(list.views);
                     list.views.some(function (view) {
                         if (!view.model) {
                             return true;
                         }
+                        const sourceId = view.model.get('SourceID');
+                        const sourceItem = querySelector('[data-id="' + sourceId + '"]');
+                        if (!sourceItem) {
+                            return true;
+                        }
+                        if (!sourceItem.classList.contains('selected')) {
+                            return true;
+                        }
+
+
                         if (expression.test(view.model.get('title')) || expression.test(view.model.get('author')) || (searchInContent && expression.test(view.model.get('content')))) {
                             view.el.classList.remove('hidden');
                         } else {
