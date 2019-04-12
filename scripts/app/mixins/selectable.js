@@ -21,7 +21,7 @@ define([], function () {
                 nextElement = this.selectPivot.el.nextElementSibling;
             } else {
                 currentElement = this.el.querySelector('.last-selected');
-                nextElement = currentElement.nextElementSibling;
+                currentElement && (nextElement = currentElement.nextElementSibling);
             }
             while (nextElement && !nextElement.matches(selector)) {
                 nextElement = nextElement.nextElementSibling;
@@ -52,7 +52,7 @@ define([], function () {
                 previousElement = this.selectPivot.el.previousElementSibling;
             } else {
                 currentElement = this.el.querySelector('.last-selected');
-                previousElement = currentElement.previousElementSibling;
+                currentElement && (previousElement = currentElement.previousElementSibling);
 
             }
             while (previousElement && !previousElement.matches(selector)) {
@@ -91,7 +91,7 @@ define([], function () {
                     return;
                 }
 
-                setTimeout(()=> {
+                setTimeout(() => {
                     this.trigger('pick', view, e);
                 }, 0);
 
