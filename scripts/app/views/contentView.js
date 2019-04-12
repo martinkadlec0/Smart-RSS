@@ -178,45 +178,42 @@ define([
             render: function () {
                 clearTimeout(this.renderTimeout);
 
-                this.renderTimeout = setTimeout(function (that) {
+                this.renderTimeout = setTimeout( () =>{
 
-                    if (!that.model) {
+                    if (!this.model) {
                         return;
                     }
-                    that.show();
+                    this.show();
 
-                    const data = Object.create(that.model.attributes);
-                    data.date = that.getFormattedDate(that.model.get('date'));
+                    const data = Object.create(this.model.attributes);
+                    data.date = this.getFormattedDate(this.model.get('date'));
                     data.title = stripTags(data.title).trim() || '&lt;no title&gt;';
                     data.url = escapeHtml(data.url);
                     data.titleIsLink = bg.settings.get('titleIsLink');
 
-                    const source = that.model.getSource();
-                    const content = that.model.get('content');
+                    const source = this.model.getSource();
+                    const content = this.model.get('content');
 
-
-                    that.el.innerHTML = that.template(data);
+                    this.el.innerHTML = this.template(data);
 
                     // first load might be too soon
                     const sandbox = app.content.sandbox;
                     const frame = sandbox.el;
 
-                    if (sandbox.loaded) {
+                    const loadContent = () => {
                         frame.contentWindow.scrollTo(0, 0);
                         frame.contentDocument.documentElement.style.fontSize = bg.settings.get('articleFontSize') + '%';
                         frame.contentDocument.querySelector('base').href = source.get('base') || source.get('url');
                         frame.contentDocument.querySelector('#smart-rss-content').innerHTML = content;
-                        frame.contentDocument.querySelector('#smart-rss-url').href = that.model.get('url');
+                        frame.contentDocument.querySelector('#smart-rss-url').href = this.model.get('url');
+                    };
+
+                    if (sandbox.loaded) {
+                        loadContent();
                     } else {
-                        sandbox.on('load', function () {
-                            frame.contentWindow.scrollTo(0, 0);
-                            frame.contentDocument.documentElement.style.fontSize = bg.settings.get('articleFontSize') + '%';
-                            frame.contentDocument.querySelector('base').href = source ? source.get('base') || source.get('url') : '#';
-                            frame.contentDocument.querySelector('#smart-rss-content').innerHTML = content;
-                            frame.contentDocument.querySelector('#smart-rss-url').href = that.model.get('url');
-                        });
+                        sandbox.on('load', loadContent);
                     }
-                }, 50, this);
+                }, 50);
 
                 return this;
             },
