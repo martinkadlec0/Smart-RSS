@@ -64,9 +64,15 @@ define([
                 }
             },
             render: function (noinfo) {
+                this.el.classList.remove('has-unread');
                 const data = this.model.toJSON();
+                data.count = 0;
                 if (this.model.get('name') === 'all-feeds') {
                     data.count = bg.info.get('allCountUnread');
+                }
+
+                if (data.count > 0) {
+                    this.el.classList.add('has-unread');
                 }
                 this.el.innerHTML = this.template(data);
                 if (!noinfo) {
