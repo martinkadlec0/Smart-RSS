@@ -109,7 +109,6 @@ define([
 
                 const activeRegion = activeElement.closest('.region');
                 const activeRegionName = activeRegion ? activeRegion.getAttribute('name') : null;
-                console.log(activeRegion, activeRegionName);
 
                 if (activeRegionName && activeRegionName in shortcuts) {
                     if (shortcut in shortcuts[activeRegionName]) {
