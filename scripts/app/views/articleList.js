@@ -380,9 +380,6 @@ define([
              * @param items {Backbone.Collection} bg.Items
              */
             addItems: function (items) {
-                let display = this.el.style.display;
-                this.el.style.display = 'none';
-
                 groups.reset();
 
                 /**
@@ -403,7 +400,6 @@ define([
                 if (document.querySelector('input[type="search"]').value !== '') {
                     app.actions.execute('articles:search');
                 }
-                this.el.style.display = display;
             },
 
             /**
@@ -415,7 +411,7 @@ define([
                 if (this.currentData.name === 'trash') {
                     app.articles.toolbar.showItems('articles:update');
                     app.articles.toolbar.hideItems('articles:undelete');
-                    document.querySelector('#context-undelete').style.display = 'none';
+                    document.querySelector('#context-undelete').classList.add('hidden');
                 }
 
                 this.currentData = {
@@ -446,7 +442,7 @@ define([
                 // if newly selected is trash
                 if (this.currentData.name === 'trash') {
                     app.articles.toolbar.hideItems('articles:update').showItems('articles:undelete');
-                    document.querySelector('#context-undelete').style.display = 'block';
+                    document.querySelector('#context-undelete').classList.remove('hidden');
                 }
 
                 const items = searchIn.filter((item) => {
@@ -569,7 +565,7 @@ define([
             destroyItem: function (view) {
                 this.nextFrameStore.push(view);
                 if (!this.nextFrame) {
-                    this.nextFrame = requestAnimationFrame( ()=> {
+                    this.nextFrame = requestAnimationFrame(() => {
                         for (let i = 0, j = this.nextFrameStore.length - 1; i < j; i++) {
                             this.destroyItemFrame(this.nextFrameStore[i]);
                         }
