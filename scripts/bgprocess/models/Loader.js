@@ -37,7 +37,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                     return;
                 }
                 this.sourcesToLoad.push(source);
-                this.set('maxSources', this.get('maxSources') + 1);
+                this.set('maxSources', this.get('maxSources') + 1, {silent: true});
                 return;
             }
             console.log('not a valid source');
