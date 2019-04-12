@@ -520,6 +520,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
 
                     [...articleList.el.querySelectorAll('.articles-list-item:not(.hidden)')].forEach((element) => {
                         element.view.el.classList.add('selected');
+                        articleList.selectedItems.push(element.view);
                     });
 
                     const lastSelected = articleList.el.querySelector('.last-selected');
