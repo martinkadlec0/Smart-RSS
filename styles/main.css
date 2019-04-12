@@ -143,7 +143,6 @@ input[type=search]:not(:focus):not(:valid) {
     box-shadow: var(--overlay-box-shadow);
     user-select: none;
     cursor: default;
-    display: none;
 }
 
 .context-menu-icon {

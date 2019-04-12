@@ -78,7 +78,7 @@ define([
              * @triggered when 'hide-overlays' comm message is sent
              */
             hide: function () {
-                this.el.style.display = 'none';
+                this.el.classList.add('hidden');
             },
 
             /**
@@ -91,6 +91,7 @@ define([
                 this.menuCollection = new MenuCollection(mc);
                 this.addItems(this.menuCollection);
                 document.body.insertAdjacentElement('beforeend', this.render().el);
+                this.hide();
 
                 this.listenTo(comm, 'hide-overlays', this.hide);
             },
@@ -102,7 +103,7 @@ define([
              * @param y {Number} y-coordinate
              */
             show: function (x, y) {
-                this.el.style.display = 'block';
+                this.el.classList.remove('hidden');
                 if (x + this.el.offsetWidth + 4 > document.body.offsetWidth) {
                     x = document.body.offsetWidth - this.el.offsetWidth - 8;
                 }
