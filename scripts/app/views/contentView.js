@@ -256,8 +256,6 @@ define([
             show: function () {
                 [...document.querySelectorAll('header,iframe')].forEach((element) => {
                     element.classList.remove('hidden');
-                    element.style.display = 'block';
-                    // move to stylesheet
                 });
             }
         });
