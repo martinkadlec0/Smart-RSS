@@ -102,15 +102,15 @@ define([
              * @param y {Number} y-coordinate
              */
             show: function (x, y) {
-                if (x + this.el.innerWidth + 4 > document.body.offsetWidth) {
-                    x = document.body.offsetWidth - this.el.innerWidth - 8;
+                this.el.style.display = 'block';
+                if (x + this.el.offsetWidth + 4 > document.body.offsetWidth) {
+                    x = document.body.offsetWidth - this.el.offsetWidth - 8;
                 }
-                if (y + this.el.innerHeight + 4 > document.body.offsetHeight) {
-                    y = document.body.offsetHeight - this.el.innerHeight - 8;
+                if (y + this.el.offsetHeight + 4 > document.body.offsetHeight) {
+                    y = document.body.offsetHeight - this.el.offsetHeight - 8;
                 }
                 this.el.style.left = x + 'px';
                 this.el.style.top = y +'px';
-                this.el.style.display = 'block';
             }
         });
 
