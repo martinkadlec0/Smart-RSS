@@ -17,7 +17,7 @@ define(['backbone', 'models/Item', 'preps/indexeddb'], function (BB, Item) {
     let Items = BB.Collection.extend({
         model: Item,
         batch: false,
-        localStorage: new Backbone.LocalStorage('items-backbone'),
+        indexedDB: new Backbone.IndexedDB('items-backbone'),
         comparator: function (a, b, sorting) {
             let val;
             sortBy = sorting || settings.get('sortBy');

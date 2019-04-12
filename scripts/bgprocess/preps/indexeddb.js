@@ -9,7 +9,7 @@ define(['backbone', 'backboneDB'], function (BB) {
      * IndexedDB preps.
      */
 
-    BB.LocalStorage.prepare = function (db) {
+    BB.IndexedDB.prepare = function (db) {
         if (!db.objectStoreNames.contains('settings-backbone')) {
             db.createObjectStore('settings-backbone', {keyPath: 'id'});
         }
@@ -35,7 +35,7 @@ define(['backbone', 'backboneDB'], function (BB) {
      * 1 -> 3: Main objects stores and testing
      * 3 -> 4: Added toolbars-backbone store
      */
-    BB.LocalStorage.version = 4;
+    BB.IndexedDB.version = 4;
 
     return true;
 });

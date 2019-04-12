@@ -32,7 +32,7 @@ define([
          */
         var Toolbars = BB.Collection.extend({
             model: Toolbar,
-            localStorage: new Backbone.LocalStorage('toolbars-backbone'),
+            indexedDB: new Backbone.IndexedDB('toolbars-backbone'),
             parse: function (data) {
                 if (!data.length) {
                     return defaultToolbarItems;

@@ -61,10 +61,10 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
 
         /**
          * @property localStorage
-         * @type Backbone.LocalStorage
+         * @type Backbone.IndexedDB
          * @default *settings-backbone*
          */
-        localStorage: new Backbone.LocalStorage('settings-backbone')
+        indexedDB: new Backbone.IndexedDB('settings-backbone')
     });
 
     return Settings;

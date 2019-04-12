@@ -12,7 +12,7 @@ define(['backbone', 'models/Source', 'preps/indexeddb'], function (BB, Source) {
      */
     return BB.Collection.extend({
         model: Source,
-        localStorage: new Backbone.LocalStorage('sources-backbone'),
+        indexedDB: new Backbone.IndexedDB('sources-backbone'),
         comparator: function (a, b) {
             const t1 = (a.get('title') || '').trim().toLowerCase();
             const t2 = (b.get('title') || '').trim().toLowerCase();
