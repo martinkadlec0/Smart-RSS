@@ -5,6 +5,7 @@ define([
 
         return BB.View.extend({
             id: 'properties',
+            className: 'hidden',
             current: null,
             template: template(Locale.translateHTML(tplProperties)),
             events: {
@@ -169,10 +170,10 @@ define([
                 this.current = source;
                 this.render();
 
-                this.el.style.display = 'block';
+                this.el.classList.remove('hidden');
             },
             hide: function () {
-                this.el.style.display = 'none';
+                this.el.classList.add('hidden');
             }
         });
     });

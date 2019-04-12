@@ -437,7 +437,6 @@ input[type=search]:not(:focus):not(:valid) {
     padding: 10px;
     background: var(--grey-10);
     border-bottom: var(--border);
-    display: none;
 }
 
 #properties label {

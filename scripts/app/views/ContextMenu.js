@@ -13,7 +13,7 @@ define([
          * @constructor
          * @extends Backbone.View
          */
-        var ContextMenu = BB.View.extend({
+        let ContextMenu = BB.View.extend({
 
             /**
              * Tag name of content view element
@@ -29,13 +29,13 @@ define([
              * @default 'context-menu'
              * @type String
              */
-            className: 'context-menu',
+            className: 'context-menu hidden',
 
             /**
              * Backbone collection of all context menu items
              * @property menuCollection
              * @default 'context-menu'
-             * @type collections/MenuCollection
+             * @type MenuCollection
              */
             menuCollection: null,
 
@@ -63,36 +63,17 @@ define([
                 });
             },
 
-            /**
-             * Renders the context menu (nothing is happening in the render method right now)
-             * @method render
-             * @chainable
-             */
-            render: function () {
-                return this;
-            },
-
-            /**
-             * Hides the context menu
-             * @method hide
-             * @triggered when 'hide-overlays' comm message is sent
-             */
-            hide: function () {
-                this.el.classList.add('hidden');
-            },
 
             /**
              * Called when new instance is created
              * @method initialize
-             * @param mc {collections/MenuCollection} Menu collection for this context menu
+             * @param mc {MenuCollection} Menu collection for this context menu
              */
             initialize: function (mc) {
                 this.el.view = this;
                 this.menuCollection = new MenuCollection(mc);
                 this.addItems(this.menuCollection);
                 document.body.insertAdjacentElement('beforeend', this.render().el);
-                this.hide();
-
                 this.listenTo(comm, 'hide-overlays', this.hide);
             },
 
@@ -111,7 +92,16 @@ define([
                     y = document.body.offsetHeight - this.el.offsetHeight - 8;
                 }
                 this.el.style.left = x + 'px';
-                this.el.style.top = y +'px';
+                this.el.style.top = y + 'px';
+            },
+
+            /**
+             * Hides the context menu
+             * @method hide
+             * @triggered when 'hide-overlays' comm message is sent
+             */
+            hide: function () {
+                this.el.classList.add('hidden');
             }
         });
 
