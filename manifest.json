@@ -64,7 +64,8 @@
   },
   "applications": {
     "gecko": {
-      "id": "smart-rss@mozilla.firefox"
+      "id": "smart-rss@mozilla.firefox",
+      "strict_min_version": "56.0"
     }
   }
 }
