@@ -190,7 +190,9 @@ define([
                     this.el.removeChild(this.el.firstChild);
                 }
 
-                this.el.insertAdjacentHTML('beforeend', this.template(data));
+                const fragment = document.createRange().createContextualFragment(this.template(data));
+                this.el.appendChild(fragment);
+
 
                 this.setTitle(this.model.get('count'), this.model.get('countAll'));
 
