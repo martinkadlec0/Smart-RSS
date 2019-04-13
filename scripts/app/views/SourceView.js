@@ -66,6 +66,10 @@ define([
 
                 this.setTitle(this.model.get('count'), this.model.get('countAll'));
 
+                while (this.el.firstChild) {
+                    this.el.removeChild(this.el.firstChild);
+                }
+
                 const fragment = document.createRange().createContextualFragment(this.template(this.model.toJSON()));
                 this.el.appendChild(fragment);
 
