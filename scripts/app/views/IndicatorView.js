@@ -85,7 +85,7 @@ define(['backbone', 'modules/Locale', 'text!templates/indicator.html'], function
             }
             const percentage = Math.round(loader.get('loaded') * 100 / loader.get('maxSources'));
             this.el.querySelector('#indicator-progress').style.background = 'linear-gradient(to right,  #c5c5c5 ' + percentage + '%, #eee ' + percentage + '%)';
-            this.el.querySelector('#indicator-progress').innerHTML = Locale.UPDATING_FEEDS + ' (' + loader.get('loaded') + '/' + loader.get('maxSources') + ')';
+            this.el.querySelector('#indicator-progress').textContent = Locale.UPDATING_FEEDS + ' (' + loader.get('loaded') + '/' + loader.get('maxSources') + ')';
             return this;
         }
     });
