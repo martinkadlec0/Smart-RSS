@@ -43,7 +43,7 @@ JSON.safeParse = function (str) {
 chrome.runtime.getBackgroundPage(function (bg) {
     const documentReady = () => {
         const version = chrome.runtime.getManifest().version;
-        document.querySelector('#version').innerHTML = version;
+        document.querySelector('#version').textContent = version;
 
         [...document.querySelectorAll('select[id], input[type=number], input[type=range], input[type=range]')].forEach((item) => {
             item.value = bg.settings.get(item.id);
@@ -149,14 +149,14 @@ chrome.runtime.getBackgroundPage(function (bg) {
 
         smartExportStatus.setAttribute('href', '#');
         smartExportStatus.removeAttribute('download');
-        smartExportStatus.innerHTML = 'Exporting, please wait';
+        smartExportStatus.textContent = 'Exporting, please wait';
 
 
         setTimeout(() => {
             const expr = new Blob([JSON.stringify(data)]);
             smartExportStatus.setAttribute('href', URL.createObjectURL(expr));
             smartExportStatus.setAttribute('download', 'exported-rss.smart');
-            smartExportStatus.innerHTML = 'Click to download exported data';
+            smartExportStatus.textContent = 'Click to download exported data';
         }, 20);
     }
 
@@ -188,7 +188,7 @@ chrome.runtime.getBackgroundPage(function (bg) {
 
         opmlExportStatus.setAttribute('href', '#');
         opmlExportStatus.removeAttribute('download');
-        opmlExportStatus.innerHTML = 'Exporting, please wait';
+        opmlExportStatus.textContent = 'Exporting, please wait';
 
         const start = '<?xml version="1.0" encoding="utf-8"?>\n<opml version="1.0">\n<head>\n\t<title>Newsfeeds exported from Smart RSS</title>\n</head>\n<body>';
         const end = '\n</body>\n</opml>';
@@ -230,7 +230,7 @@ chrome.runtime.getBackgroundPage(function (bg) {
             const expr = new Blob([(new XMLSerializer()).serializeToString(doc)]);
             opmlExportStatus.setAttribute('href', URL.createObjectURL(expr));
             opmlExportStatus.setAttribute('download', 'exported-rss.opml');
-            opmlExportStatus.innerHTML = 'Click to download exported data';
+            opmlExportStatus.textContent = 'Click to download exported data';
         }, 20);
     }
 
@@ -238,34 +238,34 @@ chrome.runtime.getBackgroundPage(function (bg) {
         const smartImportStatus = document.querySelector('#smart-imported');
         const file = e.target.files[0];
         if (!file || file.size === 0) {
-            smartImportStatus.innerHTML = 'Wrong file';
+            smartImportStatus.textContent = 'Wrong file';
             return;
         }
-        smartImportStatus.innerHTML = 'Loading & parsing file';
+        smartImportStatus.textContent = 'Loading & parsing file';
 
         const reader = new FileReader();
         reader.onload = function () {
             const data = JSON.safeParse(this.result);
 
             if (!data || !data.items || !data.sources) {
-                smartImportStatus.innerHTML = 'Wrong file';
+                smartImportStatus.textContent = 'Wrong file';
                 return;
             }
 
-            smartImportStatus.innerHTML = 'Importing, please wait!';
+            smartImportStatus.textContent = 'Importing, please wait!';
 
             const worker = new Worker('scripts/options/worker.js');
             worker.onmessage = function (e) {
                 if (e.data.action === 'finished') {
-                    smartImportStatus.innerHTML = 'Loading data to memory!';
+                    smartImportStatus.textContent = 'Loading data to memory!';
 
                     bg.fetchAll().always(function () {
                         bg.info.refreshSpecialCounters();
-                        smartImportStatus.innerHTML = 'Import fully completed!';
+                        smartImportStatus.textContent = 'Import fully completed!';
                         bg.loader.downloadAll(true);
                     });
                 } else if (e.data.action === 'message') {
-                    smartImportStatus.innerHTML = e.data.value;
+                    smartImportStatus.textContent = e.data.value;
                 }
             };
             worker.postMessage({action: 'file-content', value: data});
@@ -292,11 +292,11 @@ chrome.runtime.getBackgroundPage(function (bg) {
         const opmlImportStatus = document.querySelector('#opml-imported');
         const file = e.target.files[0];
         if (!file || file.size === 0) {
-            opmlImportStatus.innerHTML = 'Wrong file';
+            opmlImportStatus.textContent = 'Wrong file';
             return;
         }
 
-        opmlImportStatus.innerHTML = 'Importing, please wait!';
+        opmlImportStatus.textContent = 'Importing, please wait!';
 
         const reader = new FileReader();
         reader.onload = function () {
@@ -304,7 +304,7 @@ chrome.runtime.getBackgroundPage(function (bg) {
             const doc = parser.parseFromString(this.result, 'application/xml');
 
             if (!doc) {
-                opmlImportStatus.innerHTML = 'Wrong file';
+                opmlImportStatus.textContent = 'Wrong file';
                 return;
             }
 
@@ -345,7 +345,7 @@ chrome.runtime.getBackgroundPage(function (bg) {
                 }
             });
 
-            opmlImportStatus.innerHTML = 'Import completed!';
+            opmlImportStatus.textContent = 'Import completed!';
 
             setTimeout(function () {
                 bg.loader.downloadAll(true);
