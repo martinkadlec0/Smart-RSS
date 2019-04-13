@@ -88,8 +88,9 @@ define([
                     while (this.el.firstChild) {
                         this.el.removeChild(this.el.firstChild);
                     }
-                    this.el.insertAdjacentHTML('beforeend', this.template(properties));
 
+                    const fragment = document.createRange().createContextualFragment(this.template(properties));
+                    this.el.appendChild(fragment);
 
                     let folders = bg.folders;
                     let parentSelect = document.querySelector('#prop-parent');
