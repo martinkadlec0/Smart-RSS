@@ -1,5 +1,5 @@
 define(['backbone'], function (BB) {
-    var ToolbarButtonView = BB.View.extend({
+    return BB.View.extend({
         tagName: 'div',
         className: 'button',
         initialize: function () {
@@ -15,6 +15,4 @@ define(['backbone'], function (BB) {
             this.el.view = this;
         }
     });
-
-    return ToolbarButtonView;
 });
