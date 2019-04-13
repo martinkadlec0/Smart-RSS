@@ -73,7 +73,7 @@ define([
                 this.el.view = this;
                 this.menuCollection = new MenuCollection(mc);
                 this.addItems(this.menuCollection);
-                document.body.insertAdjacentElement('beforeend', this.render().el);
+                document.body.appendChild(this.render().el);
                 this.listenTo(comm, 'hide-overlays', this.hide);
             },
 
