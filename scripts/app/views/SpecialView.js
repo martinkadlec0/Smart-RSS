@@ -74,7 +74,10 @@ define([
                 if (data.count > 0) {
                     this.el.classList.add('has-unread');
                 }
-                this.el.innerHTML = this.template(data);
+
+                const fragment = document.createRange().createContextualFragment(this.template(data));
+                this.el.appendChild(fragment);
+
                 if (!noinfo) {
                     this.changeInfo();
                 }
