@@ -26,7 +26,9 @@ define(['backbone', 'modules/Locale', 'text!templates/indicator.html'], function
          * @method initialize
          */
         initialize: function () {
-            this.el.innerHTML = tplIndicator;
+            const fragment = document.createRange().createContextualFragment(tplIndicator);
+            this.el.appendChild(fragment);
+
             bg.loader.on('change:loading', this.handleLoadingChange, this);
             bg.loader.on('change:loaded', this.render, this);
             bg.loader.on('change:maxSources', this.render, this);
