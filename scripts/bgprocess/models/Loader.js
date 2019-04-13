@@ -14,7 +14,9 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
         defaults: {
             maxSources: 0,
             loaded: 0,
-            loading: false
+            loading: false,
+            sourcesToLoad: [],
+            sourcesLoading: []
         },
         itemsDownloaded: false,
         sourcesToLoad: [],

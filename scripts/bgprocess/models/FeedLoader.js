@@ -10,7 +10,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
         constructor: function (loader) {
             this.loader = loader;
             this.request = new XMLHttpRequest();
-            this.request.timeout = 1000 * 30; // TODO: make configurable
+            this.request.timeout = 1000 * 15; // TODO: make configurable
             this.request.onload = this.onLoad.bind(this);
             this.request.onerror = this.onError.bind(this);
             this.request.ontimeout = this.onTimeout.bind(this);
@@ -160,8 +160,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                 return this.loader.workerFinished(this);
             }
             if (loader.sourcesLoading.includes(this.model)) {
-                // shouldn't really happen
-                console.log('non-atomic after all');
+                // may happen if source is still loading after last attempt
                 return this.downloadNext();
             }
             this.loader.sourcesLoading.push(this.model);
