@@ -178,7 +178,7 @@ define([
             render: function () {
                 clearTimeout(this.renderTimeout);
 
-                this.renderTimeout = setTimeout( () =>{
+                this.renderTimeout = setTimeout(() => {
 
                     if (!this.model) {
                         return;
@@ -194,7 +194,12 @@ define([
                     const source = this.model.getSource();
                     const content = this.model.get('content');
 
-                    this.el.innerHTML = this.template(data);
+                    while (this.el.firstChild) {
+                        this.el.removeChild(this.el.firstChild);
+                    }
+
+                    const fragment = document.createRange().createContextualFragment(this.template(data));
+                    this.el.appendChild(fragment);
 
                     // first load might be too soon
                     const sandbox = app.content.sandbox;
@@ -204,7 +209,16 @@ define([
                         frame.contentWindow.scrollTo(0, 0);
                         frame.contentDocument.documentElement.style.fontSize = bg.settings.get('articleFontSize') + '%';
                         frame.contentDocument.querySelector('base').href = source.get('base') || source.get('url');
-                        frame.contentDocument.querySelector('#smart-rss-content').innerHTML = content;
+
+                        const contentElement = frame.contentDocument.querySelector('#smart-rss-content');
+                        while (contentElement.firstChild) {
+                            contentElement.removeChild(contentElement.firstChild);
+                        }
+
+                        const fragment = document.createRange().createContextualFragment(content);
+                        contentElement.appendChild(fragment);
+
+
                         frame.contentDocument.querySelector('#smart-rss-url').href = this.model.get('url');
                     };
 
