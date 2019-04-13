@@ -301,9 +301,12 @@ input[type=search]:not(:focus):not(:valid) {
     cursor: pointer;
 }
 
-.sources-list-item:hover .source-title {
+.sources-list-item:hover:not(.selected) .source-title {
     color: var(--blue-40);
-    text-decoration: underline;
+}
+
+.sources-list-item.selected:hover .source-title {
+    color: var(--grey-90);
 }
 
 .source-icon {
