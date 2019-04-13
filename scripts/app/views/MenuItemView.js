@@ -15,7 +15,10 @@ define(['backbone'], function (BB) {
             while (this.el.firstChild) {
                 this.el.removeChild(this.el.firstChild);
             }
-            this.el.insertAdjacentHTML('beforeend', '<img class="context-menu-icon" alt="" src=""/>' + this.model.get('title'));
+
+            const fragment = document.createRange().createContextualFragment('<img class="context-menu-icon" alt="" src=""/>' + this.model.get('title'));
+            this.el.appendChild(fragment);
+
             if (this.model.get('icon')) {
                 this.el.querySelector('img').setAttribute('src', '/images/' + this.model.get('icon'));
             }
