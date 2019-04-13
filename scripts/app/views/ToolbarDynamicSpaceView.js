@@ -1,12 +1,10 @@
 define(['backbone', ], function (BB) {
-	var ToolbarDynamicSpaceView = BB.View.extend({
+	return BB.View.extend({
 		tagName: 'div',
 		className: 'dynamic-space',
-		initialize: function() {
+		initialize: function () {
 			// this.el.setAttribute('draggable', 'true');
 			this.el.view = this;
 		}
 	});
-
-	return ToolbarDynamicSpaceView;
 });
