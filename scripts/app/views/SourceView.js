@@ -66,7 +66,8 @@ define([
 
                 this.setTitle(this.model.get('count'), this.model.get('countAll'));
 
-                this.el.innerHTML = this.template(this.model.toJSON());
+                const fragment = document.createRange().createContextualFragment(this.model.toJSON());
+                this.el.appendChild(fragment);
 
                 if (bg.sourceToFocus === this.model.get('id')) {
                     setTimeout(function () {
