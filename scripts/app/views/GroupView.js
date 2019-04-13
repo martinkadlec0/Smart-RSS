@@ -10,7 +10,7 @@ define(['backbone'], function (BB) {
      * @constructor
      * @extends Backbone.View
      */
-    var GroupView = BB.View.extend({
+    let GroupView = BB.View.extend({
 
         /**
          * Tag name of date group element
@@ -45,7 +45,7 @@ define(['backbone'], function (BB) {
          * @method render
          */
         render: function () {
-            this.el.innerHTML = this.model.get('title');
+            this.el.textContent = this.model.get('title');
             return this;
         },
 
