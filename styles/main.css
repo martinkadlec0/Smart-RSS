@@ -535,7 +535,7 @@ input[type=search]:not(:focus):not(:valid) {
     outline: none;
 }
 
-.articles-list-item:active *,
+
 .selected * {
     color: var(--grey-10);
 }
