@@ -51,7 +51,7 @@ const handleLinkClick = (event) => {
 const renderButton = (data) => {
     const element = document.createElement('li');
     element.setAttribute('data-url', data.url);
-    element.insertAdjacentHTML('beforeend', '• ' + data.title);
+    element.textContent = '• ' + data.title;
     list.appendChild(element);
 };
 
