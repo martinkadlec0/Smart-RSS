@@ -96,7 +96,7 @@ define([
                     let parentSelect = document.querySelector('#prop-parent');
                     folders.forEach((folder) => {
                         const option = document.createElement('option');
-                        option.insertAdjacentHTML('beforeEnd', folder.get('title'));
+                        option.textContent = folder.get('title');
                         option.setAttribute('value', folder.get('id'));
                         if (folder.get('id') === this.current.get('folderID')) {
                             option.setAttribute('selected', '');
@@ -147,11 +147,10 @@ define([
                     while (this.el.firstChild) {
                         this.el.removeChild(this.el.firstChild);
                     }
-                    if (isFolder) {
-                        this.el.insertAdjacentHTML('beforeend', this.template(Object.assign(params, this.current.attributes)));
-                    } else {
-                        this.el.insertAdjacentHTML('beforeend', this.template(params));
-                    }
+                    const templateData = isFolder ? Object.assign(params, this.current.attributes) : params;
+
+                    const fragment = document.createRange().createContextualFragment(this.template(templateData));
+                    this.el.appendChild(fragment);
 
                     /**
                      * Set <select>s's values
