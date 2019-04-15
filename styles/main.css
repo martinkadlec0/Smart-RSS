@@ -287,6 +287,7 @@ input[type=search]:not(:focus):not(:valid) {
     overflow-x: hidden;
     overflow-y: auto;
     display: flex;
+    min-width: 0;
     flex-flow: column;
 }
 
@@ -446,6 +447,7 @@ input[type=search]:not(:focus):not(:valid) {
     flex-basis: 2rem;
     padding: 0.1rem;
     display: flex;
+    min-width: 0;
     flex-flow: row;
     align-items: stretch;
 }
