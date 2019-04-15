@@ -60,7 +60,7 @@ define([
                 if (this.model.get('folderID')) {
                     this.el.dataset.inFolder = this.model.get('folderID');
                 } else {
-                    this.el.classList.remove('hidden');
+                    this.el.hidden = false;
                     delete this.el.dataset.inFolder;
                 }
 
