@@ -163,17 +163,12 @@ input[type=search]:not(:focus):not(:valid) {
     overflow: hidden;
     text-overflow: ellipsis;
     cursor: pointer;
-    padding-top: 5px;
-    padding-right: 6px;
-    padding-left: 3px;
-    padding-bottom: 5px;
-    /*border: 1px solid transparent;*/
+    padding: 5px 6px 5px 3px;
 }
 
 .context-menu-item:hover {
-    border-radius: 0px;
+    border-radius: 0;
     background-color: var(--blue-40);
-    /*border-color: var(--blue-40);*/
 }
 
 /**
@@ -219,7 +214,6 @@ input[type=search]:not(:focus):not(:valid) {
 .subregions {
     flex-shrink: 1;
     flex-grow: 1;
-    /*flex-basis: auto;*/
 }
 
 .regions.vertical {
@@ -227,7 +221,6 @@ input[type=search]:not(:focus):not(:valid) {
 }
 
 .region {
-    /*min-width: 100px;*/
     min-height: 180px;
     border-right: var(--border);
     display: flex;
@@ -261,7 +254,6 @@ input[type=search]:not(:focus):not(:valid) {
 #region-content {
     flex-shrink: 1;
     flex-grow: 1;
-    /*flex-basis: auto;*/
 }
 
 .region:focus {
@@ -752,7 +744,3 @@ footer {
     display: none;
 }
 
-
-/*.visible {*/
-/*display: block;*/
-/*}*/
