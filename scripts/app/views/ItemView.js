@@ -124,6 +124,7 @@ define([
             }
 
             let article = this.model.toJSON();
+            article.datetime = new Date(article.date).toISOString();
             article.date = this.getItemDate(article.date);
             article.title = stripTags(article.title).trim() || '&lt;no title&gt;';
             this.el.setAttribute('href', article.url);
