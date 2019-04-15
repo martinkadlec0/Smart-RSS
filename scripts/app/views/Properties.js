@@ -5,7 +5,6 @@ define([
 
         return BB.View.extend({
             id: 'properties',
-            className: 'hidden',
             current: null,
             template: template(Locale.translateHTML(tplProperties)),
             events: {
@@ -76,6 +75,9 @@ define([
                     this.handleClick(e);
                 }
             },
+            initialize: function () {
+                this.el.hidden = true;
+            },
             render: function () {
                 if (!this.current) {
                     return;
@@ -121,7 +123,7 @@ define([
                     const params = {updateEveryDiffers: 0, autoremoveDiffers: 0, firstUpdate: 0, firstAutoremove: 0};
 
                     /**
-                     * Test if all selected feeds has the same properteies or if tehy are mixed
+                     * Test if all selected feeds has the same properties or if they are mixed
                      */
 
                     if (listOfSources.length) {
@@ -170,10 +172,10 @@ define([
                 this.current = source;
                 this.render();
 
-                this.el.classList.remove('hidden');
+                this.el.hidden = false;
             },
             hide: function () {
-                this.el.classList.add('hidden');
+                this.el.hidden = true;
             }
         });
     });

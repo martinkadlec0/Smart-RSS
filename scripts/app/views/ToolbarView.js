@@ -77,7 +77,8 @@ define([
                 const list = [...this.el.querySelectorAll('[data-action="' + action + '"]')];
 
                 list.forEach((item) => {
-                    item.classList.add('hidden');
+                    item.hidden = true;
+                    ;
                 });
 
                 this.hiddenItems = [...new Set(this.hiddenItems.concat(list))];
@@ -93,7 +94,7 @@ define([
             showItems: function (action) {
                 this.hiddenItems = this.hiddenItems.filter((item) => {
                     if (item.dataset.action === action) {
-                        item.classList.remove('hidden');
+                        item.hidden = false;
                         return false;
                     }
                     return true;

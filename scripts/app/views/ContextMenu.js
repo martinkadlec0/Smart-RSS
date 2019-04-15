@@ -29,7 +29,7 @@ define([
              * @default 'context-menu'
              * @type String
              */
-            className: 'context-menu hidden',
+            className: 'context-menu',
 
             /**
              * Backbone collection of all context menu items
@@ -71,6 +71,7 @@ define([
              */
             initialize: function (mc) {
                 this.el.view = this;
+                this.el.hidden = true;
                 this.menuCollection = new MenuCollection(mc);
                 this.addItems(this.menuCollection);
                 document.body.appendChild(this.render().el);
@@ -84,7 +85,7 @@ define([
              * @param y {Number} y-coordinate
              */
             show: function (x, y) {
-                this.el.classList.remove('hidden');
+                this.el.hidden = false;
                 if (x + this.el.offsetWidth + 4 > document.body.offsetWidth) {
                     x = document.body.offsetWidth - this.el.offsetWidth - 8;
                 }
@@ -101,7 +102,7 @@ define([
              * @triggered when 'hide-overlays' comm message is sent
              */
             hide: function () {
-                this.el.classList.add('hidden');
+                this.el.hidden = true;
             }
         });
 

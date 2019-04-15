@@ -349,7 +349,7 @@ define([
              * Places source to its right place
              * @method placeSource
              * @param view {views/TopView} Feed/Folder/Special to add
-             * @param noManualSort {Boolean} When false, the rigt place is computed
+             * @param noManualSort {Boolean} When false, the right place is computed
              */
             placeSource: function (view, noManualSort) {
                 let sourceViews;
@@ -367,7 +367,7 @@ define([
                         }
 
                         if (!folder.view.model.get('opened')) {
-                            view.el.classList.add('hidden');
+                            view.el.hidden = true;
                         }
 
                         return;

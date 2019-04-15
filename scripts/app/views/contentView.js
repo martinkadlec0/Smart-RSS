@@ -256,7 +256,7 @@ define([
              */
             hide: function () {
                 [...document.querySelectorAll('header,iframe')].forEach((element) => {
-                    element.classList.add('hidden');
+                    element.hidden = true;
                 });
             },
 
@@ -266,7 +266,7 @@ define([
              */
             show: function () {
                 [...document.querySelectorAll('header,iframe')].forEach((element) => {
-                    element.classList.remove('hidden');
+                    element.hidden = false;
                 });
             }
         });

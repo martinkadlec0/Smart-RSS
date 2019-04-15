@@ -411,7 +411,8 @@ define([
                 if (this.currentData.name === 'trash') {
                     app.articles.toolbar.showItems('articles:update');
                     app.articles.toolbar.hideItems('articles:undelete');
-                    document.querySelector('#context-undelete').classList.add('hidden');
+                    document.querySelector('#context-undelete').hidden = true;
+                    // document.querySelector('#context-undelete').classList.add('hidden');
                 }
 
                 this.currentData = {
@@ -442,7 +443,8 @@ define([
                 // if newly selected is trash
                 if (this.currentData.name === 'trash') {
                     app.articles.toolbar.hideItems('articles:update').showItems('articles:undelete');
-                    document.querySelector('#context-undelete').classList.remove('hidden');
+                    document.querySelector('#context-undelete').hidden = false;
+                    // document.querySelector('#context-undelete').classList.remove('hidden');
                 }
 
                 const items = searchIn.filter((item) => {

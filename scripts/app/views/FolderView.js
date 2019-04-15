@@ -151,11 +151,7 @@ define([
                 this.model.save('opened', opened);
                 const items = document.querySelectorAll('.source[data-in-folder="' + this.model.get('id') + '"]');
                 [...items].forEach((item) => {
-                    if (opened) {
-                        item.classList.remove('hidden');
-                    } else {
-                        item.classList.add('hidden');
-                    }
+                    item.hidden = !opened;
                 });
                 event.stopPropagation();
             },
