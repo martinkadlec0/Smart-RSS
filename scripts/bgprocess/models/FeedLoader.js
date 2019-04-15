@@ -119,7 +119,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             return this.onFeedProcessed(false);
         },
         onError: function () {
-            return this.onFeedProcessed(false);
+            return this.onFeedProcessed(false, this.request.status > 0);
         },
 
         removeOldItems: function () {
@@ -136,17 +136,19 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             });
         },
 
-        onFeedProcessed: function (success = true) {
-            if (success) {
+        onFeedProcessed: function (success = true, isOnline = true) {
+            isOnline = isOnline && (typeof navigator.onLine !== 'undefined' ? navigator.onLine : true);
+
+            if (success && isOnline) {
                 this.removeOldItems(this.model);
             }
             const data = {
                 isLoading: false,
                 lastChecked: Date.now(),
-                errorCount: success ? 0 : this.model.get('errorCount') + 1
+                errorCount: success ? 0 : (isOnline ? this.model.get('errorCount') + 1 : this.model.get('errorCount'))
             };
             this.model.save(data);
-            this.model.trigger('update', {ok: success});
+            this.model.trigger('update', {ok: success || !isOnline});
             this.loader.set('loaded', this.loader.get('loaded') + 1);
             this.loader.sourceLoaded(this.model);
             setTimeout(() => {
