@@ -3,10 +3,7 @@
  * @submodule models/Loader
  */
 define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favicon'], function (BB, RSSParser, animation, Favicon) {
-
-
     return Backbone.Model.extend({
-
         constructor: function (loader) {
             this.loader = loader;
             this.request = new XMLHttpRequest();
@@ -15,7 +12,6 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             this.request.onerror = this.onError.bind(this);
             this.request.ontimeout = this.onTimeout.bind(this);
         },
-
         onLoad: function () {
             let parsedData = [];
             const proxy = this.model.get('proxyThroughFeedly');
@@ -53,7 +49,9 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                 const existingItem = items.get(item.id);
                 if (!existingItem) {
                     hasNew = true;
-                    items.create(item, {sort: false});
+                    items.create(item, {
+                        sort: false
+                    });
                     lastArticle = Math.max(lastArticle, item.date);
                     createdNo++;
                     return;
@@ -65,13 +63,13 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                 }
             });
             this.model.set('lastArticle', lastArticle);
-
-            items.sort({silent: true});
+            items.sort({
+                silent: true
+            });
             if (hasNew) {
                 items.trigger('search');
                 loader.itemsDownloaded = true;
             }
-
             // remove old deleted content
             const fetchedIDs = parsedData.map((item) => {
                 return item.id;
@@ -79,31 +77,34 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             items.where({
                 sourceID: this.model.get('id'),
                 deleted: true
-            }).forEach((item) => {
-                if (!fetchedIDs.includes(item.id)) {
-                    item.destroy();
-                }
-            });
-
-            const countAll = items.where({sourceID: this.model.get('id'), trashed: false}).length;
+            })
+                .forEach((item) => {
+                    if (!fetchedIDs.includes(item.id)) {
+                        item.destroy();
+                    }
+                });
+            const countAll = items.where({
+                sourceID: this.model.get('id'),
+                trashed: false
+            })
+                .length;
             const unreadCount = items.where({
                 sourceID: this.model.get('id'),
                 unread: true,
                 trashed: false
-            }).length;
-
+            })
+                .length;
             this.model.save({
                 'count': unreadCount,
                 'countAll': countAll,
                 'lastUpdate': Date.now(),
                 'hasNew': hasNew || this.model.get('hasNew')
             });
-
             info.set({
                 allCountUnvisited: info.get('allCountUnvisited') + createdNo
             });
-
-            if (this.model.get('faviconExpires') < parseInt(Math.round((new Date()).getTime() / 1000))) {
+            if (this.model.get('faviconExpires') < parseInt(Math.round((new Date())
+                .getTime() / 1000))) {
                 return Favicon.checkFavicon(this.model)
                 // no finally available in Waterfox 56
                     .then((response) => {
@@ -121,24 +122,25 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
         onError: function () {
             return this.onFeedProcessed(false, this.request.status > 0);
         },
-
         removeOldItems: function () {
             if (!parseInt(this.model.get('autoremove'))) {
                 return;
             }
-
-            items.where({sourceID: this.model.get('id'), deleted: false, pinned: false}).forEach((item) => {
-                const date = item.get('dateCreated') || item.get('date');
-                const removalInMs = this.model.get('autoremove') * 24 * 60 * 60 * 1000;
-                if (date + removalInMs < Date.now()) {
-                    item.markAsDeleted();
-                }
-            });
+            items.where({
+                sourceID: this.model.get('id'),
+                deleted: false,
+                pinned: false
+            })
+                .forEach((item) => {
+                    const date = item.get('dateCreated') || item.get('date');
+                    const removalInMs = this.model.get('autoremove') * 24 * 60 * 60 * 1000;
+                    if (date + removalInMs < Date.now()) {
+                        item.markAsDeleted();
+                    }
+                });
         },
-
         onFeedProcessed: function (success = true, isOnline = true) {
             isOnline = isOnline && (typeof navigator.onLine !== 'undefined' ? navigator.onLine : true);
-
             if (success && isOnline) {
                 this.removeOldItems(this.model);
             }
@@ -148,14 +150,15 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                 errorCount: success ? 0 : (isOnline ? this.model.get('errorCount') + 1 : this.model.get('errorCount'))
             };
             this.model.save(data);
-            this.model.trigger('update', {ok: success || !isOnline});
+            this.model.trigger('update', {
+                ok: success || !isOnline
+            });
             this.loader.set('loaded', this.loader.get('loaded') + 1);
             this.loader.sourceLoaded(this.model);
             setTimeout(() => {
                 this.downloadNext();
             }, 100);
         },
-
         downloadNext: function () {
             this.model = this.loader.sourcesToLoad.shift();
             if (!this.model) {
@@ -166,17 +169,16 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                 return this.downloadNext();
             }
             this.loader.sourcesLoading.push(this.model);
-
             if (settings.get('showSpinner')) {
                 this.model.set('isLoading', true);
             }
             const proxy = this.model.get('proxyThroughFeedly');
-
             let url = this.model.get('url');
             if (proxy) {
-                const i = items.where({sourceID: sourceID});
+                const i = items.where({
+                    sourceID: sourceID
+                });
                 let date = 0;
-
                 i.forEach((item) => {
                     if (item.date > date) {
                         date = item.date;
@@ -188,8 +190,6 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             this.request.setRequestHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
             this.request.setRequestHeader('Pragma', 'no-cache');
             this.request.setRequestHeader('X-Time-Stamp', Date.now());
-
-
             if (!proxy && (this.model.get('username') || this.model.get('password'))) {
                 const username = this.model.get('username') || '';
                 const password = this.model.getPass() || '';
@@ -199,5 +199,4 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             this.request.send();
         }
     });
-
 });
