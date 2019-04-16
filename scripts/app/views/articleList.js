@@ -275,20 +275,22 @@ define([
              * @param view {views/ItemView}
              */
             selectAfterDelete: function (view) {
-                if (view === this.selectedItems[0]) {
+                console.log("sad")
+                // if (view === this.selectedItems[0]) {
+                    console.log(true)
                     const children = Array.from(this.el.children);
                     const length = children.length;
                     if (children[length - 1].view === view) {
                         this.selectPrev({currentIsRemoved: true});
                     } else {
-                        this.selectNext({currentIsRemoved: true});
+                        this.selectNextSelectable({currentIsRemoved: true});
                     }
-                } else {
-                    // if first item is the last item to be deleted, selecting it will trigger error - rAF to get around it
-                    requestAnimationFrame(() => {
-                        this.selectFirst();
-                    });
-                }
+                // } else {
+                //     // if first item is the last item to be deleted, selecting it will trigger error - rAF to get around it
+                //     requestAnimationFrame(() => {
+                //         this.selectFirst();
+                //     });
+                // }
             },
 
             /**
@@ -568,11 +570,12 @@ define([
                 this.nextFrameStore.push(view);
                 if (!this.nextFrame) {
                     this.nextFrame = requestAnimationFrame(() => {
+                        const lastView = this.nextFrameStore[this.nextFrameStore.length - 1];
+                        this.selectAfterDelete(lastView);
                         for (let i = 0, j = this.nextFrameStore.length - 1; i < j; i++) {
                             this.destroyItemFrame(this.nextFrameStore[i]);
                         }
-                        const lastView = this.nextFrameStore[this.nextFrameStore.length - 1];
-                        this.selectAfterDelete(lastView);
+
                         this.destroyItemFrame(lastView);
 
                         this.nextFrame = null;

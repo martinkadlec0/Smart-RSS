@@ -4,14 +4,7 @@ define([], function () {
         selectedItems: [],
         selectPivot: null,
         selectFlag: false,
-        selectFirst: function () {
-            const first = document.querySelector('.' + this.itemClass);
-            if (first) {
-                this.select(first.view);
-                first.focus();
-            }
-        },
-        selectNext: function (e) {
+        selectNextSelectable: function (e) {
             e = e || {};
 
             const selector = e.selectUnread ? '.unread' : '.' + this.itemClass;
@@ -23,11 +16,12 @@ define([], function () {
                 currentElement = this.el.querySelector('.last-selected');
                 currentElement && (nextElement = currentElement.nextElementSibling);
             }
+            console.log(nextElement);
             while (nextElement && !nextElement.matches(selector)) {
                 nextElement = nextElement.nextElementSibling;
             }
 
-            if (!nextElement && !e.shiftKey && !e.ctrlKey && bg.settings.get('circularNavigation')) {
+            if (bg.settings.get('circularNavigation') && !e.ctrlKey && !e.shiftKey && !nextElement) {
                 nextElement = this.el.querySelector(selector + ':first-child');
                 if (e.currentIsRemoved && nextElement && this.el.querySelector('.last-selected') === nextElement) {
                     nextElement = null;

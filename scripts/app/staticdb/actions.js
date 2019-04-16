@@ -201,7 +201,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
             selectNext: {
                 title: 'Select next',
                 fn: function (event) {
-                    require('views/feedList').selectNext(event);
+                    require('views/feedList').selectNextSelectable(event);
                 }
             },
             selectPrevious: {
@@ -348,7 +348,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
             },
             selectNext: {
                 fn: function (event) {
-                    require('views/articleList').selectNext(event);
+                    require('views/articleList').selectNextSelectable(event);
                 }
             },
             selectPrevious: {
@@ -455,7 +455,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 icon: 'find_next.png',
                 fn: function () {
                     require('views/articleList').changeUnreadState({onlyToRead: true});
-                    require('views/articleList').selectNext({selectUnread: true});
+                    require('views/articleList').selectNextSelectable({selectUnread: true});
                 }
             },
             markAndPrevUnread: {
@@ -470,7 +470,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 title: Locale.NEXT_UNREAD,
                 icon: 'forward.png',
                 fn: function () {
-                    require('views/articleList').selectNext({selectUnread: true});
+                    require('views/articleList').selectNextSelectable({selectUnread: true});
                 }
             },
             prevUnread: {
