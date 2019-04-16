@@ -4,25 +4,22 @@
 define([
         'controllers/comm',
         'layouts/Layout', 'collections/Actions', 'layouts/FeedsLayout', 'layouts/ArticlesLayout',
-        'layouts/ContentLayout', 'staticdb/shortcuts', 'preps/all'
+        'layouts/ContentLayout', 'staticdb/shortcuts', 'preps/extendNative'
     ],
     function (comm, Layout, Actions, FeedsLayout, ArticlesLayout, ContentLayout, shortcuts) {
 
         document.documentElement.style.fontSize = bg.settings.get('uiFontSize') + '%';
 
-        document.addEventListener('contextmenu', function (e) {
-            if (!e.target.matches('#region-content header, #region-content header *')) {
-                e.preventDefault();
+        document.addEventListener('contextmenu', function (event) {
+            if (!event.target.matches('#region-content header, #region-content header *')) {
+                event.preventDefault();
             }
         });
 
         const app = window.app = new (Layout.extend({
             el: 'body',
             fixURL: function (url) {
-                if (url.search(/[a-z]+:\/\//) === -1) {
-                    url = 'http://' + url;
-                }
-                return url;
+                return url.search(/[a-z]+:\/\//) === -1 ? 'https://' + url : url;
             },
             events: {
                 'mousedown': 'handleMouseDown'
@@ -30,9 +27,9 @@ define([
             initialize: function () {
                 this.actions = new Actions();
 
-                window.addEventListener('blur', (e) => {
+                window.addEventListener('blur', (event) => {
                     this.hideContextMenus();
-                    if (e.target instanceof window.Window) {
+                    if (event.target instanceof window.Window) {
                         comm.trigger('stop-blur');
                     }
                 });
@@ -65,8 +62,8 @@ define([
                 document.querySelector('.subregions').classList.remove('vertical');
             },
 
-            handleMouseDown: function (e) {
-                if (!e.target.matches('.context-menu, .context-menu *')) {
+            handleMouseDown: function (event) {
+                if (!event.target.matches('.context-menu, .context-menu *')) {
                     this.hideContextMenus();
                 }
             },
@@ -84,25 +81,25 @@ define([
                 this.trigger('start');
                 this.trigger('start:after');
             },
-            handleKeyDown: function (e) {
-                let activeElement = document.activeElement;
+            handleKeyDown: function (event) {
+                const activeElement = document.activeElement;
 
                 if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
                     return;
                 }
 
                 let shortcut = '';
-                if (e.ctrlKey) {
+                if (event.ctrlKey) {
                     shortcut += 'ctrl+';
                 }
-                if (e.shiftKey) {
+                if (event.shiftKey) {
                     shortcut += 'shift+';
                 }
 
-                if (e.keyCode > 46 && e.keyCode < 91) {
-                    shortcut += String.fromCharCode(e.keyCode).toLowerCase();
-                } else if (e.keyCode in shortcuts.keys) {
-                    shortcut += shortcuts.keys[e.keyCode];
+                if (event.keyCode > 46 && event.keyCode < 91) {
+                    shortcut += String.fromCharCode(event.keyCode).toLowerCase();
+                } else if (event.keyCode in shortcuts.keys) {
+                    shortcut += shortcuts.keys[event.keyCode];
                 } else {
                     return;
                 }
@@ -112,15 +109,15 @@ define([
 
                 if (activeRegionName && activeRegionName in shortcuts) {
                     if (shortcut in shortcuts[activeRegionName]) {
-                        app.actions.execute(shortcuts[activeRegionName][shortcut], e);
-                        e.preventDefault();
+                        app.actions.execute(shortcuts[activeRegionName][shortcut], event);
+                        event.preventDefault();
                         return false;
                     }
                 }
 
                 if (shortcut in shortcuts.global) {
-                    app.actions.execute(shortcuts.global[shortcut], e);
-                    e.preventDefault();
+                    app.actions.execute(shortcuts.global[shortcut], event);
+                    event.preventDefault();
                     return false;
                 }
             }
