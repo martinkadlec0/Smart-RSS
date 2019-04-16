@@ -275,9 +275,6 @@ define([
              * @param view {views/ItemView}
              */
             selectAfterDelete: function (view) {
-                console.log("sad")
-                // if (view === this.selectedItems[0]) {
-                    console.log(true)
                     const children = Array.from(this.el.children);
                     const length = children.length;
                     if (children[length - 1].view === view) {
@@ -285,12 +282,6 @@ define([
                     } else {
                         this.selectNextSelectable({currentIsRemoved: true});
                     }
-                // } else {
-                //     // if first item is the last item to be deleted, selecting it will trigger error - rAF to get around it
-                //     requestAnimationFrame(() => {
-                //         this.selectFirst();
-                //     });
-                // }
             },
 
             /**
