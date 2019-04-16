@@ -16,13 +16,12 @@ define([], function () {
                 currentElement = this.el.querySelector('.last-selected');
                 currentElement && (nextElement = currentElement.nextElementSibling);
             }
-            console.log(nextElement);
             while (nextElement && !nextElement.matches(selector)) {
                 nextElement = nextElement.nextElementSibling;
             }
 
             if (bg.settings.get('circularNavigation') && !e.ctrlKey && !e.shiftKey && !nextElement) {
-                nextElement = this.el.querySelector(selector + ':first-child');
+                nextElement = this.el.querySelector(selector + ':nth-of-type(1)');
                 if (e.currentIsRemoved && nextElement && this.el.querySelector('.last-selected') === nextElement) {
                     nextElement = null;
                 }
@@ -53,7 +52,7 @@ define([], function () {
                 previousElement = previousElement.previousElementSibling;
             }
 
-            if (!previousElement && !e.shiftKey && !e.ctrlKey && bg.settings.get('circularNavigation')) {
+            if (bg.settings.get('circularNavigation') && !e.ctrlKey && !e.shiftKey && !previousElement) {
                 previousElement = this.el.querySelector(selector + ':last-child');
                 if (e.currentIsRemoved && previousElement && this.el.querySelector('.last-selected') === previousElement) {
                     previousElement = null;
