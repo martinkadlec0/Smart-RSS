@@ -2,13 +2,13 @@
  * @module BgProcess
  * @submodule models/Settings
  */
-define(['backbone', 'preps/indexeddb'], function (BB) {
-
+define(['backbone', 'preps/indexeddb'], function(BB) {
     /**
      * Test navigator.language and if it matches some avalable language
      */
     function getLangFromNavigator() {
-        const ln = String(navigator.language).split('-')[0];
+        const ln = String(navigator.language)
+        .split('-')[0];
         const available = ['en', 'cs', 'sk', 'de', 'tr', 'pl', 'ru', 'hu', 'nl', 'fr', 'pt', 'hr'];
         const index = available.indexOf(ln);
         if (index >= 0) {
@@ -16,7 +16,6 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
         }
         return 'en';
     }
-
     /**
      * User settings
      * @class Settings
@@ -58,7 +57,6 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             updateFrequency: 15, // in minutes
             disableAutoUpdate: false
         },
-
         /**
          * @property localStorage
          * @type Backbone.IndexedDB
@@ -66,6 +64,5 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
          */
         indexedDB: new Backbone.IndexedDB('settings-backbone')
     });
-
     return Settings;
 });

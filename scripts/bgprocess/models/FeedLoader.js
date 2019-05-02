@@ -1,18 +1,19 @@
 /**
  * @module BgProcess
- * @submodule models/Loader
+ * @submodule models/FeedLoader
  */
-define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favicon'], function (BB, RSSParser, animation, Favicon) {
-    return Backbone.Model.extend({
-        constructor: function (loader) {
+define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon) {
+    class FeedLoader {
+        constructor(loader) {
             this.loader = loader;
             this.request = new XMLHttpRequest();
             this.request.timeout = 1000 * 15; // TODO: make configurable
             this.request.onload = this.onLoad.bind(this);
             this.request.onerror = this.onError.bind(this);
             this.request.ontimeout = this.onTimeout.bind(this);
-        },
-        onLoad: function () {
+        }
+
+        onLoad() {
             let parsedData = [];
             const proxy = this.model.get('proxyThroughFeedly');
             if (proxy) {
@@ -30,7 +31,8 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                         dateCreated: Date.now()
                     });
                 });
-            } else {
+            }
+            else {
                 const response = this.request.responseText.trim();
                 const data = new DOMParser().parseFromString(response, 'text/xml');
                 const error = data.querySelector('parsererror');
@@ -106,7 +108,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             if (this.model.get('faviconExpires') < parseInt(Math.round((new Date())
                 .getTime() / 1000))) {
                 return Favicon.checkFavicon(this.model)
-                // no finally available in Waterfox 56
+                    // no finally available in Waterfox 56
                     .then((response) => {
                         this.model.save(response);
                         return this.onFeedProcessed();
@@ -115,14 +117,14 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                     });
             }
             return this.onFeedProcessed();
-        },
-        onTimeout: function () {
+        }
+        onTimeout() {
             return this.onFeedProcessed(false);
-        },
-        onError: function () {
+        }
+        onError() {
             return this.onFeedProcessed(false, this.request.status > 0);
-        },
-        removeOldItems: function () {
+        }
+        removeOldItems() {
             if (!parseInt(this.model.get('autoremove'))) {
                 return;
             }
@@ -138,8 +140,8 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                         item.markAsDeleted();
                     }
                 });
-        },
-        onFeedProcessed: function (success = true, isOnline = true) {
+        }
+        onFeedProcessed(success = true, isOnline = true) {
             isOnline = isOnline && (typeof navigator.onLine !== 'undefined' ? navigator.onLine : true);
             if (success && isOnline) {
                 this.removeOldItems(this.model);
@@ -153,13 +155,12 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             this.model.trigger('update', {
                 ok: success || !isOnline
             });
-            this.loader.set('loaded', this.loader.get('loaded') + 1);
             this.loader.sourceLoaded(this.model);
             setTimeout(() => {
                 this.downloadNext();
             }, 100);
-        },
-        downloadNext: function () {
+        }
+        downloadNext() {
             this.model = this.loader.sourcesToLoad.shift();
             if (!this.model) {
                 return this.loader.workerFinished(this);
@@ -198,5 +199,6 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             }
             this.request.send();
         }
-    });
+    }
+    return FeedLoader;
 });

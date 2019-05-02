@@ -26,15 +26,28 @@ define(['backbone', 'modules/Locale', 'text!templates/indicator.html'], function
          * @method initialize
          */
         initialize: function () {
+            this.loaded = 0;
+            this.maxSources = 0;
             const fragment = document.createRange().createContextualFragment(tplIndicator);
             this.el.appendChild(fragment);
+            let port = browser.runtime.connect({ name: 'port-from-cs' });
+            port.onMessage.addListener((m) => {
+                if (m.key === 'loading') {
+                    this.handleLoadingChange();
+                }
+                if (m.key === 'loaded') {
+                    this.loaded = m.value;
+                    this.render();
+                }
+                if (m.key === 'maxSources') {
+                    this.maxSources = m.value;
+                    this.render();
+                }
 
-            bg.loader.on('change:loading', this.handleLoadingChange, this);
-            bg.loader.on('change:loaded', this.render, this);
-            bg.loader.on('change:maxSources', this.render, this);
+            });
             bg.sources.on('clear-events', this.handleClearEvents, this);
 
-            this.handleLoadingChange();
+            this.render();
         },
 
         /**
@@ -44,9 +57,9 @@ define(['backbone', 'modules/Locale', 'text!templates/indicator.html'], function
          */
         handleClearEvents: function (id) {
             if (window == null || id === tabID) {
-                bg.loader.off('change:loading', this.handleLoadingChange, this);
-                bg.loader.off('change:loaded', this.render, this);
-                bg.loader.off('change:maxSources', this.render, this);
+                // bg.loader.removeEventListener('loadingChanged', this.handleLoadingChange);
+                // bg.loader.removeEventListener('loadedChanged', this.render);
+                // bg.loader.removeEventListener('maxSourcesChanged', this.render);
                 bg.sources.off('clear-events', this.handleClearEvents, this);
             }
         },
@@ -65,7 +78,8 @@ define(['backbone', 'modules/Locale', 'text!templates/indicator.html'], function
          * @method handleLoadingChange
          */
         handleLoadingChange: function () {
-            if (bg.loader.get('loading') === true) {
+            const value2 = bg.loader.loading;
+            if (value2) {
                 this.render();
                 this.el.classList.add('indicator-visible');
             } else {
@@ -81,13 +95,13 @@ define(['backbone', 'modules/Locale', 'text!templates/indicator.html'], function
          * @chainable
          */
         render: function () {
-            const loader = bg.loader;
-            if (loader.get('maxSources') === 0) {
+            const { loaded, maxSources } = this;
+            if (maxSources === 0) {
                 return;
             }
-            const percentage = Math.round(loader.get('loaded') * 100 / loader.get('maxSources'));
+            const percentage = Math.round(loaded * 100 / maxSources);
             this.el.querySelector('#indicator-progress').style.background = 'linear-gradient(to right,  #c5c5c5 ' + percentage + '%, #eee ' + percentage + '%)';
-            this.el.querySelector('#indicator-progress').textContent = Locale.UPDATING_FEEDS + ' (' + loader.get('loaded') + '/' + loader.get('maxSources') + ')';
+            this.el.querySelector('#indicator-progress').textContent = Locale.UPDATING_FEEDS + ' (' + loaded + '/' + maxSources + ')';
             return this;
         }
     });
