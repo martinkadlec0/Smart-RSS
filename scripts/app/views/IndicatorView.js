@@ -30,7 +30,7 @@ define(['backbone', 'modules/Locale', 'text!templates/indicator.html'], function
             this.maxSources = 0;
             const fragment = document.createRange().createContextualFragment(tplIndicator);
             this.el.appendChild(fragment);
-            let port = browser.runtime.connect({ name: 'port-from-cs' });
+            let port = chrome.runtime.connect({ name: 'port-from-cs' });
             port.onMessage.addListener((m) => {
                 if (m.key === 'loading') {
                     this.handleLoadingChange();
