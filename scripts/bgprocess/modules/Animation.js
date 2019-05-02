@@ -9,11 +9,11 @@ define([], function () {
      * @constructor
      * @extends Object
      */
-    var Animation = {
+    return {
         i: 2,
         interval: null,
         update: function () {
-            chrome.browserAction.setIcon({path: '/images/reload_anim_' + this.i + '.png'});
+            chrome.browserAction.setIcon({ path: '/images/reload_anim_' + this.i + '.png' });
             this.i++;
             if (this.i > 4) {
                 this.i = 1;
@@ -38,7 +38,7 @@ define([], function () {
             if (this.interval) {
                 return;
             }
-            if (sources.findWhere({hasNew: true})) {
+            if (sources.findWhere({ hasNew: true })) {
                 chrome.browserAction.setIcon({
                     path: '/images/icon19-' + settings.get('icon') + '.png'
                 });
@@ -49,7 +49,5 @@ define([], function () {
             }
         }
     };
-
-    return Animation;
 
 });
