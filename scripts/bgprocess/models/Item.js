@@ -14,7 +14,7 @@ define(['backbone'], function (BB) {
         defaults: {
             title: '<no title>',
             author: '<no author>',
-            url: 'opera:blank',
+            url: '',
             date: 0,
             content: 'No content loaded.',
             sourceID: -1,
@@ -40,7 +40,7 @@ define(['backbone'], function (BB) {
         _source: null,
         getSource: function () {
             if (!this._source) {
-                this._source = sources.findWhere({id: this.get('sourceID')});
+                this._source = sources.findWhere({ id: this.get('sourceID') });
             }
             return this._source;
         },
