@@ -34,6 +34,8 @@ cd smartrss
 npm install
 ```
 
+Sometimes you may encounter texts ending with `*` or `!` in app, first ones are fallbacks to English text when used locale lacks the needed one and the latter are actual keys displayed when even English text is missing, feel free to submit PR's to fill them.
+
 
 To check for jshint errors:
 ```
