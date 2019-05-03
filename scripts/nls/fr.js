@@ -1,9 +1,9 @@
 define({
-	MARK_AS_READ: 'Marquer comme (Non lu)Lu',
+	MARK_AS_READ: 'Marquer comme (Non-)Lu',
 	DELETE: 'Supprimer',
 	UPDATE: 'Mettre à jour',
 	PRINT: 'Imprimer',
-	SEARCH: 'Rechercher…',
+	SEARCH: 'Rechercher...',
 	SEARCH_TIP: 'Recherche dans les articles. Utilisez le préfixe \':\' pour chercher aussi dans le contenu des articles.',
 	NEVER: 'Jamais',
 	EVERY_5_MINUTES: 'Toutes les 5 minutes',
@@ -28,7 +28,7 @@ define({
 	ONE_LINE: 'sur une ligne',
 	TWO_LINES: 'sur deux lignes',
 	AUTO: 'Automatique',
-	FULL_ARTICLE: 'COnsulter l’article complet',
+	FULL_ARTICLE: 'Consulter l’article complet',
 	REALLY_DELETE: 'Souhaitez-vous vraiment supprimer ce flux ?',
 	ALL_FEEDS: 'Tous les flux',
 	PINNED: 'Épinglés',
@@ -40,7 +40,7 @@ define({
 	PREV_UNREAD: 'Non lu précédent',
 	MARK_AND_NEXT_UNREAD: 'Marquer et prochain non lu',
 	MARK_AND_PREV_UNREAD: 'Marquer et non lu précédent',
-	PIN: '(Détacher)Épingler',
+	PIN: 'Épingler/Détacher',
 	PIN_QUESTION_A: 'L’élément « ',
 	PIN_QUESTION_B: ' » est épinglé. Souhaitez-vous vraiment le supprimer ?',
 	MARK_ALL_QUESTION: 'Souhaitez-vous vraiment marquer tous les articles comme étant lus ?',
@@ -88,9 +88,9 @@ define({
 	RENAME: 'Renommer',
 	FOLDER_NAME: 'Nom du dossier',
 
-	AUTOREMOVE: 'Autoremove',
+	AUTOREMOVE: 'Suppression automatique',
 	OLDER_THAN_DAY: 'Plus d\'un jour',
 	OLDER_THAN_WEEK: 'Plus d\'une semaine',
-	OLDER_THAN_MONTH: 'Plus de un mois',
+	OLDER_THAN_MONTH: 'Plus d\'un mois',
 	OLDER_THAN_TWO_MONTHS: 'Plus de deux mois'
 });
