@@ -3,7 +3,7 @@ define({
 	DELETE: 'Supprimer',
 	UPDATE: 'Mettre à jour',
 	PRINT: 'Imprimer',
-	SEARCH: 'Rechercher...',
+	SEARCH: 'Rechercher…',
 	SEARCH_TIP: 'Recherche dans les articles. Utilisez le préfixe \':\' pour chercher aussi dans le contenu des articles.',
 	NEVER: 'Jamais',
 	EVERY_5_MINUTES: 'Toutes les 5 minutes',
@@ -32,7 +32,7 @@ define({
 	REALLY_DELETE: 'Souhaitez-vous vraiment supprimer ce flux ?',
 	ALL_FEEDS: 'Tous les flux',
 	PINNED: 'Épinglés',
-	TRASH: 'Poubelle',
+	TRASH: 'Corbeille',
 	MARK_ALL_AS_READ: 'Tout marquer comme lu',
 	PROPERTIES: 'Propriétés',
 	UNDELETE: 'Annuler la suppression',
@@ -74,17 +74,18 @@ define({
 	EARLIER_THIS_MONTH: 'Le mois dernier',
 	MORE: 'Plus',
 	SETTINGS: 'Réglages',
-	EMPTY_TRASH: 'Vider la poubelle',
+	EMPTY_TRASH: 'Vider la corbeille',
 	RSS_FEED_URL: 'URL du flux : ',
 	OPTIONS: 'Options',
 	UPDATING_FEEDS: 'Mise à jour des flux',
+
 	UNREAD: 'non lus',
 	TOTAL: 'total',
 	NEW_FOLDER: 'Nouveau dossier',
 	DOWNLOAD: 'Télécharger',
 	DELETE_ALL_ARTICLES: 'Supprimer tous les articles',
 	DELETE_ALL_Q: 'Souhaitez-vous vraiment supprimer tous les articles ?',
-	REALLY_EMPTY_TRASH: 'Souhaitez-vous supprimer définitivement tous les articles présents dans la poubelle ?',
+	REALLY_EMPTY_TRASH: 'Souhaitez-vous supprimer définitivement tous les articles présents dans la corbeille ?',
 	RENAME: 'Renommer',
 	FOLDER_NAME: 'Nom du dossier',
 
@@ -92,5 +93,13 @@ define({
 	OLDER_THAN_DAY: 'Plus d\'un jour',
 	OLDER_THAN_WEEK: 'Plus d\'une semaine',
 	OLDER_THAN_MONTH: 'Plus d\'un mois',
-	OLDER_THAN_TWO_MONTHS: 'Plus de deux mois'
+	OLDER_THAN_TWO_MONTHS: 'Plus de deux mois',
+
+	SORT_BY: 'Trier par',
+	DATE: 'Date',
+	TITLE: 'Titre',
+	AUTHOR: 'Auteur',
+
+	SORTING: 'Tri',
+	SECONDARY_SORTING: 'Tri secondaire'
 });
