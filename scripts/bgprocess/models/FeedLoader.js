@@ -2,8 +2,8 @@
  * @module BgProcess
  * @submodule models/FeedLoader
  */
-define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon) {
-    class FeedLoader {
+define(['modules/RSSParser', '../../libs/favicon'], function(RSSParser, Favicon) {
+    return class FeedLoader {
         constructor(loader) {
             this.loader = loader;
             this.request = new XMLHttpRequest();
@@ -12,7 +12,6 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
             this.request.onerror = this.onError.bind(this);
             this.request.ontimeout = this.onTimeout.bind(this);
         }
-
         onLoad() {
             let parsedData = [];
             const proxy = this.model.get('proxyThroughFeedly');
@@ -31,10 +30,10 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
                         dateCreated: Date.now()
                     });
                 });
-            }
-            else {
+            } else {
                 const response = this.request.responseText.trim();
-                const data = new DOMParser().parseFromString(response, 'text/xml');
+                const data = new DOMParser()
+                .parseFromString(response, 'text/xml');
                 const error = data.querySelector('parsererror');
                 if (error) {
                     // TODO: save error for later review
@@ -80,22 +79,22 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
                 sourceID: this.model.get('id'),
                 deleted: true
             })
-                .forEach((item) => {
-                    if (!fetchedIDs.includes(item.id)) {
-                        item.destroy();
-                    }
-                });
+            .forEach((item) => {
+                if (!fetchedIDs.includes(item.id)) {
+                    item.destroy();
+                }
+            });
             const countAll = items.where({
                 sourceID: this.model.get('id'),
                 trashed: false
             })
-                .length;
+            .length;
             const unreadCount = items.where({
                 sourceID: this.model.get('id'),
                 unread: true,
                 trashed: false
             })
-                .length;
+            .length;
             this.model.save({
                 'count': unreadCount,
                 'countAll': countAll,
@@ -106,15 +105,15 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
                 allCountUnvisited: info.get('allCountUnvisited') + createdNo
             });
             if (this.model.get('faviconExpires') < parseInt(Math.round((new Date())
-                .getTime() / 1000))) {
+                    .getTime() / 1000))) {
                 return Favicon.checkFavicon(this.model)
-                    // no finally available in Waterfox 56
-                    .then((response) => {
-                        this.model.save(response);
-                        return this.onFeedProcessed();
-                    }, () => {
-                        return this.onFeedProcessed();
-                    });
+                // no finally available in Waterfox 56
+                .then((response) => {
+                    this.model.save(response);
+                    return this.onFeedProcessed();
+                }, () => {
+                    return this.onFeedProcessed();
+                });
             }
             return this.onFeedProcessed();
         }
@@ -133,13 +132,13 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
                 deleted: false,
                 pinned: false
             })
-                .forEach((item) => {
-                    const date = item.get('dateCreated') || item.get('date');
-                    const removalInMs = this.model.get('autoremove') * 24 * 60 * 60 * 1000;
-                    if (date + removalInMs < Date.now()) {
-                        item.markAsDeleted();
-                    }
-                });
+            .forEach((item) => {
+                const date = item.get('dateCreated') || item.get('date');
+                const removalInMs = this.model.get('autoremove') * 24 * 60 * 60 * 1000;
+                if (date + removalInMs < Date.now()) {
+                    item.markAsDeleted();
+                }
+            });
         }
         onFeedProcessed(success = true, isOnline = true) {
             isOnline = isOnline && (typeof navigator.onLine !== 'undefined' ? navigator.onLine : true);
@@ -200,5 +199,4 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
             this.request.send();
         }
     }
-    return FeedLoader;
 });

@@ -9,84 +9,6 @@ define([], function () {
      * @constructor
      * @extends Object
      */
-    function parseRSS(xml, sourceID) {
-        let items = [];
-
-        if (!xml || !(xml instanceof XMLDocument)) {
-            return items;
-        }
-
-
-        let nodes = xml.querySelectorAll('item');
-        if (!nodes.length) {
-            nodes = xml.querySelectorAll('entry');
-        }
-
-        const title = getFeedTitle(xml);
-        const source = sources.findWhere({
-            id: sourceID
-        });
-
-        if (title && (source.get('title') === source.get('url') || !source.get('title'))) {
-            source.save('title', title);
-        }
-
-        /**
-         * TTL check
-         */
-        let ttl = xml.querySelector('channel > ttl, feed > ttl, rss > ttl');
-        if (ttl && source.get('lastUpdate') === 0) {
-            ttl = parseInt(ttl.textContent, 10);
-            let values = [300, 600, 1440, 10080];
-            if (ttl > 10080) {
-                source.save({updateEvery: 10080});
-            } else if (ttl > 180) {
-                for (let i = 0; i < values.length; i++) {
-                    if (ttl <= values[i]) {
-                        ttl = values[i];
-                        break;
-                    }
-                }
-                source.save({updateEvery: ttl});
-            }
-        }
-        /* END: ttl check */
-
-        const mainEl = xml.querySelector('rss, rdf, feed, channel');
-        if (mainEl) {
-            let baseStr = mainEl.getAttribute('xml:base') || mainEl.getAttribute('xmlns:base') || mainEl.getAttribute('base') || mainEl.querySelector('link').textContent || (mainEl.querySelector('link') && mainEl.querySelector('link:not([rel="self"])').getAttribute('href'));
-            if (!baseStr) {
-                baseStr = source.get('url');
-            }
-            if (baseStr) {
-                const prefix = source.get('url').includes('http://') ? 'http://' : 'https://';
-                const urlParts = baseStr.replace('http://', '').replace('https://', '').replace('//', '').split(/[/?#]/);
-                baseStr = prefix + urlParts[0];
-                source.save({base: baseStr});
-            }
-        }
-
-        [...nodes].forEach((node) => {
-            items.push({
-                id: rssGetGuid(node, source.get('base')),
-                title: rssGetTitle(node),
-                url: rssGetLink(node, source.get('base')),
-                date: rssGetDate(node),
-                author: rssGetAuthor(node, title),
-                content: rssGetContent(node),
-                sourceID: sourceID,
-                dateCreated: Date.now()
-            });
-
-            const last = items[items.length - 1];
-
-            if (last.date === 0) {
-                last.date = Date.now();
-            }
-        });
-
-        return items;
-    }
 
     function rssGetGuid(node, base) {
         if (!node) {
@@ -246,9 +168,85 @@ define([], function () {
     }
 
 
-    return {
-        parse: function () {
-            return parseRSS.apply(null, arguments);
+    class RSSParser {
+        parse(xml, sourceID) {
+            let items = [];
+
+            if (!xml || !(xml instanceof XMLDocument)) {
+                return items;
+            }
+
+
+            let nodes = xml.querySelectorAll('item');
+            if (!nodes.length) {
+                nodes = xml.querySelectorAll('entry');
+            }
+
+            const title = getFeedTitle(xml);
+            const source = sources.findWhere({
+                id: sourceID
+            });
+
+            if (title && (source.get('title') === source.get('url') || !source.get('title'))) {
+                source.save('title', title);
+            }
+
+            /**
+             * TTL check
+             */
+            let ttl = xml.querySelector('channel > ttl, feed > ttl, rss > ttl');
+            if (ttl && source.get('lastUpdate') === 0) {
+                ttl = parseInt(ttl.textContent, 10);
+                let values = [300, 600, 1440, 10080];
+                if (ttl > 10080) {
+                    source.save({ updateEvery: 10080 });
+                } else if (ttl > 180) {
+                    for (let i = 0; i < values.length; i++) {
+                        if (ttl <= values[i]) {
+                            ttl = values[i];
+                            break;
+                        }
+                    }
+                    source.save({ updateEvery: ttl });
+                }
+            }
+            /* END: ttl check */
+
+            const mainEl = xml.querySelector('rss, rdf, feed, channel');
+            if (mainEl) {
+                let baseStr = mainEl.getAttribute('xml:base') || mainEl.getAttribute('xmlns:base') || mainEl.getAttribute('base') || mainEl.querySelector('link').textContent || (mainEl.querySelector('link') && mainEl.querySelector('link:not([rel="self"])').getAttribute('href'));
+                if (!baseStr) {
+                    baseStr = source.get('url');
+                }
+                if (baseStr) {
+                    const prefix = source.get('url').includes('http://') ? 'http://' : 'https://';
+                    const urlParts = baseStr.replace('http://', '').replace('https://', '').replace('//', '').split(/[/?#]/);
+                    baseStr = prefix + urlParts[0];
+                    source.save({ base: baseStr });
+                }
+            }
+
+            [...nodes].forEach((node) => {
+                items.push({
+                    id: rssGetGuid(node, source.get('base')),
+                    title: rssGetTitle(node),
+                    url: rssGetLink(node, source.get('base')),
+                    date: rssGetDate(node),
+                    author: rssGetAuthor(node, title),
+                    content: rssGetContent(node),
+                    sourceID: sourceID,
+                    dateCreated: Date.now()
+                });
+
+                const last = items[items.length - 1];
+
+                if (last.date === 0) {
+                    last.date = Date.now();
+                }
+            });
+
+            return items;
         }
-    };
+    }
+    return new RSSParser();
 });
