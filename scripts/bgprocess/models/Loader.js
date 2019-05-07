@@ -4,23 +4,28 @@
  */
 define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favicon', 'models/FeedLoader'], function (BB, RSSParser, animation, Favicon, FeedLoader) {
     /**
-         * Updates feeds and keeps info about progress
-         * @class Loader
-         * @constructor
-         * @extends Backbone.Model
-         */
+     * Updates feeds and keeps info about progress
+     * @class Loader
+     * @constructor
+     * @extends Backbone.Model
+     */
     return class Loader {
         connected(p) {
             this.port = p;
+            p.onDisconnect.addListener(() => {
+                this.port = null;
+            });
         }
 
 
         get loading() {
             return this._loading;
         }
+
         get loaded() {
             return this._loaded;
         }
+
         get maxSources() {
             return this._maxSources;
         }
@@ -28,25 +33,27 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
 
         set loading(value) {
             this._loading = value;
-            if (!!this.port) {
+            if (this.port !== null) {
                 this.port.postMessage({
                     key: 'loading',
                     value: value
                 });
             }
         }
+
         set maxSources(value) {
             this._maxSources = value;
-            if (!!this.port) {
+            if (this.port !== null) {
                 this.port.postMessage({
                     key: 'maxSources',
                     value: value
                 });
             }
         }
+
         set loaded(value) {
             this._loaded = value;
-            if (!!this.port) {
+            if (this.port !== null) {
                 this.port.postMessage({
                     key: 'loaded',
                     value: value
@@ -56,6 +63,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
 
         constructor() {
             chrome.runtime.onConnect.addListener(this.connected.bind(this));
+            this.port = null;
             this._maxSources = 0;
             this._loaded = 0;
             this._loading = false;
@@ -66,6 +74,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             this.sourcesLoading = [];
             this.loaders = [];
         }
+
         addSources(source) {
             if (source instanceof Folder) {
                 this.addSources(sources.where({
@@ -90,6 +99,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             }
             console.log('not a valid source');
         }
+
         abortDownloading() {
             this.sourcesToLoad = [];
             this.loaders.forEach((loader) => {
@@ -99,6 +109,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             this.sourcesLoading = [];
             this.workersFinished();
         }
+
         startDownloading() {
             const workersRunning = this.loaders.length;
             this.loading = true;
@@ -111,6 +122,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                 feedLoader.downloadNext();
             }
         }
+
         download(sourcesToDownload) {
             if (!sourcesToDownload) {
                 return;
@@ -121,6 +133,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             this.addSources(sourcesToDownload);
             this.startDownloading();
         }
+
         downloadAll(force) {
             let sourcesArr = sources.toArray();
             if (!force) {
@@ -152,15 +165,14 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             this.addSources(sourcesArr);
             this.startDownloading();
         }
+
         playNotificationSound() {
             let audio;
             if (!settings.get('useSound') || settings.get('useSound') === ':user') {
                 audio = new Audio(settings.get('defaultSound'));
-            }
-            else if (settings.get('useSound') === ':none') {
+            } else if (settings.get('useSound') === ':none') {
                 audio = false;
-            }
-            else {
+            } else {
                 audio = new Audio('/sounds/' + settings.get('useSound') + '.ogg');
             }
             if (audio) {
@@ -168,6 +180,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                 audio.play();
             }
         }
+
         workerFinished(worker) {
             const loaderIndex = this.loaders.indexOf(worker);
             if (loaderIndex > -1) {
@@ -178,6 +191,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             }
             this.workersFinished();
         }
+
         workersFinished() {
             // IF DOWNLOADING FINISHED, DELETE ITEMS WITH DELETED SOURCE (should not really happen)
             const sourceIDs = sources.pluck('id');
@@ -202,6 +216,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             this.itemsDownloaded = false;
             animation.stop();
         }
+
         sourceLoaded(model) {
             this.loaded++;
             const modelIndex = this.sourcesLoading.indexOf(model);
