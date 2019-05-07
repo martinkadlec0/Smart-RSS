@@ -37,7 +37,7 @@ function handleReq(req) {
 }
 
 function startImport() {
-    const transaction = this.db.transaction(['folders-backbone', 'sources-backbone', 'items-backbone'], 'readwrite');
+    const transaction = db.transaction(['folders-backbone', 'sources-backbone', 'items-backbone'], 'readwrite');
     const folders = transaction.objectStore('folders-backbone');
     const sources = transaction.objectStore('sources-backbone');
     const items = transaction.objectStore('items-backbone');

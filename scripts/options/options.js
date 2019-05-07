@@ -258,8 +258,7 @@ chrome.runtime.getBackgroundPage(function (bg) {
             worker.onmessage = function (e) {
                 if (e.data.action === 'finished') {
                     smartImportStatus.textContent = 'Loading data to memory!';
-
-                    bg.fetchAll().always(function () {
+                    bg.fetchAll().then(function () {
                         bg.info.refreshSpecialCounters();
                         smartImportStatus.textContent = 'Import fully completed!';
                         bg.loader.downloadAll(true);
