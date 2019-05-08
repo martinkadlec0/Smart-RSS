@@ -166,7 +166,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             this.startDownloading();
         }
 
-        playNotificationSound() {
+        static playNotificationSound() {
             let audio;
             if (!settings.get('useSound') || settings.get('useSound') === ':user') {
                 audio = new Audio(settings.get('defaultSound'));
