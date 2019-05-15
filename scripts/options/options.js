@@ -319,6 +319,7 @@ chrome.runtime.getBackgroundPage(function (bg) {
                     const folder = duplicate || bg.folders.create({
                         title: folderTitle
                     }, {wait: true});
+                    const folderId = folder.get('id');
 
                     [...subfeeds].forEach((subfeed) => {
                         if (bg.sources.findWhere({url: decodeHTML(subfeed.getAttribute('xmlUrl'))})) {
@@ -328,7 +329,7 @@ chrome.runtime.getBackgroundPage(function (bg) {
                             title: decodeHTML(subfeed.getAttribute('title') || subfeed.getAttribute('text')),
                             url: decodeHTML(subfeed.getAttribute('xmlUrl')),
                             updateEvery: -1,
-                            folderID: folder.get('id')
+                            folderID: folderId
                         }, {wait: true});
 
                     });
