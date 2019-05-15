@@ -47,7 +47,7 @@ define(['backbone', 'modules/Animation'], function (BB, animation) {
      * @constructor
      * @extends Backbone.Model
      */
-    var Info = BB.Model.extend({
+    let Info = BB.Model.extend({
         defaults: {
             id: 'info-id',
             allCountUnread: 0,
