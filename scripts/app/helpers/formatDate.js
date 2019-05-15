@@ -7,7 +7,7 @@
  * @example formatDate(new Date, 'YYYY-MM-DD hh:mm');
  */
 define([], function () {
-    return formatDate = (function () {
+    return (function () {
         let that;
         const zeroPad = function (num) {
             if (num < 10) {
