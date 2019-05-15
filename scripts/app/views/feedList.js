@@ -302,11 +302,11 @@ define([
                 const view = new FolderView({model: folder}, this);
                 const folderViews = [...document.querySelectorAll('.folder')];
                 if (folderViews.length) {
-                    this.insertBefore(view.render(), folderViews);
+                    this.insertBefore(view, folderViews);
                 } else {
                     const special = document.querySelector('.special:nth-of-type(1)');
                     if (special) {
-                        special.insertAdjacentElement('afterend', view.render.el());
+                        special.insertAdjacentElement('afterend', view.render().el);
                     } else {
                         this.el.insertAdjacentElement('beforeend', view.render().el);
                     }
@@ -407,7 +407,7 @@ define([
              * @param where {Array} Element to add after
              */
             insertBefore: function (what, where) {
-                var before = null;
+                let before = null;
                 where.some(function (el) {
                     if (el.view.model !== what.model && bg.sources.comparator(el.view.model, what.model) === 1) {
                         return before = el;
