@@ -78,7 +78,6 @@ define([
 
                 list.forEach((item) => {
                     item.hidden = true;
-                    ;
                 });
 
                 this.hiddenItems = [...new Set(this.hiddenItems.concat(list))];
