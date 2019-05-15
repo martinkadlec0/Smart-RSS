@@ -1,3 +1,5 @@
+/* globals onmessage: true, postMessage, indexedDB */
+
 const request = indexedDB.open('backbone-indexeddb', 4);
 
 let db;
