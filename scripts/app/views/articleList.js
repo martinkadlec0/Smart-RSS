@@ -275,13 +275,13 @@ define([
              * @param view {views/ItemView}
              */
             selectAfterDelete: function (view) {
-                    const children = Array.from(this.el.children);
-                    const length = children.length;
-                    if (children[length - 1].view === view) {
-                        this.selectPrev({currentIsRemoved: true});
-                    } else {
-                        this.selectNextSelectable({currentIsRemoved: true});
-                    }
+                const children = Array.from(this.el.children);
+                const length = children.length;
+                if (children[length - 1].view === view) {
+                    this.selectPrev({currentIsRemoved: true});
+                } else {
+                    this.selectNextSelectable({currentIsRemoved: true});
+                }
             },
 
             /**
@@ -536,21 +536,6 @@ define([
                 }
             },
 
-            /**
-             * List of views to be closed when nextFrame animation frame is called
-             * @property nextFrame
-             * @default null
-             * @type Object
-             */
-            nextFrameStore: [],
-
-            /**
-             * RequestAnimationFrame return value for next destroy item call.
-             * @property nextFrame
-             * @default null
-             * @type Object
-             */
-            nextFrame: null,
 
             /**
              * Removes article view (clearing events and all)
@@ -558,23 +543,11 @@ define([
              * @param view {views/ItemView} Destroyed article view
              */
             destroyItem: function (view) {
-                this.nextFrameStore.push(view);
-                if (!this.nextFrame) {
-                    this.nextFrame = requestAnimationFrame(() => {
-                        const lastView = this.nextFrameStore[this.nextFrameStore.length - 1];
-                        this.selectAfterDelete(lastView);
-                        for (let i = 0, j = this.nextFrameStore.length - 1; i < j; i++) {
-                            this.destroyItemFrame(this.nextFrameStore[i]);
-                        }
 
-                        this.destroyItemFrame(lastView);
+                this.destroyItemFrame(view);
 
-                        this.nextFrame = null;
-                        this.nextFrameStore = [];
+                this.trigger('items-destroyed');
 
-                        this.trigger('items-destroyed');
-                    });
-                }
             },
 
             /**

@@ -8,7 +8,7 @@ require.config({
         underscore: '../libs/underscore.min',
         backbone: '../libs/backbone.min',
         backboneDB: '../libs/backbone.indexDB',
-        text: '../libs/require.text',
+        text: '../libs/require.text'
     },
 
     shim: {
@@ -41,11 +41,13 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     }
 });
 
-chrome.runtime.onConnect.addListener(function (port) {
-    port.onDisconnect.addListener(function (port) {
-        sources.trigger('clear-events', port.sender.tab.id);
-    });
-});
+// chrome.runtime.onConnect.addListener(function (port) {
+//     port.onDisconnect.addListener(function (port) {
+//         if (port) {
+//             sources.trigger('clear-events', port.sender.tab.id);
+//         }
+//     });
+// });
 
 
 requirejs(['bg'], function () {

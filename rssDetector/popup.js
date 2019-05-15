@@ -1,3 +1,5 @@
+/* globals browser */
+
 let list;
 
 const init = () => {
