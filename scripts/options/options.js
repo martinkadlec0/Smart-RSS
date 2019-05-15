@@ -259,9 +259,10 @@ chrome.runtime.getBackgroundPage(function (bg) {
                 if (e.data.action === 'finished') {
                     smartImportStatus.textContent = 'Loading data to memory!';
                     bg.fetchAll().then(function () {
-                        bg.info.refreshSpecialCounters();
-                        smartImportStatus.textContent = 'Import fully completed!';
-                        bg.loader.downloadAll(true);
+                        chrome.runtime.reload();
+                        // bg.info.refreshSpecialCounters();
+                        // smartImportStatus.textContent = 'Import fully completed!';
+                        // bg.loader.downloadAll(true);
                     });
                 } else if (e.data.action === 'message') {
                     smartImportStatus.textContent = e.data.value;
