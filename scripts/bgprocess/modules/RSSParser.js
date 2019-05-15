@@ -60,8 +60,8 @@ define([], function () {
             if (!title || !(title.textContent).trim()) {
                 title = this.document.querySelector('channel > link, feed > link, rss > link');
             }
-
-            return title && title.textContent ? title.textContent.trim() || 'rss' : 'rss';
+            title = title && title.textContent ? title.textContent.trim() || 'rss' : 'rss';
+            return title;
         }
 
         replaceUTCAbbr(str) {
@@ -155,11 +155,13 @@ define([], function () {
 
             return '&nbsp;';
         }
+
         getGuid() {
             const node = this.currentNode;
             let guid = node.querySelector('guid');
             return guid ? guid.textContent : this.getLink() || '';
         }
+
         parse() {
             let items = [];
 
@@ -186,7 +188,7 @@ define([], function () {
                     const prefix = this.source.get('url').includes('http://') ? 'http://' : 'https://';
                     const urlParts = baseStr.replace('http://', '').replace('https://', '').replace('//', '').split(/[/?#]/);
                     baseStr = prefix + urlParts[0];
-                    source.save({ base: baseStr });
+                    this.source.save({base: baseStr});
                 }
             }
 
@@ -209,22 +211,23 @@ define([], function () {
                     last.date = Date.now();
                 }
             });
-
             return items;
         }
-        constructor(document, source){
-            if(!document){
-                throw new Exception('No document specified');
+
+        constructor(document, source) {
+            if (!document) {
+                throw 'No document specified';
             }
-            if(!(document instanceof XMLDocument)){
-                throw new Exception('Invalid document');
+            if (!(document instanceof XMLDocument)) {
+                throw 'Invalid document';
             }
-            if(!source){
-                throw new Exception('No source specified');
+            if (!source) {
+                throw 'No source specified';
             }
             this.document = document;
             this.source = source;
         }
     }
+
     return RSSParser;
 });
