@@ -46,8 +46,7 @@ chrome.runtime.getBackgroundPage(function (bg) {
             const warning = document.querySelector('.ff-warning');
             warning.parentNode.removeChild(warning);
         }
-        const version = chrome.runtime.getManifest().version;
-        document.querySelector('#version').textContent = version;
+        document.querySelector('#version').textContent = chrome.runtime.getManifest().version;
 
         [...document.querySelectorAll('select[id], input[type=number], input[type=range], input[type=range]')].forEach((item) => {
             item.value = bg.settings.get(item.id);
