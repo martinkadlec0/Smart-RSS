@@ -74,8 +74,7 @@ chrome.runtime.getBackgroundPage((bg) => {
         });
 
 
-        let layout = bg.settings.get('layout');
-        handleLayoutChange(layout);
+        handleLayoutChange(bg.settings.get('layout'));
     };
 
 
