@@ -123,6 +123,10 @@ define([
             }
         }));
 
+        window.addEventListener('unload', () => {
+            bg.reloadExt();
+        });
+
         document.addEventListener('keydown', app.handleKeyDown);
 
         return app;

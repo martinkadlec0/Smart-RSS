@@ -80,20 +80,20 @@ define([
         /**
          * DB models
          */
-        window.settings = new Settings();
-        window.info = new Info();
-        window.sources = new Sources();
-        window.items = new Items();
-        window.folders = new Folders();
+        const settings = window.settings = new Settings();
+        const info = window.info = new Info();
+        const sources = window.sources = new Sources();
+        const items = window.items = new Items();
+        const folders = window.folders = new Folders();
 
         /**
          * This is used for when new feed is subscribed and smart rss tab is opened to focus the newly added feed
          */
-        window.sourceToFocus = null;
+        const sourceToFocus = window.sourceToFocus = null;
 
-        window.toolbars = new Toolbars();
+        const toolbars = window.toolbars = new Toolbars();
 
-        window.loader = new Loader();
+        const loader = window.loader = new Loader();
 
 
         function fetchOne(tasks) {
@@ -122,6 +122,9 @@ define([
 
         window.fetchAll = fetchAll;
         window.fetchOne = fetchOne;
+        window.reloadExt = function () {
+            chrome.runtime.reload();
+        };
 
 
         window.appStarted = new Promise((resolve) => {
@@ -195,5 +198,4 @@ define([
                 resolve(true);
             });
         });
-
     });
