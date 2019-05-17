@@ -85,8 +85,8 @@ chrome.runtime.getBackgroundPage((bg) => {
     }
 
 
-    function handleLayoutChangeClick(e) {
-        let layout = e.currentTarget.value;
+    function handleLayoutChangeClick(event) {
+        const layout = event.currentTarget.value;
         handleLayoutChange(layout);
         bg.settings.save('layout', layout);
     }
@@ -111,8 +111,8 @@ chrome.runtime.getBackgroundPage((bg) => {
         bg.settings.save(target.id, target.checked);
     }
 
-    function handleDefaultSound(e) {
-        const file = e.currentTarget.files[0];
+    function handleDefaultSound(event) {
+        const file = event.currentTarget.files[0];
         if (!file || file.size === 0) {
             return;
         }
@@ -175,8 +175,8 @@ chrome.runtime.getBackgroundPage((bg) => {
             return source;
         }
 
-        function addLine(doc, to, ctn) {
-            const line = doc.createTextNode(ctn || '\n\t');
+        function addLine(doc, to, ctn = '\n\t') {
+            const line = doc.createTextNode(ctn);
             to.appendChild(line);
         }
 
@@ -193,16 +193,16 @@ chrome.runtime.getBackgroundPage((bg) => {
         const doc = parser.parseFromString(start + end, 'application/xml');
 
 
-        setTimeout(function () {
+        setTimeout(() => {
             const body = doc.querySelector('body');
 
-            bg.folders.forEach(function (folder) {
+            bg.folders.forEach((folder) => {
                 addLine(doc, body);
                 body.appendChild(addFolder(doc, folder.get('title'), folder.get('id')));
             });
 
 
-            bg.sources.forEach(function (source) {
+            bg.sources.forEach((source) => {
                 if (source.get('folderID')) {
                     const folder = body.querySelector('[id="' + source.get('folderID') + '"]');
                     if (folder) {
@@ -230,9 +230,9 @@ chrome.runtime.getBackgroundPage((bg) => {
         }, 20);
     }
 
-    function handleImportSmart(e) {
+    function handleImportSmart(event) {
         const smartImportStatus = document.querySelector('#smart-imported');
-        const file = e.target.files[0];
+        const file = event.target.files[0];
         if (!file || file.size === 0) {
             smartImportStatus.textContent = 'Wrong file';
             return;
@@ -251,8 +251,8 @@ chrome.runtime.getBackgroundPage((bg) => {
             smartImportStatus.textContent = 'Importing, please wait!';
 
             const worker = new Worker('scripts/options/worker.js');
-            worker.onmessage = function (e) {
-                if (e.data.action === 'finished') {
+            worker.onmessage = function (message) {
+                if (message.data.action === 'finished') {
                     smartImportStatus.textContent = 'Loading data to memory!';
                     bg.fetchAll().then(function () {
                         if (browser) {
@@ -262,14 +262,14 @@ chrome.runtime.getBackgroundPage((bg) => {
                         smartImportStatus.textContent = 'Import fully completed!';
                         bg.loader.downloadAll(true);
                     });
-                } else if (e.data.action === 'message') {
-                    smartImportStatus.textContent = e.data.value;
+                } else if (message.data.action === 'message') {
+                    smartImportStatus.textContent = message.data.value;
                 }
             };
             worker.postMessage({action: 'file-content', value: data});
 
-            worker.onerror = function (e) {
-                alert('Importing error: ' + e.message);
+            worker.onerror = function (error) {
+                alert('Importing error: ' + error.message);
             };
         };
 
@@ -286,9 +286,9 @@ chrome.runtime.getBackgroundPage((bg) => {
         });
     }
 
-    function handleImportOPML(e) {
+    function handleImportOPML(event) {
         const opmlImportStatus = document.querySelector('#opml-imported');
-        const file = e.target.files[0];
+        const file = event.target.files[0];
         if (!file || file.size === 0) {
             opmlImportStatus.textContent = 'Wrong file';
             return;
@@ -310,7 +310,7 @@ chrome.runtime.getBackgroundPage((bg) => {
 
             [...feeds].forEach((feed) => {
                 if (!feed.hasAttribute('xmlUrl')) {
-                    const subfeeds = feed.querySelectorAll('outline[xmlUrl]');
+                    const subFeeds = feed.querySelectorAll('outline[xmlUrl]');
                     const folderTitle = decodeHTML(feed.getAttribute('title') || feed.getAttribute('text'));
 
                     const duplicate = bg.folders.findWhere({title: folderTitle});
@@ -320,13 +320,13 @@ chrome.runtime.getBackgroundPage((bg) => {
                     }, {wait: true});
                     const folderId = folder.get('id');
 
-                    [...subfeeds].forEach((subfeed) => {
-                        if (bg.sources.findWhere({url: decodeHTML(subfeed.getAttribute('xmlUrl'))})) {
+                    [...subFeeds].forEach((subFeed) => {
+                        if (bg.sources.findWhere({url: decodeHTML(subFeed.getAttribute('xmlUrl'))})) {
                             return;
                         }
                         bg.sources.create({
-                            title: decodeHTML(subfeed.getAttribute('title') || subfeed.getAttribute('text')),
-                            url: decodeHTML(subfeed.getAttribute('xmlUrl')),
+                            title: decodeHTML(subFeed.getAttribute('title') || subFeed.getAttribute('text')),
+                            url: decodeHTML(subFeed.getAttribute('xmlUrl')),
                             updateEvery: -1,
                             folderID: folderId
                         }, {wait: true});
