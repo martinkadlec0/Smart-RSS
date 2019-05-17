@@ -8,7 +8,7 @@ define([
     ],
     function (Layout, ToolbarView, articleList, resizable, comm) {
 
-        var toolbar = bg.toolbars.findWhere({region: 'articles'});
+        const toolbar = bg.toolbars.findWhere({region: 'articles'});
 
         /**
          * Articles layout view
@@ -16,7 +16,7 @@ define([
          * @constructor
          * @extends Layout
          */
-        var ArticlesLayout = Layout.extend({
+        let ArticlesLayout = Layout.extend({
             el: '#region-articles',
             events: {
                 'keydown': 'handleKeyDown',
