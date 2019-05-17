@@ -42,6 +42,10 @@ JSON.safeParse = function (str) {
 
 chrome.runtime.getBackgroundPage(function (bg) {
     const documentReady = () => {
+        if (!browser) {
+            const warning = document.querySelector('.ff-warning');
+            warning.parentNode.removeChild(warning);
+        }
         const version = chrome.runtime.getManifest().version;
         document.querySelector('#version').textContent = version;
 
