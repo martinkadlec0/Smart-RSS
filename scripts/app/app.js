@@ -122,10 +122,11 @@ define([
                 }
             }
         }));
-
-        window.addEventListener('unload', () => {
-            bg.reloadExt();
-        });
+        if (browser) {
+            window.addEventListener('unload', () => {
+                bg.reloadExt();
+            });
+        }
 
         document.addEventListener('keydown', app.handleKeyDown);
 

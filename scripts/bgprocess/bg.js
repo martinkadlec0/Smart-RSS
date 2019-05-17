@@ -80,20 +80,20 @@ define([
         /**
          * DB models
          */
-        const settings = window.settings = new Settings();
-        const info = window.info = new Info();
-        const sources = window.sources = new Sources();
-        const items = window.items = new Items();
-        const folders = window.folders = new Folders();
+        window.settings = new Settings();
+        window.info = new Info();
+        window.sources = new Sources();
+        window.items = new Items();
+        window.folders = new Folders();
 
         /**
          * This is used for when new feed is subscribed and smart rss tab is opened to focus the newly added feed
          */
-        const sourceToFocus = window.sourceToFocus = null;
+        window.sourceToFocus = null;
 
-        const toolbars = window.toolbars = new Toolbars();
+        window.toolbars = new Toolbars();
 
-        const loader = window.loader = new Loader();
+        window.loader = new Loader();
 
 
         function fetchOne(tasks) {
