@@ -7,20 +7,14 @@ const entityMap = {
 };
 
 function escapeHtml(string) {
-    let str = String(string).replace(/[&<>"']/gm, function (s) {
+    return String(string).replace(/[&<>"']/gm, (s) => {
         return entityMap[s];
+    }).replace(/\s/, (f) => {
+        return f === ' ' ? ' ' : '';
     });
-    str = str.replace(/\s/, function (f) {
-        if (f === ' ') {
-            return ' ';
-        }
-        return '';
-    });
-    return str;
 }
 
-function decodeHTML(str) {
-    str = str || '';
+function decodeHTML(str = '') {
     let map = {'gt': '>', 'lt': '<', 'amp': '&', 'quot': '"'};
     return str.replace(/&(#(?:x[0-9a-f]+|\d+)|[a-z]+);?/gmi, function ($0, $1) {
         if ($1[0] === '#') {
@@ -40,7 +34,7 @@ JSON.safeParse = function (str) {
     }
 };
 
-chrome.runtime.getBackgroundPage(function (bg) {
+chrome.runtime.getBackgroundPage((bg) => {
     const documentReady = () => {
         if (!browser) {
             const warning = document.querySelector('.ff-warning');
