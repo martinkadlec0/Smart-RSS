@@ -14,7 +14,7 @@ define([
          * @constructor
          * @extends Backbone.View
          */
-        var ContentView = BB.View.extend({
+        let ContentView = BB.View.extend({
 
             /**
              * Tag name of content view element
@@ -220,6 +220,45 @@ define([
 
 
                         frame.contentDocument.querySelector('#smart-rss-url').href = this.model.get('url');
+
+                        if (!this.handleClick) {
+                            this.handleClick = true;
+                            frame.contentDocument.addEventListener('click', (event) => {
+                                    if (event.target.matches('a')) {
+                                        event.stopPropagation();
+                                        const href = event.target.getAttribute('href');
+                                        if (!href || href[0] !== '#') {
+                                            return true;
+                                        }
+                                        event.preventDefault();
+                                        const name = href.substring(1);
+                                        const nameElement = frame.contentDocument.querySelector('[name="' + name + ']"');
+                                        const idElement = frame.contentDocument.getElementById(name);
+                                        var element = null;
+                                        if (nameElement) {
+                                            element = nameElement;
+                                        } else if (idElement) {
+                                            element = idElement;
+                                        }
+                                        if (element) {
+                                            const getOffset = function (el) {
+                                                const box = el.getBoundingClientRect();
+
+                                                return {
+                                                    top: box.top + frame.contentWindow.pageYOffset - frame.contentDocument.documentElement.clientTop,
+                                                    left: box.left + frame.contentWindow.pageXOffset - frame.contentDocument.documentElement.clientLeft
+                                                };
+                                            };
+
+                                            const offset = getOffset(element);
+                                            frame.contentWindow.scrollTo(offset.left, offset.top);
+                                        }
+
+                                        return false;
+                                    }
+                                }
+                            );
+                        }
                     };
 
                     if (sandbox.loaded) {
