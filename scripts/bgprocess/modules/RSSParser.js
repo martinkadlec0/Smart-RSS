@@ -32,7 +32,7 @@ define([], function () {
                 return false;
             }
 
-            let address = link.textContent || link.getAttribute('href');
+            let address = (link.textContent || link.getAttribute('href')).trim();
 
             if (!address.startsWith('http')) {
                 if (address.startsWith('/')) {
@@ -61,7 +61,7 @@ define([], function () {
                 title = this.document.querySelector('channel > link, feed > link, rss > link');
             }
             title = title && title.textContent ? title.textContent.trim() || 'rss' : 'rss';
-            return title;
+            return title.trim();
         }
 
         replaceUTCAbbr(str) {
@@ -121,14 +121,14 @@ define([], function () {
                     creator = creator.replace(/^\S+@\S+\.\S+\s+\((.+)\)$/, '$1');
                 }
                 creator = creator.replace(/\s*\(\)\s*$/, '');
-                return creator;
+                return creator.trim();
             }
 
             return 'no author';
         }
 
         getArticleTitle() {
-            return this.currentNode.querySelector('title') ? this.currentNode.querySelector('title').textContent : '&lt;no title&gt;';
+            return (this.currentNode.querySelector('title') ? this.currentNode.querySelector('title').textContent : '&lt;no title&gt;').trim();
         }
 
         getArticleContent() {
@@ -159,7 +159,7 @@ define([], function () {
         getGuid() {
             const node = this.currentNode;
             let guid = node.querySelector('guid');
-            return guid ? guid.textContent : this.getLink() || '';
+            return (guid ? guid.textContent : this.getLink() || '').trim();
         }
 
         parse() {
