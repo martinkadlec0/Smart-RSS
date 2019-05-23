@@ -272,18 +272,21 @@ chrome.runtime.getBackgroundPage((bg) => {
                 alert('Importing error: ' + error.message);
             };
         };
+        if (browser) {
+            reader.readAsText(file);
+        } else {
+            const url = chrome.extension.getURL('rss.html');
+            chrome.tabs.query({url: url}, function (tabs) {
+                for (let i = 0; i < tabs.length; i++) {
+                    chrome.tabs.remove(tabs[i].id);
+                }
 
-        const url = chrome.extension.getURL('rss.html');
-        chrome.tabs.query({url: url}, function (tabs) {
-            for (let i = 0; i < tabs.length; i++) {
-                chrome.tabs.remove(tabs[i].id);
-            }
-
-            // wait for clear events to happen
-            setTimeout(function () {
-                reader.readAsText(file);
-            }, 1000);
-        });
+                // wait for clear events to happen
+                setTimeout(function () {
+                    reader.readAsText(file);
+                }, 1000);
+            });
+        }
     }
 
     function handleImportOPML(event) {
