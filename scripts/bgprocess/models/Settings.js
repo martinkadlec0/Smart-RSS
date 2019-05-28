@@ -55,7 +55,8 @@ define(['backbone', 'preps/indexeddb'], function(BB) {
             showSpinner: true,
             concurrentDownloads: 5,
             updateFrequency: 15, // in minutes
-            disableAutoUpdate: false
+            disableAutoUpdate: false,
+            openInNewTab: true
         },
         /**
          * @property localStorage

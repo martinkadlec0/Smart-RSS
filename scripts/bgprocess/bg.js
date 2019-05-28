@@ -56,10 +56,14 @@ define([
                         return;
                     }
                     window.sourceToFocus = focusSource;
-                    chrome.tabs.create({
-                        'url': url
-                    }, () => {
-                    });
+                    if (settings.get('openInNewTab')) {
+                        chrome.tabs.create({
+                            url: url
+                        }, () => {
+                        });
+                    } else {
+                        chrome.tabs.update({url: url});
+                    }
                 });
         }
 
