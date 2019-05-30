@@ -2,7 +2,7 @@
  * @module BgProcess
  */
 define([
-        'src/scripts/bgprocess/modules/Animation', 'models/Settings', 'models/Info', 'models/Source',
+        'modules/Animation', 'models/Settings', 'models/Info', 'models/Source',
         'collections/Sources', 'collections/Items', 'collections/Folders', 'models/Loader',
         'models/Folder', 'models/Item', 'collections/Toolbars'
     ],

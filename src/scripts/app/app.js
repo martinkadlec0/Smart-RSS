@@ -2,7 +2,7 @@
  * @module App
  */
 define([
-        'src/scripts/app/controllers/comm',
+        'controllers/comm',
         'layouts/Layout', 'collections/Actions', 'layouts/FeedsLayout', 'layouts/ArticlesLayout',
         'layouts/ContentLayout', 'staticdb/shortcuts', 'preps/extendNative'
     ],
