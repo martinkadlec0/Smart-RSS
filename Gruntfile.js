@@ -234,7 +234,7 @@ module.exports = function (grunt) {
                 ]
             }
         },
-        package: {
+        zip: {
             detector: {
                 dirname: 'chromium_detector',
                 alwaysPackage: false
