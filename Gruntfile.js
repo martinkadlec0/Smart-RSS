@@ -1,28 +1,181 @@
 module.exports = function (grunt) {
 
-    // Project configuration.
+    const {join, dirname} = require('path');
+    const {readdirSync, lstatSync, existsSync} = require('fs');
+
+
+    const prepare = function () {
+        const defaultConfig = {
+            removeFromManifest: [],
+            alwaysPackage: true,
+            root: null,
+            versionsFile: null
+        };
+        const config = Object.assign(defaultConfig, this.data);
+        const root = config.root ? join(__dirname, 'dist', config.root) : join(__dirname, 'dist', this.target);
+        const manifestPath = join(root, 'manifest.json');
+        const originalManifest = grunt.file.readJSON(manifestPath);
+        let newManifest = Object.assign({}, originalManifest);
+        if (config.csp) {
+            newManifest['content_security_policy'] = newManifest[config.csp];
+            delete newManifest[config.csp];
+        }
+        if (config.removeFromManifest) {
+            config.removeFromManifest.forEach((item) => {
+                delete newManifest[item];
+            });
+        }
+        grunt.file.write(manifestPath, JSON.stringify(newManifest, null, 2));
+    };
+
+    const commit = function (level = 'patch') {
+        let {exec} = require('child_process');
+        let done = this.async();
+        exec('git add *', (err, stdout, stderr) => {
+            if (err) {
+                console.log(`stderr: ${stderr}`);
+                done(false);
+                return;
+            }
+            exec(`git commit -m "auto version bump: ${level}"`, (err) => {
+                if (err) {
+                    done(false);
+                    return;
+                }
+                done(true);
+            });
+        });
+    };
+
+    const bumpVersion = function (level = 'patch') {
+        const semver = require('semver');
+        const md5File = require('md5-file');
+
+        const manifestPath = join(__dirname, 'src/manifest.json');
+        const manifest = grunt.file.readJSON(manifestPath);
+        manifest.version = semver.inc(manifest.version, level);
+        grunt.file.write(manifestPath, JSON.stringify(manifest, null, 2));
+
+        const versionsPath = join(__dirname, '/src/rssDetector/manifest.json');
+        const versions = Object.assign(existsSync(versionsPath) ? grunt.file.readJSON(versionsPath) : {}, {
+            files: [],
+            package: false
+        });
+
+        let newVersions = {
+            files: [],
+            package: false
+        };
+        const filesList = [];
+
+        const scan = (dir) => {
+            readdirSync(dir).forEach((file) => {
+                if (file[0] === '.') {
+                    return;
+                }
+                const filePath = join(dir, file);
+                if (lstatSync(filePath).isDirectory()) {
+                    scan(filePath);
+                    return;
+                }
+                filesList.push(filePath);
+            });
+        };
+        const detectorPath = join(__dirname, 'src/rssDetector');
+        scan(detectorPath);
+        filesList.forEach((item) => {
+            const hash = md5File.sync(item);
+            const fileName = item.split('\\').pop().split('/').pop();
+            if (fileName === 'manifest.json') {
+                return;
+            }
+            newVersions.files[fileName] = hash;
+            if (!versions.files[fileName] || versions.files[fileName] !== newVersions.files[fileName]) {
+                newVersions.package = true;
+            }
+        });
+        grunt.file.write(versionsPath, JSON.stringify(newVersions, null, 2));
+        const detectorManifestPath = join(detectorPath, 'manifest.json');
+        const detectorManifest = grunt.file.readJSON(detectorManifestPath);
+        detectorManifest.version = semver.inc(detectorManifest.version, level);
+        grunt.file.write(detectorManifestPath, JSON.stringify(detectorManifest, null, 2));
+    };
+
+
+    const zip = function () {
+        const defaultConfig = {
+            dirname: this.target,
+            alwaysPackage: true,
+            skip: []
+        };
+        const config = Object.assign(defaultConfig, this.data);
+        const root = join(__dirname, 'dist', config.dirname);
+        const manifestPath = join(root, 'manifest.json');
+
+
+        const filesList = [];
+
+        const scan = (dir) => {
+            readdirSync(dir).forEach((file) => {
+                if (file[0] === '.') {
+                    return;
+                }
+                const filePath = join(dir, file);
+                let skip = false;
+                config.skip.forEach((blacklisted) => {
+                    if (filePath.includes(blacklisted)) {
+                        skip = true;
+                    }
+                });
+
+
+                if (lstatSync(filePath).isDirectory()) {
+                    scan(filePath);
+                    return;
+                }
+                filesList.push(filePath);
+            });
+        };
+        scan(root);
+
+
+        const createPackage = config.alwaysPackage || grunt.file.readJSON(join(root, 'versions.json')).package;
+
+        if (createPackage) {
+            const version = getVersion(manifestPath);
+            const AdmZip = require('adm-zip');
+            const zipFile = new AdmZip();
+            filesList.forEach((file) => {
+                let path = dirname(file).replace(root, '');
+                zipFile.addLocalFile(file, path);
+            });
+            zipFile.writeZip(join(__dirname, 'dist', 'SmartRSS_v' + version + '_' + this.target + '.zip'));
+        }
+    };
+
+    const getVersion = function (manifest) {
+        return grunt.file.readJSON(manifest).version;
+    };
+
+
+// Project configuration.
     grunt.initConfig({
-        package: {
+        watch: {
+            scripts: {
+                files: ['src/**/*'],
+                tasks: ['watcher'],
+                options: {
+                    spawn: true
+                }
+            }
+        },
+        prepare: {
             firefox: {
-                skipped: [
-                    'node_modules',
-                    'package.json',
-                    'package-lock.json',
-                    'Gruntfile.js',
-                    'rssDetector/manifest.json'
-                ],
                 removeFromManifest: [
                     'chromium_content_security_policy'
                 ]
             },
             chromium: {
-                skipped: [
-                    'node_modules',
-                    'package.json',
-                    'package-lock.json',
-                    'Gruntfile.js',
-                    'rssDetector'
-                ],
                 removeFromManifest: [
                     'content_scripts',
                     'page_action',
@@ -36,165 +189,77 @@ module.exports = function (grunt) {
                 skipped: [
                     'versions.json'
                 ],
-                root: 'rssDetector',
+                root: 'chromium_detector',
                 versionsFile: 'versions.json'
             }
-        }
-    });
-
-
-
-    grunt.registerMultiTask('package', '', function () {
-        const defaultConfig = {
-            skipped: [],
-            removeFromManifest: [],
-            alwaysPackage: true,
-            root: null,
-            versionsFile: null
-        };
-
-        const path = require('path');
-        const fs = require('fs');
-
-
-        const config = Object.assign(defaultConfig, this.data);
-
-        const root = config.root ? __dirname + '/' + config.root : __dirname;
-        const manifestPath = root + '/manifest.json';
-        const originalManifest = grunt.file.readJSON(manifestPath);
-        const version = originalManifest.version;
-
-        let newManifest = Object.assign({}, originalManifest);
-
-        if (config.csp) {
-            newManifest['content_security_policy'] = newManifest[config.csp];
-            delete newManifest[config.csp];
-        }
-        if (config.removeFromManifest.length > 0) {
-            config.removeFromManifest.forEach((item) => {
-                delete newManifest[item];
-            });
-        }
-        grunt.file.write(manifestPath, JSON.stringify(newManifest, null, 2));
-
-
-        const filesList = [];
-
-        const scan = (dir) => {
-            fs.readdirSync(dir).forEach((file) => {
-                if (file[0] === '.') {
-                    return;
-                }
-
-
-                const filePath = dir + '/' + file;
-                let skip = false;
-                if (config.skipped.length > 0) {
-                    config.skipped.forEach((blacklisted) => {
-                        if (filePath.includes(blacklisted)) {
-                            skip = true;
-                        }
-                    });
-                }
-                if (skip) {
-                    return;
-                }
-                if (path.extname(file) === '.zip') {
-                    return;
-                }
-                if (fs.lstatSync(filePath).isDirectory()) {
-                    scan(filePath);
-                    return;
-                }
-                filesList.push(filePath);
-            });
-        };
-        scan(root);
-
-
-        if (config.versionsFile) {
-            const versionsPath = root + '/' + config.versionsFile;
-            const versions = fs.existsSync(versionsPath) ? grunt.file.readJSON(versionsPath) : {};
-            const md5File = require('md5-file');
-            let newVersions = {};
-            let createPackage = false;
-            filesList.forEach((item) => {
-                const hash = md5File.sync(item);
-                const fileName = item.split('\\').pop().split('/').pop();
-                if (fileName === 'manifest.json') {
-                    return;
-                }
-                newVersions[fileName] = hash;
-                if (!versions[fileName] || versions[fileName] !== newVersions[fileName]) {
-                    createPackage = true;
-                    console.log('diff', fileName);
-                }
-            });
-
-            if (createPackage) {
-                grunt.file.write(versionsPath, JSON.stringify(newVersions, null, 2));
-                grunt.task.run('bump-version:' + config.root + ':' + config.versionsFile);
+        },
+        copy: {
+            firefox: {
+                files: [{
+                    expand: true,
+                    cwd: './src/',
+                    src: [
+                        '**/*',
+                        '!rssDetector/manifest.json'
+                    ],
+                    filter: 'isFile',
+                    dest: './dist/firefox/'
+                }]
+            },
+            chromium: {
+                files: [{
+                    expand: true,
+                    cwd: './src/',
+                    src: [
+                        '**/*',
+                        '!rssDetector/*'
+                    ],
+                    filter: 'isFile',
+                    dest: './dist/chromium/'
+                }]
+            },
+            detector: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: './src/rssDetector/',
+                        src: [
+                            '**/*'
+                        ],
+                        filter: 'isFile',
+                        dest: './dist/chromium_detector/'
+                    }
+                ]
             }
-
+        },
+        package: {
+            detector: {
+                dirname: 'chromium_detector',
+                alwaysPackage: false
+            },
+            firefox: {},
+            chromium: {}
         }
 
-        createPackage = typeof createPackage !== 'undefined' ? createPackage || config.alwaysPackage : config.alwaysPackage;
-
-
-        if (createPackage) {
-            const AdmZip = require('adm-zip');
-            const zipFile = new AdmZip();
-            filesList.forEach((file) => {
-                let path = file.replace(root, '');
-                path = path.substring(0, path.lastIndexOf('/'));
-                path = path.substring(1, path.length);
-                zipFile.addLocalFile(file, path);
-            });
-            zipFile.writeZip(this.target + '_' + version + '.zip');
-        }
-
-        if (config.removeFromManifest) {
-            grunt.file.write(manifestPath, JSON.stringify(originalManifest, null, 2));
-        }
     });
 
+    grunt.registerMultiTask('package', '', zip);
 
-    grunt.registerTask('bump-version', '', function (root, versionsFile) {
-        const manifestPath = typeof root !== 'undefined' ? root + '/manifest.json' : 'manifest.json';
-        const manifest = grunt.file.readJSON(manifestPath);
-        let version = manifest.version;
 
-        let versionArr = version.split('.');
-        versionArr[2] = parseInt(versionArr[2]) + 1;
-        version = versionArr.join('.');
+    grunt.registerMultiTask('prepare', '', prepare);
+    grunt.registerTask('commit', '', commit);
+    grunt.registerTask('bump-version', '', bumpVersion);
 
-        manifest.version = version;
-        grunt.file.write(manifestPath, JSON.stringify(manifest, null, 2));
-        let {exec} = require('child_process');
-        let done = this.async();
-        let gitCommand = 'git add ' + manifestPath;
-        if (typeof versionsFile !== 'undefined') {
-            gitCommand += ' ' + root + '/' + versionsFile;
-        }
-        console.log(gitCommand);
-        exec(gitCommand, (err, stdout, stderr) => {
-            if (err) {
-                // node couldn't execute the command
-                console.log(`stderr: ${stderr}`);
-                done(false);
-                return;
-            }
-            exec('git commit -m "auto version bump"', (err, stdout, stderr) => {
-                console.log(`stdout: ${stdout}`);
-                if (err) {
-                    console.log(`stderr: ${stderr}`);
-                    done(false);
-                    return;
-                }
-                done(true);
-            });
-        });
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.registerTask('watcher', ['copy', 'prepare']);
+
+    grunt.registerTask('release', '', function (level = 'patch') {
+        grunt.task.run('bump-version:' + level);
+        grunt.task.run('commit');
+        grunt.task.run('copy');
+        grunt.task.run('prepare');
+        grunt.task.run('package');
     });
 
-    grunt.registerTask('release', ['bump-version', 'package']);
 };

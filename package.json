@@ -2,12 +2,15 @@
   "name": "smartrss",
   "version": "2.0.0",
   "description": "RSS Reader",
-  "homepage": "",
+  "homepage": "https://github.com/zakius/Smart-RSS",
   "dependencies": {},
   "devDependencies": {
     "adm-zip": "git+https://github.com/cthackers/adm-zip.git",
     "grunt": "^1.0.4",
-    "md5-file": "^4.0.0"
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-watch": "^1.1.0",
+    "md5-file": "^4.0.0",
+    "semver": "^6.1.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

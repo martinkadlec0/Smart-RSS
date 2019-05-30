@@ -1,0 +1,37 @@
+{
+    "name": "Smart RSS Detector",
+    "developer": {
+        "name": "zakius",
+        "url": ""
+    },
+    "description": "RSS Detector for Smart RSS extension.",
+    "manifest_version": 2,
+    "version": "1.0.7",
+    "background": {
+        "scripts": [
+            "bg.js"
+        ],
+        "persistent": false
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*/*"
+            ],
+            "run_at": "document_start",
+            "js": [
+                "scan.js"
+            ]
+        }
+    ],
+    "page_action": {
+        "default_title": "RSS",
+        "default_popup": "popup.html"
+    },
+    "icons": {
+        "48": "icon48.png",
+        "64": "icon64.png",
+        "96": "icon96.png",
+        "128": "icon128.png"
+    }
+}
