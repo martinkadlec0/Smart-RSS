@@ -245,22 +245,22 @@ module.exports = function (grunt) {
 
     });
 
-    grunt.registerMultiTask('package', '', zip);
-
-
-    grunt.registerMultiTask('prepare', '', prepare);
-    grunt.registerTask('commit', '', commit);
     grunt.registerTask('bump-version', '', bumpVersion);
+    grunt.registerTask('package', ['copy', 'prepare', 'zip']);
 
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.registerMultiTask('prepare', '', prepare);
+    grunt.registerMultiTask('zip', '', zip);
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.registerTask('watcher', ['copy', 'prepare']);
 
+
+
+
+
     grunt.registerTask('release', '', function (level = 'patch') {
         grunt.task.run('bump-version:' + level);
-        grunt.task.run('commit');
-        grunt.task.run('copy');
-        grunt.task.run('prepare');
+        commit();
         grunt.task.run('package');
     });
 
