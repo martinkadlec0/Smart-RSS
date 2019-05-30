@@ -42,13 +42,30 @@ To check for jshint errors:
 jshint .
 ```
 
-To create package uploadable to various extension repositories 
-```
-grunt release
-```
-this will automatically bump version in manifest.json, commit the change and create zip file
+There are multiple grunt tasks defined for this project but only few are meant to be run directly:
 
-To create zip file only use 
 ```
-grunt package
+grunt prepare
+``` 
+copies relevant source files to browser specific directories within `dist` subdirectory and cleans up manifests from values not needed by the given browser.
+ 
+ 
 ```
+grunt watch
+```
+watches for changes in `src` directory and performs `prepare` every time it detects one
+
+ 
+```
+grunt release:{level=patch}
+```
+ 
+is all-in-one solution for releasing new versions of the extension  
+  
+- increases extension version in manifest by semver `level`
+- checks if Chromium only Detector changed and if so
+    - increases Detector version in manifest by semver `level`
+- commits changes with relevant message
+- performs `prepare`
+- creates browser specific packages of the extension and if required
+    - creates chromium package of Detector
