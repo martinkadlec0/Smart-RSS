@@ -4,7 +4,7 @@ module.exports = function (grunt) {
     const {readdirSync, lstatSync, existsSync} = require('fs');
 
 
-    const prepare = function () {
+    const cleanup = function () {
         const defaultConfig = {
             removeFromManifest: [],
             alwaysPackage: true,
@@ -165,13 +165,13 @@ module.exports = function (grunt) {
         watch: {
             scripts: {
                 files: ['src/**/*'],
-                tasks: ['watcher'],
+                tasks: ['prepare'],
                 options: {
                     spawn: true
                 }
             }
         },
-        prepare: {
+        cleanup: {
             firefox: {
                 removeFromManifest: [
                     'chromium_content_security_policy'
@@ -246,13 +246,13 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('bump-version', '', bumpVersion);
-    grunt.registerTask('package', ['copy', 'prepare', 'zip']);
+    grunt.registerTask('package', ['prepare', 'zip']);
 
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.registerMultiTask('prepare', '', prepare);
+    grunt.registerMultiTask('cleanup', '', cleanup);
     grunt.registerMultiTask('zip', '', zip);
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.registerTask('watcher', ['copy', 'prepare']);
+    grunt.registerTask('prepare', ['copy', 'cleanup']);
 
 
 
