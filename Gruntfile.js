@@ -146,7 +146,9 @@ module.exports = function (grunt) {
             const AdmZip = require('adm-zip');
             const zipFile = new AdmZip();
             filesList.forEach((file) => {
-                let path = dirname(file).replace(root, '');
+                // TODO: shorten somehow, make sure that `path` doesn't contain leading slashes nor backslashes
+                let path = dirname(file).replace(root + '/', '').replace(root + '\\', '').replace(root, '');
+
                 zipFile.addLocalFile(file, path);
             });
             zipFile.writeZip(join(__dirname, 'dist', 'SmartRSS_v' + version + '_' + this.target + '.zip'));
