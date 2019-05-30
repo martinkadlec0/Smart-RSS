@@ -246,6 +246,7 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('bump-version', '', bumpVersion);
+    grunt.registerTask('commit', '', commit);
     grunt.registerTask('package', ['prepare', 'zip']);
 
     grunt.loadNpmTasks('grunt-contrib-copy');
@@ -260,7 +261,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('release', '', function (level = 'patch') {
         grunt.task.run('bump-version:' + level);
-        commit();
+        grunt.task.run('commit:' + level);
         grunt.task.run('package');
     });
 
