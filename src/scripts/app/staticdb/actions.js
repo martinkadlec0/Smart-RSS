@@ -363,7 +363,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                     let query = event.currentTarget.value || '';
                     const list = require('views/articleList');
                     if (query === '') {
-                        [...document.querySelectorAll('.date-group')].map((element) => {
+                        [...document.querySelectorAll('.date-group, .articles-list-item')].map((element) => {
                             element.classList.remove('hidden');
                         });
                         return;
@@ -381,22 +381,22 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                     const expression = new RegExp(RegExp.escape(query), 'i');
                     list.views.some(function (view) {
                         if (!view.model) {
-                            return true;
+                            return false;
                         }
-                        const sourceId = view.model.get('SourceID');
+                        const sourceId = view.model.get('sourceID');
                         const sourceItem = document.querySelector('[data-id="' + sourceId + '"]');
                         if (!sourceItem) {
-                            return true;
+                            return false;
                         }
                         if (!sourceItem.classList.contains('selected')) {
-                            return true;
+                            return false;
                         }
 
 
-                        if (expression.test(view.model.get('title')) || expression.test(view.model.get('author')) || (searchInContent && expression.test(view.model.get('content')))) {
-                            view.el.classList.remove('hidden');
-                        } else {
+                        if (!(expression.test(view.model.get('title')) || expression.test(view.model.get('author')) || (searchInContent && expression.test(view.model.get('content'))))) {
                             view.el.classList.add('hidden');
+                        } else {
+                            view.el.classList.remove('hidden');
                         }
                     });
                 }
