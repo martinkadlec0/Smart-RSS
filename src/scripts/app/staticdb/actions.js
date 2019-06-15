@@ -163,7 +163,8 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                     }
 
                     url = app.fixURL(url);
-                    const duplicate = bg.sources.findWhere({url: url});
+                    const uid = url.replace(/^(.*:)?(\/\/)?(www*?\.)?/, '').replace(/\/$/, '');
+                    const duplicate = bg.sources.findWhere({uid: uid});
 
                     if (!duplicate) {
                         const newFeed = bg.sources.create({
