@@ -13,7 +13,7 @@ define(['backbone'], function (BB) {
     var Source = BB.Model.extend({
         defaults: {
             title: '',
-            url: 'about:blank',
+            url: '',
             base: '',
             updateEvery: -1, // in minutes, -1 to use global default
             lastChecked: 0,
@@ -29,7 +29,8 @@ define(['backbone'], function (BB) {
             favicon: '/images/feed.png',
             faviconExpires: 0,
             errorCount: 0,
-            lastArticle: 0
+            lastArticle: 0,
+            uid: ''
         },
 
         initialize: function () {
