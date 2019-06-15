@@ -164,6 +164,7 @@ define([], function () {
 
         parse() {
             let items = [];
+            const data = {};
 
             let nodes = this.document.querySelectorAll('item');
             if (!nodes.length) {
@@ -174,7 +175,7 @@ define([], function () {
 
 
             if (title && (this.source.get('title') === this.source.get('url') || !this.source.get('title'))) {
-                this.source.save('title', title);
+                data.title = title;
             }
 
 
@@ -188,8 +189,10 @@ define([], function () {
                     const prefix = this.source.get('url').includes('http://') ? 'http://' : 'https://';
                     const urlParts = baseStr.replace('http://', '').replace('https://', '').replace('//', '').split(/[/?#]/);
                     baseStr = prefix + urlParts[0];
-                    this.source.save({base: baseStr});
+                    data.base = baseStr;
                 }
+                data.uid = this.source.get('url').replace(/^(.*:)?(\/\/)?(www*?\.)?/, '').replace(/\/$/, '');
+                this.source.save(data);
             }
 
             [...nodes].forEach((node) => {
