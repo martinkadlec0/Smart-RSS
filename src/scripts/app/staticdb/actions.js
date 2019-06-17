@@ -170,7 +170,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                         const newFeed = bg.sources.create({
                             title: url,
                             url: url,
-                            updateEvery: 180,
+                            updateEvery: -1,
                             folderID: folderID
                         }, {wait: true});
                         app.trigger('focus-feed', newFeed.get('id'));
