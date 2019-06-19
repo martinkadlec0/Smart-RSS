@@ -72,7 +72,7 @@ define([
             noFocus: false,
 
             events: {
-                'dragstart .articles-list-item': 'handleDragStart',
+                // 'dragstart .articles-list-item': 'handleDragStart',
                 'click .articles-list-item': 'handleMouseDown',
                 'mouseup .articles-list-item': 'handleMouseUp',
                 'dblclick .articles-list-item': 'handleItemDblClick',
@@ -255,19 +255,19 @@ define([
                 this.handleNewSelected(this.currentData);
             },
 
-            /**
-             * Stores ids of dragged items
-             * @method handleDragStart
-             * @triggered on drag start
-             * @param event {DragEvent}
-             */
-            handleDragStart: function (event) {
-                const ids = this.selectedItems.map(function (view) {
-                    return view.model.id;
-                });
-
-                event.originalEvent.dataTransfer.setData('text/plain', JSON.stringify(ids));
-            },
+            // /**
+            //  * Stores ids of dragged items
+            //  * @method handleDragStart
+            //  * @triggered on drag start
+            //  * @param event {DragEvent}
+            //  */
+            // handleDragStart: function (event) {
+            //     const ids = this.selectedItems.map(function (view) {
+            //         return view.model.id;
+            //     });
+            //
+            //     event.originalEvent.dataTransfer.setData('text/plain', JSON.stringify(ids));
+            // },
 
             /**
              * Selects new item when the last selected is deleted
@@ -368,7 +368,7 @@ define([
 
 
             /**
-             * Removes everything from lists and adds new collectino of articles
+             * Removes everything from lists and adds new collection of articles
              * @method setItemHeight
              * @param items {Backbone.Collection} bg.Items
              */
