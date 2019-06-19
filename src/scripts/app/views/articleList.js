@@ -584,8 +584,8 @@ define([
              */
             destroyItemFrame: function (view) {
                 // START: REMOVE DATE GROUP
-                let prev = view.el.previousElementSibling;
-                let next = view.el.nextElementSibling;
+                const prev = view.el.previousElementSibling;
+                const next = view.el.nextElementSibling;
                 if (prev && prev.classList.contains('date-group')) {
                     if (!next || next.classList.contains('date-group')) {
                         groups.remove(prev.view.model);
@@ -596,13 +596,13 @@ define([
                 view.clearEvents();
                 view.remove();
 
-                let io = this.selectedItems.indexOf(view);
-                if (io >= 0) {
-                    this.selectedItems.splice(io, 1);
+                const selectedItemIndex = this.selectedItems.indexOf(view);
+                if (selectedItemIndex >= 0) {
+                    this.selectedItems.splice(selectedItemIndex, 1);
                 }
-                io = this.views.indexOf(view);
-                if (io >= 0) {
-                    this.views.splice(io, 1);
+                const viewIndex = this.views.indexOf(view);
+                if (viewIndex >= 0) {
+                    this.views.splice(viewIndex, 1);
                 }
             },
 
