@@ -11,7 +11,7 @@ define([
         document.documentElement.style.fontSize = bg.settings.get('uiFontSize') + '%';
 
         document.addEventListener('contextmenu', function (event) {
-            if (!event.target.matches('#region-content header, #region-content header *')) {
+            if (!event.target.matches('#content header, #content header *')) {
                 event.preventDefault();
             }
         });
@@ -105,7 +105,7 @@ define([
                 }
 
                 const activeRegion = activeElement.closest('.region');
-                const activeRegionName = activeRegion ? activeRegion.getAttribute('name') : null;
+                const activeRegionName = activeRegion ? activeRegion.id : null;
 
                 if (activeRegionName && activeRegionName in shortcuts) {
                     if (shortcut in shortcuts[activeRegionName]) {

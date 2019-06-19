@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-	<meta charset="utf-8">
-	<title>Smart RSS</title>
-	<link rel="stylesheet" type="text/css" href="styles/main.css" />
-	<link rel="shortcut icon" href="images/icon16_v2.png" />
-	<script data-main="scripts/main.js" src="scripts/libs/require.js"></script>
+  <meta charset="utf-8">
+  <title>Smart RSS</title>
+  <link rel="stylesheet" type="text/css" href="styles/main.css"/>
+  <link rel="shortcut icon" href="images/icon16_v2.png"/>
+  <script data-main="scripts/main.js" src="scripts/libs/require.js"></script>
 </head>
 <body>
-	<div class="regions">
-		<section class="region" id="region-feeds" tabindex="1" name="feeds"></section>
-		<section class="regions subregions">
-			<section class="region" id="region-articles" tabindex="2" name="articles"></section>
-			<section class="region" id="region-content"  tabindex="3" name="content"></section>
-		</section>
-	</div>
+<section class="region" id="feeds" tabindex="0"></section>
+<section id="second-pane">
+  <section class="region" id="articles" tabindex="0"></section>
+  <section class="region" id="content" tabindex="0"></section>
+</section>
 </body>
 </html>

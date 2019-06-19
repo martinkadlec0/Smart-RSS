@@ -21,10 +21,10 @@ define([
             /**
              * View element
              * @property el
-             * @default #region-content
+             * @default #content
              * @type HTMLElement
              */
-            el: '#region-content',
+            el: '#content',
 
             /**
              * @method initialize

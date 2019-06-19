@@ -17,7 +17,7 @@ define([
          * @extends Layout
          */
         let ArticlesLayout = Layout.extend({
-            el: '#region-articles',
+            el: '#articles',
             events: {
                 'keydown': 'handleKeyDown',
                 'mousedown': 'handleMouseDown'

@@ -21,10 +21,10 @@ define([
             /**
              * View element
              * @property el
-             * @default #region-feeds
+             * @default #feeds
              * @type HTMLElement
              */
-            el: '#region-feeds',
+            el: '#feeds',
 
             /**
              * @method initialize
