@@ -202,7 +202,8 @@ module.exports = function (grunt) {
                     cwd: './src/',
                     src: [
                         '**/*',
-                        '!rssDetector/manifest.json'
+                        '!rssDetector/manifest.json',
+                        '!images/chrome-small-tile.png',
                     ],
                     filter: 'isFile',
                     dest: './dist/firefox/'
@@ -214,7 +215,8 @@ module.exports = function (grunt) {
                     cwd: './src/',
                     src: [
                         '**/*',
-                        '!rssDetector/*'
+                        '!rssDetector/*',
+                        '!images/chrome-small-tile.png',
                     ],
                     filter: 'isFile',
                     dest: './dist/chromium/'
