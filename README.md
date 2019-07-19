@@ -6,6 +6,8 @@ Translations are in scripts/nls/*.js
 
 For technical bug reports use issues here on GitHub
 
+## If you recently upgraded to FF68 and your extension data seem to be lost please look here for a workaround and a bit of discussion https://github.com/zakius/Smart-RSS/issues/79#issuecomment-513215261
+
 ## For users
 
 Extension is available in following repositories:
