@@ -92,6 +92,9 @@ define([
                 if (event.ctrlKey) {
                     shortcut += 'ctrl+';
                 }
+                if (event.altKey) {
+                    shortcut += 'alt+';
+                }
                 if (event.shiftKey) {
                     shortcut += 'shift+';
                 }
