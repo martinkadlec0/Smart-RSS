@@ -89,14 +89,17 @@ chrome.runtime.getBackgroundPage((bg) => {
                 const label = document.createElement('label');
                 label.classList.add('web-content-select-label');
 
-                const left = document.createElement('input');
-                left.classList.add('selectLabel');
-                left.value = regionHotkey;
-                const right = document.createElement('input');
-                right.value = regionHotkeys[regionHotkey];
+                const hotkey = document.createElement('input');
+                hotkey.setAttribute('disabled', true);
+                hotkey.classList.add('selectLabel');
+                hotkey.value = regionHotkey;
 
-                label.insertAdjacentElement('beforeend', left);
-                label.insertAdjacentElement('beforeend', right);
+                const action = document.createElement('input');
+                action.setAttribute('disabled', true);
+                action.value = regionHotkeys[regionHotkey];
+
+                label.insertAdjacentElement('beforeend', hotkey);
+                label.insertAdjacentElement('beforeend', action);
                 row.insertAdjacentElement('beforeend', label);
 
                 hotkeysElement.insertAdjacentElement('beforeend', row);
