@@ -59,13 +59,6 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             disableAutoUpdate: false,
             openInNewTab: true,
             hotkeys: {
-                global: {
-                    'shift+1': 'feeds:focus',
-                    'shift+2': 'articles:focus',
-                    'shift+3': 'content:focus',
-                    'shift+4': 'content:focusSandbox',
-                    'esc': 'global:hideOverlays'
-                },
                 feeds: {
                     'up': 'feeds:selectPrevious',
                     'down': 'feeds:selectNext',
@@ -153,7 +146,14 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
                     'z': 'articles:prevUnread',
                     'j': 'articles:selectNext',
                     'u': 'articles:selectPrevious'
-                }
+                },
+                global: {
+                    'shift+1': 'feeds:focus',
+                    'shift+2': 'articles:focus',
+                    'shift+3': 'content:focus',
+                    'shift+4': 'content:focusSandbox',
+                    'esc': 'global:hideOverlays'
+                },
             }
         },
         /**
