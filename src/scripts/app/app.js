@@ -83,6 +83,7 @@ define([
             },
             handleKeyDown: function (event) {
                 const activeElement = document.activeElement;
+                const hotkeys = bg.settings.get('hotkeys');
 
                 if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
                     return;
@@ -111,15 +112,15 @@ define([
                 const activeRegionName = activeRegion ? activeRegion.id : null;
 
                 if (activeRegionName && activeRegionName in shortcuts) {
-                    if (shortcut in shortcuts[activeRegionName]) {
-                        app.actions.execute(shortcuts[activeRegionName][shortcut], event);
+                    if (shortcut in hotkeys[activeRegionName]) {
+                        app.actions.execute(hotkeys[activeRegionName][shortcut], event);
                         event.preventDefault();
                         return false;
                     }
                 }
 
-                if (shortcut in shortcuts.global) {
-                    app.actions.execute(shortcuts.global[shortcut], event);
+                if (shortcut in hotkeys.global) {
+                    app.actions.execute(hotkeys.global[shortcut], event);
                     event.preventDefault();
                     return false;
                 }
