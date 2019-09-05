@@ -77,35 +77,39 @@ chrome.runtime.getBackgroundPage((bg) => {
         const hotkeys = bg.settings.get('hotkeys');
         console.log(hotkeys);
         for (const region in hotkeys) {
-            const regionElement = document.createElement('h4');
-            regionElement.insertAdjacentText('afterbegin', region);
-            hotkeysElement.insertAdjacentElement('beforeend', regionElement);
+            if (hotkeys.hasOwnProperty(region)) {
+                const regionElement = document.createElement('h4');
+                regionElement.insertAdjacentText('afterbegin', region);
+                hotkeysElement.insertAdjacentElement('beforeend', regionElement);
 
-            const regionHotkeys = hotkeys[region];
-            for (const regionHotkey in regionHotkeys) {
-                const row = document.createElement('div');
-                row.classList.add('settings-row');
-                row.classList.add('learn-more');
-                const label = document.createElement('label');
-                label.classList.add('web-content-select-label');
+                const regionHotkeys = hotkeys[region];
+                for (const regionHotkey in regionHotkeys) {
+                    if (regionHotkeys.hasOwnProperty(regionHotkey)) {
 
-                const hotkey = document.createElement('input');
-                hotkey.setAttribute('disabled', true);
-                hotkey.classList.add('selectLabel');
-                hotkey.value = regionHotkey;
+                        const row = document.createElement('div');
+                        row.classList.add('settings-row');
+                        row.classList.add('learn-more');
+                        const label = document.createElement('label');
+                        label.classList.add('web-content-select-label');
 
-                const action = document.createElement('input');
-                action.setAttribute('disabled', true);
-                action.value = regionHotkeys[regionHotkey];
+                        const hotkey = document.createElement('input');
+                        hotkey.setAttribute('disabled', true);
+                        hotkey.classList.add('selectLabel');
+                        hotkey.value = regionHotkey;
 
-                label.insertAdjacentElement('beforeend', hotkey);
-                label.insertAdjacentElement('beforeend', action);
-                row.insertAdjacentElement('beforeend', label);
+                        const action = document.createElement('input');
+                        action.setAttribute('disabled', true);
+                        action.value = regionHotkeys[regionHotkey];
 
-                hotkeysElement.insertAdjacentElement('beforeend', row);
+                        label.insertAdjacentElement('beforeend', hotkey);
+                        label.insertAdjacentElement('beforeend', action);
+                        row.insertAdjacentElement('beforeend', label);
+
+                        hotkeysElement.insertAdjacentElement('beforeend', row);
+                    }
+                }
             }
         }
-
 
         handleLayoutChange(bg.settings.get('layout'));
     };
@@ -415,4 +419,5 @@ chrome.runtime.getBackgroundPage((bg) => {
         });
     }
 
-});
+})
+;
