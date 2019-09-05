@@ -111,7 +111,7 @@ define([
                 const activeRegion = activeElement.closest('.region');
                 const activeRegionName = activeRegion ? activeRegion.id : null;
 
-                if (activeRegionName && activeRegionName in shortcuts) {
+                if (activeRegionName && activeRegionName in hotkeys) {
                     if (shortcut in hotkeys[activeRegionName]) {
                         app.actions.execute(hotkeys[activeRegionName][shortcut], event);
                         event.preventDefault();
