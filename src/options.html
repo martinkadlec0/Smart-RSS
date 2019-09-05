@@ -1,332 +1,331 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Smart RSS - Options</title>
-    <link href="styles/option.css" rel="stylesheet">
-    <script src="scripts/options/options.js"></script>
+  <meta charset="utf-8">
+  <title>Smart RSS - Options</title>
+  <link href="styles/option.css" rel="stylesheet">
+  <script src="scripts/options/options.js"></script>
 </head>
 <body>
 <div id="content">
-    <div id="logo">
-        <div id="logo-icon"></div>
-        <h1>Smart RSS</h1>
+  <div id="logo">
+    <div id="logo-icon"></div>
+    <h1>Smart RSS</h1>
+  </div>
+  <section>
+    <h3 class="section-header">Localization</h3>
+    <div class="settings-row learn-more" title="Contact me if you want to make translation for your lang.">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Language:</span>
+        <select id="lang">
+          <option value="en">English</option>
+          <option value="cs">Čeština</option>
+          <option value="sk">Slovenčina</option>
+          <option value="de">Deutsch</option>
+          <option value="tr">Türkçe</option>
+          <option value="pl">Polski</option>
+          <option value="ru">Русский</option>
+          <option value="hu">Magyar</option>
+          <option value="nl">Nederlands</option>
+          <option value="fr">Français</option>
+          <option value="pt">Português</option>
+          <option value="hr">Hrvatski</option>
+        </select>
+      </label>
     </div>
-    <section>
-        <h3 class="section-header">Localization</h3>
-        <div class="settings-row learn-more" title="Contact me if you want to make translation for your lang.">
-            <label class="web-content-select-label">
-                <span class="selectLabel">Language:</span>
-                <select id="lang">
-                    <option value="en">English</option>
-                    <option value="cs">Čeština</option>
-                    <option value="sk">Slovenčina</option>
-                    <option value="de">Deutsch</option>
-                    <option value="tr">Türkçe</option>
-                    <option value="pl">Polski</option>
-                    <option value="ru">Русский</option>
-                    <option value="hu">Magyar</option>
-                    <option value="nl">Nederlands</option>
-                    <option value="fr">Français</option>
-                    <option value="pt">Português</option>
-                    <option value="hr">Hrvatski</option>
-                </select>
-            </label>
-        </div>
 
-        <div class="settings-row learn-more" title="Normal = DD.MM.YYYY, ISO = YYYY-MM-DD, US = MM/DD/YYYY">
-            <label class="web-content-select-label">
-                <span class="selectLabel">Date format:</span>
-                <select id="dateType">
-                    <option value="normal">Normal</option>
-                    <option value="iso">ISO</option>
-                    <option value="us">US</option>
-                </select>
-            </label>
-        </div>
+    <div class="settings-row learn-more" title="Normal = DD.MM.YYYY, ISO = YYYY-MM-DD, US = MM/DD/YYYY">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Date format:</span>
+        <select id="dateType">
+          <option value="normal">Normal</option>
+          <option value="iso">ISO</option>
+          <option value="us">US</option>
+        </select>
+      </label>
+    </div>
 
-        <div class="settings-row learn-more" title="Time format">
-            <label class="web-content-select-label">
-                <span class="selectLabel">Time format:</span>
-                <select id="hoursFormat">
-                    <option value="24h">24h</option>
-                    <option value="12h">12h (AM/PM)</option>
-                </select>
-            </label>
-        </div>
-    </section>
+    <div class="settings-row learn-more" title="Time format">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Time format:</span>
+        <select id="hoursFormat">
+          <option value="24h">24h</option>
+          <option value="12h">12h (AM/PM)</option>
+        </select>
+      </label>
+    </div>
+  </section>
 
-    <section>
-        <h3 class="section-header">Appearance</h3>
-        <div class="settings-row learn-more">
-            <label class="web-content-select-label">
-                <span class="selectLabel">Layout:</span>
-                <input alt="horizontal" src="images/layout_horizontal.png" type="image" value="horizontal"/>
-                <input alt="vertical" src="images/layout_vertical.png" type="image" value="vertical"/>
-            </label>
-        </div>
-        <div class="settings-row learn-more">
-            <label class="web-content-select-label" for="sortBy">
-                <span class="selectLabel">Sorting:</span>
-                <select class="half-size" data-name="sortBy" id="sortBy">
-                    <option value="date">Date</option>
-                    <option value="title">Title</option>
-                    <option value="author">Author</option>
-                </select>
-                <select class="half-size" data-name="sortOrder" id="sortOrder">
-                    <option value="desc">Descending</option>
-                    <option value="asc">Ascending</option>
-                </select>
-            </label>
-        </div>
-        <div class="settings-row learn-more">
-            <label class="web-content-select-label" for="sortBy2">
-                <span class="selectLabel">Secondary sorting:</span>
-                <select class="half-size" data-name="sortBy2" id="sortBy2">
-                    <option value="date">Date</option>
-                    <option value="title">Title</option>
-                    <option value="author">Author</option>
-                </select>
-                <select class="half-size" data-name="sortOrder2" id="sortOrder2">
-                    <option value="desc">Descending</option>
-                    <option value="asc">Ascending</option>
-                </select>
-            </label>
-        </div>
+  <section>
+    <h3 class="section-header">Appearance</h3>
+    <div class="settings-row learn-more">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Layout:</span>
+        <input alt="horizontal" src="images/layout_horizontal.png" type="image" value="horizontal"/>
+        <input alt="vertical" src="images/layout_vertical.png" type="image" value="vertical"/>
+      </label>
+    </div>
+    <div class="settings-row learn-more">
+      <label class="web-content-select-label" for="sortBy">
+        <span class="selectLabel">Sorting:</span>
+        <select class="half-size" data-name="sortBy" id="sortBy">
+          <option value="date">Date</option>
+          <option value="title">Title</option>
+          <option value="author">Author</option>
+        </select>
+        <select class="half-size" data-name="sortOrder" id="sortOrder">
+          <option value="desc">Descending</option>
+          <option value="asc">Ascending</option>
+        </select>
+      </label>
+    </div>
+    <div class="settings-row learn-more">
+      <label class="web-content-select-label" for="sortBy2">
+        <span class="selectLabel">Secondary sorting:</span>
+        <select class="half-size" data-name="sortBy2" id="sortBy2">
+          <option value="date">Date</option>
+          <option value="title">Title</option>
+          <option value="author">Author</option>
+        </select>
+        <select class="half-size" data-name="sortOrder2" id="sortOrder2">
+          <option value="desc">Descending</option>
+          <option value="asc">Ascending</option>
+        </select>
+      </label>
+    </div>
 
 
-        <div class="settings-row learn-more" title="Color of icon that shows up in extension button when new articles are downloaded.">
-            <label class="web-content-select-label">
-                <span class="selectLabel">New articles notification icon:</span>
-                <select id="icon">
-                    <option value="orange">Orange</option>
-                    <option value="blue">Blue</option>
-                    <option value="green">Green</option>
-                    <option value="purple">Purple</option>
-                    <option value="red">Red</option>
-                    <option value="royalblue">Royal Blue</option>
-                </select>
-            </label>
-        </div>
+    <div class="settings-row learn-more" title="Color of icon that shows up in extension button when new articles are downloaded.">
+      <label class="web-content-select-label">
+        <span class="selectLabel">New articles notification icon:</span>
+        <select id="icon">
+          <option value="orange">Orange</option>
+          <option value="blue">Blue</option>
+          <option value="green">Green</option>
+          <option value="purple">Purple</option>
+          <option value="red">Red</option>
+          <option value="royalblue">Royal Blue</option>
+        </select>
+      </label>
+    </div>
 
-        <div class="settings-row learn-more" title="">
-            <label class="web-content-select-label">
-                <span class="selectLabel">Disable date groups:</span>
-                <input id="disableDateGroups" type="checkbox"/>
-            </label>
-        </div>
+    <div class="settings-row learn-more" title="">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Disable date groups:</span>
+        <input id="disableDateGroups" type="checkbox"/>
+      </label>
+    </div>
 
-        <div class="settings-row learn-more" title="">
-            <label class="web-content-select-label">
-                <span class="selectLabel">Article font size:</span>
-                <input id="articleFontSize" max="150" min="50" step="10" type="number"/>%
-            </label>
-        </div>
+    <div class="settings-row learn-more" title="">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Article font size:</span>
+        <input id="articleFontSize" max="150" min="50" step="10" type="number"/>%
+      </label>
+    </div>
 
-        <div class="settings-row learn-more" title="">
-            <label class="web-content-select-label">
-                <span class="selectLabel">UI font size:</span>
-                <input id="uiFontSize" max="150" min="50" step="10" type="number"/>%
-            </label>
-        </div>
+    <div class="settings-row learn-more" title="">
+      <label class="web-content-select-label">
+        <span class="selectLabel">UI font size:</span>
+        <input id="uiFontSize" max="150" min="50" step="10" type="number"/>%
+      </label>
+    </div>
 
-        <div class="settings-row learn-more" title="Replace favicon of feed with spinner animation during feed update.">
-            <label class="web-content-select-label">
-                <span class="selectLabel">Show spinner during update:</span>
-                <input id="showSpinner" type="checkbox"/>
-            </label>
-        </div>
-    </section>
+    <div class="settings-row learn-more" title="Replace favicon of feed with spinner animation during feed update.">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Show spinner during update:</span>
+        <input id="showSpinner" type="checkbox"/>
+      </label>
+    </div>
+  </section>
 
-    <section>
-        <h3 class="section-header">Behaviour</h3>
-      <div class="settings-row learn-more" title="If checked clicking toolbar button will open new tab, else it will load reader in the same tab.">
-        <label class="web-content-select-label">
-          <span class="selectLabel">Open Reader in new tab:</span>
-          <input id="openInNewTab" type="checkbox"/>
-        </label>
-      </div>
-        <div class="settings-row learn-more" title="This option will immidiately mark as read every article you visit in the right column.">
-            <label class="web-content-select-label">
-                <span class="selectLabel">Automatically mark articles as read:</span>
-                <input id="readOnVisit" type="checkbox"/>
-            </label>
-        </div>
-        <div class="settings-row learn-more" title="When you select more than 10 feeds in article list and choose 'Open article link' options from context menu.">
-            <label class="web-content-select-label">
-                <span class="selectLabel">Ask when opening 10+ tabs:</span>
-                <input id="askOnOpening" type="checkbox"/>
-            </label>
-        </div>
-        <div class="settings-row learn-more" title="Effects date in article list.">
-            <label class="web-content-select-label">
-                <span class="selectLabel">Always show full date:</span>
-                <input id="fullDate" type="checkbox"/>
-            </label>
-        </div>
-        <div class="settings-row learn-more" title="If enabled, pressing arrow up in a list when the first item is selected will select the last item and visa-versa.">
-            <label class="web-content-select-label">
-                <span class="selectLabel">Circular navigation:</span>
-                <input id="circularNavigation" type="checkbox"/>
-            </label>
-        </div>
+  <section>
+    <h3 class="section-header">Behaviour</h3>
+    <div class="settings-row learn-more" title="If checked clicking toolbar button will open new tab, else it will load reader in the same tab.">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Open Reader in new tab:</span>
+        <input id="openInNewTab" type="checkbox"/>
+      </label>
+    </div>
+    <div class="settings-row learn-more" title="This option will immidiately mark as read every article you visit in the right column.">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Automatically mark articles as read:</span>
+        <input id="readOnVisit" type="checkbox"/>
+      </label>
+    </div>
+    <div class="settings-row learn-more" title="When you select more than 10 feeds in article list and choose 'Open article link' options from context menu.">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Ask when opening 10+ tabs:</span>
+        <input id="askOnOpening" type="checkbox"/>
+      </label>
+    </div>
+    <div class="settings-row learn-more" title="Effects date in article list.">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Always show full date:</span>
+        <input id="fullDate" type="checkbox"/>
+      </label>
+    </div>
+    <div class="settings-row learn-more" title="If enabled, pressing arrow up in a list when the first item is selected will select the last item and visa-versa.">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Circular navigation:</span>
+        <input id="circularNavigation" type="checkbox"/>
+      </label>
+    </div>
 
-        <div class="settings-row learn-more" title="If enabled, title of article is a link to full article.">
-            <label class="web-content-select-label">
-                <span class="selectLabel">Title is link to full article:</span>
-                <input id="titleIsLink" type="checkbox"/>
-            </label>
-        </div>
+    <div class="settings-row learn-more" title="If enabled, title of article is a link to full article.">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Title is link to full article:</span>
+        <input id="titleIsLink" type="checkbox"/>
+      </label>
+    </div>
 
-        <div class="settings-row learn-more" title="Ask to prevent accidental removal of pinned items.">
-            <label class="web-content-select-label">
-                <span class="selectLabel">Ask when removing pinned items:</span>
-                <select id="askRmPinned">
-                    <option value="none">Never</option>
-                    <option value="trashed">On removal from trash</option>
-                    <option value="all">Always</option>
-                </select>
-            </label>
-        </div>
+    <div class="settings-row learn-more" title="Ask to prevent accidental removal of pinned items.">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Ask when removing pinned items:</span>
+        <select id="askRmPinned">
+          <option value="none">Never</option>
+          <option value="trashed">On removal from trash</option>
+          <option value="all">Always</option>
+        </select>
+      </label>
+    </div>
 
-        <div class="settings-row learn-more" title="">
-            <label class="web-content-select-label">
-                <span class="selectLabel">Icon badge:</span>
-                <select id="badgeMode">
-                    <option value="disabled">disabled</option>
-                    <option value="unread"># of unread</option>
-                    <option value="unvisited"># of unvisited</option>
-                </select>
-            </label>
-        </div>
-    </section>
-    <section>
-        <div class="settings-row learn-more" title="">
-            <label class="web-content-select-label">
-                <span class="selectLabel">Concurrent downloads:</span>
-                <input id="concurrentDownloads" max="32" min="1" step="1" type="number"/>
-            </label>
-        </div>
-    </section>
-    <section>
-        <div class="settings-row learn-more" title="">
-            <label class="web-content-select-label">
-                <span class="selectLabel">Disable auto update completely:</span>
-                <input id="disableAutoUpdate" type="checkbox"/>
-            </label>
-        </div>
-        <div class="settings-row learn-more" title="">
-            <label class="web-content-select-label">
-                <span class="selectLabel">Default update frequency (minutes):</span>
-                <input id="updateFrequency" max="180" min="1" step="1" type="number"/>
-            </label>
-        </div>
-    </section>
+    <div class="settings-row learn-more" title="">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Icon badge:</span>
+        <select id="badgeMode">
+          <option value="disabled">disabled</option>
+          <option value="unread"># of unread</option>
+          <option value="unvisited"># of unvisited</option>
+        </select>
+      </label>
+    </div>
+    <div class="settings-row learn-more" title="">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Concurrent downloads:</span>
+        <input id="concurrentDownloads" max="32" min="1" step="1" type="number"/>
+      </label>
+    </div>
+    <div class="settings-row learn-more" title="">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Disable auto update completely:</span>
+        <input id="disableAutoUpdate" type="checkbox"/>
+      </label>
+    </div>
+    <div class="settings-row learn-more" title="">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Default update frequency (minutes):</span>
+        <input id="updateFrequency" max="180" min="1" step="1" type="number"/>
+      </label>
+    </div>
+  </section>
+  <section id="hotkeys">
+    <h3 class="section-header">Hotkeys</h3>
+  </section>
 
-    <section>
-        <h3 class="section-header">Sound notifications</h3>
-        <div class="settings-row learn-more" title="If enabled, browser will make a sound when new articles are downloaded.">
-            <label class="web-content-select-label">
-                <span class="selectLabel">Enable sound notifications:</span>
-                <input id="soundNotifications" type="checkbox"/>
-            </label>
-        </div>
+  <section>
+    <h3 class="section-header">Sound notifications</h3>
+    <div class="settings-row learn-more" title="If enabled, browser will make a sound when new articles are downloaded.">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Enable sound notifications:</span>
+        <input id="soundNotifications" type="checkbox"/>
+      </label>
+    </div>
 
-        <div class="settings-row learn-more" title="">
-            <label class="web-content-select-label">
-                <span class="selectLabel">Use sound:</span>
-                <select id="useSound">
-                    <option value=":user">User sound</option>
-                    <option value=":none">None</option>
-                    <optgroup label="Default sounds">
-                        <option value="knock">Knock</option>
-                        <option value="taptap">Taptap</option>
-                        <option value="glass">Glass</option>
-                        <option value="pop">Pop</option>
-                        <option value="nightbird">Nightbird</option>
-                    </optgroup>
-                </select>
-            </label>
-        </div>
+    <div class="settings-row learn-more" title="">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Use sound:</span>
+        <select id="useSound">
+          <option value=":user">User sound</option>
+          <option value=":none">None</option>
+          <optgroup label="Default sounds">
+            <option value="knock">Knock</option>
+            <option value="taptap">Taptap</option>
+            <option value="glass">Glass</option>
+            <option value="pop">Pop</option>
+            <option value="nightbird">Nightbird</option>
+          </optgroup>
+        </select>
+      </label>
+    </div>
 
-        <div class="settings-row learn-more" title="Select sound file to be played.">
-            <label class="web-content-select-label">
-                <span class="selectLabel">User sound:</span>
-                <input id="default-sound" type="file"/>
-            </label>
-        </div>
+    <div class="settings-row learn-more" title="Select sound file to be played.">
+      <label class="web-content-select-label">
+        <span class="selectLabel">User sound:</span>
+        <input id="default-sound" type="file"/>
+      </label>
+    </div>
 
-        <div class="settings-row learn-more" title="">
-            <label class="web-content-select-label">
-                <span class="selectLabel">Volume:</span>
-                <span class="valspan">0% <input id="soundVolume" max="1" min="0" step="0.05" type="range"/> 100%</span>
-            </label>
-        </div>
-    </section>
+    <div class="settings-row learn-more" title="">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Volume:</span>
+        <span class="valspan">0% <input id="soundVolume" max="1" min="0" step="0.05" type="range"/> 100%</span>
+      </label>
+    </div>
+  </section>
 
-    <section>
-        <h3 class="section-header">Export</h3>
-        <div class="settings-row learn-more" title="SMART is special format of Smart RSS extension. It exports/imports both, feeds and feeds's articles.">
-            <label class="web-content-select-label">
-                <span class="selectLabel">SMART:</span>
-                <button id="export-smart">Export</button>
-                <a href="" id="smart-exported"></a>
-            </label>
-        </div>
-        <div class="settings-row learn-more" title="You can use OPML format to export feeds from Smart RSS to Opera 12.">
-            <label class="web-content-select-label">
-                <span class="selectLabel">OPML:</span>
-                <button id="export-opml">Export</button>
-                <a href="" id="opml-exported"></a>
-            </label>
-        </div>
-    </section>
+  <section>
+    <h3 class="section-header">Export</h3>
+    <div class="settings-row learn-more" title="SMART is special format of Smart RSS extension. It exports/imports both, feeds and feeds's articles.">
+      <label class="web-content-select-label">
+        <span class="selectLabel">SMART:</span>
+        <button id="export-smart">Export</button>
+        <a href="" id="smart-exported"></a>
+      </label>
+    </div>
+    <div class="settings-row learn-more" title="You can use OPML format to export feeds from Smart RSS to Opera 12.">
+      <label class="web-content-select-label">
+        <span class="selectLabel">OPML:</span>
+        <button id="export-opml">Export</button>
+        <a href="" id="opml-exported"></a>
+      </label>
+    </div>
+  </section>
 
-    <section>
-        <h3 class="section-header">Import</h3>
-        <div class="settings-row learn-more" title="SMART is special format of Smart RSS extension. It exports/imports all feeds, folders and articles.">
-            <label class="web-content-select-label">
-              <div class="ff-warning">Warning: Smart RSS will reload after finishing the SMART import, it's expected behavior</div>
-                <span class="selectLabel">SMART:</span>
-                <input id="import-smart" type="file">
-                <span id="smart-imported"></span>
-            </label>
-        </div>
-        <div class="settings-row learn-more" title="You can use OPML format to import feeds and folders from Opera 12 to Smart RSS.">
-            <label class="web-content-select-label">
-                <span class="selectLabel">OPML:</span>
-                <input id="import-opml" type="file">
-                <span id="opml-imported"></span>
-            </label>
-        </div>
-    </section>
+  <section>
+    <h3 class="section-header">Import</h3>
+    <div class="settings-row learn-more" title="SMART is special format of Smart RSS extension. It exports/imports all feeds, folders and articles.">
+      <label class="web-content-select-label">
+        <div class="ff-warning">Warning: Smart RSS will reload after finishing the SMART import, it's expected behavior</div>
+        <span class="selectLabel">SMART:</span>
+        <input id="import-smart" type="file">
+        <span id="smart-imported"></span>
+      </label>
+    </div>
+    <div class="settings-row learn-more" title="You can use OPML format to import feeds and folders from Opera 12 to Smart RSS.">
+      <label class="web-content-select-label">
+        <span class="selectLabel">OPML:</span>
+        <input id="import-opml" type="file">
+        <span id="opml-imported"></span>
+      </label>
+    </div>
+  </section>
 
-    <section>
+  <section>
     <h3 class="section-header">Clear Favicons</h3>
     <div class="settings-row learn-more" title="This will remove all yours feeds and articles and settings.">
-        <label class="web-content-select-label">
-            <span class="selectLabel">Remove Favicon data:</span>
-            <button id="clear-favicons">!!Clear!!</button>
-            <span id="favicons-cleared"></span>
-        </label>
+      <label class="web-content-select-label">
+        <span class="selectLabel">Remove Favicon data:</span>
+        <button id="clear-favicons">!!Clear!!</button>
+        <span id="favicons-cleared"></span>
+      </label>
     </div>
-    </section>
+  </section>
 
-    <section>
-        <h3 class="section-header">Clear data</h3>
-        <div class="settings-row learn-more" title="This will remove all yours feeds and articles and settings.">
-            <label class="web-content-select-label">
-                <span class="selectLabel">Remove ALL extension data:</span>
-                <button id="clear-data">!!Clear!!</button>
-                <span id="data-cleared"></span>
-            </label>
-        </div>
-    </section>
+  <section>
+    <h3 class="section-header">Clear data</h3>
+    <div class="settings-row learn-more" title="This will remove all yours feeds and articles and settings.">
+      <label class="web-content-select-label">
+        <span class="selectLabel">Remove ALL extension data:</span>
+        <button id="clear-data">!!Clear!!</button>
+        <span id="data-cleared"></span>
+      </label>
+    </div>
+  </section>
 
-    <section>
-        <h3 class="section-header">Version</h3>
-        <p id="version"></p>
-    </section>
+  <section>
+    <h3 class="section-header">Version</h3>
+    <p id="version"></p>
+  </section>
 </div>
 </body>
 </html>

@@ -73,6 +73,36 @@ chrome.runtime.getBackgroundPage((bg) => {
             element.addEventListener('click', handleLayoutChangeClick);
         });
 
+        const hotkeysElement = document.querySelector('#hotkeys');
+        const hotkeys = bg.settings.get('hotkeys');
+        console.log(hotkeys);
+        for (const region in hotkeys) {
+            const regionElement = document.createElement('h4');
+            regionElement.insertAdjacentText('afterbegin', region);
+            hotkeysElement.insertAdjacentElement('beforeend', regionElement);
+
+            const regionHotkeys = hotkeys[region];
+            for (const regionHotkey in regionHotkeys) {
+                const row = document.createElement('div');
+                row.classList.add('settings-row');
+                row.classList.add('learn-more');
+                const label = document.createElement('label');
+                label.classList.add('web-content-select-label');
+
+                const left = document.createElement('input');
+                left.classList.add('selectLabel');
+                left.value = regionHotkey;
+                const right = document.createElement('input');
+                right.value = regionHotkeys[regionHotkey];
+
+                label.insertAdjacentElement('beforeend', left);
+                label.insertAdjacentElement('beforeend', right);
+                row.insertAdjacentElement('beforeend', label);
+
+                hotkeysElement.insertAdjacentElement('beforeend', row);
+            }
+        }
+
 
         handleLayoutChange(bg.settings.get('layout'));
     };
