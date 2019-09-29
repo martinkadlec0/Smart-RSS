@@ -383,7 +383,9 @@ input[type=search]:not(:focus):not(:valid) {
 .sources-list-item.broken .icon,
 .sources-list-item.loading .icon,
 .sources-list-item .loading,
-.sources-list-item .broken {
+.sources-list-item .broken,
+.sources-list-item.broken .loading,
+.sources-list-item.loading .broken{
   display: none;
 }
 
