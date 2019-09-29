@@ -126,7 +126,7 @@ define([
                 }
             }
         }));
-        if (browser) {
+        if (typeof browser !== 'undefined') {
             window.addEventListener('unload', () => {
                 bg.reloadExt();
             });
