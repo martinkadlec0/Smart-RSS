@@ -73,7 +73,8 @@ define([
 
             events: {
                 // 'dragstart .articles-list-item': 'handleDragStart',
-                'click .articles-list-item': 'handleMouseDown',
+                'mousedown .articles-list-item': 'handleMouseDown',
+                'click .articles-list-item': 'handleClick',
                 'mouseup .articles-list-item': 'handleMouseUp',
                 'dblclick .articles-list-item': 'handleItemDblClick',
                 'mousedown .item-pin,.item-pinned': 'handleClickPin'
@@ -88,13 +89,20 @@ define([
                 app.actions.execute('articles:oneFullArticle');
             },
 
+            handleMouseDown(event){
+                if (event.button === 1) {
+                    const linkElement = event.target.closest('a');
+                    this.prefetcher.href = linkElement.href;
+                }
+            },
+
             /**
              * Selects article
-             * @method handleMouseDown
-             * @triggered on mouse down on article
+             * @method handleClick
+             * @triggered on click on article
              * @param event {MouseEvent}
              */
-            handleMouseDown: function (event) {
+            handleClick: function (event) {
                 this.handleSelectableMouseDown(event);
             },
 
@@ -124,6 +132,13 @@ define([
              * @method initialize
              */
             initialize: function () {
+                this.prefetcher = document.createElement('link');
+                this.prefetcher.rel = 'preload';
+                this.prefetcher.setAttribute('as', 'fetch');
+                this.prefetcher.setAttribute('crossorigin', 'crossorigin');
+                document.head.appendChild(this.prefetcher);
+
+
                 bg.items.on('reset', this.addItems, this);
                 bg.items.on('add', this.addItem, this);
                 bg.items.on('sort', this.handleSort, this);

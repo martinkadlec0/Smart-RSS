@@ -7,7 +7,7 @@ define([
             template: template(tplSpecial),
             /*events: {
                 'mouseup': 'handleMouseUp',
-                'click': 'handleMouseDown'
+                'click': 'handleClick'
             },*/
             showContextMenu: function (e) {
                 if (!this.contextMenu) {

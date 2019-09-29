@@ -139,7 +139,7 @@ define([
 
             /**
              * Selectable mixin bindings. The selectable mixing will trigger "pick" event when items are selected.
-             * @method handleMouseDown
+             * @method handleClick
              * @triggered on mouse down
              * @param event {Event} Mouse event
              */
@@ -160,7 +160,7 @@ define([
 
             /**
              * Add class to drop region elements
-             * @method handleMouseDown
+             * @method handleClick
              * @triggered on drag over
              * @param event {DragEvent} Drag event
              */

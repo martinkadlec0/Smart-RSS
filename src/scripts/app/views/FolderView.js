@@ -41,7 +41,7 @@ define([
             events: {
                 'dblclick': 'handleDoubleClick',
                 /*'mouseup': 'handleMouseUp',
-                'click': 'handleMouseDown',*/
+                'click': 'handleClick',*/
                 'click .folder-arrow': 'handleClickArrow'
             },
 
