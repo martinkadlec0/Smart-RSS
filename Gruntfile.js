@@ -54,6 +54,8 @@ module.exports = function (grunt) {
         const manifestPath = join(__dirname, 'src/manifest.json');
         const manifest = grunt.file.readJSON(manifestPath);
         manifest.version = semver.inc(manifest.version, level);
+        console.log(JSON.stringify(manifest));
+        return;
         grunt.file.write(manifestPath, JSON.stringify(manifest, null, 2));
 
         const versionsPath = join(__dirname, '/src/rssDetector/manifest.json');
