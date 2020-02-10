@@ -259,7 +259,8 @@ module.exports = function (grunt) {
 
 
     grunt.registerTask('release', '', function (level = 'patch') {
-        if (!('major', 'minor', 'patch').includes(level)) {
+        console.log(level);
+        if (!['major', 'minor', 'patch'].includes(level)) {
             console.error('Wrong update level, aborting');
             return false;
         }
