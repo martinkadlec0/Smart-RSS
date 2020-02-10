@@ -6,22 +6,20 @@ Translations are in scripts/nls/*.js
 
 For technical bug reports use issues here on GitHub
 
-## If you recently upgraded to FF68 and your extension data seem to be lost please look here for a workaround and a bit of discussion https://github.com/zakius/Smart-RSS/issues/79#issuecomment-513215261
-
 ## For users
 
 Extension is available in following repositories:
 
 ### AMO: https://addons.mozilla.org/pl/firefox/addon/smart-rss-reader/
 
-### Chrome Web Store: https://chrome.google.com/webstore/detail/smart-rss/eggggihfcaabljfpjiiaohloefmgejic (please note that there's something weird going on there, they published the draft version and now won't let me upgrade)
+### Chrome Web Store: TBA
 
-### Opera Extensions: Awaiting moderation (since 2019.03.08)
+### Opera Extensions: TBA
 
 
 ## For developers
 
-If you are interested in improving Smart RSS then there are few tips to get started. 
+If you are interested in improving Smart RSS then there are few tips to get started.
 
 First of all you will need several command line tools:
 
@@ -48,22 +46,22 @@ There are multiple grunt tasks defined for this project but only few are meant t
 
 ```
 grunt prepare
-``` 
+```
 copies relevant source files to browser specific directories within `dist` subdirectory and cleans up manifests from values not needed by the given browser.
- 
- 
+
+
 ```
 grunt watch
 ```
 watches for changes in `src` directory and performs `prepare` every time it detects one
 
- 
+
 ```
 grunt release:{level=patch}
 ```
- 
-is all-in-one solution for releasing new versions of the extension  
-  
+
+is all-in-one solution for releasing new versions of the extension
+
 - increases extension version in manifest by semver `level`
 - checks if Chromium only Detector changed and if so
     - increases Detector version in manifest by semver `level`
