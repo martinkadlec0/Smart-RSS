@@ -54,8 +54,6 @@ module.exports = function (grunt) {
         const manifestPath = join(__dirname, 'src/manifest.json');
         const manifest = grunt.file.readJSON(manifestPath);
         manifest.version = semver.inc(manifest.version, level);
-        console.log(JSON.stringify(manifest));
-        return;
         grunt.file.write(manifestPath, JSON.stringify(manifest, null, 2));
 
         const versionsPath = join(__dirname, '/src/rssDetector/manifest.json');
@@ -205,7 +203,7 @@ module.exports = function (grunt) {
                     src: [
                         '**/*',
                         '!rssDetector/manifest.json',
-                        '!images/chrome-small-tile.png',
+                        '!images/chrome-small-tile.png'
                     ],
                     filter: 'isFile',
                     dest: './dist/firefox/'
@@ -218,7 +216,7 @@ module.exports = function (grunt) {
                     src: [
                         '**/*',
                         '!rssDetector/*',
-                        '!images/chrome-small-tile.png',
+                        '!images/chrome-small-tile.png'
                     ],
                     filter: 'isFile',
                     dest: './dist/chromium/'
@@ -260,10 +258,11 @@ module.exports = function (grunt) {
     grunt.registerTask('prepare', ['copy', 'cleanup']);
 
 
-
-
-
     grunt.registerTask('release', '', function (level = 'patch') {
+        if (!('major', 'minor', 'patch').includes(level)) {
+            console.error('Wrong update level, aborting');
+            return false;
+        }
         grunt.task.run('bump-version:' + level);
         grunt.task.run('commit:' + level);
         grunt.task.run('package');
