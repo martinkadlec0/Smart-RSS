@@ -59,6 +59,7 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             disableAutoUpdate: false,
             openInNewTab: true,
             showFullHeadlines: 'false',
+            selectFirstArticle: 1,
             hotkeys: {
                 feeds: {
                     'up': 'feeds:selectPrevious',
