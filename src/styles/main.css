@@ -564,6 +564,12 @@ input[type=search]:not(:focus):not(:valid) {
   padding-left: 1rem;
 }
 
+.full-headline {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+}
+
 .item-author {
   color: var(--grey-50);
   padding-top: 0.2rem;
