@@ -17,7 +17,7 @@ module.exports = function (grunt) {
         const originalManifest = grunt.file.readJSON(manifestPath);
         let newManifest = Object.assign({}, originalManifest);
         if (config.csp) {
-            newManifest['content_security_policy'] = newManifest[config.csp];
+            newManifest['content_security_policy'] = originalManifest[config.csp];
             delete newManifest[config.csp];
         }
         if (config.removeFromManifest) {
