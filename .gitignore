@@ -2,5 +2,4 @@ node_modules/*
 docs/*
 .idea/*
 *.zip
-package-lock.json
 dist/*
