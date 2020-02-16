@@ -128,7 +128,12 @@ define([
             article.date = this.getItemDate(article.date);
             article.title = stripTags(article.title).trim() || '&lt;no title&gt;';
             this.el.setAttribute('href', article.url);
-            this.el.setAttribute('title', article.title);
+            if (bg.settings.get('showFullHeadline')) {
+                this.el.classList.add('full-headline');
+            } else {
+                this.el.setAttribute('title', article.title);
+            }
+
 
             while (this.el.firstChild) {
                 this.el.removeChild(this.el.firstChild);
