@@ -56,10 +56,10 @@ define([
                 }
             },
             layoutToVertical: function () {
-                document.querySelector('.subregions').classList.add('vertical');
+                document.querySelector('#second-pane').classList.add('vertical');
             },
             layoutToHorizontal: function () {
-                document.querySelector('.subregions').classList.remove('vertical');
+                document.querySelector('#second-pane').classList.remove('vertical');
             },
 
             handleMouseDown: function (event) {
