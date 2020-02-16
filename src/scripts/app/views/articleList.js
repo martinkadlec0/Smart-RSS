@@ -89,10 +89,12 @@ define([
                 app.actions.execute('articles:oneFullArticle');
             },
 
-            handleMouseDown(event){
+            handleMouseDown(event) {
                 if (event.button === 1) {
                     const linkElement = event.target.closest('a');
-                    this.prefetcher.href = linkElement.href;
+                    if (typeof browser !== 'undefined') {
+                        this.prefetcher.href = linkElement.href;
+                    }
                 }
             },
 
@@ -132,11 +134,13 @@ define([
              * @method initialize
              */
             initialize: function () {
-                this.prefetcher = document.createElement('link');
-                this.prefetcher.rel = 'preload';
-                this.prefetcher.setAttribute('as', 'fetch');
-                this.prefetcher.setAttribute('crossorigin', 'crossorigin');
-                document.head.appendChild(this.prefetcher);
+                if (typeof browser !== 'undefined') {
+                    this.prefetcher = document.createElement('link');
+                    this.prefetcher.rel = 'preload';
+                    this.prefetcher.setAttribute('as', 'fetch');
+                    this.prefetcher.setAttribute('crossorigin', 'crossorigin');
+                    document.head.appendChild(this.prefetcher);
+                }
 
 
                 bg.items.on('reset', this.addItems, this);
