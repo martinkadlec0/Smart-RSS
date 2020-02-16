@@ -58,7 +58,7 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             updateFrequency: 15, // in minutes
             disableAutoUpdate: false,
             openInNewTab: true,
-            showFullHeadlines: false,
+            showFullHeadlines: 'false',
             hotkeys: {
                 feeds: {
                     'up': 'feeds:selectPrevious',
