@@ -36,7 +36,7 @@ JSON.safeParse = function (str) {
 
 chrome.runtime.getBackgroundPage((bg) => {
     const documentReady = () => {
-        if (!browser) {
+        if (typeof browser === 'undefined') {
             const warning = document.querySelector('.ff-warning');
             warning.parentNode.removeChild(warning);
         }
@@ -292,7 +292,7 @@ chrome.runtime.getBackgroundPage((bg) => {
                 if (message.data.action === 'finished') {
                     smartImportStatus.textContent = 'Loading data to memory!';
                     bg.fetchAll().then(function () {
-                        if (browser) {
+                        if (typeof browser !== 'undefined') {
                             chrome.runtime.reload();
                         }
                         bg.info.refreshSpecialCounters();
@@ -309,7 +309,7 @@ chrome.runtime.getBackgroundPage((bg) => {
                 alert('Importing error: ' + error.message);
             };
         };
-        if (browser) {
+        if (typeof browser !== 'undefined') {
             reader.readAsText(file);
         } else {
             const url = chrome.extension.getURL('rss.html');
