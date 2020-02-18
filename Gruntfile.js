@@ -178,7 +178,8 @@ module.exports = function (grunt) {
         cleanup: {
             firefox: {
                 removeFromManifest: [
-                    'chromium_content_security_policy'
+                    'chromium_content_security_policy',
+                    'chromium_permissions'
                 ]
             },
             chromium: {
