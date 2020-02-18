@@ -6,7 +6,7 @@
   },
   "description": "RSS Reader",
   "manifest_version": 2,
-  "version": "2.3.2",
+  "version": "2.3.3",
   "background": {
     "page": "index.html"
   },
@@ -21,8 +21,7 @@
   ],
   "chromium_permissions": [
     "alarms",
-    "tabs",
-    "<all_urls>"
+    "tabs"
   ],
   "content_security_policy": "default-src * 'self' data: 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-eval'; style-src * 'self' data: 'unsafe-inline'; img-src * 'self' data:; object-src 'self'",
   "chromium_content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
