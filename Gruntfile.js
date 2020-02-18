@@ -20,6 +20,10 @@ module.exports = function (grunt) {
             newManifest['content_security_policy'] = originalManifest[config.csp];
             delete newManifest[config.csp];
         }
+        if (config.csp) {
+            newManifest['permissions'] = originalManifest[config.permissions];
+            delete newManifest[config.permissions];
+        }
         if (config.removeFromManifest) {
             config.removeFromManifest.forEach((item) => {
                 delete newManifest[item];
@@ -184,6 +188,7 @@ module.exports = function (grunt) {
                     'applications',
                     'developer'
                 ],
+                permissions: 'chromium_permissions',
                 csp: 'chromium_content_security_policy'
             },
             detector: {
