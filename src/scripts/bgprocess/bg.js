@@ -182,7 +182,6 @@ define([
                  * Init
                  */
                 chrome.alarms.create('scheduler', {
-                    delayInMinutes: 0,
                     periodInMinutes: 1
                 });
 
