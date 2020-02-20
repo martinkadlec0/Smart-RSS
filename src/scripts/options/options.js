@@ -75,7 +75,6 @@ chrome.runtime.getBackgroundPage((bg) => {
 
         const hotkeysElement = document.querySelector('#hotkeys');
         const hotkeys = bg.settings.get('hotkeys');
-        console.log(hotkeys);
         for (const region in hotkeys) {
             if (hotkeys.hasOwnProperty(region)) {
                 const regionElement = document.createElement('h4');

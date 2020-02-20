@@ -68,7 +68,6 @@ define([
         }
 
         function openInNewTab() {
-            console.log('test');
             chrome.tabs.create({
                 url: chrome.extension.getURL('rss.html')
             }, () => {
@@ -199,7 +198,6 @@ define([
                  * onclick:button -> open RSS
                  */
                 chrome.browserAction.onClicked.addListener(function (tab, onClickData) {
-                    console.log(onClickData);
                     if (typeof onClickData !== 'undefined') {
                         if (onClickData.button === 1) {
                             openInNewTab();

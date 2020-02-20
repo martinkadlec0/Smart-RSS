@@ -173,10 +173,6 @@ define([], function () {
             enclosure.name = enclosureNode.hasAttribute('url') ? enclosure.url.substring(enclosure.url.lastIndexOf('/') + 1) : '';
             enclosure.type = enclosureNode.hasAttribute('type') ? enclosureNode.getAttribute('type') : '';
             enclosure.length = enclosureNode.hasAttribute('length') ? enclosureNode.getAttribute('length') : '';
-
-            console.log(enclosureNode);
-
-
             return enclosure;
         }
 
