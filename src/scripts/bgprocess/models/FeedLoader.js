@@ -11,6 +11,11 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
             this.request.onload = this.onLoad.bind(this);
             this.request.onerror = this.onError.bind(this);
             this.request.ontimeout = this.onTimeout.bind(this);
+            this.request.onabort = this.onAbort.bind(this);
+        }
+
+        onAbort(){
+            this.model.save({isLoading: false});
         }
 
         onLoad() {
