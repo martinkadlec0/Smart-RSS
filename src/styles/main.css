@@ -665,7 +665,7 @@ h1 a {
 #below-h1 {
   display: flex;
   min-width: 0;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
   width: 100%;
 }
 
@@ -686,6 +686,10 @@ header .author {
 header .date {
   flex: 0 1 200px;
   text-align: right;
+}
+
+header .enclosure {
+  flex-basis: 100%;
 }
 
 header .pin-button {

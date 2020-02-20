@@ -162,6 +162,25 @@ define([], function () {
             return (guid ? guid.textContent : this.getLink() || '').trim();
         }
 
+        getEnclosure() {
+            const node = this.currentNode;
+            let enclosureNode = node.querySelector('enclosure');
+            if (!enclosureNode) {
+                return '';
+            }
+            let enclosure = {};
+            enclosure.url = enclosureNode.hasAttribute('url') ? enclosureNode.getAttribute('url') : '';
+            enclosure.name = enclosureNode.hasAttribute('url') ? enclosure.url.substring(enclosure.url.lastIndexOf('/') + 1) : '';
+            enclosure.type = enclosureNode.hasAttribute('type') ? enclosureNode.getAttribute('type') : '';
+            enclosure.length = enclosureNode.hasAttribute('length') ? enclosureNode.getAttribute('length') : '';
+
+            console.log(enclosureNode);
+
+
+            return enclosure;
+        }
+
+
         parse() {
             let items = [];
             const data = {};
@@ -205,6 +224,7 @@ define([], function () {
                     author: this.getAuthor(),
                     content: this.getArticleContent(),
                     sourceID: this.source.get('id'),
+                    enclosure: this.getEnclosure(),
                     dateCreated: Date.now()
                 });
 

@@ -7,4 +7,5 @@
 	<p class="author"><%- author %></p>
 	<p class="date"><%= date %></p>
 	<p class="pin-button" title="{{PIN}}" <%= (pinned ? 'class="pinned"' : '') %>></p>
+  <% if (!!enclosure) { %><p class="enclosure"><a href="<%= enclosure.url %>" target="_blank" tabindex="-1"><%= enclosure.name %> - <%= enclosure.type %> - <%= enclosure.length %></a></p><% } %>
 </div>

@@ -23,7 +23,8 @@ define(['backbone'], function (BB) {
             deleted: false,
             trashed: false,
             pinned: false,
-            dateCreated: 0
+            dateCreated: 0,
+            enclosure: '' ,
         },
         markAsDeleted: function () {
             this.save({
@@ -31,6 +32,7 @@ define(['backbone'], function (BB) {
                 deleted: true,
                 visited: true,
                 unread: false,
+                enclosure: '',
                 'pinned': false,
                 'content': '',
                 'author': '',
