@@ -51,6 +51,19 @@ module.exports = function (grunt) {
         });
     };
 
+    const push = function () {
+        let {exec} = require('child_process');
+        let done = this.async();
+        exec('git push', (err, stdout, stderr) => {
+            if (err) {
+                console.log(`stderr: ${stderr}`);
+                done(false);
+                return;
+            }
+            done(true);
+        });
+    };
+
     const bumpVersion = function (level = 'patch') {
         const semver = require('semver');
         const md5File = require('md5-file');
@@ -255,6 +268,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('bump-version', '', bumpVersion);
     grunt.registerTask('commit', '', commit);
+    grunt.registerTask('push', '', push);
     grunt.registerTask('package', ['prepare', 'zip']);
 
     grunt.loadNpmTasks('grunt-contrib-copy');
@@ -272,6 +286,7 @@ module.exports = function (grunt) {
         grunt.task.run('bump-version:' + level);
         grunt.task.run('commit:' + level);
         grunt.task.run('package');
+        grunt.task.run('push');
     });
 
 };
