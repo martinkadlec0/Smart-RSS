@@ -17,7 +17,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 title: 'Options',
                 icon: 'options.png',
                 fn: function () {
-                    window.open('options.html');
+                    chrome.runtime.openOptionsPage();
                 }
             }
         },
