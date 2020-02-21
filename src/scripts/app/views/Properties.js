@@ -27,25 +27,25 @@ define([
 
                 const updateEvery = parseInt(document.querySelector('#prop-update-every').value);
                 const autoRemove = parseInt(document.querySelector('#prop-autoremove').value);
+                const folderId =  parseInt(document.querySelector('#prop-parent').value);
 
                 if (this.current instanceof bg.Source) {
                     /* encrypt the password */
                     this.current.setPass(document.querySelector('#prop-password').value);
 
-                    const folder = document.querySelector('#prop-parent').value;
                     this.current.save({
                         title: document.querySelector('#prop-title').value,
                         url: app.fixURL(document.querySelector('#prop-url').value),
                         username: document.querySelector('#prop-username').value,
-                        folderID: document.querySelector('#prop-parent').value,
-                        updateEvery: parseInt(document.querySelector('#prop-update-every').value),
-                        autoremove: parseInt(document.querySelector('#prop-autoremove').value),
+                        folderID: folderId,
+                        updateEvery: updateEvery,
+                        autoremove: autoRemove,
                         proxyThroughFeedly: document.querySelector('#prop-proxy').checked
                     });
-                    if (folder === '0') {
+                    if (folderId === 0) {
                         this.current.unset('folderID');
                     }
-                    this.render();
+                    // this.render();
                 } else {
                     let iterator = [];
                     if (this.current instanceof bg.Folder) {
@@ -53,6 +53,7 @@ define([
                         this.current.save({
                             title: document.querySelector('#prop-title').value
                         });
+
                     } else if (Array.isArray(this.current)) {
                         iterator = this.current;
                     }
@@ -64,6 +65,16 @@ define([
                     if (autoRemove >= -1) {
                         iterator.forEach(function (source) {
                             source.save({autoremove: autoRemove});
+                        });
+                    }
+
+                    if (folderId >= 0) {
+                        iterator.forEach(function (source) {
+                            if (folderId === '0') {
+                                source.unset('folderID');
+                            } else {
+                                source.save({folderID: folderId});
+                            }
                         });
                     }
                 }
@@ -140,6 +151,13 @@ define([
                                 return true;
                             }
                         });
+
+                        params.firstFolderId = listOfSources[0].get('folderID');
+                        params.folderIdDiffers = listOfSources.some(function (c) {
+                            if (params.firstAutoremove !== c.get('folderID')) {
+                                return true;
+                            }
+                        });
                     }
 
                     /**
@@ -154,6 +172,16 @@ define([
                     const fragment = document.createRange().createContextualFragment(this.template(templateData));
                     this.el.appendChild(fragment);
 
+                    const folders = bg.folders;
+                    const parentSelect = document.querySelector('#prop-parent');
+                    folders.forEach((folder) => {
+                        console.log(folder);
+                        const option = document.createElement('option');
+                        option.textContent = folder.get('title');
+                        option.setAttribute('value', folder.get('id'));
+                        parentSelect.insertAdjacentElement('beforeend', option);
+                    });
+
                     /**
                      * Set <select>s's values
                      */
@@ -163,6 +191,10 @@ define([
                     }
                     if (!params.updateEveryDiffers) {
                         document.querySelector('#prop-update-every').value = params.firstUpdate;
+                    }
+
+                    if (!params.folderIdDiffers) {
+                        document.querySelector('#prop-parent').value = params.firstFolderId;
                     }
                 }
 
