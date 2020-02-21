@@ -286,7 +286,7 @@ module.exports = function (grunt) {
         grunt.task.run('bump-version:' + level);
         grunt.task.run('commit:' + level);
         grunt.task.run('package');
-        grunt.task.run('push');
+        // grunt.task.run('push');
     });
 
 };
