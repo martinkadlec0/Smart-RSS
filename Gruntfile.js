@@ -197,21 +197,11 @@ module.exports = function (grunt) {
             },
             chromium: {
                 removeFromManifest: [
-                    'content_scripts',
-                    'page_action',
                     'applications',
                     'developer'
                 ],
                 permissions: 'chromium_permissions',
                 csp: 'chromium_content_security_policy'
-            },
-            detector: {
-                alwaysPackage: false,
-                skipped: [
-                    'versions.json'
-                ],
-                root: 'chromium_detector',
-                versionsFile: 'versions.json'
             }
         },
         copy: {
@@ -234,25 +224,11 @@ module.exports = function (grunt) {
                     cwd: './src/',
                     src: [
                         '**/*',
-                        '!rssDetector/*',
                         '!images/chrome-small-tile.png'
                     ],
                     filter: 'isFile',
                     dest: './dist/chromium/'
                 }]
-            },
-            detector: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: './src/rssDetector/',
-                        src: [
-                            '**/*'
-                        ],
-                        filter: 'isFile',
-                        dest: './dist/chromium_detector/'
-                    }
-                ]
             }
         },
         zip: {
