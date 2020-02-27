@@ -7,7 +7,6 @@ module.exports = function (grunt) {
     const cleanup = function () {
         const defaultConfig = {
             removeFromManifest: [],
-            alwaysPackage: true,
             root: null,
             versionsFile: null
         };
@@ -66,63 +65,16 @@ module.exports = function (grunt) {
 
     const bumpVersion = function (level = 'patch') {
         const semver = require('semver');
-        const md5File = require('md5-file');
-
         const manifestPath = join(__dirname, 'src/manifest.json');
         const manifest = grunt.file.readJSON(manifestPath);
         manifest.version = semver.inc(manifest.version, level);
         grunt.file.write(manifestPath, JSON.stringify(manifest, null, 2));
-
-        const versionsPath = join(__dirname, '/src/rssDetector/manifest.json');
-        const versions = Object.assign(existsSync(versionsPath) ? grunt.file.readJSON(versionsPath) : {}, {
-            files: [],
-            package: false
-        });
-
-        let newVersions = {
-            files: [],
-            package: false
-        };
-        const filesList = [];
-
-        const scan = (dir) => {
-            readdirSync(dir).forEach((file) => {
-                if (file[0] === '.') {
-                    return;
-                }
-                const filePath = join(dir, file);
-                if (lstatSync(filePath).isDirectory()) {
-                    scan(filePath);
-                    return;
-                }
-                filesList.push(filePath);
-            });
-        };
-        const detectorPath = join(__dirname, 'src/rssDetector');
-        scan(detectorPath);
-        filesList.forEach((item) => {
-            const hash = md5File.sync(item);
-            const fileName = item.split('\\').pop().split('/').pop();
-            if (fileName === 'manifest.json') {
-                return;
-            }
-            newVersions.files[fileName] = hash;
-            if (!versions.files[fileName] || versions.files[fileName] !== newVersions.files[fileName]) {
-                newVersions.package = true;
-            }
-        });
-        grunt.file.write(versionsPath, JSON.stringify(newVersions, null, 2));
-        const detectorManifestPath = join(detectorPath, 'manifest.json');
-        const detectorManifest = grunt.file.readJSON(detectorManifestPath);
-        detectorManifest.version = semver.inc(detectorManifest.version, level);
-        grunt.file.write(detectorManifestPath, JSON.stringify(detectorManifest, null, 2));
     };
 
 
     const zip = function () {
         const defaultConfig = {
             dirname: this.target,
-            alwaysPackage: true,
             skip: []
         };
         const config = Object.assign(defaultConfig, this.data);
@@ -154,11 +106,6 @@ module.exports = function (grunt) {
             });
         };
         scan(root);
-
-
-        const createPackage = config.alwaysPackage || grunt.file.readJSON(join(root, 'versions.json')).package;
-
-        if (createPackage) {
             const version = getVersion(manifestPath);
             const AdmZip = require('adm-zip');
             const zipFile = new AdmZip();
@@ -169,7 +116,6 @@ module.exports = function (grunt) {
                 zipFile.addLocalFile(file, path);
             });
             zipFile.writeZip(join(__dirname, 'dist', 'SmartRSS_v' + version + '_' + this.target + '.zip'));
-        }
     };
 
     const getVersion = function (manifest) {
@@ -211,7 +157,6 @@ module.exports = function (grunt) {
                     cwd: './src/',
                     src: [
                         '**/*',
-                        '!rssDetector/manifest.json',
                         '!images/chrome-small-tile.png'
                     ],
                     filter: 'isFile',
@@ -232,10 +177,6 @@ module.exports = function (grunt) {
             }
         },
         zip: {
-            detector: {
-                dirname: 'chromium_detector',
-                alwaysPackage: false
-            },
             firefox: {},
             chromium: {}
         }
