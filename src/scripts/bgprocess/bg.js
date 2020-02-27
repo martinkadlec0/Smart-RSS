@@ -11,27 +11,55 @@ define([
          * Messages
          */
 
+        function addSource(address) {
+            address = address.replace(/^feed:/i, 'https:');
+
+            const duplicate = sources.findWhere({url: address});
+
+            if (!duplicate) {
+                const source = sources.create({
+                    title: address,
+                    url: address
+                }, {wait: true});
+                openRSS(false, source.get('id'));
+            } else {
+                duplicate.trigger('change');
+                openRSS(false, duplicate.get('id'));
+            }
+        }
+
+
         function onAddSourceMessage(message) {
             if (!message.hasOwnProperty('action')) {
                 return;
             }
 
             if (message.action === 'new-rss' && message.value) {
-                message.value = message.value.replace(/^feed:/i, 'https:');
-
-                const duplicate = sources.findWhere({url: message.value});
-
-                if (!duplicate) {
-                    const source = sources.create({
-                        title: message.value,
-                        url: message.value
-                    }, {wait: true});
-                    openRSS(false, source.get('id'));
-                } else {
-                    duplicate.trigger('change');
-                    openRSS(false, duplicate.get('id'));
-                }
-
+                addSource(message.value);
+            }
+            if (message.action === 'feeds-detected') {
+                console.log('received');
+                chrome.contextMenus.removeAll();
+                const feeds = message.value;
+                chrome.contextMenus.create({
+                    id: 'SmartRss',
+                    contexts: ['browser_action'],
+                    title: 'Subscribe'
+                }, function () {
+                    feeds.forEach(function (feed) {
+                        chrome.contextMenus.create({
+                            id: feed.url,
+                            title: feed.title,
+                            contexts: ['browser_action'],
+                            parentId: 'SmartRss',
+                            onclick: function () {
+                                console.log('fff' + feed.url);
+                                addSource(feed.url);
+                            }
+                        });
+                    });
+                });
+                chrome.browserAction.setBadgeText({text: feeds.length > 0 ? feeds.length.toString() : ''});
             }
         }
 
