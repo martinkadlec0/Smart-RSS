@@ -42,7 +42,7 @@ chrome.runtime.getBackgroundPage((bg) => {
         }
         document.querySelector('#version').textContent = chrome.runtime.getManifest().version;
 
-        [...document.querySelectorAll('select[id], input[type=number], input[type=range], input[type=range]')].forEach((item) => {
+        [...document.querySelectorAll('select[id], input[type=number], input[type=range]')].forEach((item) => {
             item.value = bg.settings.get(item.id);
             if (item.type === 'number') {
                 item.addEventListener('input', handleChange);
