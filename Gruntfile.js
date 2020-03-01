@@ -1,17 +1,15 @@
 module.exports = function (grunt) {
 
     const {join, dirname} = require('path');
-    const {readdirSync, lstatSync, existsSync} = require('fs');
+    const {readdirSync, lstatSync} = require('fs');
 
 
     const cleanup = function () {
         const defaultConfig = {
             removeFromManifest: [],
-            root: null,
-            versionsFile: null
         };
         const config = Object.assign(defaultConfig, this.data);
-        const root = config.root ? join(__dirname, 'dist', config.root) : join(__dirname, 'dist', this.target);
+        const root = join(__dirname, 'dist', this.target);
         const manifestPath = join(root, 'manifest.json');
         const originalManifest = grunt.file.readJSON(manifestPath);
         let newManifest = Object.assign({}, originalManifest);
@@ -19,9 +17,9 @@ module.exports = function (grunt) {
             newManifest['content_security_policy'] = originalManifest[config.csp];
             delete newManifest[config.csp];
         }
-        if (config.csp) {
+        if (config.chromium_permissions) {
             newManifest['permissions'] = originalManifest[config.permissions];
-            delete newManifest[config.permissions];
+            delete newManifest[config.chromium_permissions];
         }
         if (config.removeFromManifest) {
             config.removeFromManifest.forEach((item) => {
@@ -50,19 +48,6 @@ module.exports = function (grunt) {
         });
     };
 
-    const push = function () {
-        let {exec} = require('child_process');
-        let done = this.async();
-        exec('git push', (err, stdout, stderr) => {
-            if (err) {
-                console.log(`stderr: ${stderr}`);
-                done(false);
-                return;
-            }
-            done(true);
-        });
-    };
-
     const bumpVersion = function (level = 'patch') {
         const semver = require('semver');
         const manifestPath = join(__dirname, 'src/manifest.json');
@@ -70,7 +55,6 @@ module.exports = function (grunt) {
         manifest.version = semver.inc(manifest.version, level);
         grunt.file.write(manifestPath, JSON.stringify(manifest, null, 2));
     };
-
 
     const zip = function () {
         const defaultConfig = {
@@ -105,6 +89,7 @@ module.exports = function (grunt) {
                 filesList.push(filePath);
             });
         };
+
         scan(root);
             const version = getVersion(manifestPath);
             const AdmZip = require('adm-zip');
@@ -185,7 +170,6 @@ module.exports = function (grunt) {
 
     grunt.registerTask('bump-version', '', bumpVersion);
     grunt.registerTask('commit', '', commit);
-    grunt.registerTask('push', '', push);
     grunt.registerTask('package', ['prepare', 'zip']);
 
     grunt.loadNpmTasks('grunt-contrib-copy');
@@ -203,7 +187,6 @@ module.exports = function (grunt) {
         grunt.task.run('bump-version:' + level);
         grunt.task.run('commit:' + level);
         grunt.task.run('package');
-        // grunt.task.run('push');
     });
 
 };
