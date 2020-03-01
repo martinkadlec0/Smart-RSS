@@ -221,8 +221,10 @@ define([
             loadAllFeeds: function () {
                 setTimeout(() => {
                     app.trigger('select-all-feeds');
+                    const it = bg.items.sort();
 
-                    const unread = bg.items.where({trashed: false, unread: true});
+                    const unread = it.where({trashed: false, unread: true});
+
                     if (unread.length) {
                         this.addItems(unread);
                     } else {
@@ -393,7 +395,6 @@ define([
              */
             addItems: function (items) {
                 groups.reset();
-
                 /**
                  * Select removal
                  */
