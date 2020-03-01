@@ -41,26 +41,8 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     }
 });
 
-// chrome.runtime.onConnect.addListener(function (port) {
-//     port.onDisconnect.addListener(function (port) {
-//         if (port) {
-//             sources.trigger('clear-events', port.sender.tab.id);
-//         }
-//     });
-// });
-
 
 requirejs(['bg'], function () {
     // bg started
 });
 
-// chrome.runtime.onMessage.addListener(function (request, sender) {
-//     if (request.action === 'show-rss-icon') {
-//         const tab = sender.tab;
-//         chrome.pageAction.setIcon({
-//             path: 'rssDetector/icon16.png',
-//             tabId: tab.id
-//         });
-//         chrome.pageAction.show(tab.id);
-//     }
-// });
