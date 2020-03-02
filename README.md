@@ -14,7 +14,7 @@ Extension is available in following repositories:
 
 ### Chrome Web Store: https://chrome.google.com/webstore/detail/eggggihfcaabljfpjiiaohloefmgejic/
 
-### Opera Extensions: TBA
+### Opera Extensions: https://addons.opera.com/extensions/details/smart-rss-4/ (not available for stable channel yet, awaiting moderation)
 
 
 ## For developers
