@@ -63,9 +63,6 @@ grunt release:{level=patch}
 is all-in-one solution for releasing new versions of the extension
 
 - increases extension version in manifest by semver `level`
-- checks if Chromium only Detector changed and if so
-    - increases Detector version in manifest by semver `level`
 - commits changes with relevant message
 - performs `prepare`
-- creates browser specific packages of the extension and if required
-    - creates chromium package of Detector
+- creates browser specific packages of the extension
