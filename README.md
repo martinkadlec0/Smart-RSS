@@ -12,7 +12,7 @@ Extension is available in following repositories:
 
 ### AMO: https://addons.mozilla.org/firefox/addon/smart-rss-reader/
 
-### Chrome Web Store: https://chrome.google.com/webstore/detail/eggggihfcaabljfpjiiaohloefmgejic/
+### Chrome Web Store: https://chrome.google.com/webstore/detail/eggggihfcaabljfpjiiaohloefmgejic/ (please wait for 2.8.2 to get approved before installing from here, currently accepted version is heavily outdated)
 
 ### Opera Extensions: https://addons.opera.com/extensions/details/smart-rss-4/ (not available for stable channel yet, awaiting moderation)
 
