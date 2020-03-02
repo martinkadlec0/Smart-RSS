@@ -37,10 +37,12 @@ define([
             if (message.action === 'new-rss' && message.value) {
                 addSource(message.value);
             }
-            if (message.action === 'feeds-detected') {
-                console.log('received');
+            if (message.action === 'list-feeds') {
                 chrome.contextMenus.removeAll();
                 const feeds = message.value;
+                if (feeds.length === 0) {
+                    return;
+                }
                 chrome.contextMenus.create({
                     id: 'SmartRss',
                     contexts: ['browser_action'],
@@ -60,6 +62,10 @@ define([
                     });
                 });
                 chrome.browserAction.setBadgeText({text: feeds.length > 0 ? feeds.length.toString() : ''});
+            }
+            if (message.action === 'visibility-lost') {
+                chrome.contextMenus.removeAll();
+                chrome.browserAction.setBadgeText({text: ''});
             }
         }
 

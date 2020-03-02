@@ -1,11 +1,14 @@
-function scan() {
+const feedsData = [];
+function handleVisibilityChange() {
     if (document.hidden) {
+        chrome.runtime.sendMessage({action: 'visibility-lost'});
         return;
     }
-    console.log('scanning');
+    chrome.runtime.sendMessage({action: 'list-feeds', value: feedsData});
+}
 
+function scan(){
     const selector = 'link[type="application/rss+xml"], link[type="application/atom+xml"]';
-    const feedsData = [];
     feedsData.push(...[...document.querySelectorAll(selector)].map((feed) => {
         return {url: feed.href, title: feed.title || feed.href};
     }));
@@ -18,10 +21,9 @@ function scan() {
             feedsData.push({url: feedUrl, title: feedUrl});
         }
     }
-    chrome.runtime.sendMessage({action: 'feeds-detected', value: feedsData});
-
 }
 
-document.addEventListener('visibilitychange', scan, false);
+document.addEventListener('visibilitychange', handleVisibilityChange, false);
 
 scan();
+handleVisibilityChange();
