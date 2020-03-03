@@ -209,7 +209,9 @@ define([
                         bg.sourceToFocus = null;
                     }, 0);
                 } else {
-                    this.loadAllFeeds();
+                    if(bg.settings.get('selectAllFeeds')){
+                        this.loadAllFeeds();
+                    }
                 }
             },
 
