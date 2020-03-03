@@ -60,6 +60,7 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             openInNewTab: true,
             showFullHeadlines: 'false',
             selectFirstArticle: 1,
+            selectAllFeeds: 1,
             hotkeys: {
                 feeds: {
                     'up': 'feeds:selectPrevious',
