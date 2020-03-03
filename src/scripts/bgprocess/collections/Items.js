@@ -18,35 +18,39 @@ define(['backbone', 'models/Item', 'preps/indexeddb'], function (BB, Item) {
         model: Item,
         batch: false,
         indexedDB: new Backbone.IndexedDB('items-backbone'),
-        comparator: function (a, b, sorting) {
-            let val;
-            sortBy = sorting || settings.get('sortBy');
-
-
-            if (sortBy === 'title') {
-                if (!sorting && getS(a.get('title')) === getS(b.get('title'))) {
-                    return this.comparator(a, b, settings.get('sortBy2') || true);
-                }
-                val = getS(a.get('title')) <= getS(b.get('title')) ? 1 : -1;
-            } else if (sortBy === 'author') {
-                if (!sorting && getS(a.get('author')) === getS(b.get('author'))) {
-                    return this.comparator(a, b, settings.get('sortBy2') || true);
-                }
-                val = getS(a.get('author')) <= getS(b.get('author')) ? 1 : -1;
+        spaceship: function spaceship(val1, val2) {
+            if ((val1 === null || val2 === null) || (typeof val1 !== typeof val2)) {
+                return null;
+            }
+            if (typeof val1 === 'string') {
+                return (val1).localeCompare(val2);
             } else {
-                if (!sorting && a.get('date') === b.get('date')) {
-                    return this.comparator(a, b, settings.get('sortBy2') || true);
+                if (val1 > val2) {
+                    return 1;
+                } else if (val1 < val2) {
+                    return -1;
                 }
-                val = a.get('date') <= b.get('date') ? 1 : -1;
+                return 0;
+            }
+        },
+        comparator: function (a, b, sorting) {
+            const sortBy = sorting ? settings.get('sortBy2') : settings.get('sortBy');
+            const sortOrder = sorting ? settings.get('sortOrder2') : settings.get('sortOrder');
+
+            const aVal = getS(a.get(sortBy));
+            const bVal = getS(b.get(sortBy));
+
+            val = this.spaceship(aVal, bVal);
+
+            if (val === 0) {
+                return sorting ? 0 :  this.comparator(a, b, true);
             }
 
-            if (!sorting && settings.get('sortOrder') === 'asc') {
-                val = -val;
-            }
-            if (sorting && settings.get('sortOrder2') === 'asc') {
-                val = -val;
+            if (sortOrder === 'desc') {
+                return -val;
             }
             return val;
+
         },
         initialize: function () {
             this.listenTo(settings, 'change:sortOrder', this.sort);
