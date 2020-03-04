@@ -12,9 +12,9 @@ Extension is available in following repositories:
 
 #### AMO: https://addons.mozilla.org/firefox/addon/smart-rss-reader/
 
-#### Chrome Web Store: https://chrome.google.com/webstore/detail/eggggihfcaabljfpjiiaohloefmgejic/ (please wait for 2.8.2 to get approved before installing from here, currently accepted version is heavily outdated)
+#### Chrome Web Store: https://chrome.google.com/webstore/detail/eggggihfcaabljfpjiiaohloefmgejic/
 
-#### Opera Extensions: https://addons.opera.com/extensions/details/smart-rss-4/ (not available for stable channel yet, awaiting moderation)
+#### Opera Extensions: https://addons.opera.com/extensions/details/smart-rss-4/ (available for Beta and Dev, awaiting manual moderation)
 
 
 ## For developers
@@ -23,9 +23,9 @@ If you are interested in improving Smart RSS then there are few tips to get star
 
 First of all you will need several command line tools:
 
-- Git (obviously) - http://msysgit.github.io
-- Node.JS & npm - http://nodejs.org
-- Grunt-cli - http://gruntjs.com/getting-started (npm install -g grunt-cli)
+- Git
+- Node.JS & npm
+- Grunt-cli
 
 To setup your Smart RSS project open your console, go to your projects folders and type:
 ```
