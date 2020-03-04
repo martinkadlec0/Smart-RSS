@@ -42,7 +42,7 @@ chrome.runtime.getBackgroundPage((bg) => {
         }
         document.querySelector('#version').textContent = chrome.runtime.getManifest().version;
 
-        [...document.querySelectorAll('select[id], input[type=number], input[type=range]')].forEach((item) => {
+        [...document.querySelectorAll('select[id], input[type=number], input[type=range], textarea')].forEach((item) => {
             item.value = bg.settings.get(item.id);
             if (item.type === 'number') {
                 item.addEventListener('input', handleChange);
@@ -140,6 +140,9 @@ chrome.runtime.getBackgroundPage((bg) => {
     function handleChange(event) {
         const target = event.target;
         bg.settings.save(target.id, target.value);
+        if (target.id === 'userStyle') {
+            chrome.runtime.sendMessage({action: 'changeUserStyle'});
+        }
     }
 
     function handleCheck(event) {

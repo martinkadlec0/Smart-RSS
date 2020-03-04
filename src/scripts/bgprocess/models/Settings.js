@@ -61,6 +61,7 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             showFullHeadlines: 'false',
             selectFirstArticle: 1,
             selectAllFeeds: 1,
+            userStyle: '',
             hotkeys: {
                 feeds: {
                     'up': 'feeds:selectPrevious',

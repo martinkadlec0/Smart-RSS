@@ -16,6 +16,18 @@ define([
             }
         });
 
+        chrome.runtime.onMessage.addListener(onMessage);
+
+        function changeUserStyle() {
+            document.querySelector('[data-custom-style]').innerHTML = bg.settings.get('userStyle');
+        }
+
+        function onMessage(message) {
+            if (message.action === 'changeUserStyle') {
+                changeUserStyle();
+            }
+        }
+
         const app = window.app = new (Layout.extend({
             el: 'body',
             fixURL: function (url) {
@@ -37,7 +49,7 @@ define([
                 bg.settings.on('change:layout', this.handleLayoutChange, this);
                 bg.settings.on('change:panelToggled', this.handleToggleChange, this);
                 bg.sources.on('clear-events', this.handleClearEvents, this);
-
+                changeUserStyle();
             },
             handleClearEvents: function (id) {
                 if (window == null || id === tabID) {
