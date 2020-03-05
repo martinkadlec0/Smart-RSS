@@ -36,6 +36,7 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             sortOrder: 'desc',
             sortOrder2: 'asc',
             icon: 'orange',
+            sourcesFoundIcon: 'arrow-orange',
             readOnVisit: false,
             askOnOpening: true,
             fullDate: false,
@@ -59,6 +60,7 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             disableAutoUpdate: false,
             openInNewTab: true,
             showFullHeadlines: 'false',
+
             selectFirstArticle: 1,
             selectAllFeeds: 1,
             userStyle: '',

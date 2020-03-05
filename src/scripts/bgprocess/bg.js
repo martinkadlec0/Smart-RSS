@@ -41,8 +41,12 @@ define([
                 chrome.contextMenus.removeAll();
                 const feeds = message.value;
                 if (feeds.length === 0) {
+                    animation.handleIconChange();
                     return;
                 }
+                chrome.browserAction.setIcon({
+                    path: '/images/icon19-' + settings.get('sourcesFoundIcon') + '.png'
+                });
                 chrome.contextMenus.create({
                     id: 'SmartRss',
                     contexts: ['browser_action'],
@@ -55,17 +59,21 @@ define([
                             contexts: ['browser_action'],
                             parentId: 'SmartRss',
                             onclick: function () {
-                                console.log('fff' + feed.url);
                                 addSource(feed.url);
                             }
                         });
                     });
                 });
-                chrome.browserAction.setBadgeText({text: feeds.length > 0 ? feeds.length.toString() : ''});
+                if (settings.get('badgeMode') === 'sources') {
+                    chrome.browserAction.setBadgeText({text: feeds.length.toString()});
+                }
             }
             if (message.action === 'visibility-lost') {
+                animation.handleIconChange();
                 chrome.contextMenus.removeAll();
-                chrome.browserAction.setBadgeText({text: ''});
+                if (settings.get('badgeMode') === 'sources') {
+                    chrome.browserAction.setBadgeText({text: ''});
+                }
             }
         }
 
