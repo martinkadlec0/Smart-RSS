@@ -243,6 +243,7 @@ define([
                     if (typeof onClickData !== 'undefined') {
                         if (onClickData.button === 1) {
                             openInNewTab();
+                            return;
                         }
                     }
                     openRSS(true);
