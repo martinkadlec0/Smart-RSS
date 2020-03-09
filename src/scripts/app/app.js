@@ -49,7 +49,6 @@ define([
                 bg.settings.on('change:layout', this.handleLayoutChange, this);
                 bg.settings.on('change:panelToggled', this.handleToggleChange, this);
                 bg.sources.on('clear-events', this.handleClearEvents, this);
-                changeUserStyle();
             },
             handleClearEvents: function (id) {
                 if (window == null || id === tabID) {
@@ -89,9 +88,8 @@ define([
 
                 this.feeds.enableResizing('horizontal', bg.settings.get('posA'));
                 this.articles.enableResizing('horizontal', bg.settings.get('posB'));
-
-                this.trigger('start');
-                this.trigger('start:after');
+                changeUserStyle();
+                this.handleLayoutChange();
             },
             handleKeyDown: function (event) {
                 const activeElement = document.activeElement;
