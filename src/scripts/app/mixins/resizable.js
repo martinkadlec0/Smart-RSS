@@ -103,7 +103,7 @@ define([], function () {
             }
 
             if (layout === 'vertical') {
-                this.resizer.style.width = this.el.innerWidth + 'px';
+                this.resizer.style.width = '100%';
                 this.resizer.style.cursor = 'n-resize';
                 this.resizer.style.height = resizeWidth + 'px';
             } else {
