@@ -134,6 +134,7 @@ define([
          * DB models
          */
         window.settings = new Settings();
+        window.settings.fetch();
         window.info = new Info();
         window.sources = new Sources();
         window.items = new Items();
@@ -166,9 +167,9 @@ define([
             const tasks = [];
             tasks.push(folders.fetch({silent: true}));
             tasks.push(sources.fetch({silent: true}));
-            tasks.push(items.fetch({silent: true}));
             tasks.push(toolbars.fetch({silent: true}));
-            tasks.push(settings.fetch({silent: true}));
+            tasks.push(items.fetch({silent: true}));
+
 
             return fetchOne(tasks);
         }
