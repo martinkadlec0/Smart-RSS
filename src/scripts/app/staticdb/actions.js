@@ -280,7 +280,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
 
                     } else if (ids.length) {
                         bg.sources.forEach((source) => {
-                            if (source.get('hasNew') && ids.indexOf(source.id) >= 0) {
+                            if (source.get('hasNew') && ids.includes(source.id)) {
                                 source.save({hasNew: false});
                             }
                         });

@@ -209,7 +209,7 @@ define([
                         bg.sourceToFocus = null;
                     }, 0);
                 } else {
-                    if(bg.settings.get('selectAllFeeds')){
+                    if (bg.settings.get('selectAllFeeds')) {
                         this.loadAllFeeds();
                     }
                 }
@@ -460,14 +460,12 @@ define([
                     document.querySelector('#context-undelete').hidden = false;
                     // document.querySelector('#context-undelete').classList.remove('hidden');
                 }
-
                 const items = searchIn.filter((item) => {
                     if (!item.get('unread') && this.unreadOnly) {
                         return false;
                     }
-                    return data.name || data.feeds.indexOf(item.get('sourceID')) >= 0;
+                    return data.name || data.feeds.includes(item.get('sourceID'));
                 }, this);
-
                 this.addItems(items);
             },
 
