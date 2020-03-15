@@ -3,10 +3,9 @@
  * @submodule layouts/ContentLayout
  */
 define([
-        'layouts/Layout', 'views/ToolbarView', 'views/contentView', 'views/SandboxView',
-        'controllers/comm'
+        'layouts/Layout', 'views/ToolbarView', 'views/contentView', 'views/SandboxView'
     ],
-    function (Layout, ToolbarView, contentView, SandboxView, comm) {
+    function (Layout, ToolbarView, contentView, SandboxView) {
 
         const toolbar = bg.toolbars.findWhere({region: 'content'});
 
@@ -37,28 +36,28 @@ define([
                     this.attach('sandbox', new SandboxView());
                 });
 
-                this.el.addEventListener('focus', (event) => {
-                    event.target.classList.add('focused');
-                    clearTimeout(blurTimeout);
-                });
+                // this.el.addEventListener('focus', (event) => {
+                //     event.target.classList.add('focused');
+                //     clearTimeout(blurTimeout);
+                // });
 
-                let focus = true;
-                let blurTimeout;
-
-                comm.on('stop-blur', function () {
-                    focus = false;
-                });
-
-                this.el.addEventListener('blur', (event) => {
-                    blurTimeout = setTimeout(() => {
-                        if (focus && !event.relatedTarget) {
-                            this.focus();
-                            return;
-                        }
-                        event.target.classList.remove('focused');
-                        focus = true;
-                    }, 0);
-                });
+                // let focus = true;
+                // let blurTimeout;
+                //
+                // comm.on('stop-blur', function () {
+                //     focus = false;
+                // });
+                //
+                // this.el.addEventListener('blur', (event) => {
+                //     blurTimeout = setTimeout(() => {
+                //         if (focus && !event.relatedTarget) {
+                //             this.focus();
+                //             return;
+                //         }
+                //         event.target.classList.remove('focused');
+                //         focus = true;
+                //     }, 0);
+                // });
 
             }
         });

@@ -4,9 +4,9 @@
  */
 define([
         'layouts/Layout', 'views/ToolbarView', 'views/articleList',
-        'mixins/resizable', 'controllers/comm'
+        'mixins/resizable'
     ],
-    function (Layout, ToolbarView, articleList, resizable, comm) {
+    function (Layout, ToolbarView, articleList, resizable) {
 
         const toolbar = bg.toolbars.findWhere({region: 'articles'});
 
@@ -30,29 +30,29 @@ define([
                     this.attach('articleList', articleList);
                 });
 
-                this.el.addEventListener('focus', (event) => {
-                    event.target.classList.add('focused');
-                    clearTimeout(blurTimeout);
-                });
+                // this.el.addEventListener('focus', (event) => {
+                //     event.target.classList.add('focused');
+                //     clearTimeout(blurTimeout);
+                // });
 
 
-                let focus = true;
-                let blurTimeout;
+                // let focus = true;
+                // let blurTimeout;
 
-                comm.on('stop-blur', function () {
-                    focus = false;
-                });
+                // comm.on('stop-blur', function () {
+                //     focus = false;
+                // });
 
-                this.el.addEventListener('blur', (event) => {
-                    blurTimeout = setTimeout(() => {
-                        if (focus && !event.relatedTarget) {
-                            this.focus();
-                            return;
-                        }
-                        event.target.classList.remove('focused');
-                        focus = true;
-                    }, 0);
-                });
+                // this.el.addEventListener('blur', (event) => {
+                //     blurTimeout = setTimeout(() => {
+                //         if (focus && !event.relatedTarget) {
+                //             this.focus();
+                //             return;
+                //         }
+                //         event.target.classList.remove('focused');
+                //         focus = true;
+                //     }, 0);
+                // });
                 this.on('resize:after', this.handleResizeAfter);
             },
 
