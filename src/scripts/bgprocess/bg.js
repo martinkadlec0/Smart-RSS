@@ -1,6 +1,7 @@
 /**
  * @module BgProcess
  */
+
 define([
         'modules/Animation', 'models/Settings', 'models/Info', 'models/Source',
         'collections/Sources', 'collections/Items', 'collections/Folders', 'models/Loader',
@@ -10,7 +11,6 @@ define([
         /**
          * Messages
          */
-
         function addSource(address) {
             address = address.replace(/^feed:/i, 'https:');
 
@@ -26,23 +26,13 @@ define([
                 url: address
             }, {wait: true});
             openRSS(false, source.get('id'));
-
         }
 
 
-        function onMessage(message, sender, sendResponse) {
-
-
+        function onMessage(message) {
             if (!message.hasOwnProperty('action')) {
                 return;
             }
-            // if (message.action === 'get-tab-id') {
-            //     sendResponse({
-            //         action: 'response-tab-id',
-            //         value: sender.tab.id
-            //     });
-            //     return;
-            // }
 
             if (message.action === 'new-rss' && message.value) {
                 addSource(message.value);
