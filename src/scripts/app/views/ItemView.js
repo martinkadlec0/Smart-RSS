@@ -115,7 +115,7 @@ define([
             if (this.model.get('pinned')) {
                 classList.add('pinned');
             }
-            if (bg.settings.get('lines') == 1) {
+            if (bg.settings.get('lines') === '1') {
                 classList.add('one-line');
             }
 
@@ -132,7 +132,7 @@ define([
             article.date = this.getItemDate(article.date);
             article.title = stripTags(article.title).trim() || '&lt;no title&gt;';
             this.el.setAttribute('href', article.url);
-            if (bg.settings.get('showFullHeadline')) {
+            if (bg.settings.get('showFullHeadline') === '1') {
                 this.el.classList.add('full-headline');
             } else {
                 this.el.setAttribute('title', article.title);
