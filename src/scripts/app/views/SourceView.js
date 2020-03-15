@@ -43,15 +43,14 @@ define([
                 this.el.classList.remove('loading');
                 this.el.classList.remove('broken');
 
-
                 if (this.model.get('count') > 0) {
                     this.el.classList.add('has-unread');
                 }
 
-
                 if ((this.model.get('errorCount') > 0) && !this.model.get('isLoading')) {
                     this.el.classList.add('broken');
                 }
+
                 if (this.model.get('isLoading')) {
                     this.el.classList.add('loading');
                 }
