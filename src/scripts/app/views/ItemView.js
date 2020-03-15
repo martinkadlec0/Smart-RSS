@@ -104,6 +104,7 @@ define([
             classList.remove('pinned');
             classList.remove('unvisited');
             classList.remove('unread');
+            classList.remove('one-line');
 
             if (!this.model.get('visited')) {
                 classList.add('unvisited');
@@ -113,6 +114,9 @@ define([
             }
             if (this.model.get('pinned')) {
                 classList.add('pinned');
+            }
+            if (bg.settings.get('lines') == 1) {
+                classList.add('one-line');
             }
 
             const changedAttributes = this.model.changedAttributes();

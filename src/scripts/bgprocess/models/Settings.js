@@ -29,7 +29,7 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             lang: getLangFromNavigator(),
             dateType: 'normal', // normal = DD.MM.YYYY, ISO = YYYY-MM-DD, US = MM/DD/YYYY
             layout: 'horizontal', // or vertical
-            lines: 'auto', // one-line, two-lines
+            lines: '2', // one-line, two-lines
             posA: '250,*',
             posB: '350,*',
             posC: '50%,*',
@@ -59,8 +59,7 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             updateFrequency: 15, // in minutes
             disableAutoUpdate: false,
             openInNewTab: true,
-            showFullHeadlines: 'false',
-
+            showFullHeadlines: 0,
             selectFirstArticle: 1,
             selectAllFeeds: 1,
             userStyle: '',

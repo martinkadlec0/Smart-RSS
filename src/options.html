@@ -104,8 +104,19 @@
       </label>
     </div>
 
+    <div class="settings-row learn-more">
+      <label class="web-content-select-label" for="lines">
+        <span class="selectLabel">Article list display mode:</span>
+        <select class="half-size" data-name="lines" id="lines">
+          <option value=1>One Line</option>
+          <option value=2>Two Lines</option>
+        </select>
+      </label>
+    </div>
 
-    <div class="settings-row learn-more" title="Color of icon that shows up in extension button when new articles are downloaded.">
+
+    <div class="settings-row learn-more"
+         title="Color of icon that shows up in extension button when new articles are downloaded.">
       <label class="web-content-select-label">
         <span class="selectLabel">New articles notification icon:</span>
         <select id="icon">
@@ -119,7 +130,8 @@
       </label>
     </div>
 
-    <div class="settings-row learn-more" title="Color of icon that shows up in extension button when new articles are downloaded.">
+    <div class="settings-row learn-more"
+         title="Color of icon that shows up in extension button when new articles are downloaded.">
       <label class="web-content-select-label">
         <span class="selectLabel">New sources found icon:</span>
         <select id="sourcesFoundIcon">
@@ -165,7 +177,8 @@
 
   <section>
     <h3 class="section-header">Behaviour</h3>
-    <div class="settings-row learn-more" title="If checked clicking toolbar button will open new tab, else it will load reader in the same tab.">
+    <div class="settings-row learn-more"
+         title="If checked clicking toolbar button will open new tab, else it will load reader in the same tab.">
       <label class="web-content-select-label">
         <span class="selectLabel">Open Reader in new tab:</span>
         <input id="openInNewTab" type="checkbox"/>
@@ -183,13 +196,15 @@
         <input id="selectAllFeeds" type="checkbox"/>
       </label>
     </div>
-    <div class="settings-row learn-more" title="This option will immediately mark as read every article you visit in the right column.">
+    <div class="settings-row learn-more"
+         title="This option will immediately mark as read every article you visit in the right column.">
       <label class="web-content-select-label">
         <span class="selectLabel">Automatically mark articles as read:</span>
         <input id="readOnVisit" type="checkbox"/>
       </label>
     </div>
-    <div class="settings-row learn-more" title="When you select more than 10 feeds in article list and choose 'Open article link' options from context menu.">
+    <div class="settings-row learn-more"
+         title="When you select more than 10 feeds in article list and choose 'Open article link' options from context menu.">
       <label class="web-content-select-label">
         <span class="selectLabel">Ask when opening 10+ tabs:</span>
         <input id="askOnOpening" type="checkbox"/>
@@ -201,7 +216,8 @@
         <input id="fullDate" type="checkbox"/>
       </label>
     </div>
-    <div class="settings-row learn-more" title="If enabled, pressing arrow up in a list when the first item is selected will select the last item and visa-versa.">
+    <div class="settings-row learn-more"
+         title="If enabled, pressing arrow up in a list when the first item is selected will select the last item and visa-versa.">
       <label class="web-content-select-label">
         <span class="selectLabel">Circular navigation:</span>
         <input id="circularNavigation" type="checkbox"/>
@@ -262,7 +278,8 @@
 
   <section>
     <h3 class="section-header">Sound notifications</h3>
-    <div class="settings-row learn-more" title="If enabled, browser will make a sound when new articles are downloaded.">
+    <div class="settings-row learn-more"
+         title="If enabled, browser will make a sound when new articles are downloaded.">
       <label class="web-content-select-label">
         <span class="selectLabel">Enable sound notifications:</span>
         <input id="soundNotifications" type="checkbox"/>
@@ -310,7 +327,8 @@
 
   <section>
     <h3 class="section-header">Export</h3>
-    <div class="settings-row learn-more" title="SMART is special format of Smart RSS extension. It exports/imports both, feeds and feeds's articles.">
+    <div class="settings-row learn-more"
+         title="SMART is special format of Smart RSS extension. It exports/imports both, feeds and feeds's articles.">
       <label class="web-content-select-label">
         <span class="selectLabel">SMART:</span>
         <button id="export-smart">Export</button>
@@ -328,15 +346,19 @@
 
   <section>
     <h3 class="section-header">Import</h3>
-    <div class="settings-row learn-more" title="SMART is special format of Smart RSS extension. It exports/imports all feeds, folders and articles.">
+    <div class="settings-row learn-more"
+         title="SMART is special format of Smart RSS extension. It exports/imports all feeds, folders and articles.">
       <label class="web-content-select-label">
-        <div class="ff-warning">Warning: Smart RSS will reload after finishing the SMART import, it's expected behavior</div>
+        <div class="ff-warning">Warning: Smart RSS will reload after finishing the SMART import, it's expected
+          behavior
+        </div>
         <span class="selectLabel">SMART:</span>
         <input id="import-smart" type="file">
         <span id="smart-imported"></span>
       </label>
     </div>
-    <div class="settings-row learn-more" title="You can use OPML format to import feeds and folders from Opera 12 to Smart RSS.">
+    <div class="settings-row learn-more"
+         title="You can use OPML format to import feeds and folders from Opera 12 to Smart RSS.">
       <label class="web-content-select-label">
         <span class="selectLabel">OPML:</span>
         <input id="import-opml" type="file">
