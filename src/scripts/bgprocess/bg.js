@@ -16,26 +16,37 @@ define([
 
             const duplicate = sources.findWhere({url: address});
 
-            if (!duplicate) {
-                const source = sources.create({
-                    title: address,
-                    url: address
-                }, {wait: true});
-                openRSS(false, source.get('id'));
-            } else {
+            if (duplicate) {
                 duplicate.trigger('change');
                 openRSS(false, duplicate.get('id'));
+                return;
             }
+            const source = sources.create({
+                title: address,
+                url: address
+            }, {wait: true});
+            openRSS(false, source.get('id'));
+
         }
 
 
-        function onAddSourceMessage(message) {
+        function onMessage(message, sender, sendResponse) {
+
+
             if (!message.hasOwnProperty('action')) {
                 return;
             }
+            // if (message.action === 'get-tab-id') {
+            //     sendResponse({
+            //         action: 'response-tab-id',
+            //         value: sender.tab.id
+            //     });
+            //     return;
+            // }
 
             if (message.action === 'new-rss' && message.value) {
                 addSource(message.value);
+                return;
             }
             if (message.action === 'list-feeds') {
                 chrome.contextMenus.removeAll();
@@ -77,8 +88,7 @@ define([
             }
         }
 
-        chrome.runtime.onMessageExternal.addListener(onAddSourceMessage);
-        chrome.runtime.onMessage.addListener(onAddSourceMessage);
+        chrome.runtime.onMessage.addListener(onMessage);
 
         function openRSS(closeIfActive, focusSource) {
             let url = chrome.extension.getURL('rss.html');
@@ -230,7 +240,6 @@ define([
                 chrome.alarms.onAlarm.addListener((alarm) => {
                     if (alarm.name === 'scheduler') {
                         if (settings.get('disableAutoUpdate') === true) {
-                            console.log('auto updating disabled');
                             return;
                         }
                         loader.downloadAll();

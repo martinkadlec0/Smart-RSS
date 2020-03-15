@@ -28,20 +28,6 @@ require.config({
     }
 });
 
-/**
- * Events handlers that has to be set right on start
- */
-
-chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-    if (message.action === 'get-tab-id') {
-        sendResponse({
-            action: 'response-tab-id',
-            value: sender.tab.id
-        });
-    }
-});
-
-
 requirejs(['bg'], function () {
     // bg started
 });
