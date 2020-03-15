@@ -47,13 +47,11 @@ define([
                 });
 
                 bg.settings.on('change:layout', this.handleLayoutChange, this);
-                bg.settings.on('change:panelToggled', this.handleToggleChange, this);
                 bg.sources.on('clear-events', this.handleClearEvents, this);
             },
             handleClearEvents: function (id) {
                 if (window == null || id === tabID) {
                     bg.settings.off('change:layout', this.handleLayoutChange, this);
-                    bg.settings.off('change:panelToggled', this.handleToggleChange, this);
                     bg.sources.off('clear-events', this.handleClearEvents, this);
                 }
             },
