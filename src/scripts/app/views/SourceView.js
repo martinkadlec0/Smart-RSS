@@ -7,7 +7,6 @@ define([
             list: null,
             initialize: function (opt, list) {
                 this.list = list;
-                this.el.setAttribute('draggable', 'true');
                 this.model.on('change', this.render, this);
                 this.model.on('destroy', this.handleModelDestroy, this);
                 this.model.on('change:title', this.handleChangeTitle, this);
