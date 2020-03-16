@@ -428,7 +428,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                         }
                     }
                     articleList.selectedItems.forEach(function (item) {
-                        chrome.tabs.create({url: stripTags(item.model.get('url')), active: !event.shiftKey});
+                        chrome.tabs.create({url: stripTags(item.model.get('url')), active: !!event.shiftKey});
                     });
                 }
             },
@@ -447,7 +447,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                         view = articleList.selectedItems[0];
                     }
                     if (view.model) {
-                        chrome.tabs.create({url: stripTags(view.model.get('url')), active: !event.shiftKey});
+                        chrome.tabs.create({url: stripTags(view.model.get('url')), active: !!event.shiftKey});
                     }
                 }
             },
