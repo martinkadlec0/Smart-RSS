@@ -93,8 +93,7 @@ define({
 	OLDER_THAN_DAY: 'Ouder dan één dag',
 	OLDER_THAN_WEEK: 'Ouder dan één week',
 	OLDER_THAN_MONTH: 'Ouder dan één maand',
-	OLDER_THAN_TWO_MONTHS: 'Ouder dan twee maanden'
-    
+	OLDER_THAN_TWO_MONTHS: 'Ouder dan twee maanden',
     SORT_BY: 'Sorteren op',
 	DATE: 'Datum',
 	TITLE: 'Titel',
