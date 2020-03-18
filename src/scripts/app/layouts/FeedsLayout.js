@@ -62,7 +62,7 @@ define([
                 // });
 
                 this.on('resize:after', this.handleResize);
-                //window.addEventListener('resize', this.handleResize.bind(this));
+                window.addEventListener('resize', this.handleResize.bind(this));
 
                 this.enableResizing('horizontal', bg.settings.get('posA'));
             },
@@ -72,10 +72,8 @@ define([
              * @method handleResize
              */
             handleResize: function () {
-                if (bg.settings.get('panelToggled')) {
                     const width = this.el.offsetWidth;
                     bg.settings.save({posA: width});
-                }
             }
         });
 
