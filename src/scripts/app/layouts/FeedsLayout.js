@@ -39,28 +39,6 @@ define([
 
                 this.el.view = this;
 
-                // this.el.addEventListener('focus', (event) => {
-                //     event.target.classList.add('focused');
-                //     clearTimeout(blurTimeout);
-                // });
-                //
-                // let focus = true;
-                // let blurTimeout;
-                //
-                // comm.on('stop-blur', function () {
-                //     focus = false;
-                // });
-                //
-                // this.el.addEventListener('blur', (event) => {
-                //     blurTimeout = setTimeout(() => {
-                //         if (focus && !event.relatedTarget) {
-                //             return;
-                //         }
-                //         event.target.classList.remove('focused');
-                //         focus = true;
-                //     }, 0);
-                // });
-
                 this.on('resize:after', this.handleResize);
                 window.addEventListener('resize', this.handleResize.bind(this));
 

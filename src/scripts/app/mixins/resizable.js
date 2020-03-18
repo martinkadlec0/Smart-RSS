@@ -41,7 +41,6 @@ define([], function () {
             loadPosition.call(el);
         });
 
-        this.trigger('resize');
         this.trigger('resize:after');
     }
 
@@ -114,9 +113,6 @@ define([], function () {
 
 
             loadPosition.call(this);
-            requestAnimationFrame(() => {
-                this.trigger('resize:enabled');
-            });
 
             this.resizer.addEventListener('mousedown', handleMouseDown.bind(this));
             document.addEventListener('mousemove', handleMouseMove.bind(this));
