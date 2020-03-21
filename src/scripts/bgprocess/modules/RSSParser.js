@@ -165,6 +165,11 @@ define([], function () {
         getEnclosure() {
             const node = this.currentNode;
             let enclosureNode = node.querySelector('enclosure');
+
+            if (!enclosureNode) {
+                enclosureNode = [...node.getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'content')][0];
+            }
+
             if (!enclosureNode) {
                 return '';
             }
