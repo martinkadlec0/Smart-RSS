@@ -642,6 +642,11 @@ header {
   overflow: hidden;
 }
 
+header img, header video {
+  max-width: 100%;
+  height: auto;
+}
+
 .clear {
   clear: both;
 }
@@ -772,7 +777,7 @@ footer {
   justify-content: flex-end;
 }
 
-.one-line>.item-title {
+.one-line > .item-title {
   flex: 1 1 auto;
   padding-right: 20px;
   padding-left: 0;
@@ -782,20 +787,20 @@ footer {
   text-overflow: ellipsis;
 }
 
-.one-line>.item-pin {
+.one-line > .item-pin {
   order: -1;
   margin-top: 0.3rem;
 }
 
-.one-line>.item-author, .item-date {
+.one-line > .item-author, .item-date {
   padding: 0;
 }
 
-.one-line>.item-author {
+.one-line > .item-author {
   flex: 0 0 12rem;
 }
 
-.one-line>.item-date {
+.one-line > .item-date {
   flex: 0 0 auto;
   padding-right: 5px;
 }

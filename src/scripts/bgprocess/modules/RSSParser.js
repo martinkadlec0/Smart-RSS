@@ -171,7 +171,7 @@ define([], function () {
                 enclosureNode = [...node.getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'content')][0];
 
                 const mediaTitleNode = [...node.getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'title')][0];
-                if(mediaTitleNode){
+                if (mediaTitleNode) {
                     media.title = mediaTitleNode.textContent;
                 }
             }
@@ -183,28 +183,35 @@ define([], function () {
             enclosure.url = enclosureNode.hasAttribute('url') ? enclosureNode.getAttribute('url') : '';
             enclosure.name = enclosureNode.hasAttribute('url') ? enclosure.url.substring(enclosure.url.lastIndexOf('/') + 1) : (media.title ? media.title : '');
             enclosure.type = enclosureNode.hasAttribute('type') ? enclosureNode.getAttribute('type') : '';
-            enclosure.medium = enclosureNode.hasAttribute('medium') ? enclosureNode.getAttribute('medium') : this.getMediumFromType(enclosure.type);
+            enclosure.medium = enclosureNode.hasAttribute('medium') ? enclosureNode.getAttribute('medium') : this.getMediumFromType(enclosure.type, enclosure.name);
             enclosure.length = enclosureNode.hasAttribute('length') ? enclosureNode.getAttribute('length') : '';
             return enclosure;
         }
 
-        getMediumFromType(type){
-            if(!type){
-                return '';
-            }
+        getMediumFromType(type, name) {
+            const extension = name.split('.')[1] ? name.split('.')[1] : '';
             const splitType = type.split('/');
-            if(['audio', 'image', 'video'].includes(splitType[0])){
-                return splitType[0];
+            if (splitType.length > 0) {
+                if (['audio', 'image', 'video'].includes(splitType[0])) {
+                    return splitType[0];
+                }
+                if (splitType[0] === 'text') {
+                    return 'document';
+                }
             }
-            if(splitType[0] === 'text'){
-                return 'document';
-            }
-            if(type.includes('application/octet-stream')){
+            if (type.includes('application/octet-stream')) {
                 return 'executable';
             }
-            if(type.includes('application/x-msdownload')){
+            if (type.includes('application/x-msdownload')) {
                 return 'executable';
             }
+            const imgExtensions = [
+                'jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'
+            ];
+            if(imgExtensions.includes(extension)){
+                return 'image';
+            }
+
 
             return '';
         }

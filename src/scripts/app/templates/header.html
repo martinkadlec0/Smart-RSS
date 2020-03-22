@@ -1,11 +1,36 @@
 <h1>
-	<% if (titleIsLink) { %><a href="<%= url ? url : '#' %>" target="_blank" tabindex="-1"><% } %>
-		<%= title %>
-	<% if (titleIsLink) { %></a><% } %>
+  <% if (titleIsLink) { %><a href="<%= url ? url : '#' %>" target="_blank" tabindex="-1"><% } %>
+  <%= title %>
+  <% if (titleIsLink) { %></a><% } %>
 </h1>
 <div id="below-h1">
-	<p class="author"><%- author %></p>
-	<p class="date"><%= date %></p>
-	<p class="pin-button" title="{{PIN}}" <%= (pinned ? 'class="pinned"' : '') %>></p>
-  <% if (!!enclosure) { %><p class="enclosure"><a href="<%= enclosure.url %>" target="_blank" tabindex="-1"><%= enclosure.name %> - <%= enclosure.type %> - <%= enclosure.length %></a></p><% } %>
+  <p class="author"><%- author %></p>
+  <p class="date"><%= date %></p>
+  <p class="pin-button" title="{{PIN}}" <%= (pinned ? 'class="pinned"' : '') %>></p>
+  <% if (!!enclosure) { %>
+  <p class="enclosure">
+    <% if (!!enclosure.medium) { %>
+    <details>
+      <summary>
+        <a href="<%= enclosure.url %>" target="_blank" tabindex="-1"><%= enclosure.name %><% if (enclosure.medium) { %> - <%= enclosure.medium %><% } %></a>
+      </summary>
+      <% if (enclosure.medium === 'image') { %>
+      <img src="<%= enclosure.url %>" alt="<%= enclosure.name %>"/>
+      <% } %>
+      <% if (enclosure.medium === 'audio') { %>
+      <audio controls="controls">
+        <source src="<%= enclosure.url %>"/>
+      </audio>
+      <% } %>
+      <% if (enclosure.medium === 'video') { %>
+      <video controls="controls">
+        <source src="<%= enclosure.url %>" type="<%= enclosure.type %>"/>
+      </video>
+    </details>
+    <% } %>
+    <% } else { %>
+    <a href="<%= enclosure.url %>" target="_blank" tabindex="-1"><%= enclosure.name %><% if (enclosure.medium) { %> - <%= enclosure.medium %><% } %></a>
+    <% } %>
+  </p>
+  <% } %>
 </div>
