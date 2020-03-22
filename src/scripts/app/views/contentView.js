@@ -234,7 +234,7 @@ define([
                                         const name = href.substring(1);
                                         const nameElement = frame.contentDocument.querySelector('[name="' + name + ']"');
                                         const idElement = frame.contentDocument.getElementById(name);
-                                        var element = null;
+                                        let element = null;
                                         if (nameElement) {
                                             element = nameElement;
                                         } else if (idElement) {
