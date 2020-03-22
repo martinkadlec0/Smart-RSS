@@ -165,9 +165,15 @@ define([], function () {
         getEnclosure() {
             const node = this.currentNode;
             let enclosureNode = node.querySelector('enclosure');
+            let media = {};
 
             if (!enclosureNode) {
                 enclosureNode = [...node.getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'content')][0];
+
+                const mediaTitleNode = [...node.getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'title')][0];
+                if(mediaTitleNode){
+                    media.title = mediaTitleNode.textContent;
+                }
             }
 
             if (!enclosureNode) {
@@ -175,10 +181,32 @@ define([], function () {
             }
             let enclosure = {};
             enclosure.url = enclosureNode.hasAttribute('url') ? enclosureNode.getAttribute('url') : '';
-            enclosure.name = enclosureNode.hasAttribute('url') ? enclosure.url.substring(enclosure.url.lastIndexOf('/') + 1) : '';
+            enclosure.name = enclosureNode.hasAttribute('url') ? enclosure.url.substring(enclosure.url.lastIndexOf('/') + 1) : (media.title ? media.title : '');
             enclosure.type = enclosureNode.hasAttribute('type') ? enclosureNode.getAttribute('type') : '';
+            enclosure.medium = enclosureNode.hasAttribute('medium') ? enclosureNode.getAttribute('medium') : this.getMediumFromType(enclosure.type);
             enclosure.length = enclosureNode.hasAttribute('length') ? enclosureNode.getAttribute('length') : '';
             return enclosure;
+        }
+
+        getMediumFromType(type){
+            if(!type){
+                return '';
+            }
+            const splitType = type.split('/');
+            if(['audio', 'image', 'video'].includes(splitType[0])){
+                return splitType[0];
+            }
+            if(splitType[0] === 'text'){
+                return 'document';
+            }
+            if(type.includes('application/octet-stream')){
+                return 'executable';
+            }
+            if(type.includes('application/x-msdownload')){
+                return 'executable';
+            }
+
+            return '';
         }
 
 
