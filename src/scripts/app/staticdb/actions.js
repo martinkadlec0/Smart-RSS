@@ -380,6 +380,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                         searchInContent = true;
                     }
                     const expression = new RegExp(RegExp.escape(query), 'i');
+                    const selectedSpecial = document.querySelector('.sources-list-item.selected.special');
                     list.views.some(function (view) {
                         if (!view.model) {
                             return false;
@@ -389,7 +390,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                         if (!sourceItem) {
                             return false;
                         }
-                        if (!sourceItem.classList.contains('selected')) {
+                        if (!sourceItem.classList.contains('selected') && !selectedSpecial) {
                             return false;
                         }
 
