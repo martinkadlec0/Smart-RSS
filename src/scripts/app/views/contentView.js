@@ -205,7 +205,11 @@ define([
                     const sandbox = app.content.sandbox;
                     const frame = sandbox.el;
 
+
+                    frame.setAttribute('scrolling', 'no');
+
                     const loadContent = () => {
+
                         frame.contentWindow.scrollTo(0, 0);
                         frame.contentDocument.documentElement.style.fontSize = bg.settings.get('articleFontSize') + '%';
                         frame.contentDocument.querySelector('base').href = source.get('base') || source.get('url');
@@ -220,6 +224,7 @@ define([
 
 
                         frame.contentDocument.querySelector('#smart-rss-url').href = this.model.get('url');
+
 
                         if (!this.handleClick) {
                             this.handleClick = true;
@@ -259,6 +264,14 @@ define([
                                 }
                             );
                         }
+                        const scrollHeight = frame.contentDocument.body.scrollHeight;
+                        frame.style.minHeight = '10px';
+                        frame.style.minHeight = '70%';
+                        frame.style.minHeight =  `${scrollHeight}px`;
+
+                        frame.style.height = '10px';
+                        frame.style.height = '70%';
+                        frame.style.height = `${scrollHeight}px`;
                     };
 
                     if (sandbox.loaded) {
