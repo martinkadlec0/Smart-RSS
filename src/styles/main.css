@@ -83,6 +83,9 @@ label {
   padding: 3px 6px;
   user-select: none;
   overflow: hidden;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .dynamic-space {
