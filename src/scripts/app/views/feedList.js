@@ -486,7 +486,9 @@ define([
                         return;
                     }
                     if (item instanceof bg.Folder) {
-                        const folderFeeds = bg.sources.where({folderID: item.id});
+                        const folderFeeds = bg.sources.toArray().filter((source) => {
+                            return source.folderID = item.id;
+                        });
                         rt.push(...this.getSelectedFeeds(folderFeeds));
                     }
                 });

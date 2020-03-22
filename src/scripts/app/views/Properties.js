@@ -175,7 +175,6 @@ define([
                     const folders = bg.folders;
                     const parentSelect = document.querySelector('#prop-parent');
                     folders.forEach((folder) => {
-                        console.log(folder);
                         const option = document.createElement('option');
                         option.textContent = folder.get('title');
                         option.setAttribute('value', folder.get('id'));

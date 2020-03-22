@@ -79,7 +79,6 @@ define([], function () {
 
                 if (!window || !window.frames) {
                     bg.logs.add({message: 'Event duplication bug! Clearing events now...'});
-                    bg.console.log('Event duplication bug! Clearing events now...');
                     bg.sources.trigger('clear-events', -1);
                     return;
                 }

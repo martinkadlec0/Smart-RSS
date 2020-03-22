@@ -97,7 +97,6 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                 this.maxSources = this.maxSources + 1;
                 return;
             }
-            console.log('not a valid source');
         }
 
         abortDownloading() {
@@ -199,7 +198,6 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
             items.toArray()
                 .forEach((item) => {
                     if (sourceIDs.indexOf(item.get('sourceID')) === -1) {
-                        console.log('DELETING ITEM BECAUSE OF MISSING SOURCE');
                         item.destroy();
                         foundSome = true;
                     }

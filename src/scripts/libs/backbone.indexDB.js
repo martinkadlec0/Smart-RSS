@@ -210,7 +210,6 @@
                 } else {
                     errorMessage = error.message;
                 }
-                console.log('IDB ERR: ' + errorMessage);
                 cbh(null, errorMessage);
             }
         }

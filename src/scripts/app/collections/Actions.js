@@ -35,7 +35,6 @@ define(['backbone', 'models/Action', 'staticdb/actions'], function (BB, Action, 
                 action = this.get(action);
             }
             if (!action) {
-                console.log('Action "' + action + '" does not exists');
                 return false;
             }
             const args = [].slice.call(arguments);
