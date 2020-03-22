@@ -152,7 +152,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                         return;
                     }
 
-                    let folderID = 0;
+                    let folderID = '';
                     const list = require('views/feedList');
                     if (list.selectedItems.length && list.selectedItems[0].el.classList.contains('folder')) {
                         const fid = list.selectedItems[0].model.get('id');
@@ -390,8 +390,13 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                         if (!sourceItem) {
                             return false;
                         }
-                        if (!sourceItem.classList.contains('selected') && !selectedSpecial) {
-                            return false;
+                        if (!sourceItem.classList.contains('selected')) {
+                            const folderId = sourceItem.view.model.get('folderID');
+                            const folderItem = document.querySelector('[data-id="' + folderId + '"]');
+
+                            if (!selectedSpecial && !folderItem) {
+                                return false;
+                            }
                         }
 
 
