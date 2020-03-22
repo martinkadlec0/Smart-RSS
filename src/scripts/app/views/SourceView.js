@@ -57,7 +57,6 @@ define([
 
 
                 if (this.model.get('folderID')) {
-                    console.log( this.model.get('folderID'));
                     this.el.dataset.inFolder = this.model.get('folderID');
                 } else {
                     this.el.hidden = false;
