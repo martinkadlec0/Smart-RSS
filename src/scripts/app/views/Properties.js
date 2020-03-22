@@ -27,7 +27,7 @@ define([
 
                 const updateEvery = parseInt(document.querySelector('#prop-update-every').value);
                 const autoRemove = parseInt(document.querySelector('#prop-autoremove').value);
-                const folderId =  parseInt(document.querySelector('#prop-parent').value);
+                const folderId = document.querySelector('#prop-parent').value;
 
                 if (this.current instanceof bg.Source) {
                     /* encrypt the password */
@@ -42,7 +42,7 @@ define([
                         autoremove: autoRemove,
                         proxyThroughFeedly: document.querySelector('#prop-proxy').checked
                     });
-                    if (folderId === 0) {
+                    if (folderId === '0') {
                         this.current.unset('folderID');
                     }
                     // this.render();
