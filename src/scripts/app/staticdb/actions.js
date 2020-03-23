@@ -248,25 +248,25 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
             },
             showArticles: {
                 title: 'Show articles',
-                fn: function (event) {
-                    event = event || {};
+                fn: function (event = {}) {
                     const target = event.target || {};
                     const feedList = require('views/feedList');
                     const feeds = feedList.getSelectedFeeds();
-                    const ids = feeds.map((feed) => {
+                    const feedIds = feeds.map((feed) => {
                         return feed.id;
                     });
                     let special = Array.from(document.querySelectorAll('.special.selected'))[0];
                     if (special) {
                         special = special.view.model;
                     }
-
+                    const folder = Array.from(document.querySelectorAll('.folder.selected'))[0];
 
                     app.trigger('select:' + feedList.el.id, {
                         action: 'new-select',
-                        feeds: ids,
+                        feeds: feedIds,
                         filter: special ? Object.assign({}, special.get('filter')) : null,
                         name: special ? special.get('name') : null,
+                        multiple: !!(special || folder),
                         unreadOnly: !!event.altKey || target.className === 'source-counter'
                     });
 
@@ -278,9 +278,9 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                             }
                         });
 
-                    } else if (ids.length) {
+                    } else if (feedIds.length) {
                         bg.sources.forEach((source) => {
-                            if (source.get('hasNew') && ids.includes(source.id)) {
+                            if (source.get('hasNew') && feedIds.includes(source.id)) {
                                 source.save({hasNew: false});
                             }
                         });

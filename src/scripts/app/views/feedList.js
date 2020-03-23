@@ -475,8 +475,8 @@ define([
              * @method getSelectedFeeds
              * @param arr {Array} List of selected items
              */
-            getSelectedFeeds: function (arr) {
-                const selectedItems = arr || this.selectedItems.map((item) => {
+            getSelectedFeeds: function (arr = []) {
+                const selectedItems = arr.length > 0 ? arr : this.selectedItems.map((item) => {
                     return item.model;
                 });
 

@@ -228,7 +228,16 @@ define([
                     } else {
                         this.addItems(bg.items.where({trashed: false}));
                     }
-                    app.trigger('select-all-feeds');
+                    const event = new MouseEvent('mousedown', {
+                        view: window,
+                        bubbles: true,
+                        cancelable: true
+                    });
+
+                    const cb = document.querySelector('.special');
+                    cb.dispatchEvent(event);
+
+
 
                 }, 0);
 
@@ -392,8 +401,9 @@ define([
              * Removes everything from lists and adds new collection of articles
              * @method setItemHeight
              * @param items {Backbone.Collection} bg.Items
+             * @param multiple
              */
-            addItems: function (items) {
+            addItems: function (items, multiple = false) {
                 groups.reset();
                 /**
                  * Select removal
@@ -406,6 +416,7 @@ define([
                 this.selectPivot = null;
 
                 items.forEach(function (item) {
+                    item.multiple = multiple;
                     this.addItem(item, true);
                 }, this);
 
@@ -446,18 +457,12 @@ define([
                 this.clearOnSelect();
                 this.currentData = data;
 
-                let searchIn = null;
-                if (data.filter) {
-                    searchIn = bg.items.where(data.filter);
-                } else {
-                    searchIn = bg.items.where({trashed: false});
-                }
+                const searchIn = data.filter ? bg.items.where(data.filter) : bg.items.where({trashed: false});
 
                 // if newly selected is trash
                 if (this.currentData.name === 'trash') {
                     app.articles.toolbar.hideItems('articles:update').showItems('articles:undelete');
                     document.querySelector('#context-undelete').hidden = false;
-                    // document.querySelector('#context-undelete').classList.remove('hidden');
                 }
                 const items = searchIn.filter((item) => {
                     if (!item.get('unread') && this.unreadOnly) {
@@ -465,7 +470,7 @@ define([
                     }
                     return data.name || data.feeds.includes(item.get('sourceID'));
                 }, this);
-                this.addItems(items);
+                this.addItems(items, data.multiple);
             },
 
 

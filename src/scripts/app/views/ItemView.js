@@ -53,6 +53,7 @@ define([
          * @param list {Backbone.View} Reference to articleList
          */
         initialize: function (opt, list) {
+            this.multiple = opt.model.multiple;
             this.list = list;
             // this.el.setAttribute('draggable', 'true');
             this.el.view = this;
@@ -131,6 +132,12 @@ define([
             article.datetime = new Date(article.date).toISOString();
             article.date = this.getItemDate(article.date);
             article.title = stripTags(article.title).trim() || '&lt;no title&gt;';
+            if(this.multiple){
+                const source = bg.sources.find({id: this.model.get('sourceID')});
+                article.sourceTitle = source.get('title');
+                article.favicon = source.get('favicon');
+                article.author = article.sourceTitle;
+            }
             this.el.setAttribute('href', article.url);
             if (bg.settings.get('showFullHeadline') === '1') {
                 this.el.classList.add('full-headline');
