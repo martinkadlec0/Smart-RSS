@@ -479,20 +479,21 @@ define([
                 const selectedItems = arr || this.selectedItems.map((item) => {
                     return item.model;
                 });
-                const rt = [];
+
+                const selectedFeeds = [];
                 selectedItems.forEach((item) => {
                     if (item instanceof bg.Source) {
-                        rt.push(item);
+                        selectedFeeds.push(item);
                         return;
                     }
                     if (item instanceof bg.Folder) {
                         const folderFeeds = bg.sources.toArray().filter((source) => {
                             return source.get('folderID') === item.id;
                         });
-                        rt.push(...this.getSelectedFeeds(folderFeeds));
+                        selectedFeeds.push(...this.getSelectedFeeds(folderFeeds));
                     }
                 });
-                return rt;
+                return selectedFeeds;
             },
 
             /**

@@ -67,8 +67,7 @@ define([], function () {
                 previousElement.focus();
             }
         },
-        select: function (view, e, forceSelect) {
-            e = e || {};
+        select: function (view, e = {}, forceSelect = false) {
             if ((e.shiftKey !== true && e.ctrlKey !== true) || (e.shiftKey && !this.selectPivot)) {
                 this.selectedItems = [];
                 this.selectPivot = view;
