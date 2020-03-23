@@ -168,7 +168,6 @@ define([
                     // It might happen when source is deleted and created in the same tick
                     return;
                 }
-
                 app.trigger('select:' + this.el.id, {action: 'new-select', value: view.model.id});
 
                 if (view.model.get('unread') && bg.settings.get('readOnVisit')) {

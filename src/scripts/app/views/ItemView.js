@@ -12,7 +12,7 @@ define([
      * @constructor
      * @extends Backbone.View
      */
-    var ItemView = BB.View.extend({
+    let ItemView = BB.View.extend({
 
         /**
          * Tag name of article item element

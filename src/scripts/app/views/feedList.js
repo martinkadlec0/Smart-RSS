@@ -487,7 +487,7 @@ define([
                     }
                     if (item instanceof bg.Folder) {
                         const folderFeeds = bg.sources.toArray().filter((source) => {
-                            return source.folderID = item.id;
+                            return source.get('folderID') === item.id;
                         });
                         rt.push(...this.getSelectedFeeds(folderFeeds));
                     }
