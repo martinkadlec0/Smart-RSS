@@ -81,6 +81,7 @@ label {
   align-items: stretch;
   justify-content: flex-start;
   padding: 3px 6px;
+  -moz-user-select: none;
   user-select: none;
   overflow: hidden;
   position: sticky;
@@ -149,6 +150,7 @@ input[type=search]:not(:focus):not(:valid) {
   padding: 0;
   box-shadow: var(--overlay-box-shadow);
   user-select: none;
+  -moz-user-select: none;
   cursor: default;
 }
 
@@ -257,6 +259,7 @@ input[type=search]:not(:focus):not(:valid) {
   flex-shrink: 0;
   flex-grow: 0;
   flex-basis: 400px;
+  -moz-user-select: none;
   user-select: none;
 }
 
@@ -274,6 +277,7 @@ input[type=search]:not(:focus):not(:valid) {
   position: absolute;
   left: 0;
   top: 0;
+  -moz-user-select: none;
   user-select: none;
 }
 
@@ -285,6 +289,7 @@ input[type=search]:not(:focus):not(:valid) {
   flex-shrink: 1;
   flex-grow: 1;
   flex-basis: auto;
+  -moz-user-select: none;
   user-select: none;
   overflow-x: hidden;
   overflow-y: auto;
@@ -423,6 +428,7 @@ input[type=search]:not(:focus):not(:valid) {
   border-top: var(--border);
   flex-flow: row;
   align-items: stretch;
+  -moz-user-select: none;
   user-select: none;
 }
 
@@ -506,6 +512,7 @@ input[type=search]:not(:focus):not(:valid) {
 
 #article-list {
   flex: 1 1 auto;
+  -moz-user-select: none;
   user-select: none;
   overflow-x: hidden;
   overflow-y: auto;
@@ -636,6 +643,7 @@ input[type=search]:not(:focus):not(:valid) {
   font-size: 0.75rem;
   text-align: center;
   font-weight: bold;
+  -moz-user-select: none;
   user-select: none;
 }
 
