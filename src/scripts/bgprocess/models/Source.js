@@ -10,7 +10,7 @@ define(['backbone'], function (BB) {
      * @constructor
      * @extends Backbone.Model
      */
-    var Source = BB.Model.extend({
+    let Source = BB.Model.extend({
         defaults: {
             title: '',
             url: '',
@@ -30,7 +30,8 @@ define(['backbone'], function (BB) {
             faviconExpires: 0,
             errorCount: 0,
             lastArticle: 0,
-            uid: ''
+            uid: '',
+            folderID: '0',
         },
 
         initialize: function () {
