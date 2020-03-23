@@ -54,7 +54,7 @@ define([
          */
         initialize: function (opt, list) {
             this.list = list;
-            this.el.setAttribute('draggable', 'true');
+            // this.el.setAttribute('draggable', 'true');
             this.el.view = this;
             this.setEvents();
         },
