@@ -28,6 +28,7 @@ const keys = {
     46: 'del'
 };
 
+
 function escapeHtml(string) {
     return String(string).replace(/[&<>"']/gm, (s) => {
         return entityMap[s];
@@ -83,6 +84,7 @@ chrome.runtime.getBackgroundPage((bg) => {
         });
 
         document.querySelector('#default-sound').addEventListener('change', handleDefaultSound);
+        document.querySelector('#reset-style').addEventListener('click', handleResetStyle);
         document.querySelector('#export-smart').addEventListener('click', handleExportSmart);
         document.querySelector('#export-opml').addEventListener('click', handleExportOPML);
         document.querySelector('#clear-data').addEventListener('click', handleClearData);
@@ -157,6 +159,16 @@ chrome.runtime.getBackgroundPage((bg) => {
             document.querySelector('input[value=horizontal]').setAttribute('src', '/images/layout_horizontal_selected.png');
             document.querySelector('input[value=vertical]').setAttribute('src', '/images/layout_vertical.png');
         }
+    }
+
+    function handleResetStyle() {
+        if (!confirm('Do you really want to reset style to default?')) {
+            return;
+        }
+        const defaultStyle = bg.settings.get('defaultStyle');
+        document.querySelector('#userStyle').value = defaultStyle;
+        bg.settings.save('userStyle', defaultStyle);
+        chrome.runtime.sendMessage({action: 'changeUserStyle'});
     }
 
     function handleChange(event) {

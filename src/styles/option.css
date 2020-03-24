@@ -42,6 +42,10 @@ a {
     color: rgb(17, 85, 204);
 }
 
+#reset-style {
+  margin-left: 202px;
+}
+
 
 .section-header {
     color: rgb(95, 95, 95);
