@@ -135,8 +135,8 @@ define([
             if(this.multiple){
                 const source = bg.sources.find({id: this.model.get('sourceID')});
                 article.sourceTitle = source.get('title');
-                article.favicon = source.get('favicon');
-                article.author = article.sourceTitle;
+                // article.favicon = source.get('favicon');
+                article.author = article.sourceTitle !== article.author ? article.sourceTitle + ' - ' + article.author : article.author;
             }
             this.el.setAttribute('href', article.url);
             if (bg.settings.get('showFullHeadline') === '1') {
