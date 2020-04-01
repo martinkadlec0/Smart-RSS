@@ -101,7 +101,7 @@ chrome.runtime.getBackgroundPage((bg) => {
         const hotkeys = bg.settings.get('hotkeys');
         for (const region in hotkeys) {
             if (hotkeys.hasOwnProperty(region)) {
-                const regionElement = document.createElement('h4');
+                const regionElement = document.createElement('h3');
                 regionElement.insertAdjacentText('afterbegin', region);
                 hotkeysElement.insertAdjacentElement('beforeend', regionElement);
 
@@ -109,9 +109,6 @@ chrome.runtime.getBackgroundPage((bg) => {
                 for (const regionHotkey in regionHotkeys) {
                     if (regionHotkeys.hasOwnProperty(regionHotkey)) {
 
-                        const row = document.createElement('div');
-                        row.classList.add('settings-row');
-                        row.classList.add('learn-more');
                         const label = document.createElement('label');
                         label.classList.add('web-content-select-label');
 
@@ -126,9 +123,7 @@ chrome.runtime.getBackgroundPage((bg) => {
 
                         label.insertAdjacentElement('beforeend', hotkey);
                         label.insertAdjacentElement('beforeend', action);
-                        row.insertAdjacentElement('beforeend', label);
-
-                        hotkeysElement.insertAdjacentElement('beforeend', row);
+                        hotkeysElement.insertAdjacentElement('beforeend', label);
                     }
                 }
             }
