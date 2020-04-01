@@ -186,7 +186,9 @@ module.exports = function (grunt) {
         }
         grunt.task.run('bump-version:' + level);
         grunt.task.run('commit:' + level);
-        grunt.task.run('package');
+        grunt.task.run('copy');
+        grunt.task.run('cleanup');
+        grunt.task.run('zip');
     });
-
 };
+
