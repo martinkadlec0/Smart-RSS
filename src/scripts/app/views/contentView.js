@@ -214,20 +214,20 @@ define([
                     frame.setAttribute('scrolling', 'no');
 
                     const resizeFrame = () => {
-                        console.log('test');
-                        const scrollHeight = frame.contentDocument.body.scrollHeight;
-                        frame.style.minHeight = '10px';
-                        frame.style.minHeight = '70%';
-                        frame.style.minHeight = `${scrollHeight}px`;
+                            const scrollHeight = frame.contentDocument.body.scrollHeight;
+                            frame.style.minHeight = '10px';
+                            frame.style.minHeight = '70%';
+                            frame.style.minHeight = `${scrollHeight}px`;
 
-                        frame.style.height = '10px';
-                        frame.style.height = '70%';
-                        frame.style.height = `${scrollHeight}px`;
+                            frame.style.height = '10px';
+                            frame.style.height = '70%';
+                            frame.style.height = `${scrollHeight}px`;
                     };
 
                     const loadContent = () => {
 
                         frame.contentWindow.scrollTo(0, 0);
+                        document.querySelector('#content').scrollTo(0, 0);
                         frame.contentDocument.documentElement.style.fontSize = bg.settings.get('articleFontSize') + '%';
                         frame.contentDocument.querySelector('base').href = source.get('base') || source.get('url');
 
@@ -242,49 +242,54 @@ define([
 
                         frame.contentDocument.querySelector('#smart-rss-url').href = this.model.get('url');
 
-
-                        if (!this.handleClick) {
-                            this.handleClick = true;
-                            frame.contentDocument.addEventListener('click', (event) => {
-                                    if (event.target.matches('a')) {
-                                        event.stopPropagation();
-                                        const href = event.target.getAttribute('href');
-                                        if (!href || href[0] !== '#') {
-                                            return true;
-                                        }
-                                        event.preventDefault();
-                                        const name = href.substring(1);
-                                        const nameElement = frame.contentDocument.querySelector('[name="' + name + ']"');
-                                        const idElement = frame.contentDocument.getElementById(name);
-                                        let element = null;
-                                        if (nameElement) {
-                                            element = nameElement;
-                                        } else if (idElement) {
-                                            element = idElement;
-                                        }
-                                        if (element) {
-                                            const getOffset = function (el) {
-                                                const box = el.getBoundingClientRect();
-
-                                                return {
-                                                    top: box.top + frame.contentWindow.pageYOffset - frame.contentDocument.documentElement.clientTop,
-                                                    left: box.left + frame.contentWindow.pageXOffset - frame.contentDocument.documentElement.clientLeft
-                                                };
-                                            };
-
-                                            const offset = getOffset(element);
-                                            frame.contentWindow.scrollTo(offset.left, offset.top);
-                                        }
-
-                                        return false;
-                                    }
+                        const clickHandler = (event) => {
+                            if (event.target.matches('a')) {
+                                event.stopPropagation();
+                                const href = event.target.getAttribute('href');
+                                if (!href || href[0] !== '#') {
+                                    return true;
                                 }
-                            );
-                        }
+                                event.preventDefault();
+                                const name = href.substring(1);
+                                const nameElement = frame.contentDocument.querySelector('[name="' + name + ']"');
+                                const idElement = frame.contentDocument.getElementById(name);
+                                let element = null;
+                                if (nameElement) {
+                                    element = nameElement;
+                                } else if (idElement) {
+                                    element = idElement;
+                                }
+                                if (element) {
+                                    const getOffset = function (el) {
+                                        const box = el.getBoundingClientRect();
+
+                                        return {
+                                            top: box.top + frame.contentWindow.pageYOffset - frame.contentDocument.documentElement.clientTop,
+                                            left: box.left + frame.contentWindow.pageXOffset - frame.contentDocument.documentElement.clientLeft
+                                        };
+                                    };
+
+                                    const offset = getOffset(element);
+                                    frame.contentWindow.scrollTo(offset.left, offset.top);
+                                }
+
+                                return false;
+                            }
+                        };
+
+                        frame.contentDocument.removeEventListener('click', clickHandler);
+                        frame.contentDocument.addEventListener('click', clickHandler);
+
+                        frame.contentDocument.removeEventListener('load', resizeFrame);
+                        frame.contentDocument.addEventListener('load', resizeFrame);
+
+                        [...frame.contentDocument.querySelectorAll('img, picture, iframe, video, audio')].forEach((img) => {
+                            img.onload = resizeFrame;
+                        });
+
                         resizeFrame();
                     };
-                    frame.removeEventListener('load', resizeFrame);
-                    frame.addEventListener('load', resizeFrame);
+
 
                     if (sandbox.loaded) {
                         loadContent();
