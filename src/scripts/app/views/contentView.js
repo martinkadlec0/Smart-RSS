@@ -213,6 +213,18 @@ define([
 
                     frame.setAttribute('scrolling', 'no');
 
+                    const resizeFrame = () => {
+                        console.log('test');
+                        const scrollHeight = frame.contentDocument.body.scrollHeight;
+                        frame.style.minHeight = '10px';
+                        frame.style.minHeight = '70%';
+                        frame.style.minHeight = `${scrollHeight}px`;
+
+                        frame.style.height = '10px';
+                        frame.style.height = '70%';
+                        frame.style.height = `${scrollHeight}px`;
+                    };
+
                     const loadContent = () => {
 
                         frame.contentWindow.scrollTo(0, 0);
@@ -269,15 +281,10 @@ define([
                                 }
                             );
                         }
-                        const scrollHeight = frame.contentDocument.body.scrollHeight;
-                        frame.style.minHeight = '10px';
-                        frame.style.minHeight = '70%';
-                        frame.style.minHeight =  `${scrollHeight}px`;
-
-                        frame.style.height = '10px';
-                        frame.style.height = '70%';
-                        frame.style.height = `${scrollHeight}px`;
+                        resizeFrame();
                     };
+                    frame.removeEventListener('load', resizeFrame);
+                    frame.addEventListener('load', resizeFrame);
 
                     if (sandbox.loaded) {
                         loadContent();
