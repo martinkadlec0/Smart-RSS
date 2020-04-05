@@ -434,7 +434,10 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                         }
                     }
                     articleList.selectedItems.forEach(function (item) {
-                        chrome.tabs.create({url: stripTags(item.model.get('url')), active: !!event.shiftKey});
+                        const openNewTab = bg.settings.get('openNewTab');
+                        const active = openNewTab === ' background' ?  !!event.shiftKey : !event.shiftKey;
+
+                        chrome.tabs.create({url: stripTags(item.model.get('url')), active: active});
                     });
                 }
             },
@@ -453,7 +456,10 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                         view = articleList.selectedItems[0];
                     }
                     if (view.model) {
-                        chrome.tabs.create({url: stripTags(view.model.get('url')), active: !!event.shiftKey});
+                        const openNewTab = bg.settings.get('openNewTab');
+                        const active = openNewTab === ' background' ?  !!event.shiftKey : !event.shiftKey;
+
+                        chrome.tabs.create({url: stripTags(item.model.get('url')), active: active});
                     }
                 }
             },
