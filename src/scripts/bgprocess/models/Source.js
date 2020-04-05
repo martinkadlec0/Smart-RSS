@@ -31,6 +31,7 @@ define(['backbone'], function (BB) {
             errorCount: 0,
             lastArticle: 0,
             uid: '',
+            openEnclosure: 'global',
             folderID: '0',
         },
 

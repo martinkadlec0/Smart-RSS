@@ -184,14 +184,19 @@ define([
                         return;
                     }
                     this.show();
+                    const source = this.model.getSource();
+                    const openEnclosure = source.get('openEnclosure');
+
+                    const open = openEnclosure === 'yes' || openEnclosure === 'global' && bg.settings.get('openEnclosure') === 'yes';
 
                     const data = Object.create(this.model.attributes);
                     data.date = this.getFormattedDate(this.model.get('date'));
                     data.title = stripTags(data.title).trim() || '&lt;no title&gt;';
                     data.url = escapeHtml(data.url);
                     data.titleIsLink = bg.settings.get('titleIsLink');
+                    data.open = open;
 
-                    const source = this.model.getSource();
+
                     const content = this.model.get('content');
 
                     while (this.el.firstChild) {

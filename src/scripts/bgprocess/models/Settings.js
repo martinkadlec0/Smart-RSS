@@ -62,6 +62,7 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             showFullHeadlines: 0,
             selectFirstArticle: 1,
             selectAllFeeds: 1,
+            openEnclosure: 'no',
             openNewTab: 'background',
             userStyle: ':root {\n' +
                 '\n' +

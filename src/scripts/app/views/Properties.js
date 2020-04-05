@@ -40,7 +40,8 @@ define([
                         folderID: folderId,
                         updateEvery: updateEvery,
                         autoremove: autoRemove,
-                        proxyThroughFeedly: document.querySelector('#prop-proxy').checked
+                        proxyThroughFeedly: document.querySelector('#prop-proxy').checked,
+                        openEnclosure: document.querySelector('#openEnclosure').value,
                     });
                     if (folderId === '0') {
                         this.current.unset('folderID');
@@ -124,6 +125,11 @@ define([
                     if (this.current.get('autoremove')) {
                         document.querySelector('#prop-autoremove').value = this.current.get('autoremove');
                     }
+
+                    if (this.current.get('openEnclosure')) {
+                        document.querySelector('#openEnclosure').value = this.current.get('openEnclosure');
+                    }
+
                     if (this.current.get('proxyThroughFeedly')) {
                         document.querySelector('#prop-proxy').checked = true;
                     }

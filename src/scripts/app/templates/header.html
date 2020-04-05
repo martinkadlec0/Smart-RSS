@@ -9,7 +9,7 @@
   <p class="pin-button" title="{{PIN}}" <%= (pinned ? 'class="pinned"' : '') %>></p>
   <% if (!!enclosure) { %>
   <% if (!!enclosure.medium) { %>
-  <details class="enclosure">
+  <details class="enclosure" <%= (open) ? 'open="open"' : '' %>>
     <summary>
       <a href="<%= enclosure.url %>" target="_blank" tabindex="-1"><%= enclosure.name %><% if (enclosure.medium) { %> -
         <%= enclosure.medium %><% } %></a>
