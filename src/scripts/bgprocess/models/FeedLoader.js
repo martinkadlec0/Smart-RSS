@@ -14,7 +14,7 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
             this.request.onabort = this.onAbort.bind(this);
         }
 
-        onAbort(){
+        onAbort() {
             this.model.save({isLoading: false});
         }
 
@@ -38,8 +38,7 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
                 });
             } else {
                 const response = this.request.responseText.trim();
-                const data = new DOMParser()
-                    .parseFromString(response, 'text/xml');
+                const data = new DOMParser().parseFromString(response, 'text/xml');
                 const error = data.querySelector('parsererror');
                 if (error) {
                     // TODO: save error for later review
@@ -77,7 +76,7 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
             });
             this.model.set('lastArticle', lastArticle);
             items.sort({
-                silent: true
+                silent: false
             });
             if (hasNew) {
                 items.trigger('search');
@@ -86,7 +85,7 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
                 const fetchedIDs = parsedData.map((item) => {
                     return item.id;
                 });
-                if(fetchedIDs.length > 0){
+                if (fetchedIDs.length > 0) {
                     items.where({
                         sourceID: this.model.get('id'),
                         deleted: true
@@ -122,7 +121,7 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
             if (this.model.get('faviconExpires') < parseInt(Math.round((new Date())
                 .getTime() / 1000))) {
                 return Favicon.checkFavicon(this.model)
-                // no finally available in Waterfox 56
+                    // no finally available in Waterfox 56
                     .then((response) => {
                         this.model.save(response);
                         return this.onFeedProcessed();
@@ -175,7 +174,7 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
             });
             this.loader.sourceLoaded(this.model);
             // setTimeout(() => {
-                this.downloadNext();
+            this.downloadNext();
             // }, 100);
         }
 
