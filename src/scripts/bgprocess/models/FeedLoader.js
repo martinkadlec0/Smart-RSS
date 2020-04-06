@@ -86,15 +86,17 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
                 const fetchedIDs = parsedData.map((item) => {
                     return item.id;
                 });
-                items.where({
-                    sourceID: this.model.get('id'),
-                    deleted: true
-                })
-                    .forEach((item) => {
-                        if (!fetchedIDs.includes(item.id)) {
-                            item.destroy();
-                        }
-                    });
+                if(fetchedIDs.length > 0){
+                    items.where({
+                        sourceID: this.model.get('id'),
+                        deleted: true
+                    })
+                        .forEach((item) => {
+                            if (!fetchedIDs.includes(item.id)) {
+                                item.destroy();
+                            }
+                        });
+                }
             }
 
             const countAll = items.where({
