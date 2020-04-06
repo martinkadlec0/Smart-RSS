@@ -82,20 +82,21 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
             if (hasNew) {
                 items.trigger('search');
                 loader.itemsDownloaded = true;
-            }
-            // remove old deleted content
-            const fetchedIDs = parsedData.map((item) => {
-                return item.id;
-            });
-            items.where({
-                sourceID: this.model.get('id'),
-                deleted: true
-            })
-                .forEach((item) => {
-                    if (!fetchedIDs.includes(item.id)) {
-                        item.destroy();
-                    }
+                // remove old deleted content
+                const fetchedIDs = parsedData.map((item) => {
+                    return item.id;
                 });
+                items.where({
+                    sourceID: this.model.get('id'),
+                    deleted: true
+                })
+                    .forEach((item) => {
+                        if (!fetchedIDs.includes(item.id)) {
+                            item.destroy();
+                        }
+                    });
+            }
+
             const countAll = items.where({
                 sourceID: this.model.get('id'),
                 trashed: false
