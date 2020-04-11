@@ -152,7 +152,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                         return;
                     }
 
-                    let folderID = '';
+                    let folderID = '0';
                     const list = require('views/feedList');
                     if (list.selectedItems.length && list.selectedItems[0].el.classList.contains('folder')) {
                         const fid = list.selectedItems[0].model.get('id');
