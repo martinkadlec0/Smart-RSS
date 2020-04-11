@@ -1,28 +1,28 @@
 {
-  "name": "smartrss",
-  "version": "2.0.0",
-  "description": "RSS Reader",
-  "homepage": "https://github.com/zakius/Smart-RSS",
-  "dependencies": {},
-  "devDependencies": {
-    "adm-zip": "git+https://github.com/cthackers/adm-zip.git",
-    "grunt": "^1.0.4",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-watch": "^1.1.0",
-    "md5-file": "^4.0.0",
-    "semver": "^6.1.1"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/zakius/Smart-RSS.git"
-  },
-  "author": "zakius",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/zakius/Smart-RSS/issues"
-  },
-  "engine": "node >= 0.10.0"
+    "name": "smartrss",
+    "version": "2.0.0",
+    "description": "RSS Reader",
+    "homepage": "https://github.com/zakius/Smart-RSS",
+    "dependencies": {},
+    "devDependencies": {
+        "adm-zip": "^0.4.14",
+        "grunt": "^1.1.0",
+        "grunt-contrib-copy": "^1.0.0",
+        "grunt-contrib-watch": "^1.1.0",
+        "md5-file": "^4.0.0",
+        "semver": "^6.1.1"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/zakius/Smart-RSS.git"
+    },
+    "author": "zakius",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/zakius/Smart-RSS/issues"
+    },
+    "engine": "node >= 0.10.0"
 }
