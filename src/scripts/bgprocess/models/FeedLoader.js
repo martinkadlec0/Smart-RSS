@@ -166,7 +166,8 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
             const data = {
                 isLoading: false,
                 lastChecked: Date.now(),
-                errorCount: success ? 0 : (isOnline ? this.model.get('errorCount') + 1 : this.model.get('errorCount'))
+                errorCount: success ? 0 : (isOnline ? this.model.get('errorCount') + 1 : this.model.get('errorCount')),
+                folderID: this.model.get('folderID') === '' ? '0' : this.model.get('folderID'),
             };
             this.model.save(data);
             this.model.trigger('update', {
