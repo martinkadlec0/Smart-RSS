@@ -434,7 +434,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                         }
                     }
                     const openNewTab = bg.settings.get('openNewTab');
-                    const active = openNewTab === 'background' ?  !!event.shiftKey : !event.shiftKey;
+                    const active = openNewTab === 'background' ? !!event.shiftKey : !event.shiftKey;
                     articleList.selectedItems.forEach(function (item) {
 
                         chrome.tabs.create({url: stripTags(item.model.get('url')), active: active});
@@ -457,7 +457,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                     }
                     if (view.model) {
                         const openNewTab = bg.settings.get('openNewTab');
-                        const active = openNewTab === 'background' ?  !!event.shiftKey : !event.shiftKey;
+                        const active = openNewTab === 'background' ? !!event.shiftKey : !event.shiftKey;
 
                         chrome.tabs.create({url: stripTags(view.model.get('url')), active: active});
                     }
@@ -677,12 +677,12 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 title: Locale.DELETE,
                 icon: 'delete.png',
                 fn: function (e) {
-                    var contentView = require('views/contentView');
+                    const contentView = require('views/contentView');
                     if (!contentView.model) {
                         return;
                     }
 
-                    askRmPinned = bg.settings.get('askRmPinned');
+                    const askRmPinned = bg.settings.get('askRmPinned');
 
                     if (e.shiftKey) {
                         if (contentView.model.get('pinned') && askRmPinned && askRmPinned !== 'none') {

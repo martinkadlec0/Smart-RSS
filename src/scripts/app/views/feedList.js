@@ -479,7 +479,6 @@ define([
                 const selectedItems = arr.length > 0 ? arr : this.selectedItems.map((item) => {
                     return item.model;
                 });
-
                 const selectedFeeds = [];
                 selectedItems.forEach((item) => {
                     if (item instanceof bg.Source) {
@@ -490,7 +489,9 @@ define([
                         const folderFeeds = bg.sources.toArray().filter((source) => {
                             return source.get('folderID') === item.id;
                         });
-                        selectedFeeds.push(...this.getSelectedFeeds(folderFeeds));
+                        if (folderFeeds.length > 0) {
+                            selectedFeeds.push(...this.getSelectedFeeds(folderFeeds));
+                        }
                     }
                 });
                 return selectedFeeds;
@@ -502,11 +503,11 @@ define([
              * @param arr {Array} List of selected items
              */
             getSelectedFolders: function (arr) {
-                const si = arr || this.selectedItems.map((item) => {
+                const selectedFolders = arr || this.selectedItems.map((item) => {
                     return item.model;
                 });
                 const rt = [];
-                si.forEach((folder) => {
+                selectedFolders.forEach((folder) => {
                     if (folder instanceof bg.Folder) {
                         rt.push(folder);
                     }
