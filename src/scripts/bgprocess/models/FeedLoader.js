@@ -33,7 +33,7 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
                         author: item.author ? item.author : '',
                         content: item.content ? item.content.content : item.summary.content,
                         sourceID: this.model.get('id'),
-                        dateCreated: Date.now()
+                        dateCreated: Date.now(),
                     });
                 });
             } else {
