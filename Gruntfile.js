@@ -26,6 +26,7 @@ module.exports = function (grunt) {
                 delete newManifest[item];
             });
         }
+        console.log(newManifest);
         grunt.file.write(manifestPath, JSON.stringify(newManifest, null, 2));
     };
 
