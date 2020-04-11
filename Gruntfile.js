@@ -26,6 +26,7 @@ module.exports = function (grunt) {
                 delete newManifest[item];
             });
         }
+        console.log(newManifest);
         grunt.file.write(manifestPath, JSON.stringify(newManifest, null, 2));
     };
 
@@ -74,13 +75,6 @@ module.exports = function (grunt) {
                     return;
                 }
                 const filePath = join(dir, file);
-                let skip = false;
-                config.skip.forEach((blacklisted) => {
-                    if (filePath.includes(blacklisted)) {
-                        skip = true;
-                    }
-                });
-
 
                 if (lstatSync(filePath).isDirectory()) {
                     scan(filePath);
@@ -91,16 +85,16 @@ module.exports = function (grunt) {
         };
 
         scan(root);
-            const version = getVersion(manifestPath);
-            const AdmZip = require('adm-zip');
-            const zipFile = new AdmZip();
-            filesList.forEach((file) => {
-                // TODO: shorten somehow, make sure that `path` doesn't contain leading slashes nor backslashes
-                let path = dirname(file).replace(root + '/', '').replace(root + '\\', '').replace(root, '');
+        const version = getVersion(manifestPath);
+        const AdmZip = require('adm-zip');
+        const zipFile = new AdmZip();
+        filesList.forEach((file) => {
+            // TODO: shorten somehow, make sure that `path` doesn't contain leading slashes nor backslashes
+            let path = dirname(file).replace(root + '/', '').replace(root + '\\', '').replace(root, '');
 
-                zipFile.addLocalFile(file, path);
-            });
-            zipFile.writeZip(join(__dirname, 'dist', 'SmartRSS_v' + version + '_' + this.target + '.zip'));
+            zipFile.addLocalFile(file, path);
+        });
+        zipFile.writeZip(join(__dirname, 'dist', 'SmartRSS_v' + version + '_' + this.target + '.zip'));
     };
 
     const getVersion = function (manifest) {
@@ -184,11 +178,7 @@ module.exports = function (grunt) {
             console.error('Wrong update level, aborting');
             return false;
         }
-        grunt.task.run('bump-version:' + level);
-        grunt.task.run('commit:' + level);
-        grunt.task.run('copy');
-        grunt.task.run('cleanup');
-        grunt.task.run('zip');
+        grunt.task.run(['bump-version:' + level, 'commit:' + level, 'copy', 'cleanup', 'zip']);
     });
 };
 
