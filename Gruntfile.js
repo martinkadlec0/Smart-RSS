@@ -26,7 +26,6 @@ module.exports = function (grunt) {
                 delete newManifest[item];
             });
         }
-        console.log(newManifest);
         grunt.file.write(manifestPath, JSON.stringify(newManifest, null, 2));
     };
 
@@ -60,7 +59,6 @@ module.exports = function (grunt) {
     const zip = function () {
         const defaultConfig = {
             dirname: this.target,
-            skip: []
         };
         const config = Object.assign(defaultConfig, this.data);
         const root = join(__dirname, 'dist', config.dirname);
