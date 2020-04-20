@@ -76,7 +76,7 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
             });
             this.model.set('lastArticle', lastArticle);
             items.sort({
-                silent: false
+                silent: true
             });
             if (hasNew) {
                 items.trigger('search');
