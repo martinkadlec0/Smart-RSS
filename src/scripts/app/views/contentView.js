@@ -183,6 +183,9 @@ define([
                     if (!this.model) {
                         return;
                     }
+
+                    const stylePath = chrome.runtime.getURL('styles/main.css');
+
                     this.show();
                     const source = this.model.getSource();
                     const openEnclosure = source.get('openEnclosure');
@@ -230,6 +233,9 @@ define([
                         document.querySelector('#content').scrollTo(0, 0);
                         frame.contentDocument.documentElement.style.fontSize = bg.settings.get('articleFontSize') + '%';
                         frame.contentDocument.querySelector('base').href = source.get('base') || source.get('url');
+
+                        frame.contentDocument.querySelector('[data-base-style]').setAttribute('href', stylePath);
+                        frame.contentDocument.querySelector('[data-custom-style]').innerHTML = bg.settings.get('userStyle');
 
                         const contentElement = frame.contentDocument.querySelector('#smart-rss-content');
                         while (contentElement.firstChild) {

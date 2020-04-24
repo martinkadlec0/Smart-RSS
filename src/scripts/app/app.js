@@ -19,7 +19,17 @@ define([
         chrome.runtime.onMessage.addListener(onMessage);
 
         function changeUserStyle() {
-            document.querySelector('[data-custom-style]').innerHTML = bg.settings.get('userStyle');
+            const userStyle = bg.settings.get('userStyle');
+            document.querySelector('[data-custom-style]').innerHTML = userStyle;
+            const frame = document.querySelector('[name="sandbox"]');
+            if (!frame) {
+                return;
+            }
+            const customStyleTag = frame.contentDocument.querySelector('[data-custom-style]');
+            if (!customStyleTag) {
+                return;
+            }
+            customStyleTag.innerHTML = userStyle;
         }
 
         function onMessage(message) {
