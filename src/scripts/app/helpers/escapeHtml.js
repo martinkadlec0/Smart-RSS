@@ -10,7 +10,7 @@ define([], function () {
         '<': '&lt;',
         '>': '&gt;',
         '"': '&quot;',
-        '\'': '&#39;'
+        '\'': '&#39;',
     };
 
     return function (str) {
