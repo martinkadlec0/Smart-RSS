@@ -11,6 +11,7 @@ define([], function () {
         '>': '&gt;',
         '"': '&quot;',
         '\'': '&#39;',
+        '/': '&#x2F;',
     };
 
     return function (str) {
