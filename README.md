@@ -10,7 +10,7 @@ For technical bug reports use issues here on GitHub
 
 Extension is available in following repositories:
 
-#### AMO: https://addons.mozilla.org/firefox/addon/smart-rss-reader/
+#### AMO: https://addons.mozilla.org/firefox/addon/smart-rss-reader/ (pulled back after manual review, working to get it back)
 
 #### Chrome Web Store: https://chrome.google.com/webstore/detail/eggggihfcaabljfpjiiaohloefmgejic/
 
