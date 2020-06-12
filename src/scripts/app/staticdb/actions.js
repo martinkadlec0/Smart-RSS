@@ -398,9 +398,12 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                                 return false;
                             }
                         }
+                        const cleanedTitle = view.model.get('title').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                        const cleanedAuthor = view.model.get('author').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                        const cleanedContent = searchInContent ? view.model.get('content').normalize('NFD').replace(/[\u0300-\u036f]/g, '') : '';
 
 
-                        if (!(expression.test(view.model.get('title')) || expression.test(view.model.get('author')) || (searchInContent && expression.test(view.model.get('content'))))) {
+                        if (!(expression.test(cleanedTitle) || expression.test(cleanedAuthor) || (searchInContent && expression.test(cleanedContent)))) {
                             view.el.classList.add('hidden');
                         } else {
                             view.el.classList.remove('hidden');
