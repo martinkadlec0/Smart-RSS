@@ -1,12 +1,60 @@
 define([
-        'backbone', '../../libs/template', 'text!templates/properties.html', 'modules/Locale'
+        'backbone', 'modules/Locale'
     ],
-    function (BB, template, tplProperties, Locale) {
+    function (BB, Locale) {
 
         return BB.View.extend({
             id: 'properties',
             current: null,
-            template: template(Locale.translateHTML(tplProperties)),
+            template: Locale.translateHTML(`
+<label id="property-title-label">
+  {{NAME}}:
+  <input id="prop-title" placeholder="{{FETCH_TITLE_TIP}}" title="{{FETCH_TITLE_TIP}}" type="text" value="<%- title %>"/>
+</label>
+
+<label id="property-title-address">{{ADDRESS}}: <input id="prop-url" type="url" value="<%= url %>"/></label>
+
+<label>{{UPDATE}}: <select id="prop-update-every">
+  <% if (typeof updateEveryDiffers != 'undefined' && updateEveryDiffers == true) { %>
+  <option value="-2">&lt;mixed&gt;</option>
+  <% } %>
+  <option value="-1">Use global setting</option>
+  <option value="0">{{NEVER}}</option>
+  <option value="5">{{EVERY_5_MINUTES}}</option>
+  <option value="15">{{EVERY_15_MINUTES}}</option>
+  <option value="30">{{EVERY_30_MINUTES}}</option>
+  <option value="60">{{EVERY_HOUR}}</option>
+  <option value="120">{{EVERY_2_HOURS}}</option>
+  <option value="180">{{EVERY_3_HOURS}}</option>
+  <option value="300">{{EVERY_5_HOURS}}</option>
+  <option value="600">{{EVERY_10_HOURS}}</option>
+  <option value="1440">{{EVERY_24_HOURS}}</option>
+  <option value="10080">{{EVERY_WEEK}}</option>
+</select></label>
+
+
+<label>{{PARENT}}: <select id="prop-parent">
+  <% if (typeof folderIdDiffers != 'undefined' && folderIdDiffers == true) { %>
+  <option value="-2">&lt;mixed&gt;</option>
+  <% } %>
+  <option value="0">{{ROOT_FOLDER}}</option>
+</select></label>
+
+
+<label>{{AUTOREMOVE}}: <select id="prop-autoremove">
+  <% if (typeof autoremoveDiffers != 'undefined' && autoremoveDiffers == true) { %>
+  <option value="-2">&lt;mixed&gt;</option>
+  <% } %>
+  <option value="0">{{NEVER}}</option>
+  <option value="1">{{OLDER_THAN_DAY}}</option>
+  <option value="7">{{OLDER_THAN_WEEK}}</option>
+  <option value="30">{{OLDER_THAN_MONTH}}</option>
+  <option value="60">{{OLDER_THAN_TWO_MONTHS}}</option>
+</select></label>
+
+<button id="prop-ok">{{OK}}</button>
+<button id="prop-cancel">{{CANCEL}}</button>
+`),
             events: {
                 'click button': 'handleClick',
                 'keydown button': 'handleKeyDown'
@@ -103,7 +151,56 @@ define([
                         this.el.removeChild(this.el.firstChild);
                     }
 
-                    const fragment = document.createRange().createContextualFragment(this.template(properties));
+                    const fragment = document.createRange().createContextualFragment(this.template);
+
+                    const labelTitle = fragment.querySelector('#property-title-label');
+                    if (!properties.title) {
+                        fragment.removeChild(labelTitle);
+                    } else {
+                        labelTitle.querySelector('input').value = properties.title;
+                    }
+
+
+                    if (properties.updateEveryDiffers === true) {
+                        const option = document.createRange().createContextualFragment(`<option value="-2">&lt;mixed&gt;</option>`);
+                        fragment.querySelector('#prop-update-every').prepend(option);
+                    }
+
+                    if (properties.folderIdDiffers === true) {
+                        const option = document.createRange().createContextualFragment(`<option value="-2">&lt;mixed&gt;</option>`);
+                        fragment.querySelector('#prop-parent').prepend(option);
+                    }
+
+                    if (properties.autoremoveDiffers === true) {
+                        const option = document.createRange().createContextualFragment(`<option value="-2">&lt;mixed&gt;</option>`);
+                        fragment.querySelector('#prop-autoremove').prepend(option);
+                    }
+
+                    const labelUrl = fragment.querySelector('#property-title-address');
+                    if (!properties.title) {
+                        fragment.removeChild(labelUrl);
+                    } else {
+                        labelUrl.querySelector('input').value = properties.url;
+                        const details = document.createRange().createContextualFragment(Locale.translateHTML(`<details>
+  <summary>{{MORE}}</summary>
+  <label>{{USERNAME}}: <input id="prop-username" type="text" value=""/></label>
+  <label>{{PASSWORD}}: <input id="prop-password" type="password" value=""/></label>
+
+  <label>Proxy: <input id="prop-proxy" type="checkbox" value=""/></label>
+  <label>Open media preview: <select id="openEnclosure">
+    <option value="global">Use global setting</option>
+    <option value="yes">Yes</option>
+    <option value="no">No</option>
+  </select></label>
+</details>`));
+                        details.querySelector('#prop-username').value = properties.username;
+                        details.querySelector('#prop-password').value = properties.password;
+                        details.querySelector('#prop-proxy').value = properties.proxyThroughFeedly;
+
+                        fragment.insertBefore(details, fragment.querySelector('button'));
+                    }
+
+
                     this.el.appendChild(fragment);
 
                     let folders = bg.folders;
