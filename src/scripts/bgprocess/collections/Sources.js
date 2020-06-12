@@ -16,7 +16,7 @@ define(['backbone', 'models/Source', 'preps/indexeddb'], function (BB, Source) {
         comparator: function (a, b) {
             const t1 = (a.get('title') || '').trim().toLowerCase();
             const t2 = (b.get('title') || '').trim().toLowerCase();
-            return t1 < t2 ? -1 : 1;
+            return t1.localeCompare(t2);
         }
     });
 });
