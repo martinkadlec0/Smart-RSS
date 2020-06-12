@@ -68,8 +68,11 @@ define([
                 while (this.el.firstChild) {
                     this.el.removeChild(this.el.firstChild);
                 }
-
-                const fragment = document.createRange().createContextualFragment(this.template(this.model.toJSON()));
+    const data = this.model.toJSON();
+                const fragment = document.createRange().createContextualFragment(this.template);
+                fragment.querySelector('.source-icon.icon').src = data.favicon;
+                fragment.querySelector('.source-title').textContent = data.title;
+                fragment.querySelector('.source-counter').textContent = data.count;
                 this.el.appendChild(fragment);
 
                 if (bg.sourceToFocus === this.model.get('id')) {
