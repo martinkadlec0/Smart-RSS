@@ -3,8 +3,8 @@
  * @submodule views/ItemView
  */
 define([
-    'backbone', '../../libs/template', 'helpers/formatDate', 'instances/contextMenus', 'helpers/stripTags', 'text!templates/item.html'
-], function (BB, template, formatDate, contextMenus, stripTags, tplItem) {
+    'backbone', 'helpers/formatDate', 'instances/contextMenus', 'helpers/stripTags',
+], function (BB, formatDate, contextMenus, stripTags) {
 
     /**
      * View of one article item in article list
@@ -30,13 +30,10 @@ define([
          */
         className: 'articles-list-item',
 
-        /**
-         * Article item view template
-         * @property template
-         * @default ./templates/item.html
-         * @type Function
-         */
-        template: template(tplItem),
+        template: `<div class="item-title"><img src="<%= favicon %>" class="source-icon icon"/><%= title %></div>
+<div class="item-pin"></div>
+<div class="item-author"><%- author %></div>
+<time class="item-date" datetime="<%- datetime %>"><%- date %></time>`,
 
         /**
          * Reference to view/articleList instance. It should be replaced with require('views/articleList')
@@ -132,7 +129,7 @@ define([
             article.datetime = new Date(article.date).toISOString();
             article.date = this.getItemDate(article.date);
             article.title = stripTags(article.title).trim() || '&lt;no title&gt;';
-            if(this.multiple){
+            if (this.multiple) {
                 const source = bg.sources.find({id: this.model.get('sourceID')});
                 article.sourceTitle = source.get('title');
                 // article.favicon = source.get('favicon');
@@ -150,7 +147,20 @@ define([
                 this.el.removeChild(this.el.firstChild);
             }
 
-            const fragment = document.createRange().createContextualFragment(this.template(article));
+            const fragment = document.createRange().createContextualFragment(this.template);
+            const itemTitle = fragment.querySelector('.item-title');
+            const icon = itemTitle.querySelector('.icon');
+            if(article.favicon){
+                icon.src = article.favicon;
+            }
+            else{
+                itemTitle.removeChild(icon);
+            }
+            itemTitle.textContent = article.title;
+            fragment.querySelector('.item-author').textContent = article.author;
+            fragment.querySelector('.item-date').textContent = article.date;
+            fragment.querySelector('.item-date').setAttribute('datetime', article.datetime);
+
             this.el.appendChild(fragment);
 
             return this;
