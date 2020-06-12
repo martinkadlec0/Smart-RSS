@@ -3,10 +3,10 @@
  * @submodule views/contentView
  */
 define([
-        'backbone', '../../libs/template', 'helpers/formatDate', 'helpers/escapeHtml', 'helpers/stripTags', 'text!templates/download.html',
-        'text!templates/header.html'
+        'backbone', 'helpers/formatDate', 'helpers/escapeHtml', 'helpers/stripTags',
+
     ],
-    function (BB, template, formatDate, escapeHtml, stripTags, tplDownload, tplHeader) {
+    function (BB, formatDate, escapeHtml, stripTags) {
 
         /**
          * Full view of one article (right column)
@@ -24,21 +24,20 @@ define([
              */
             tagName: 'header',
 
-            /**
-             * Content view template
-             * @property template
-             * @default ./templates/header.html
-             * @type Function
-             */
-            template: template(tplHeader),
+            template: `<h1></h1>
+<div id="below-h1">
+  <p class="author"></p>
+  <p class="date"></p>
+  <p class="pin-button" title="{{PIN}}"</p>
+</div>`,
 
-            /**
-             * Template for downloading an article
-             * @property downloadTemplate
-             * @default ./templates/download.html
-             * @type Function
-             */
-            downloadTemplate: template(tplDownload),
+            // /**
+            //  * Template for downloading an article
+            //  * @property downloadTemplate
+            //  * @default ./templates/download.html
+            //  * @type Function
+            //  */
+            // downloadTemplate: template(tplDownload),
 
 
             events: {
@@ -206,7 +205,77 @@ define([
                         this.el.removeChild(this.el.firstChild);
                     }
 
-                    const fragment = document.createRange().createContextualFragment(this.template(data));
+                    const fragment = document.createRange().createContextualFragment(this.template);
+                    const h1 = fragment.querySelector('h1');
+                    if (data.titleIsLink) {
+                        const link = document.createRange().createContextualFragment('<a target="_blank" tabindex="-1"></a>');
+                        link.href = data.url ? data.url : '#';
+                        link.textContent = data.title;
+                        h1.prepend(link);
+                    } else {
+                        h1.textContent = data.title;
+                    }
+                    fragment.querySelector('.author').textContent = data.author;
+                    fragment.querySelector('.date').textContent = data.date;
+                    if (data.pinned) {
+                        fragment.querySelector('.pin-button').classList.add('pinned');
+                    }
+                    if (data.enclosure) {
+                        if (data.enclosure.medium) {
+                            const enclosureMedium = document.createRange().createContextualFragment(`  <details class="enclosure">
+    <summary>
+      <a href="#" target="_blank" tabindex="-1"></a>
+    </summary>
+    <img src="" alt=""/>
+    <audio controls="controls">
+      <source src=""/>
+    </audio>
+    <video controls="controls">
+      <source src="" type=""/>
+    </video>
+  </details>`);
+                            if (data.open) {
+                                enclosureMedium.querySelector('.enclosure').setAttribute('open', 'open');
+                            }
+                            enclosureMedium.querySelector('a').href = data.enclosure.url;
+                            enclosureMedium.querySelector('a').textContent = data.enclosure.medium ? data.enclosure.name + ' - ' + data.enclosure.media : data.enclosure.name;
+
+                            const img = enclosureMedium.querySelector('img');
+                            if (data.enclosure.medium === 'image') {
+                                img.src = data.enclosure.url;
+                                img.alt = data.enclosure.name;
+                            } else {
+                                img.parentElement.removeChild(img);
+                            }
+
+                            const audio = enclosureMedium.querySelector('audio');
+                            if (data.enclosure.medium === 'audio') {
+                                audio.querySelector('source').src = data.enclosure.url;
+                            } else {
+                                audio.parentElement.removeChild(audio);
+                            }
+
+                            const video = enclosureMedium.querySelector('video');
+                            if (data.enclosure.medium === 'video') {
+                                video.querySelector('source').src = data.enclosure.url;
+                                video.querySelector('source').type = data.enclosure.type;
+                            } else {
+                                video.parentElement.removeChild(video);
+                            }
+                            fragment.querySelector('#below-h1').appendChild(enclosureMedium);
+                        } else {
+                            const enclosure = document.createRange().createContextualFragment(`<p class="enclosure">
+    <a href="" target="_blank" tabindex="-1"></a>
+  </p>`);
+                            const a = enclosure.querySelector('a');
+                            a.href = data.enclosure.url;
+                            a.textContent = data.enclosure.name;
+
+                            fragment.querySelector('#below-h1').appendChild(enclosure);
+                        }
+
+
+                    }
                     this.el.appendChild(fragment);
 
                     // first load might be too soon
@@ -217,14 +286,14 @@ define([
                     frame.setAttribute('scrolling', 'no');
 
                     const resizeFrame = () => {
-                            const scrollHeight = frame.contentDocument.body.scrollHeight;
-                            frame.style.minHeight = '10px';
-                            frame.style.minHeight = '70%';
-                            frame.style.minHeight = `${scrollHeight}px`;
+                        const scrollHeight = frame.contentDocument.body.scrollHeight;
+                        frame.style.minHeight = '10px';
+                        frame.style.minHeight = '70%';
+                        frame.style.minHeight = `${scrollHeight}px`;
 
-                            frame.style.height = '10px';
-                            frame.style.height = '70%';
-                            frame.style.height = `${scrollHeight}px`;
+                        frame.style.height = '10px';
+                        frame.style.height = '70%';
+                        frame.style.height = `${scrollHeight}px`;
                     };
 
                     const loadContent = () => {
