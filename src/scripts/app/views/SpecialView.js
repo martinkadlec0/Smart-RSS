@@ -1,10 +1,12 @@
 define([
-        '../../libs/template', 'views/TopView', 'text!templates/special.html'
+        '../../libs/template', 'views/TopView',
     ],
-    function (template, TopView, tplSpecial) {
+    function (template, TopView) {
         return TopView.extend({
             className: 'sources-list-item special',
-            template: template(tplSpecial),
+            template: `<img src="" class="source-icon"/>
+<div class="source-title"></div>
+<div class="source-counter"></div>`,
             /*events: {
                 'mouseup': 'handleMouseUp',
                 'click': 'handleClick'
@@ -74,11 +76,14 @@ define([
                 if (data.count > 0) {
                     this.el.classList.add('has-unread');
                 }
-                while(this.el.firstChild){
+                while (this.el.firstChild) {
                     this.el.removeChild(this.el.firstChild);
                 }
 
-                const fragment = document.createRange().createContextualFragment(this.template(data));
+                const fragment = document.createRange().createContextualFragment(this.template);
+                fragment.querySelector('.source-icon').src = '/images/' + data.icon;
+                fragment.querySelector('.source-title').textContent = data.title;
+                fragment.querySelector('.source-counter').textContent = data.count;
                 this.el.appendChild(fragment);
 
                 if (!noinfo) {
