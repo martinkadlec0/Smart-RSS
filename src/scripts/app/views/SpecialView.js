@@ -1,7 +1,5 @@
-define([
-        '../../libs/template', 'views/TopView',
-    ],
-    function (template, TopView) {
+define(['views/TopView',],
+    function (TopView) {
         return TopView.extend({
             className: 'sources-list-item special',
             template: `<img src="" class="source-icon"/>
