@@ -2,7 +2,7 @@
  * @module App
  * @submodule views/IndicatorView
  */
-define(['backbone', 'modules/Locale', 'text!templates/indicator.html'], function (BB, Locale, tplIndicator) {
+define(['backbone', 'modules/Locale'], function (BB, Locale) {
 
     /**
      * Feeds update indicator view
@@ -28,9 +28,15 @@ define(['backbone', 'modules/Locale', 'text!templates/indicator.html'], function
         initialize: function () {
             this.loaded = 0;
             this.maxSources = 0;
-            const fragment = document.createRange().createContextualFragment(tplIndicator);
+            const fragment = document.createRange().createContextualFragment(
+                `<div id="indicator-progress">
+</div>
+<div id="indicator-toolbar">
+<div id="indicator-stop"></div>
+</div>`
+            );
             this.el.appendChild(fragment);
-            let port = chrome.runtime.connect({ name: 'port-from-cs' });
+            let port = chrome.runtime.connect({name: 'port-from-cs'});
             port.onMessage.addListener((m) => {
                 if (m.key === 'loading') {
                     this.handleLoadingChange();
@@ -95,7 +101,7 @@ define(['backbone', 'modules/Locale', 'text!templates/indicator.html'], function
          * @chainable
          */
         render: function () {
-            const { loaded, maxSources } = this;
+            const {loaded, maxSources} = this;
             if (maxSources === 0) {
                 return;
             }
