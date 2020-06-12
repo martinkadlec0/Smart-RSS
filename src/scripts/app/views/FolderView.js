@@ -3,9 +3,9 @@
  * @submodule views/FolderView
  */
 define([
-        'backbone', '../../libs/template', 'views/TopView', 'instances/contextMenus', 'text!templates/folder.html'
+        'backbone', 'views/TopView', 'instances/contextMenus',
     ],
-    function (BB, template, TopView, contextMenus, tplFolder) {
+    function (BB, TopView, contextMenus) {
 
         /**
          * View for Folder in feed list
@@ -23,13 +23,11 @@ define([
              */
             className: 'sources-list-item folder',
 
-            /**
-             * Folder view template
-             * @property template
-             * @default ./templates/folder.html
-             * @type Function
-             */
-            template: template(tplFolder),
+            template: `<div class="folder-arrow"></div>
+            <img src="/images/folder.png" class="source-icon closed"/>
+            <img src="/images/folder_opened.png" class="source-icon opened"/>
+            <div class="source-title"><%- title %></div>
+            <div class="source-counter"><%- count %></div>`,
 
             /**
              * Reference to view/feedList instance. It should be replaced with require('views/feedList')
@@ -186,7 +184,9 @@ define([
                     this.el.removeChild(this.el.firstChild);
                 }
 
-                const fragment = document.createRange().createContextualFragment(this.template(data));
+                const fragment = document.createRange().createContextualFragment(this.template);
+                fragment.querySelector('.source-title').textContent = data.title;
+                fragment.querySelector('.source-counter').textContent = data.count;
                 this.el.appendChild(fragment);
 
 
