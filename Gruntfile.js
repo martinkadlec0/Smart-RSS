@@ -121,7 +121,7 @@ module.exports = function (grunt) {
             },
             chromium: {
                 removeFromManifest: [
-                    'applications',
+                    'browser_specific_settings',
                     'developer'
                 ],
                 permissions: 'chromium_permissions',
