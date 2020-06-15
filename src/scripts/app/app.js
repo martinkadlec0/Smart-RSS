@@ -20,7 +20,7 @@ define([
 
         function changeUserStyle() {
             const userStyle = bg.settings.get('userStyle');
-            document.querySelector('[data-custom-style]').innerHTML = userStyle;
+            document.querySelector('[data-custom-style]').textContent = userStyle;
             const frame = document.querySelector('[name="sandbox"]');
             if (!frame) {
                 return;
@@ -29,7 +29,7 @@ define([
             if (!customStyleTag) {
                 return;
             }
-            customStyleTag.innerHTML = userStyle;
+            customStyleTag.textContent = userStyle;
         }
 
         function onMessage(message) {
