@@ -25,6 +25,7 @@ define(['backbone'], function (BB) {
             pinned: false,
             dateCreated: 0,
             enclosure: '' ,
+            emptyDate: false,
         },
         markAsDeleted: function () {
             this.save({

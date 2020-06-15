@@ -261,13 +261,15 @@ define([], function () {
                     content: this.getArticleContent(),
                     sourceID: this.source.get('id'),
                     enclosure: this.getEnclosure(),
-                    dateCreated: Date.now()
+                    dateCreated: Date.now(),
+                    emptyDate: false,
                 });
 
                 const last = items[items.length - 1];
 
                 if (last.date === 0) {
                     last.date = Date.now();
+                    last.emptyDate = true;
                 }
             });
             return items;
