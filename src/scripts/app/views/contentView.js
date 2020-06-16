@@ -206,15 +206,6 @@ define([
                     }
 
                     const fragment = document.createRange().createContextualFragment(this.template);
-                    const h1 = fragment.querySelector('h1');
-                    if (data.titleIsLink) {
-                        const link = document.createRange().createContextualFragment('<a target="_blank" tabindex="-1"></a>');
-                        link.href = data.url ? data.url : '#';
-                        link.textContent = data.title;
-                        h1.prepend(link);
-                    } else {
-                        h1.textContent = data.title;
-                    }
                     fragment.querySelector('.author').textContent = data.author;
                     fragment.querySelector('.date').textContent = data.date;
                     if (data.pinned) {
@@ -277,6 +268,18 @@ define([
 
                     }
                     this.el.appendChild(fragment);
+                    const h1 = this.el.querySelector('h1');
+                    if (data.titleIsLink) {
+                        const link = document.createElement('a');
+                        link.target = '_blank';
+                        link.tabindex='-1';
+                        link.href = data.url ? data.url : '#';
+                        link.textContent = data.title;
+                        h1.appendChild(link);
+                        console.log(link, h1);
+                    } else {
+                        h1.textContent = data.title;
+                    }
 
                     // first load might be too soon
                     const sandbox = app.content.sandbox;
