@@ -50,6 +50,7 @@ function startImport() {
 
 
     if (importedFolders) {
+        folders.clear();
         for (let i = 0, j = importedFolders.length; i < j; i++) {
             handleReq(folders.add(importedFolders[i]));
             if (i % 10 === 0) {
@@ -59,6 +60,7 @@ function startImport() {
     }
 
     if (importedSources) {
+        sources.clear();
         for (let i = 0, j = importedSources.length; i < j; i++) {
             handleReq(sources.add(importedSources[i]));
             if (i % 10 === 0) {
@@ -68,6 +70,7 @@ function startImport() {
     }
 
     if (importedItems) {
+        items.clear();
         for (let i = 0, j = importedItems.length; i < j; i++) {
             handleReq(items.add(importedItems[i]));
             if (i % 10 === 0) {
