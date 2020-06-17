@@ -204,7 +204,8 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
                     'shift+4': 'content:focusSandbox',
                     'esc': 'global:hideOverlays'
                 },
-            }
+            },
+            version: 0,
         },
         /**
          * @property localStorage

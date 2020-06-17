@@ -223,6 +223,15 @@ define([
                 /**
                  * Init
                  */
+
+                const version = settings.get('version') || 0;
+                if (version < 1) {
+                    items.forEach((item) => {
+                        item.save('id', item.get('id') + item.get('sourceID'));
+                    });
+                    settings.save('version', 1);
+                }
+
                 chrome.alarms.create('scheduler', {
                     periodInMinutes: 1
                 });
@@ -248,6 +257,7 @@ define([
                     }
                     openRSS(true);
                 });
+
                 /**
                  * Set icon
                  */

@@ -159,7 +159,7 @@ define([], function () {
         getGuid() {
             const node = this.currentNode;
             let guid = node.querySelector('guid');
-            return (guid ? guid.textContent : this.getLink() || '').trim();
+            return (guid ? guid.textContent : this.getLink() || '').trim() + this.source.get('id');
         }
 
         getEnclosure() {
@@ -208,7 +208,7 @@ define([], function () {
             const imgExtensions = [
                 'jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'
             ];
-            if(imgExtensions.includes(extension)){
+            if (imgExtensions.includes(extension)) {
                 return 'image';
             }
 

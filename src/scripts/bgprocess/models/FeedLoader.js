@@ -57,9 +57,18 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
             let hasNew = false;
             let createdNo = 0;
             let lastArticle = this.model.get('lastArticle');
+            const currentItems = items.where({
+                sourceID: this.model.get('id')
+            });
+            const earliestDate = Math.min(...currentItems.map((item) => {
+                return item.get('date');
+            }));
             parsedData.forEach((item) => {
                 const existingItem = items.get(item.id);
                 if (!existingItem) {
+                    if (earliestDate > item.date) {
+                        return;
+                    }
                     hasNew = true;
                     items.create(item, {
                         sort: false

@@ -276,7 +276,6 @@ define([
                         link.href = data.url ? data.url : '#';
                         link.textContent = data.title;
                         h1.appendChild(link);
-                        console.log(link, h1);
                     } else {
                         h1.textContent = data.title;
                     }
