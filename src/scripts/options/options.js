@@ -88,6 +88,7 @@ chrome.runtime.getBackgroundPage((bg) => {
         document.querySelector('#export-smart').addEventListener('click', handleExportSmart);
         document.querySelector('#export-opml').addEventListener('click', handleExportOPML);
         document.querySelector('#clear-data').addEventListener('click', handleClearData);
+        document.querySelector('#clear-removed-storage').addEventListener('click', handleClearDeletedStorage);
         document.querySelector('#clear-favicons').addEventListener('click', handleClearFavicons);
         document.querySelector('#import-smart').addEventListener('change', handleImportSmart);
         document.querySelector('#import-opml').addEventListener('change', handleImportOPML);
@@ -437,6 +438,22 @@ chrome.runtime.getBackgroundPage((bg) => {
         chrome.runtime.reload();
     }
 
+
+    function handleClearDeletedStorage() {
+        if (!confirm('Do you really want to remove deleted articles metadata? This may cause some of them to appear again')) {
+            return;
+        }
+
+        bg.items.where({
+            deleted: true,
+        })
+            .forEach((item) => {
+                item.destroy();
+            });
+        alert('Done,extension will reboot now');
+        chrome.runtime.reload();
+    }
+
     function handleClearFavicons() {
         if (!confirm('Do you really want to remove all favicons?')) {
             return;
@@ -448,6 +465,7 @@ chrome.runtime.getBackgroundPage((bg) => {
                 faviconExpires: 0
             });
         });
+        alert('Done');
     }
 
 })
