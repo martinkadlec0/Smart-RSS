@@ -98,15 +98,15 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
                     items.where({
                         sourceID: this.model.get('id'),
                         deleted: true,
-                    })
-                        .forEach((item) => {
-                            if(item.emptyDate){
-                                return;
-                            }
-                            if (!fetchedIDs.includes(item.id)) {
-                                item.destroy();
-                            }
-                        });
+                    }).forEach((item) => {
+                        if (item.emptyDate) {
+                            return;
+                        }
+                        if (fetchedIDs.includes(item.id)) {
+                            return;
+                        }
+                        item.destroy();
+                    });
                 }
             }
 
