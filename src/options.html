@@ -102,7 +102,8 @@
       </select>
     </label>
 
-    <label class="web-content-select-label" title="Color of icon that shows up in extension button when new articles are downloaded.">
+    <label class="web-content-select-label"
+           title="Color of icon that shows up in extension button when new articles are downloaded.">
       <span class="selectLabel">New articles notification icon:</span>
       <select id="icon">
         <option value="orange">Orange</option>
@@ -114,7 +115,8 @@
       </select>
     </label>
 
-    <label class="web-content-select-label" title="Color of icon that shows up in extension button when new articles are downloaded.">
+    <label class="web-content-select-label"
+           title="Color of icon that shows up in extension button when new articles are downloaded.">
       <span class="selectLabel">New sources found icon:</span>
       <select id="sourcesFoundIcon">
         <option value="arrow-orange">Arrow Orange</option>
@@ -127,7 +129,8 @@
       </select>
     </label>
 
-    <label class="web-content-select-label" title="Controls whether media preview should be visible when displaying article contents. Can be overridden per source">
+    <label class="web-content-select-label"
+           title="Controls whether media preview should be visible when displaying article contents. Can be overridden per source">
       <span class="selectLabel">Open media preview automatically:</span>
       <select id="openEnclosure">
         <option value="yes">Yes</option>
@@ -158,7 +161,8 @@
 
   <section>
     <h2 class="section-header">Behaviour</h2>
-    <label class="web-content-select-label" title="If checked clicking toolbar button will open new tab, else it will load reader in the same tab.">
+    <label class="web-content-select-label"
+           title="If checked clicking toolbar button will open new tab, else it will load reader in the same tab.">
       <span class="selectLabel">Open Reader in new tab:</span>
       <input id="openInNewTab" type="checkbox"/>
     </label>
@@ -173,12 +177,14 @@
       <input id="selectAllFeeds" type="checkbox"/>
     </label>
 
-    <label class="web-content-select-label" title="This option will immediately mark as read every article you visit in the right column.">
+    <label class="web-content-select-label"
+           title="This option will immediately mark as read every article you visit in the right column.">
       <span class="selectLabel">Automatically mark articles as read:</span>
       <input id="readOnVisit" type="checkbox"/>
     </label>
 
-    <label class="web-content-select-label" title="When you select more than 10 feeds in article list and choose 'Open article link' options from context menu.">
+    <label class="web-content-select-label"
+           title="When you select more than 10 feeds in article list and choose 'Open article link' options from context menu.">
       <span class="selectLabel">Ask when opening 10+ tabs:</span>
       <input id="askOnOpening" type="checkbox"/>
     </label>
@@ -188,7 +194,8 @@
       <input id="fullDate" type="checkbox"/>
     </label>
 
-    <label class="web-content-select-label" title="If enabled, pressing arrow up in a list when the first item is selected will select the last item and visa-versa.">
+    <label class="web-content-select-label"
+           title="If enabled, pressing arrow up in a list when the first item is selected will select the last item and visa-versa.">
       <span class="selectLabel">Circular navigation:</span>
       <input id="circularNavigation" type="checkbox"/>
     </label>
@@ -248,7 +255,8 @@
   <section>
     <h2 class="section-header">Sound notifications</h2>
 
-    <label class="web-content-select-label" title="If enabled, browser will make a sound when new articles are downloaded.">
+    <label class="web-content-select-label"
+           title="If enabled, browser will make a sound when new articles are downloaded.">
       <span class="selectLabel">Enable sound notifications:</span>
       <input id="soundNotifications" type="checkbox"/>
     </label>
@@ -291,7 +299,8 @@
   <section>
     <h2 class="section-header">Export</h2>
 
-    <label class="web-content-select-label" title="SMART is special format of Smart RSS extension. It exports/imports both, feeds and feeds's articles.">
+    <label class="web-content-select-label"
+           title="SMART is special format of Smart RSS extension. It exports/imports both, feeds and feeds's articles.">
       <span class="selectLabel">SMART:</span>
       <button id="export-smart">Export</button>
       <a href="" id="smart-exported"></a>
@@ -302,51 +311,58 @@
       <a href="" id="opml-exported"></a>
     </label>
   </section>
-
   <section>
     <h2 class="section-header">Import</h2>
     <div class="ff-warning">Warning: Smart RSS will reload after finishing the SMART import, it's expected
       behavior
     </div>
-    <label class="web-content-select-label" title="SMART is special format of Smart RSS extension. It exports/imports all feeds, folders and articles.">
+    <label class="web-content-select-label"
+           title="SMART is special format of Smart RSS extension. It exports/imports all feeds, folders and articles.">
       <span class="selectLabel">SMART:</span>
       <input id="import-smart" type="file" accept=".smart">
       <span id="smart-imported"></span>
     </label>
 
-    <label class="web-content-select-label" title="You can use OPML format to import feeds and folders from Opera 12 to Smart RSS.">
+    <label class="web-content-select-label"
+           title="You can use OPML format to import feeds and folders from Opera 12 to Smart RSS.">
       <span class="selectLabel">OPML:</span>
       <input id="import-opml" type="file" accept=".opml">
       <span id="opml-imported"></span>
     </label>
   </section>
 
-  <section>
-    <h2 class="section-header">Clear Favicons</h2>
-    <label class="web-content-select-label" title="This will remove all yours feeds and articles and settings.">
-      <span class="selectLabel">Remove Favicon data:</span>
-      <button id="clear-favicons">!!Clear!!</button>
-      <span id="favicons-cleared"></span>
-    </label>
-  </section>
+  <details>
+    <summary>Advanced features. Mostly for troubleshooting purposes</summary>
+    <section>
+      <h2 class="section-header">Clear Favicons</h2>
+      <label class="web-content-select-label" title="This will remove all yours feeds and articles and settings.">
+        <span class="selectLabel">Remove Favicon data:</span>
+        <button id="clear-favicons">!!Clear!!</button>
+        <span id="favicons-cleared"></span>
+      </label>
+    </section>
 
-  <section>
-    <h2 class="section-header">Clear removed articles store</h2>
-    <label class="web-content-select-label" title="This will remove all removed articles cache. It may cause some removed articles to appear again.">
-      <span class="selectLabel">Remove removed articles data:</span>
-      <button id="clear-removed-storage">!!Clear!!</button>
-      <span id="removed-storage-cleared"></span>
-    </label>
-  </section>
+    <section>
+      <h2 class="section-header">Clear removed articles store</h2>
+      <label class="web-content-select-label"
+             title="This will remove all removed articles cache. It may cause some removed articles to appear again.">
+        <span class="selectLabel">Remove removed articles data:</span>
+        <button id="clear-removed-storage">!!Clear!!</button>
+        <span id="removed-storage-cleared"></span>
+      </label>
+    </section>
 
-  <section>
-    <h2 class="section-header">Clear data</h2>
-    <label class="web-content-select-label" title="This will remove all yours feeds and articles and settings.">
-      <span class="selectLabel">Remove ALL extension data:</span>
-      <button id="clear-data">!!Clear!!</button>
-      <span id="data-cleared"></span>
-    </label>
-  </section>
+    <section>
+      <h2 class="section-header">Clear data</h2>
+      <label class="web-content-select-label" title="This will remove all yours feeds and articles and settings.">
+        <span class="selectLabel">Remove ALL extension data:</span>
+        <button id="clear-data">!!Clear!!</button>
+        <span id="data-cleared"></span>
+      </label>
+    </section>
+
+  </details>
+
 
   <footer>
     <h2 class="section-header">Version</h2>
