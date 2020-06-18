@@ -60,7 +60,7 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
             const currentItems = items.where({
                 sourceID: this.model.get('id')
             });
-            const earliestDate = Math.min(...currentItems.map((item) => {
+            const earliestDate = Math.min(0, ...currentItems.map((item) => {
                 return item.get('date');
             }));
             parsedData.forEach((item) => {
