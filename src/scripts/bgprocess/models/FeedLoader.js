@@ -98,9 +98,11 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
                     items.where({
                         sourceID: this.model.get('id'),
                         deleted: true,
-                        emptyDate: false,
                     })
                         .forEach((item) => {
+                            if(item.emptyDate){
+                                return;
+                            }
                             if (!fetchedIDs.includes(item.id)) {
                                 item.destroy();
                             }
