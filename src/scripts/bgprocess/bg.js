@@ -134,7 +134,6 @@ define([
          * DB models
          */
         window.settings = new Settings();
-        window.settings.fetch();
         window.info = new Info();
         window.sources = new Sources();
         window.items = new Items();
@@ -165,6 +164,7 @@ define([
 
         function fetchAll() {
             const tasks = [];
+            tasks.push(settings.fetch({silent: true}));
             tasks.push(folders.fetch({silent: true}));
             tasks.push(sources.fetch({silent: true}));
             tasks.push(toolbars.fetch({silent: true}));
@@ -225,6 +225,7 @@ define([
                  */
 
                 const version = settings.get('version') || 0;
+                console.log(version);
                 if (version < 1) {
                     items.forEach((item) => {
                         item.save('id', item.get('id') + item.get('sourceID'));
