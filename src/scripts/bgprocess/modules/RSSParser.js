@@ -236,16 +236,46 @@ define([], function () {
 
             const mainEl = this.document.querySelector('rss, rdf, feed, channel');
             if (mainEl) {
-                let baseStr = mainEl.getAttribute('xml:base') || mainEl.getAttribute('xmlns:base') || mainEl.getAttribute('base') || mainEl.querySelector('link').textContent || (mainEl.querySelector('link') && mainEl.querySelector('link:not([rel="self"])').getAttribute('href'));
+                let baseStr = mainEl.getAttribute('xml:base');
+                if (!baseStr) {
+                    baseStr = mainEl.getAttribute('xmlns:base');
+                }
+                if (!baseStr) {
+                    baseStr = mainEl.getAttribute('base');
+                }
+                if (!baseStr) {
+                    const node = mainEl.querySelector('link[rel="alternate"]');
+                    if (node) {
+                        baseStr = node.textContent;
+                    }
+                }
+                if (!baseStr) {
+                    const node = mainEl.querySelector('link[rel="alternate"]');
+                    if (node) {
+                        baseStr = node.getAttribute('href');
+                    }
+                }
+                if (!baseStr) {
+                    const node = mainEl.querySelector('link:not([rel="self"])');
+                    if (node) {
+                        baseStr = node.getAttribute('href');
+                    }
+                }
+                if (!baseStr) {
+                    const node = mainEl.querySelector('link');
+                    if (node) {
+                        baseStr = node.textContent;
+                    }
+                }
                 if (!baseStr) {
                     baseStr = this.source.get('url');
-                }
-                if (baseStr) {
                     const prefix = this.source.get('url').includes('http://') ? 'http://' : 'https://';
                     const urlParts = baseStr.replace('http://', '').replace('https://', '').replace('//', '').split(/[/?#]/);
                     baseStr = prefix + urlParts[0];
-                    data.base = baseStr;
                 }
+
+                data.base = baseStr;
+
                 data.uid = this.source.get('url').replace(/^(.*:)?(\/\/)?(www*?\.)?/, '').replace(/\/$/, '');
                 this.source.save(data);
             }
