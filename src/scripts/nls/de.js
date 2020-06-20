@@ -35,6 +35,8 @@ define({
 	TRASH: 'Papierkorb',
 	MARK_ALL_AS_READ: 'Alle als gelesen markieren',
 	PROPERTIES: 'Eigenschaften',
+	REFETCH: 'Rücksetzen & neu abrufen',
+	OPENHOME: 'Feed-Webseite öffnen',
 	UNDELETE: 'Wiederherstellen',
 	NEXT_UNREAD: 'Nächste Ungelesene',
 	PREV_UNREAD: 'Vorherige Ungelesene',
