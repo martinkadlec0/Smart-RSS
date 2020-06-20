@@ -35,6 +35,8 @@ define({
 	TRASH: 'Trash',
 	MARK_ALL_AS_READ: 'Mark All As Read',
 	PROPERTIES: 'Properties',
+	REFETCH: 'Refetch',
+	OPENHOME: 'Open feed homepage',
 	UNDELETE: 'Undelete',
 	NEXT_UNREAD: 'Next Unread',
 	PREV_UNREAD: 'Previous Unread',
