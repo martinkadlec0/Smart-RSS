@@ -206,6 +206,8 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
                 },
             },
             version: 0,
+            showNewArticlesIcon: 'always',
+            hideSubscribedFeeds: 'mark',
         },
         /**
          * @property localStorage
