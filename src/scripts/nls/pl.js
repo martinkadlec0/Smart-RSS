@@ -49,6 +49,7 @@ define({
 	FETCH_TITLE_TIP: 'Jeśli jest pusty, zostanie pobrany.',
 	NAME: 'Nazwa',
 	ADDRESS: 'Adres',
+    PARENT: 'Folder nadrzędny',
 	JANUARY: 'Styczeń',
 	FEBRUARY: 'Luty',
 	MARCH: 'Marzec',
