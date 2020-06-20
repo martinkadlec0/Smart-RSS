@@ -529,6 +529,7 @@ define([
                 }
                 view.model.save({trashed: true, visited: true});
                 this.destroyItem(view);
+                this.trigger('items-destroyed');
             },
 
             /**
@@ -595,7 +596,7 @@ define([
                         this.nextFrame = null;
                         this.nextFrameStore = [];
 
-                        this.trigger('items-destroyed');
+
                     });
                 }
             },
