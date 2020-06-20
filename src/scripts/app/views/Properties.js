@@ -138,50 +138,42 @@ define([
             initialize: function () {
                 this.el.hidden = true;
             },
-            render: function () {
-                if (!this.current) {
-                    return;
+            renderSource: function () {
+                /* decrypt password */
+                const properties = this.current.toJSON();
+                properties.password = this.current.getPass();
+
+                const fragment = document.createRange().createContextualFragment(this.template);
+
+                const labelTitle = fragment.querySelector('#property-title-label');
+                if (!properties.title) {
+                    fragment.removeChild(labelTitle);
+                } else {
+                    labelTitle.querySelector('input').value = properties.title;
                 }
 
-                if (this.current instanceof bg.Source) {
-                    /* decrypt password */
-                    const properties = this.current.toJSON();
-                    properties.password = this.current.getPass();
-                    while (this.el.firstChild) {
-                        this.el.removeChild(this.el.firstChild);
-                    }
 
-                    const fragment = document.createRange().createContextualFragment(this.template);
+                if (properties.updateEveryDiffers === true) {
+                    const option = document.createRange().createContextualFragment(`<option value="-2">&lt;mixed&gt;</option>`);
+                    fragment.querySelector('#prop-update-every').prepend(option);
+                }
 
-                    const labelTitle = fragment.querySelector('#property-title-label');
-                    if (!properties.title) {
-                        fragment.removeChild(labelTitle);
-                    } else {
-                        labelTitle.querySelector('input').value = properties.title;
-                    }
+                if (properties.folderIdDiffers === true) {
+                    const option = document.createRange().createContextualFragment(`<option value="-2">&lt;mixed&gt;</option>`);
+                    fragment.querySelector('#prop-parent').prepend(option);
+                }
 
+                if (properties.autoremoveDiffers === true) {
+                    const option = document.createRange().createContextualFragment(`<option value="-2">&lt;mixed&gt;</option>`);
+                    fragment.querySelector('#prop-autoremove').prepend(option);
+                }
 
-                    if (properties.updateEveryDiffers === true) {
-                        const option = document.createRange().createContextualFragment(`<option value="-2">&lt;mixed&gt;</option>`);
-                        fragment.querySelector('#prop-update-every').prepend(option);
-                    }
-
-                    if (properties.folderIdDiffers === true) {
-                        const option = document.createRange().createContextualFragment(`<option value="-2">&lt;mixed&gt;</option>`);
-                        fragment.querySelector('#prop-parent').prepend(option);
-                    }
-
-                    if (properties.autoremoveDiffers === true) {
-                        const option = document.createRange().createContextualFragment(`<option value="-2">&lt;mixed&gt;</option>`);
-                        fragment.querySelector('#prop-autoremove').prepend(option);
-                    }
-
-                    const labelUrl = fragment.querySelector('#property-title-address');
-                    if (!properties.title) {
-                        fragment.removeChild(labelUrl);
-                    } else {
-                        labelUrl.querySelector('input').value = properties.url;
-                        const details = document.createRange().createContextualFragment(Locale.translateHTML(`<details>
+                const labelUrl = fragment.querySelector('#property-title-address');
+                if (!properties.title) {
+                    fragment.removeChild(labelUrl);
+                } else {
+                    labelUrl.querySelector('input').value = properties.url;
+                    const details = document.createRange().createContextualFragment(Locale.translateHTML(`<details>
   <summary>{{MORE}}</summary>
   <label>{{USERNAME}}: <input id="prop-username" type="text" value=""/></label>
   <label>{{PASSWORD}}: <input id="prop-password" type="password" value=""/></label>
@@ -193,113 +185,160 @@ define([
     <option value="no">No</option>
   </select></label>
 </details>`));
-                        details.querySelector('#prop-username').value = properties.username;
-                        details.querySelector('#prop-password').value = properties.password;
-                        details.querySelector('#prop-proxy').value = properties.proxyThroughFeedly;
+                    details.querySelector('#prop-username').value = properties.username;
+                    details.querySelector('#prop-password').value = properties.password;
+                    details.querySelector('#prop-proxy').value = properties.proxyThroughFeedly;
 
-                        fragment.insertBefore(details, fragment.querySelector('button'));
-                    }
-
-
-                    this.el.appendChild(fragment);
-
-                    let folders = bg.folders;
-                    let parentSelect = document.querySelector('#prop-parent');
-                    folders.forEach((folder) => {
-                        const option = document.createElement('option');
-                        option.textContent = folder.get('title');
-                        option.setAttribute('value', folder.get('id'));
-                        if (folder.get('id') === this.current.get('folderID')) {
-                            option.setAttribute('selected', '');
-                        }
-                        parentSelect.insertAdjacentElement('beforeend', option);
-                    });
-
-                    if (this.current.get('updateEvery')) {
-                        document.querySelector('#prop-update-every').value = this.current.get('updateEvery');
-                    }
-
-                    if (this.current.get('autoremove')) {
-                        document.querySelector('#prop-autoremove').value = this.current.get('autoremove');
-                    }
-
-                    if (this.current.get('openEnclosure')) {
-                        document.querySelector('#openEnclosure').value = this.current.get('openEnclosure');
-                    }
-
-                    if (this.current.get('proxyThroughFeedly')) {
-                        document.querySelector('#prop-proxy').checked = true;
-                    }
-                } else {
-                    const isFolder = this.current instanceof bg.Folder;
-                    const listOfSources = isFolder ? bg.sources.where({folderID: this.current.id}) : this.current;
-
-                    const params = {updateEveryDiffers: 0, autoremoveDiffers: 0, firstUpdate: 0, firstAutoremove: 0};
-
-                    /**
-                     * Test if all selected feeds has the same properties or if they are mixed
-                     */
-
-                    if (listOfSources.length) {
-                        params.firstUpdate = listOfSources[0].get('updateEvery');
-                        params.updateEveryDiffers = listOfSources.some(function (c) {
-                            if (params.firstUpdate !== c.get('updateEvery')) {
-                                return true;
-                            }
-                        });
-
-                        params.firstAutoremove = listOfSources[0].get('autoremove');
-                        params.autoremoveDiffers = listOfSources.some(function (c) {
-                            if (params.firstAutoremove !== c.get('autoremove')) {
-                                return true;
-                            }
-                        });
-
-                        params.firstFolderId = listOfSources[0].get('folderID');
-                        params.folderIdDiffers = listOfSources.some(function (c) {
-                            if (params.firstAutoremove !== c.get('folderID')) {
-                                return true;
-                            }
-                        });
-                    }
-
-                    /**
-                     * Create HTML
-                     */
-
-                    while (this.el.firstChild) {
-                        this.el.removeChild(this.el.firstChild);
-                    }
-                    const templateData = isFolder ? Object.assign(params, this.current.attributes) : params;
-
-                    const fragment = document.createRange().createContextualFragment(this.template(templateData));
-                    this.el.appendChild(fragment);
-
-                    const folders = bg.folders;
-                    const parentSelect = document.querySelector('#prop-parent');
-                    folders.forEach((folder) => {
-                        const option = document.createElement('option');
-                        option.textContent = folder.get('title');
-                        option.setAttribute('value', folder.get('id'));
-                        parentSelect.insertAdjacentElement('beforeend', option);
-                    });
-
-                    /**
-                     * Set <select>s's values
-                     */
-
-                    if (!params.autoremoveDiffers) {
-                        document.querySelector('#prop-autoremove').value = params.firstAutoremove;
-                    }
-                    if (!params.updateEveryDiffers) {
-                        document.querySelector('#prop-update-every').value = params.firstUpdate;
-                    }
-
-                    if (!params.folderIdDiffers) {
-                        document.querySelector('#prop-parent').value = params.firstFolderId;
-                    }
+                    fragment.insertBefore(details, fragment.querySelector('button'));
                 }
 
+
+                this.el.appendChild(fragment);
+
+                let folders = bg.folders;
+                let parentSelect = document.querySelector('#prop-parent');
+                folders.forEach((folder) => {
+                    const option = document.createElement('option');
+                    option.textContent = folder.get('title');
+                    option.setAttribute('value', folder.get('id'));
+                    if (folder.get('id') === this.current.get('folderID')) {
+                        option.setAttribute('selected', '');
+                    }
+                    parentSelect.insertAdjacentElement('beforeend', option);
+                });
+
+                if (this.current.get('updateEvery')) {
+                    document.querySelector('#prop-update-every').value = this.current.get('updateEvery');
+                }
+
+                if (this.current.get('autoremove')) {
+                    document.querySelector('#prop-autoremove').value = this.current.get('autoremove');
+                }
+
+                if (this.current.get('openEnclosure')) {
+                    document.querySelector('#openEnclosure').value = this.current.get('openEnclosure');
+                }
+
+                if (this.current.get('proxyThroughFeedly')) {
+                    document.querySelector('#prop-proxy').checked = true;
+                }
+            },
+            renderGroup: function () {
+                const isFolder = this.current instanceof bg.Folder;
+                const listOfSources = isFolder ? bg.sources.where({folderID: this.current.id}) : this.current;
+
+                const params = {updateEveryDiffers: 0, autoremoveDiffers: 0, firstUpdate: 0, firstAutoremove: 0};
+
+
+                const properties = isFolder ? Object.assign(params, this.current.attributes) : params;
+
+                const fragment = document.createRange().createContextualFragment(this.template);
+
+                /**
+                 * Test if all selected feeds has the same properties or if they are mixed
+                 */
+
+                const labelTitle = fragment.querySelector('#property-title-label');
+                if (!properties.title) {
+                    fragment.removeChild(labelTitle);
+                } else {
+                    labelTitle.querySelector('input').value = properties.title;
+                }
+
+
+                if (properties.updateEveryDiffers === true) {
+                    const option = document.createRange().createContextualFragment(`<option value="-2">&lt;mixed&gt;</option>`);
+                    fragment.querySelector('#prop-update-every').prepend(option);
+                }
+
+                if (properties.folderIdDiffers === true) {
+                    const option = document.createRange().createContextualFragment(`<option value="-2">&lt;mixed&gt;</option>`);
+                    fragment.querySelector('#prop-parent').prepend(option);
+                }
+
+                if (properties.autoremoveDiffers === true) {
+                    const option = document.createRange().createContextualFragment(`<option value="-2">&lt;mixed&gt;</option>`);
+                    fragment.querySelector('#prop-autoremove').prepend(option);
+                }
+
+                const labelUrl = fragment.querySelector('#property-title-address');
+                if (!properties.title) {
+                    fragment.removeChild(labelUrl);
+                }
+
+                if (!properties.url) {
+                    fragment.removeChild(labelUrl);
+                }
+
+                if (listOfSources.length) {
+                    params.firstUpdate = listOfSources[0].get('updateEvery');
+                    params.updateEveryDiffers = listOfSources.some(function (c) {
+                        if (params.firstUpdate !== c.get('updateEvery')) {
+                            return true;
+                        }
+                    });
+
+                    params.firstAutoremove = listOfSources[0].get('autoremove');
+                    params.autoremoveDiffers = listOfSources.some(function (c) {
+                        if (params.firstAutoremove !== c.get('autoremove')) {
+                            return true;
+                        }
+                    });
+
+                    params.firstFolderId = listOfSources[0].get('folderID');
+                    params.folderIdDiffers = listOfSources.some(function (c) {
+                        if (params.firstAutoremove !== c.get('folderID')) {
+                            return true;
+                        }
+                    });
+                }
+
+                /**
+                 * Create HTML
+                 */
+
+
+                this.el.appendChild(fragment);
+
+                const folders = bg.folders;
+                const parentSelect = document.querySelector('#prop-parent');
+                folders.forEach((folder) => {
+                    const option = document.createElement('option');
+                    option.textContent = folder.get('title');
+                    option.setAttribute('value', folder.get('id'));
+                    parentSelect.insertAdjacentElement('beforeend', option);
+                });
+
+                /**
+                 * Set <select>s's values
+                 */
+
+                if (!params.autoremoveDiffers) {
+                    document.querySelector('#prop-autoremove').value = params.firstAutoremove;
+                }
+                if (!params.updateEveryDiffers) {
+                    document.querySelector('#prop-update-every').value = params.firstUpdate;
+                }
+
+                if (!params.folderIdDiffers) {
+                    document.querySelector('#prop-parent').value = params.firstFolderId;
+                }
+
+            },
+
+            render: function () {
+                if (!this.current) {
+                    return;
+                }
+                while (this.el.firstChild) {
+                    this.el.removeChild(this.el.firstChild);
+                }
+
+                if (this.current instanceof bg.Source) {
+                    this.renderSource();
+                } else {
+                    this.renderGroup();
+                }
                 return this;
             },
             show: function (source) {
