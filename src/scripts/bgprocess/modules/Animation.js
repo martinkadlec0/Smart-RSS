@@ -38,9 +38,10 @@ define([], function () {
             if (this.interval) {
                 return;
             }
-            if (sources.findWhere({hasNew: true})) {
+            const icon = settings.get('icon');
+            if (sources.findWhere({hasNew: true}) && icon !== 'disabled') {
                 chrome.browserAction.setIcon({
-                    path: '/images/icon19-' + settings.get('icon') + '.png'
+                    path: '/images/icon19-' + icon + '.png'
                 });
             } else {
                 chrome.browserAction.setIcon({
