@@ -40,6 +40,9 @@ define([
             }
             if (message.action === 'list-feeds') {
                 chrome.contextMenus.removeAll();
+                if (settings.get('detectFeeds') === 'disabled') {
+                    return;
+                }
                 let feeds = message.value;
                 let subscribedFound = 0;
                 let unsubscribedFound = 0;
