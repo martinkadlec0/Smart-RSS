@@ -49,6 +49,7 @@ define({
 	FETCH_TITLE_TIP: 'If this field is empty, the title of the feed will be used instead.',
 	NAME: 'Name',
 	ADDRESS: 'Address',
+	PARENT: 'Parent folder',
 	JANUARY: 'January',
 	FEBRUARY: 'February',
 	MARCH: 'March',
