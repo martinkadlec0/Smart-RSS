@@ -49,6 +49,7 @@ define({
 	FETCH_TITLE_TIP: 'Leer für Auto-Titel',
 	NAME: 'Titel',
 	ADDRESS: 'Adresse',
+	PARENT: 'Enthalten in Ordner',
 	JANUARY: 'Januar',
 	FEBRUARY: 'Februar',
 	MARCH: 'März',
