@@ -40,14 +40,50 @@ define([
             }
             if (message.action === 'list-feeds') {
                 chrome.contextMenus.removeAll();
-                const feeds = message.value;
+                let feeds = message.value;
+                let subscribedFound = 0;
+                let unsubscribedFound = 0;
+                if (settings.get('hideSubscribedFeeds') === 'hide') {
+                    feeds = feeds.filter((feed) => {
+                        const isFound = !sources.where({url: feed.url}).length;
+                        if (isFound) {
+                            subscribedFound++;
+                        } else {
+                            unsubscribedFound++;
+                        }
+                        return isFound;
+                    });
+                } else {
+                    feeds = feeds.map((feed) => {
+                        const isFound = sources.where({url: feed.url}).length;
+                        if (isFound) {
+                            subscribedFound++;
+                            feed.title = '[*] ' + feed.title;
+                        } else {
+                            unsubscribedFound++;
+                        }
+                        return feed;
+                    });
+                }
+
                 if (feeds.length === 0) {
                     animation.handleIconChange();
                     return;
                 }
-                chrome.browserAction.setIcon({
-                    path: '/images/icon19-' + settings.get('sourcesFoundIcon') + '.png'
-                });
+
+                const whenToChangeIcon = settings.get('showNewArticlesIcon');
+                let shouldChangeIcon = true;
+                if (whenToChangeIcon === 'not-subscribed-found' && unsubscribedFound === 0) {
+                    shouldChangeIcon = false;
+                }
+                if (whenToChangeIcon === 'no-subscribed-found' && subscribedFound > 0) {
+                    shouldChangeIcon = false;
+                }
+                if (shouldChangeIcon) {
+                    chrome.browserAction.setIcon({
+                        path: '/images/icon19-' + settings.get('sourcesFoundIcon') + '.png'
+                    });
+                }
                 chrome.contextMenus.create({
                     id: 'SmartRss',
                     contexts: ['browser_action'],
