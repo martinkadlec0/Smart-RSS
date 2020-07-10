@@ -415,15 +415,28 @@ define([
 
                 this.selectPivot = null;
 
-                items.forEach(function (item) {
-                    item.multiple = multiple;
-                    this.addItem(item, true);
-                }, this);
-
-
-                if (document.querySelector('input[type="search"]').value !== '') {
-                    app.actions.execute('articles:search');
-                }
+                const length = items.length;
+                const that = this;
+                const renderBlock = function(startingPoint = 0){
+                    let internalCounter = 0;
+                    while(true){
+                        const item = items[startingPoint + internalCounter];
+                        item.multiple = multiple;
+                        that.addItem(item, true);
+                        internalCounter++;
+                        if(internalCounter === 250 || startingPoint + internalCounter === length){
+                            break;
+                        }
+                    }
+                    if(startingPoint + internalCounter === length){
+                        if (document.querySelector('input[type="search"]').value !== '') {
+                            app.actions.execute('articles:search');
+                        }
+                        return;
+                    }
+                    setTimeout(renderBlock, 0, startingPoint + internalCounter);
+                };
+                renderBlock();
             },
 
             /**
