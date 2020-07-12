@@ -59,7 +59,7 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             updateFrequency: 15, // in minutes
             disableAutoUpdate: false,
             openInNewTab: true,
-            showFullHeadlines: 0,
+            showFullHeadline: 0,
             selectFirstArticle: 1,
             selectAllFeeds: 1,
             openEnclosure: 'no',
