@@ -244,8 +244,7 @@ define([
              * @param noManualSort {Boolean} When false, the rigt place is computed
              */
             addSource: function (source, noManualSort) {
-                var view = new SourceView({model: source}, this);
-                this.placeSource(view, noManualSort === true);
+                this.placeSource(new SourceView({model: source}, this), noManualSort === true);
             },
 
             /**
@@ -403,19 +402,19 @@ define([
             /**
              * Get array of selected folders
              * @method getSelectedFolders
-             * @param arr {Array} List of selected items
+             * @param selectedItems {Array} List of selected items
              */
-            getSelectedFolders: function (arr) {
-                const selectedFolders = arr || this.selectedItems.map((item) => {
+            getSelectedFolders: function (selectedItems) {
+                const currentlySelectedItems = selectedItems || this.selectedItems.map((item) => {
                     return item.model;
                 });
-                const rt = [];
-                selectedFolders.forEach((folder) => {
+                const selectedFolders = [];
+                currentlySelectedItems.forEach((folder) => {
                     if (folder instanceof bg.Folder) {
-                        rt.push(folder);
+                        selectedFolders.push(folder);
                     }
                 });
-                return rt;
+                return selectedFolders;
             }
         });
 
