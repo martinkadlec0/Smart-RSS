@@ -130,3 +130,6 @@ div[class$="warning"] {
 #hotkeys > label > input:first-child {
   width: 150px;
 }
+button {
+  width: 150px;
+}

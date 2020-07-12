@@ -64,7 +64,7 @@ chrome.runtime.getBackgroundPage((bg) => {
             warning.parentNode.removeChild(warning);
         }
         document.querySelector('#version').textContent = chrome.runtime.getManifest().version;
-        browser.runtime.getBrowserInfo().then((info)=>{
+        browser.runtime.getBrowserInfo().then((info) => {
             console.log(info);
             document.querySelector('#browser-info').textContent = `${info.vendor} ${info.name} ${info.version} ${info.buildID}`;
         });
@@ -89,6 +89,7 @@ chrome.runtime.getBackgroundPage((bg) => {
         });
 
         document.querySelector('#default-sound').addEventListener('change', handleDefaultSound);
+        document.querySelector('#suggest-style').addEventListener('click', handleSuggestStyle);
         document.querySelector('#reset-style').addEventListener('click', handleResetStyle);
         document.querySelector('#export-smart').addEventListener('click', handleExportSmart);
         document.querySelector('#export-opml').addEventListener('click', handleExportOPML);
@@ -166,11 +167,23 @@ chrome.runtime.getBackgroundPage((bg) => {
         if (!confirm('Do you really want to reset style to default?')) {
             return;
         }
+        document.querySelector('#userStyle').value = '';
+        bg.settings.save('userStyle', '');
+        chrome.runtime.sendMessage({action: 'changeUserStyle'});
+    }
+
+    function handleSuggestStyle() {
+        if (document.querySelector('#userStyle').value !== '') {
+            if (!confirm('Do you really want to replace your current style with colors template?')) {
+                return;
+            }
+        }
         const defaultStyle = bg.settings.get('defaultStyle');
         document.querySelector('#userStyle').value = defaultStyle;
         bg.settings.save('userStyle', defaultStyle);
         chrome.runtime.sendMessage({action: 'changeUserStyle'});
     }
+
 
     function handleChange(event) {
         const target = event.target;
