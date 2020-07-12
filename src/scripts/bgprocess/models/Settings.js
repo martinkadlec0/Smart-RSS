@@ -187,9 +187,9 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             version: 0,
             showNewArticlesIcon: 'always',
             hideSubscribedFeeds: 'mark',
-            feedDetection: 'enabled',
-            showAllFeeds: 1,
-            showPinned: 1,
+            detectFeeds: true,
+            showAllFeeds: true,
+            showPinned: true,
         },
         /**
          * @property localStorage

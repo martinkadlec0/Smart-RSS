@@ -122,8 +122,8 @@
              title="When icon should indicate that feeds were found on website.">
         <span class="selectLabel">Feed detection:</span>
         <select id="detectFeeds">
-          <option value="enabled">Enabled</option>
-          <option value="disabled">Disabled</option>
+          <option value="true">Enabled</option>
+          <option value="false">Disabled</option>
         </select>
       </label>
 
@@ -159,6 +159,14 @@
           <option value="purple">Purple</option>
           <option value="red">Red</option>
           <option value="royalblue">Royal Blue</option>
+        </select>
+      </label>
+
+      <label class="web-content-select-label">
+        <span class="selectLabel">Show special All Feeds item on feeds list:</span>
+        <select id="showAllFeeds">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
         </select>
       </label>
 
@@ -354,7 +362,8 @@
         <button id="export-smart">Export</button>
         <a href="" id="smart-exported"></a>
       </label>
-      <label class="web-content-select-label" title="You can use OPML format to export feeds from Smart RSS to Opera 12.">
+      <label class="web-content-select-label"
+             title="You can use OPML format to export feeds from Smart RSS to Opera 12.">
         <span class="selectLabel">OPML:</span>
         <button id="export-opml">Export</button>
         <a href="" id="opml-exported"></a>

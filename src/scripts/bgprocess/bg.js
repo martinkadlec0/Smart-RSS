@@ -40,7 +40,7 @@ define([
             }
             if (message.action === 'list-feeds') {
                 chrome.contextMenus.removeAll();
-                if (settings.get('detectFeeds') === 'disabled') {
+                if (!settings.get('detectFeeds')) {
                     return;
                 }
                 let feeds = message.value;
