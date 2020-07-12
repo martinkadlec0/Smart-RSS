@@ -9,21 +9,6 @@ define(['backbone', 'models/Special', 'instances/contextMenus', 'modules/Locale'
                 name: 'trash',
                 onReady: function () {
                     this.contextMenu = contextMenus.get('trash');
-                    // this.el.addEventListener('dragover', function (e) {
-                    //     e.preventDefault();
-                    // });
-                    // this.el.addEventListener('drop', function (e) {
-                    //     e.preventDefault();
-                    //     const ids = JSON.parse(e.dataTransfer.getData('text/plain') || '[]') || [];
-                    //     ids.forEach(function (id) {
-                    //         const item = bg.items.findWhere({id: id});
-                    //         if (item && !item.get('trashed')) {
-                    //             item.save({
-                    //                 trashed: true
-                    //             });
-                    //         }
-                    //     });
-                    // });
                 }
             }),
             allFeeds: new Special({
