@@ -63,9 +63,6 @@ define(['backbone', 'modules/Locale'], function (BB, Locale) {
          */
         handleClearEvents: function (id) {
             if (window == null || id === tabID) {
-                // bg.loader.removeEventListener('loadingChanged', this.handleLoadingChange);
-                // bg.loader.removeEventListener('loadedChanged', this.render);
-                // bg.loader.removeEventListener('maxSourcesChanged', this.render);
                 bg.sources.off('clear-events', this.handleClearEvents, this);
             }
         },
