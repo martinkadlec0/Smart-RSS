@@ -108,8 +108,8 @@ define([
             insertFeeds: function () {
                 this.addFolders(bg.folders);
 
-                this.addSpecial(specials.allFeeds);
                 this.addSpecial(specials.pinned);
+                this.addSpecial(specials.allFeeds);
                 this.addSpecial(specials.trash);
 
                 this.addSources(bg.sources);
