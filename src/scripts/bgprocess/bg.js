@@ -267,7 +267,6 @@ define([
                  */
 
                 const version = settings.get('version') || 0;
-                console.log(version);
                 if (version < 1) {
                     items.forEach((item) => {
                         item.save('id', item.get('id') + item.get('sourceID'));

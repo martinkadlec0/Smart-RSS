@@ -356,6 +356,11 @@
     <section>
       <h2 class="section-header">Export</h2>
 
+      <label class="web-content-select-label">
+        <span class="selectLabel">Settings:</span>
+        <button id="export-settings">Export</button>
+        <a href="" id="settings-exported"></a>
+      </label>
       <label class="web-content-select-label"
              title="SMART is special format of Smart RSS extension. It exports/imports both, feeds and feeds's articles.">
         <span class="selectLabel">SMART:</span>
@@ -374,6 +379,12 @@
       <div class="ff-warning">Warning: Smart RSS will reload after finishing the SMART import, it's expected
         behavior
       </div>
+      <label class="web-content-select-label">
+        <span class="selectLabel">Settings:</span>
+        <input id="import-settings" type="file" accept=".smart">
+        <span id="settings-imported"></span>
+      </label>
+
       <label class="web-content-select-label"
              title="SMART is special format of Smart RSS extension. It exports/imports all feeds, folders and articles.">
         <span class="selectLabel">SMART:</span>
@@ -409,6 +420,15 @@
         <span class="selectLabel">Remove removed articles data:</span>
         <button id="clear-removed-storage">!!Clear!!</button>
         <span id="removed-storage-cleared"></span>
+      </label>
+    </section>
+
+    <section>
+      <h2 class="section-header">Clear settings</h2>
+      <label class="web-content-select-label" title="This will remove all yours feeds and articles and settings.">
+        <span class="selectLabel">Remove extension settings:</span>
+        <button id="clear-settings">!!Clear!!</button>
+        <span id="settings-cleared"></span>
       </label>
     </section>
 

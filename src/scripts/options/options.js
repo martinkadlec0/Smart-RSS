@@ -91,11 +91,14 @@ chrome.runtime.getBackgroundPage((bg) => {
         document.querySelector('#default-sound').addEventListener('change', handleDefaultSound);
         document.querySelector('#suggest-style').addEventListener('click', handleSuggestStyle);
         document.querySelector('#reset-style').addEventListener('click', handleResetStyle);
+        document.querySelector('#export-settings').addEventListener('click', handleExportSettings);
         document.querySelector('#export-smart').addEventListener('click', handleExportSmart);
         document.querySelector('#export-opml').addEventListener('click', handleExportOPML);
+        document.querySelector('#clear-settings').addEventListener('click', handleClearSettings);
         document.querySelector('#clear-data').addEventListener('click', handleClearData);
         document.querySelector('#clear-removed-storage').addEventListener('click', handleClearDeletedStorage);
         document.querySelector('#clear-favicons').addEventListener('click', handleClearFavicons);
+        document.querySelector('#import-settings').addEventListener('change', handleImportSettings);
         document.querySelector('#import-smart').addEventListener('change', handleImportSmart);
         document.querySelector('#import-opml').addEventListener('change', handleImportOPML);
 
@@ -243,6 +246,25 @@ chrome.runtime.getBackgroundPage((bg) => {
         }, 20);
     }
 
+    function handleExportSettings() {
+        const settingsExportStatus = document.querySelector('#settings-exported');
+        const data = {
+            settings: bg.settings.toJSON(),
+        };
+
+        settingsExportStatus.setAttribute('href', '#');
+        settingsExportStatus.removeAttribute('download');
+        settingsExportStatus.textContent = 'Exporting, please wait';
+
+
+        setTimeout(() => {
+            const expr = new Blob([JSON.stringify(data)]);
+            settingsExportStatus.setAttribute('href', URL.createObjectURL(expr));
+            settingsExportStatus.setAttribute('download', 'settings.smart');
+            settingsExportStatus.textContent = 'Click to download exported data';
+        }, 20);
+    }
+
     function handleExportOPML() {
 
         function addFolder(doc, title, id) {
@@ -316,6 +338,67 @@ chrome.runtime.getBackgroundPage((bg) => {
             opmlExportStatus.textContent = 'Click to download exported data';
         }, 20);
     }
+
+
+    function handleImportSettings(event) {
+        const settingsImportStatus = document.querySelector('#settings-imported');
+        const file = event.target.files[0];
+        if (!file || file.size === 0) {
+            settingsImportStatus.textContent = 'Wrong file';
+            return;
+        }
+        settingsImportStatus.textContent = 'Loading & parsing file';
+
+        const reader = new FileReader();
+        reader.onload = function () {
+            const data = JSON.safeParse(this.result);
+
+            if (!data || !data.settings) {
+                settingsImportStatus.textContent = 'Wrong file';
+                return;
+            }
+
+            settingsImportStatus.textContent = 'Importing, please wait!';
+
+            const worker = new Worker('scripts/options/worker.js');
+            worker.onmessage = function (message) {
+                if (message.data.action === 'finished-settings') {
+                    settingsImportStatus.textContent = 'Loading data to memory!';
+                    bg.fetchAll().then(function () {
+                        if (typeof browser !== 'undefined') {
+                            chrome.runtime.reload();
+                        }
+                        bg.info.refreshSpecialCounters();
+                        settingsImportStatus.textContent = 'Import fully completed!';
+                        bg.loader.downloadAll(true);
+                    });
+                } else if (message.data.action === 'message-settings') {
+                    settingsImportStatus.textContent = message.data.value;
+                }
+            };
+            worker.postMessage({action: 'settings', value: data});
+
+            worker.onerror = function (error) {
+                alert('Importing error: ' + error.message);
+            };
+        };
+        if (typeof browser !== 'undefined') {
+            reader.readAsText(file);
+        } else {
+            const url = chrome.extension.getURL('rss.html');
+            chrome.tabs.query({url: url}, function (tabs) {
+                for (let i = 0; i < tabs.length; i++) {
+                    chrome.tabs.remove(tabs[i].id);
+                }
+
+                // wait for clear events to happen
+                setTimeout(function () {
+                    reader.readAsText(file);
+                }, 1000);
+            });
+        }
+    }
+
 
     function handleImportSmart(event) {
         const smartImportStatus = document.querySelector('#smart-imported');
@@ -443,6 +526,21 @@ chrome.runtime.getBackgroundPage((bg) => {
 
 
         reader.readAsText(file);
+    }
+
+    function handleClearSettings() {
+        if (!confirm('Do you really want to remove all extension settings?')) {
+            return;
+        }
+        const request = indexedDB.open('backbone-indexeddb', 4);
+        request.addEventListener('success', function () {
+            db = this.result;
+            const transaction = db.transaction(['settings-backbone'], 'readwrite');
+            const settings = transaction.objectStore('settings-backbone');
+            settings.clear();
+            chrome.alarms.clearAll();
+            chrome.runtime.reload();
+        });
     }
 
     function handleClearData() {

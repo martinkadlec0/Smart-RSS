@@ -24,6 +24,12 @@ onmessage = function (e) {
             startImport();
         }
     }
+    if (e.data.action === 'settings') {
+        content = e.data.value;
+        if (db) {
+            startSettingsImport();
+        }
+    }
 };
 
 let writes = 0;
@@ -36,6 +42,27 @@ function handleReq(req) {
             postMessage({action: 'finished'});
         }
     };
+}
+
+function startSettingsImport() {
+    const transaction = db.transaction(['settings-backbone'], 'readwrite');
+    const settings = transaction.objectStore('settings-backbone');
+
+    const importedSettings = content.settings;
+    if (importedSettings) {
+        settings.clear();
+        for (let i = 0, j = importedSettings.length; i < j; i++) {
+            handleReq(settings.add(importedSettings[i]));
+            if (i % 10 === 0) {
+                postMessage({action: 'message-settings', value: 'Settings: ' + i + '/' + j});
+            }
+        }
+    }
+    if (writes === 0) {
+        postMessage({action: 'finished-settings'});
+    } else {
+        postMessage({action: 'message-settings', value: 'Writing...'});
+    }
 }
 
 function startImport() {

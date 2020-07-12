@@ -184,7 +184,7 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
                     'esc': 'global:hideOverlays'
                 },
             },
-            version: 0,
+            version: 1,
             showNewArticlesIcon: 'always',
             hideSubscribedFeeds: 'mark',
             detectFeeds: true,
