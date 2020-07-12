@@ -42,13 +42,13 @@ define([
             id: 'feed-list',
 
             events: {
-                'dragstart .source': 'handleDragStart',
-                'drop': 'handleDrop',
-                'drop [data-in-folder]': 'handleDrop',
-                'drop .folder': 'handleDrop',
-                'dragover': 'handleDragOver',
-                'dragover .folder,[data-in-folder]': 'handleDragOver',
-                'dragleave .folder,[data-in-folder]': 'handleDragLeave',
+                // 'dragstart .source': 'handleDragStart',
+                // 'drop': 'handleDrop',
+                // 'drop [data-in-folder]': 'handleDrop',
+                // 'drop .folder': 'handleDrop',
+                // 'dragover': 'handleDragOver',
+                // 'dragover .folder,[data-in-folder]': 'handleDragOver',
+                // 'dragleave .folder,[data-in-folder]': 'handleDragLeave',
                 'mousedown .sources-list-item': 'handleMouseDown',
                 'mouseup .sources-list-item': 'handleMouseUp'
             },
@@ -157,95 +157,95 @@ define([
                 event.currentTarget.view.handleMouseUp(event);
                 this.handleSelectableMouseUp(event);
             },
-
-            /**
-             * Add class to drop region elements
-             * @method handleClick
-             * @triggered on drag over
-             * @param event {DragEvent} Drag event
-             */
-            handleDragOver: function (event) {
-                const folder = event.currentTarget.dataset.inFolder;
-                if (folder) {
-                    document.querySelector('.folder[data-id="' + folder + '"]').classList.add('drag-over');
-                } else if (event.currentTarget.classList.contains('folder')) {
-                    event.currentTarget.classList.add('drag-over');
-                }
-                event.preventDefault();
-            },
-
-            /**
-             * Remove class from drop region elements
-             * @method handleDragLeave
-             * @triggered on drag leave
-             * @param event {DragEvent} Drag event
-             */
-            handleDragLeave: function (event) {
-                const folder = event.currentTarget.dataset.inFolder;
-                if (folder) {
-                    document.querySelector('.folder[data-id="' + folder + '"]').classList.remove('drag-over');
-                } else if (event.currentTarget.classList.contains('folder')) {
-                    event.currentTarget.classList.remove('drag-over');
-                }
-            },
-
-            /**
-             * Handle drop event (move feeds between folders)
-             * @method handleDrop
-             * @triggered on drop
-             * @param event {DragEvent} Drag event
-             */
-            handleDrop: function (event) {
-
-                event.preventDefault();
-
-                const elem = document.querySelector('.drag-over');
-                if (elem) {
-                    elem.classList.remove('drag-over');
-                }
-
-                const ids = JSON.parse(event.originalEvent.dataTransfer.getData('dnd-sources'));
-                if (!ids || ids.length === 0) {
-                    return;
-                }
-
-                ids.forEach((id) => {
-                    const item = bg.sources.findWhere({id: id});
-                    if (!item) {
-                        return;
-                    }
-                    let folderID;
-                    if (event.currentTarget.classList.contains('folder')) {
-                        folderID = event.currentTarget.dataset.id;
-                    } else {
-                        folderID = event.currentTarget.dataset.inFolder;
-                    }
-
-                    item.save({folderID: folderID});
-                });
-
-                event.stopPropagation();
-            },
-
-            /**
-             * Add feeds ids to drag data
-             * @method handleDragStart
-             * @triggered on drag start
-             * @param event {DragEvent} Drag event
-             */
-            handleDragStart: function (event) {
-                let models = this.selectedItems.map((item) => {
-                    return item.model;
-                });
-                const ids = [];
-                models.forEach((model) => {
-                    if (model instanceof bg.Source) {
-                        ids.push(model.id);
-                    }
-                });
-
-                event.originalEvent.dataTransfer.setData('dnd-sources', JSON.stringify(ids));
-            },
+            //
+            // /**
+            //  * Add class to drop region elements
+            //  * @method handleClick
+            //  * @triggered on drag over
+            //  * @param event {DragEvent} Drag event
+            //  */
+            // handleDragOver: function (event) {
+            //     const folder = event.currentTarget.dataset.inFolder;
+            //     if (folder) {
+            //         document.querySelector('.folder[data-id="' + folder + '"]').classList.add('drag-over');
+            //     } else if (event.currentTarget.classList.contains('folder')) {
+            //         event.currentTarget.classList.add('drag-over');
+            //     }
+            //     event.preventDefault();
+            // },
+            //
+            // /**
+            //  * Remove class from drop region elements
+            //  * @method handleDragLeave
+            //  * @triggered on drag leave
+            //  * @param event {DragEvent} Drag event
+            //  */
+            // handleDragLeave: function (event) {
+            //     const folder = event.currentTarget.dataset.inFolder;
+            //     if (folder) {
+            //         document.querySelector('.folder[data-id="' + folder + '"]').classList.remove('drag-over');
+            //     } else if (event.currentTarget.classList.contains('folder')) {
+            //         event.currentTarget.classList.remove('drag-over');
+            //     }
+            // },
+            //
+            // /**
+            //  * Handle drop event (move feeds between folders)
+            //  * @method handleDrop
+            //  * @triggered on drop
+            //  * @param event {DragEvent} Drag event
+            //  */
+            // handleDrop: function (event) {
+            //
+            //     event.preventDefault();
+            //
+            //     const elem = document.querySelector('.drag-over');
+            //     if (elem) {
+            //         elem.classList.remove('drag-over');
+            //     }
+            //
+            //     const ids = JSON.parse(event.originalEvent.dataTransfer.getData('dnd-sources'));
+            //     if (!ids || ids.length === 0) {
+            //         return;
+            //     }
+            //
+            //     ids.forEach((id) => {
+            //         const item = bg.sources.findWhere({id: id});
+            //         if (!item) {
+            //             return;
+            //         }
+            //         let folderID;
+            //         if (event.currentTarget.classList.contains('folder')) {
+            //             folderID = event.currentTarget.dataset.id;
+            //         } else {
+            //             folderID = event.currentTarget.dataset.inFolder;
+            //         }
+            //
+            //         item.save({folderID: folderID});
+            //     });
+            //
+            //     event.stopPropagation();
+            // },
+            //
+            // /**
+            //  * Add feeds ids to drag data
+            //  * @method handleDragStart
+            //  * @triggered on drag start
+            //  * @param event {DragEvent} Drag event
+            //  */
+            // handleDragStart: function (event) {
+            //     let models = this.selectedItems.map((item) => {
+            //         return item.model;
+            //     });
+            //     const ids = [];
+            //     models.forEach((model) => {
+            //         if (model instanceof bg.Source) {
+            //             ids.push(model.id);
+            //         }
+            //     });
+            //
+            //     event.originalEvent.dataTransfer.setData('dnd-sources', JSON.stringify(ids));
+            // },
 
             /**
              * Place feed to the right place
