@@ -64,28 +64,7 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             selectAllFeeds: 1,
             openEnclosure: 'no',
             openNewTab: 'background',
-            userStyle: ':root {\n' +
-                '\n' +
-                '  --blue-40: #45a1ff;\n' +
-                '  --blue-50: #0a84ff;\n' +
-                '  --blue-50-a30: rgba(10, 132, 255, 0.3);\n' +
-                '  --blue-60: #0060df;\n' +
-                '  --blue-70: #003eaa;\n' +
-                '  --blue-80: #002275;\n' +
-                '  --blue-90: #000f40;\n' +
-                '\n' +
-                '  --grey-10: #f9f9fa;\n' +
-                '  --grey-20: #ededf0;\n' +
-                '  --grey-30: #d7d7db;\n' +
-                '  --grey-40: #b1b1b3;\n' +
-                '  --grey-50: #737373;\n' +
-                '  --grey-60: #4a4a4f;\n' +
-                '  --grey-70: #38383d;\n' +
-                '  --grey-80: #2a2a2e;\n' +
-                '  --grey-90: #0c0c0d;\n' +
-                '\n' +
-                '  --white: #fff;\n' +
-                '}',
+            userStyle: '',
             defaultStyle: ':root {\n' +
                 '\n' +
                 '  --blue-40: #45a1ff;\n' +
