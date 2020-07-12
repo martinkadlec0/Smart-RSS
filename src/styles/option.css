@@ -6,6 +6,10 @@ html, body {
   padding: 0;
 }
 
+body {
+  padding-left: calc(100vw - 100%);
+}
+
 span.selectLabel {
   display: inline-block;
   min-width: 200px;
@@ -130,6 +134,7 @@ div[class$="warning"] {
 #hotkeys > label > input:first-child {
   width: 150px;
 }
+
 button {
   width: 150px;
 }
