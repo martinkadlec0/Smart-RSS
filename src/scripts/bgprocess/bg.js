@@ -82,6 +82,9 @@ define([
                 if (whenToChangeIcon === 'no-subscribed-found' && subscribedFound > 0) {
                     shouldChangeIcon = false;
                 }
+                if (whenToChangeIcon === 'never') {
+                    shouldChangeIcon = false;
+                }
                 if (shouldChangeIcon) {
                     chrome.browserAction.setIcon({
                         path: '/images/icon19-' + settings.get('sourcesFoundIcon') + '.png'
