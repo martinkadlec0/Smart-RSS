@@ -207,10 +207,10 @@ define([
                         app.trigger('focus-feed', bg.sourceToFocus);
                         bg.sourceToFocus = null;
                     }, 0);
-                } else {
-                    if (bg.settings.get('selectAllFeeds')) {
-                        this.loadAllFeeds();
-                    }
+                    return;
+                }
+                if (bg.settings.get('selectAllFeeds') && bg.settings.get('showAllFeeds')) {
+                    this.loadAllFeeds();
                 }
             },
 
@@ -236,7 +236,6 @@ define([
 
                     const cb = document.querySelector('.special');
                     cb.dispatchEvent(event);
-
 
 
                 }, 0);
@@ -417,18 +416,18 @@ define([
 
                 const length = items.length;
                 const that = this;
-                const renderBlock = function(startingPoint = 0){
+                const renderBlock = function (startingPoint = 0) {
                     let internalCounter = 0;
-                    while(true){
+                    while (true) {
                         const item = items[startingPoint + internalCounter];
                         item.multiple = multiple;
                         that.addItem(item, true);
                         internalCounter++;
-                        if(internalCounter === 250 || startingPoint + internalCounter === length){
+                        if (internalCounter === 250 || startingPoint + internalCounter === length) {
                             break;
                         }
                     }
-                    if(startingPoint + internalCounter === length){
+                    if (startingPoint + internalCounter === length) {
                         if (document.querySelector('input[type="search"]').value !== '') {
                             app.actions.execute('articles:search');
                         }

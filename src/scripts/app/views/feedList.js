@@ -107,9 +107,12 @@ define([
              */
             insertFeeds: function () {
                 this.addFolders(bg.folders);
-
-                this.addSpecial(specials.pinned);
-                this.addSpecial(specials.allFeeds);
+                if (bg.settings.get('showPinned')) {
+                    this.addSpecial(specials.pinned);
+                }
+                if (bg.settings.get('showAllFeeds')) {
+                    this.addSpecial(specials.allFeeds);
+                }
                 this.addSpecial(specials.trash);
 
                 this.addSources(bg.sources);
