@@ -9,10 +9,7 @@ define([
             doNotRegenerate: false,
             events: {
                 'click .button': 'handleButtonClick',
-                'input input[type=search]': 'handleButtonClick'
-                /**** replace with "drop" to implement dnd between toolbars ****/
-                // 'dragend': 'handleDragEnd',
-                // 'dragover': 'handleDragOver'
+                'input input[type=search]': 'handleButtonClick',
             },
             initialize: function () {
                 this.el.view = this;
@@ -116,7 +113,7 @@ define([
                 this.items.add({actionName: action, type: 'button'});
             },
             handleButtonClick: function (e) {
-                var button = e.currentTarget.view.model;
+                const button = e.currentTarget.view.model;
                 app.actions.execute(button.get('actionName'), e);
             },
             render: function () {
@@ -141,65 +138,5 @@ define([
                 this.el.insertAdjacentElement('beforeend', view.render().el);
                 toolbarItem.view = view;
             }
-
-            // handleDragEnd: function (e) {
-            //     e.stopPropagation();
-            //     var t = e.originalEvent.target;
-            //
-            //     // toolbarItems are sorted by left position
-            //     this.items.sort();
-            //     var moved = this.items.some(function (item) {
-            //         var r = item.view.el.getBoundingClientRect();
-            //
-            //         // if the toolbarItem is hidden (e.g. undelete button)
-            //         if (r.left === 0) return false;
-            //
-            //         if (r.left + r.width / 2 > e.originalEvent.clientX) {
-            //             if (item.view.el === t) return true;
-            //
-            //             $(t).insertBefore(item.view.$el);
-            //             return true;
-            //         }
-            //     });
-            //
-            //     if (!moved) {
-            //         this.$el.append(t);
-            //     }
-            //     this.items.sort();
-            //     this.saveToDB();
-            //
-            //     this.hiddenItems.forEach(function (item) {
-            //         $(item).hide();
-            //     });
-            // },
-            // saveToDB: function () {
-            //     this.doNotRegenerate = true;
-            //     var list = this.items.pluck('actionName');
-            //     list = list.map(function (action, i) {
-            //         if (action === 'global:default') {
-            //             if (this.items.at(i).get('type') === 'dynamicSpace') {
-            //                 return '!dynamicSpace';
-            //             }
-            //         }
-            //         return action;
-            //     }, this);
-            //
-            //     this.model.set('actions', list);
-            //     this.model.save();
-            //     this.doNotRegenerate = false;
-            // },
-            //
-            // /**
-            //  * Shows all hidden items during drag
-            //  * @triggered when user drags item over to the toolbar (which happens immidiatelly)
-            //  * @method handleDragStart
-            //  */
-            // handleDragOver: function (e) {
-            //     e.preventDefault();
-            //     e.stopPropagation();
-            //     this.hiddenItems.forEach(function (item) {
-            //         $(item).show();
-            //     });
-            // }
         });
     });
