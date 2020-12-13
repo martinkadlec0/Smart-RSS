@@ -866,6 +866,11 @@ iframe {
   text-decoration: underline;
 }
 
+#smart-rss-content-footer .full-article-url {
+  color: rgb(151, 128, 128);
+  font-size: 0.8rem;
+}
+
 @media print {
   #smart-rss-content-footer {
     display: none !important;
