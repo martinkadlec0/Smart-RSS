@@ -60,7 +60,7 @@ define({
 	JUNE: 'June',
 	JULY: 'July',
 	AUGUST: 'August',
-	SEPTEMBER: 'Semptember',
+	SEPTEMBER: 'September',
 	OCTOBER: 'October',
 	NOVEMBER: 'November',
 	DECEMBER: 'December',
