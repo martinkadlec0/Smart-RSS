@@ -318,6 +318,7 @@ define([
 
 
                         frame.contentDocument.querySelector('#smart-rss-url').href = this.model.get('url');
+                        frame.contentDocument.querySelector('#full-article-url').textContent = this.model.get('url');
 
                         const clickHandler = (event) => {
                             if (event.target.matches('a')) {

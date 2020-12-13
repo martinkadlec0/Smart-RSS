@@ -866,7 +866,7 @@ iframe {
   text-decoration: underline;
 }
 
-#smart-rss-content-footer .full-article-url {
+#smart-rss-content-footer #full-article-url {
   color: rgb(151, 128, 128);
   font-size: 0.8rem;
 }
