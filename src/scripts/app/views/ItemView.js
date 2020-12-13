@@ -156,7 +156,7 @@ define([
             else{
                 itemTitle.removeChild(icon);
             }
-            itemTitle.textContent = article.title;
+            itemTitle.textContent = new DOMParser().parseFromString(article.title, 'text/html').documentElement.textContent;
             fragment.querySelector('.item-author').textContent = article.author;
             fragment.querySelector('.item-date').textContent = article.date;
             fragment.querySelector('.item-date').setAttribute('datetime', article.datetime);
