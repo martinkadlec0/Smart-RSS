@@ -212,8 +212,11 @@ define([
                         fragment.querySelector('.pin-button').classList.add('pinned');
                     }
                     if (data.enclosure) {
-                        if (data.enclosure.medium) {
-                            const enclosureMedium = document.createRange().createContextualFragment(`  <details class="enclosure">
+                        if (data.enclosure.medium || data.enclosure.url.includes('youtube.com')) {
+                            const enclosureMedium = document
+                                .createRange()
+                                .createContextualFragment(
+                                    `<details class="enclosure">
     <summary>
       <a href="#" target="_blank" tabindex="-1"></a>
     </summary>
@@ -224,7 +227,18 @@ define([
     <video controls="controls">
       <source src="" type=""/>
     </video>
-  </details>`);
+    <div id="yt-wrapper" style="  position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;">
+    <iframe id="yt-player" src="" allowfullscreen="true" style="position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;"></iframe>
+    </div>
+  </details>
+`);
                             if (data.open) {
                                 enclosureMedium.querySelector('.enclosure').setAttribute('open', 'open');
                             }
@@ -253,26 +267,37 @@ define([
                             } else {
                                 video.parentElement.removeChild(video);
                             }
+                            const iframe = enclosureMedium.querySelector('iframe');
+                            const ytWrapper = enclosureMedium.querySelector('#yt-wrapper')
+                            if (data.enclosure.url.includes('youtube.com')) {
+                                const videoId = /\/v\/([a-zA-Z0-9_]+)/.exec(data.enclosure.url)[1];
+                                iframe.src = `https://www.youtube.com/embed/${videoId}`;
+
+                            } else {
+                                ytWrapper.parentElement.removeChild(ytWrapper);
+                            }
+
                             fragment.querySelector('#below-h1').appendChild(enclosureMedium);
                         } else {
-                            const enclosure = document.createRange().createContextualFragment(`<p class="enclosure">
-    <a href="" target="_blank" tabindex="-1"></a>
-  </p>`);
+                            const enclosure = document.createRange()
+                                .createContextualFragment(
+                                    `<p class="enclosure">
+                                            <a href="" target="_blank" tabindex="-1"></a>
+                                      </p>`
+                                );
                             const a = enclosure.querySelector('a');
                             a.href = data.enclosure.url;
                             a.textContent = data.enclosure.name;
 
                             fragment.querySelector('#below-h1').appendChild(enclosure);
                         }
-
-
                     }
                     this.el.appendChild(fragment);
                     const h1 = this.el.querySelector('h1');
                     if (data.titleIsLink) {
                         const link = document.createElement('a');
                         link.target = '_blank';
-                        link.tabindex='-1';
+                        link.tabindex = '-1';
                         link.href = data.url ? data.url : '#';
                         link.textContent = data.title;
                         h1.appendChild(link);
