@@ -64,7 +64,7 @@
             rootName === 'channel' || // rss2
             rootName === 'feed' || // atom
             isRSS1) {
-            return chrome.runtime.sendMessage({action: 'new-rss', value: address});
+            feedsData.push({url: address, title: 'This feed'});
         }
 
         function findFeedsForYoutubeAddress(address) {
