@@ -133,6 +133,32 @@
             return updateAvailableSourcesList();
         }
 
+        if (address.includes('vimeo.com')) {
+            const currentUrl = window.location.href;
+            const channelNameMatch = /vimeo\.com\/(.+)/.exec(currentUrl);
+            if (channelNameMatch) {
+                const potentialChannelName = channelNameMatch[1];
+                const match2 = /([a-zA-Z]+?)/.exec(potentialChannelName);
+                let channelName = '';
+                if (match2) {
+                    channelName = potentialChannelName;
+                } else {
+                    const channelLink = document.querySelector('a.js-user-link');
+                    if (channelLink) {
+
+                        channelName = channelLink.href.replace('/', '');
+                    }
+                }
+                if (!channelName) {
+                    return;
+                }
+                const href = 'https://vimeo.com/' + channelName + '/videos/rss/';
+                feedsData.push({url: href, title: 'Channel feed'});
+            }
+
+            return updateAvailableSourcesList();
+        }
+
 
         const selector = 'link[type="application/rss+xml"], link[type="application/atom+xml"]';
         feedsData.push(...[...document.querySelectorAll(selector)].map((feed) => {
