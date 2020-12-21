@@ -34,7 +34,8 @@ define([], function () {
 
             let address = (link.textContent || link.getAttribute('href')).trim();
 
-            if (!address.startsWith('http')) {
+            const match = /.+:\/\//.exec(address);
+            if (!match) {
                 if (address.startsWith('/')) {
                     address = address.substr(1);
                 }
