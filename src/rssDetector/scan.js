@@ -108,6 +108,18 @@
             return updateAvailableSourcesList();
         }
 
+        if (address.includes('bitchute.com')) {
+
+            const channelLink = document.querySelector('.owner>a');
+            if (channelLink) {
+                const channelName = channelLink.textContent;
+                const href = 'https://www.bitchute.com/feeds/rss/channel/' + channelName;
+                feedsData.push({url: href, title: 'Channel feed'});
+            }
+
+            return updateAvailableSourcesList();
+        }
+
 
         const selector = 'link[type="application/rss+xml"], link[type="application/atom+xml"]';
         feedsData.push(...[...document.querySelectorAll(selector)].map((feed) => {
