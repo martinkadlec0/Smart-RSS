@@ -120,6 +120,19 @@
             return updateAvailableSourcesList();
         }
 
+        if (address.includes('odysee.com')) {
+            const currentUrl = window.location.href;
+            const channelNameMatch = /@(.+?):/.exec(currentUrl);
+            if (channelNameMatch) {
+                const channelName = channelNameMatch[1];
+
+                const href = 'https://lbryfeed.melroy.org/channel/' + channelName;
+                feedsData.push({url: href, title: 'Channel feed'});
+            }
+
+            return updateAvailableSourcesList();
+        }
+
 
         const selector = 'link[type="application/rss+xml"], link[type="application/atom+xml"]';
         feedsData.push(...[...document.querySelectorAll(selector)].map((feed) => {
