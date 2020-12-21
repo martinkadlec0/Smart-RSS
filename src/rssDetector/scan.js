@@ -159,6 +159,28 @@
             return updateAvailableSourcesList();
         }
 
+        if (address.includes('steemit.com')) {
+            const currentUrl = window.location.href;
+            const channelNameMatch = /steemit\.com\/(.+)/.exec(currentUrl);
+            if (channelNameMatch) {
+                const channelName = channelNameMatch[1];
+                const href = 'http://www.hiverss.com/' + channelName + '/feed';
+                feedsData.push({url: href, title: 'Channel feed'});
+            }
+            return updateAvailableSourcesList();
+        }
+
+        if (address.includes('hive.blog')) {
+            const currentUrl = window.location.href;
+            const channelNameMatch = /hive\.blog\/(.+)/.exec(currentUrl);
+            if (channelNameMatch) {
+                const channelName = channelNameMatch[1];
+                const href = 'http://www.hiverss.com/' + channelName + '/feed';
+                feedsData.push({url: href, title: 'Channel feed'});
+            }
+            return updateAvailableSourcesList();
+        }
+
 
         const selector = 'link[type="application/rss+xml"], link[type="application/atom+xml"]';
         feedsData.push(...[...document.querySelectorAll(selector)].map((feed) => {
