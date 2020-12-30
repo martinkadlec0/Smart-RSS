@@ -1,5 +1,4 @@
 (function () {
-    const feedsData = [];
     let oldHref = document.location.href;
 
     function init() {
@@ -31,40 +30,47 @@
         }
     }
 
-    function updateAvailableSourcesList() {
+    function updateAvailableSourcesList(feedsData) {
         if (document.hidden) {
             chrome.runtime.sendMessage({action: 'visibility-lost'});
             return;
         }
-        console.log(feedsData);
         chrome.runtime.sendMessage({action: 'list-feeds', value: feedsData});
     }
 
     function scan() {
         const address = document.location.href;
-        feedsData.length = 0;
+        const feedsData = [];
+        if (typeof document.getRootNode !== 'undefined') {
+            let rootNode = document.getRootNode();
+            if (rootNode) {
+                let rootDocumentElement = rootNode.documentElement;
+                // for chrome
 
+                let d = document.getElementById('webkit-xml-viewer-source-xml');
 
-        let rootNode = document.getRootNode().documentElement;
-        // for chrome
-        let d = document.getElementById('webkit-xml-viewer-source-xml');
-        if (d && d.firstChild) {
-            rootNode = d.firstChild;
-        }
-        const rootName = rootNode.nodeName.toLowerCase();
-        let isRSS1 = false;
+                if (d && d.firstChild) {
+                    rootDocumentElement = d.firstChild;
+                }
 
-        if (rootName === 'rdf' || rootName === 'rdf:rdf') {
-            if (rootNode.attributes['xmlns']) {
-                isRSS1 = rootNode.attributes['xmlns'].nodeValue.search('rss') > 0;
+                const rootName = rootDocumentElement.nodeName.toLowerCase();
+
+                let isRSS1 = false;
+
+                if (rootName === 'rdf' || rootName === 'rdf:rdf') {
+                    if (rootDocumentElement.attributes['xmlns']) {
+                        isRSS1 = rootDocumentElement.attributes['xmlns'].nodeValue.search('rss') > 0;
+                    }
+                }
+                if (
+                    rootName === 'rss' ||
+                    rootName === 'channel' || // rss2
+                    rootName === 'feed' || // atom
+                    isRSS1) {
+                    feedsData.push({url: address, title: 'This feed'});
+                }
+
             }
-        }
-        if (
-            rootName === 'rss' ||
-            rootName === 'channel' || // rss2
-            rootName === 'feed' || // atom
-            isRSS1) {
-            feedsData.push({url: address, title: 'This feed'});
         }
 
         function findFeedsForYoutubeAddress(address) {
@@ -105,7 +111,7 @@
                 }
             }
 
-            return updateAvailableSourcesList();
+            return updateAvailableSourcesList(feedsData);
         }
 
         if (address.includes('bitchute.com')) {
@@ -117,7 +123,7 @@
                 feedsData.push({url: href, title: 'Channel feed'});
             }
 
-            return updateAvailableSourcesList();
+            return updateAvailableSourcesList(feedsData);
         }
 
         if (address.includes('odysee.com')) {
@@ -130,7 +136,7 @@
                 feedsData.push({url: href, title: 'Channel feed'});
             }
 
-            return updateAvailableSourcesList();
+            return updateAvailableSourcesList(feedsData);
         }
 
         if (address.includes('vimeo.com')) {
@@ -156,7 +162,7 @@
                 feedsData.push({url: href, title: 'Channel feed'});
             }
 
-            return updateAvailableSourcesList();
+            return updateAvailableSourcesList(feedsData);
         }
 
         if (address.includes('steemit.com')) {
@@ -167,7 +173,7 @@
                 const href = 'http://www.hiverss.com/' + channelName + '/feed';
                 feedsData.push({url: href, title: 'Channel feed'});
             }
-            return updateAvailableSourcesList();
+            return updateAvailableSourcesList(feedsData);
         }
 
         if (address.includes('hive.blog')) {
@@ -178,25 +184,28 @@
                 const href = 'http://www.hiverss.com/' + channelName + '/feed';
                 feedsData.push({url: href, title: 'Channel feed'});
             }
-            return updateAvailableSourcesList();
+            return updateAvailableSourcesList(feedsData);
         }
 
-
         const selector = 'link[type="application/rss+xml"], link[type="application/atom+xml"]';
+
         feedsData.push(...[...document.querySelectorAll(selector)].map((feed) => {
             return {url: feed.href, title: feed.title || feed.href};
         }));
 
         if (feedsData.length === 0) {
             const generator = document.querySelector('meta[name="generator"]');
+
             if (generator && generator.getAttribute('content').includes('WordPress')) {
                 const url = document.URL;
+
                 const feedUrl = url.charAt(url.length - 1) === '/' ? url + 'feed' : url + '/feed';
 
                 feedsData.push({url: feedUrl, title: feedUrl});
             }
         }
-        updateAvailableSourcesList();
+
+        updateAvailableSourcesList(feedsData);
     }
 
 
