@@ -269,10 +269,7 @@ define([], function () {
                     }
                 }
                 if (!baseStr) {
-                    baseStr = this.source.get('url');
-                    const prefix = this.source.get('url').includes('http://') ? 'http://' : 'https://';
-                    const urlParts = baseStr.replace('http://', '').replace('https://', '').replace('//', '').split(/[/?#]/);
-                    baseStr = prefix + urlParts[0];
+                    baseStr = new URL(this.source.get('url')).origin;
                 }
 
                 data.base = baseStr;
