@@ -5,7 +5,8 @@
 define([], function () {
     function checkFavicon(source) {
         return new Promise((resolve, reject) => {
-            let baseAddress = source.get('base');
+            const baseUrl = new URL(source.get('base'));
+            const hostBaseAddress = baseUrl.origin;
             let xhr = new XMLHttpRequest();
             xhr.ontimeout = () => {
                 resolve({});
@@ -15,13 +16,9 @@ define([], function () {
                     if (xhr.status !== 200) {
                         resolve({});
                     }
-                    const text = xhr.responseText.replace(/<body(.*?)<\/body>/gm, '');
-                    const baseDocument = new DOMParser().parseFromString(text, 'text/html');
-                    const baseAddressLength = baseAddress.length;
-                    if (baseAddress[baseAddressLength - 1] === '/') {
-                        baseAddress = baseAddress.substring(0, baseAddressLength - 1);
-                    }
-                    let iconAddress = baseAddress + '/favicon.ico';
+                    const baseDocumentContents = xhr.responseText.replace(/<body(.*?)<\/body>/gm, '');
+                    const baseDocument = new DOMParser().parseFromString(baseDocumentContents, 'text/html');
+                    let iconAddress = hostBaseAddress + '/favicon.ico';
                     const links = baseDocument.querySelectorAll('link');
                     const iconLinks = Array.from(links).filter(link => {
                         return link.hasAttribute('rel') && link.getAttribute('rel').includes('icon');
@@ -43,17 +40,18 @@ define([], function () {
                             }
                             return false;
                         }
-                        if (localSize === '16x16') {
+                        const side = parseInt(localSize.split('x')[0]);
+                        if (side === 16) {
+                            size = side;
                             iconAddress = tempIcon;
                             return true;
                         }
-                        const side = parseInt(localSize.split('x')[0]);
-                        if (side > size) {
-                            size = side;
-                            iconAddress = tempIcon;
+                        if (side < size) {
+                            return false;
                         }
+                        size = side;
+                        iconAddress = tempIcon;
                     });
-                    const schema = baseAddress.includes('http://') ? 'http://' : 'https://';
 
                     if (!iconAddress.includes('//')) {
                         if (iconAddress[0] === '.') {
@@ -62,9 +60,8 @@ define([], function () {
                         if (iconAddress[0] === '/') {
                             iconAddress = iconAddress.substr(1);
                         }
-                        iconAddress = baseAddress + '/' + iconAddress;
+                        iconAddress = hostBaseAddress + '/' + iconAddress;
                     }
-                    iconAddress = schema + iconAddress.replace('http://', '').replace('https://', '').replace('//', '');
 
                     toDataURI(iconAddress, size)
                         .then(response => {
@@ -76,7 +73,7 @@ define([], function () {
 
                 }
             };
-            xhr.open('GET', baseAddress);
+            xhr.open('GET', hostBaseAddress);
             xhr.timeout = 1000 * 30;
             xhr.send();
         });
