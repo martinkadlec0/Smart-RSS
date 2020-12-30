@@ -415,11 +415,18 @@ define([
                 this.selectPivot = null;
 
                 const length = items.length;
+                if(length === 0){
+                    return;
+                }
                 const that = this;
+
                 const renderBlock = function (startingPoint = 0) {
                     let internalCounter = 0;
                     while (true) {
                         const item = items[startingPoint + internalCounter];
+                        if (!item) {
+                            break;
+                        }
                         item.multiple = multiple;
                         that.addItem(item, true);
                         internalCounter++;
