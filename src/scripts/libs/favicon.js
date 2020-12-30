@@ -14,6 +14,13 @@ define([], function () {
             xhr.onloadend = () => {
                 if (xhr.readyState === 4) {
                     if (xhr.status !== 200) {
+                        toDataURI(hostBaseAddress + '/favicon.ico')
+                            .then(response => {
+                                resolve(response);
+                            })
+                            .catch(() => {
+                                resolve({});
+                            });
                         resolve({});
                     }
                     const baseDocumentContents = xhr.responseText.replace(/<body(.*?)<\/body>/gm, '');
