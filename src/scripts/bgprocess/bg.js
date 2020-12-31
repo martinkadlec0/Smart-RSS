@@ -231,6 +231,7 @@ define([
 
 
             fetchAll().then(function () {
+                window.items.sort();
                 /**
                  * Load counters for specials
                  */
