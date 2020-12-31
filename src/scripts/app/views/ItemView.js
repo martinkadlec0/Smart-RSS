@@ -30,8 +30,8 @@ define([
          */
         className: 'articles-list-item',
 
-        template: `<div class="item-title"><img src="<%= favicon %>" class="source-icon icon"/><%= title %></div>
-<div class="item-pin"></div>
+        template: `<div class="item-title"><%= title %></div>
+<div class="item-pin"><img src="<%= favicon %>" class="source-icon icon"/></div>
 <div class="item-author"><%- author %></div>
 <time class="item-date" datetime="<%- datetime %>"><%- date %></time>`,
 
@@ -132,7 +132,9 @@ define([
             if (this.multiple) {
                 const source = bg.sources.find({id: this.model.get('sourceID')});
                 article.sourceTitle = source.get('title');
-                // article.favicon = source.get('favicon');
+                if (bg.settings.get('displayFaviconInsteadOfPin') === '1') {
+                    article.favicon = source.get('favicon');
+                }
                 article.author = article.sourceTitle !== article.author ? article.sourceTitle + ' - ' + article.author : article.author;
             }
             this.el.setAttribute('href', article.url);
@@ -148,16 +150,15 @@ define([
             }
 
             const fragment = document.createRange().createContextualFragment(this.template);
-            const itemTitle = fragment.querySelector('.item-title');
-            const icon = itemTitle.querySelector('.icon');
-            if(article.favicon){
+            const itemPin = fragment.querySelector('.item-pin');
+            const icon = itemPin.querySelector('.icon');
+            if (typeof article.favicon !== 'undefined') {
                 icon.src = article.favicon;
+            } else {
+                itemPin.removeChild(icon);
             }
-            else{
-                itemTitle.removeChild(icon);
-            }
-            itemTitle.textContent = new DOMParser().parseFromString(article.title, 'text/html').documentElement.textContent;
-            fragment.querySelector('.item-author').textContent = article.author;
+            fragment.querySelector('.item-author').textContent = new DOMParser().parseFromString(article.author, 'text/html').documentElement.textContent;
+            fragment.querySelector('.item-title').textContent = new DOMParser().parseFromString(article.title, 'text/html').documentElement.textContent;
             fragment.querySelector('.item-date').textContent = article.date;
             fragment.querySelector('.item-date').setAttribute('datetime', article.datetime);
 

@@ -602,25 +602,28 @@ input[type=search]:not(:focus):not(:valid) {
 .item-pin {
   width: 0.4rem;
   height: 0.5rem;
-  margin-top: 0.46rem;
   margin-right: 0.4rem;
   margin-left: 0.2rem;
+  flex: 0 0 0.4rem;
+}
+
+.item-pin:empty {
+  margin-top: 0.46rem;
   background-repeat: no-repeat;
   background-image: url("../images/bullet_read.png");
   background-position: 50% 50%;
   background-size: 1rem;
-  flex: 0 0 0.4rem;
 }
 
-.unread:not(.unvisited):not(.pinned) .item-pin {
+.unread:not(.unvisited):not(.pinned) .item-pin:empty {
   background-image: url("../images/bullet_unread.png");
 }
 
-.unvisited:not(.pinned) .item-pin {
+.unvisited:not(.pinned) .item-pin:empty {
   background-image: url("../images/bullet_unseen.png");
 }
 
-.pinned .item-pin {
+.pinned .item-pin:empty {
   background-image: url("../images/bullet_pinned.png");
 }
 
