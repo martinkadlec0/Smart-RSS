@@ -284,20 +284,6 @@ define([
                 this.handleNewSelected(this.currentData);
             },
 
-            // /**
-            //  * Stores ids of dragged items
-            //  * @method handleDragStart
-            //  * @triggered on drag start
-            //  * @param event {DragEvent}
-            //  */
-            // handleDragStart: function (event) {
-            //     const ids = this.selectedItems.map(function (view) {
-            //         return view.model.id;
-            //     });
-            //
-            //     event.originalEvent.dataTransfer.setData('text/plain', JSON.stringify(ids));
-            // },
-
             /**
              * Selects new item when the last selected is deleted
              * @method selectAfterDelete
