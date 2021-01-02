@@ -212,62 +212,61 @@ define([
                     if (data.pinned) {
                         fragment.querySelector('.pin-button').classList.add('pinned');
                     }
-                    if (data.enclosure) {
-                        if (data.enclosure.medium || data.enclosure.url.includes('youtube.com')) {
-                            let enclosureMedium;
 
-                            if (data.enclosure.medium === 'image') {
-                                enclosureMedium = document
+                    function createEnclosure(data) {
+                        let enclosure;
+
+                        switch (data.enclosure.medium) {
+                            case 'image':
+                                enclosure = document
                                     .createRange()
                                     .createContextualFragment(enclosureImage);
-                                const img = enclosureMedium.querySelector('img');
+                                const img = enclosure.querySelector('img');
                                 img.src = data.enclosure.url;
                                 img.alt = data.enclosure.name;
-                            }
-
-                            if (data.enclosure.medium === 'audio') {
-                                enclosureMedium = document
-                                    .createRange()
-                                    .createContextualFragment(enclosureAudio);
-                                const audio = enclosureMedium.querySelector('audio');
-                                audio.querySelector('source').src = data.enclosure.url;
-                            }
-
-                            if (data.enclosure.medium === 'video') {
-                                enclosureMedium = document
+                                break;
+                            case 'video':
+                                enclosure = document
                                     .createRange()
                                     .createContextualFragment(enclosureVideo);
-                                const video = enclosureMedium.querySelector('video');
+                                const video = enclosure.querySelector('video');
                                 video.querySelector('source').src = data.enclosure.url;
                                 video.querySelector('source').type = data.enclosure.type;
-                            }
-
-                            if (data.enclosure.url.includes('youtube.com')) {
-                                enclosureMedium = document
+                                break;
+                            case 'audio':
+                                enclosure = document
+                                    .createRange()
+                                    .createContextualFragment(enclosureAudio);
+                                const audio = enclosure.querySelector('audio');
+                                audio.querySelector('source').src = data.enclosure.url;
+                                break;
+                            case 'youtube':
+                                enclosure = document
                                     .createRange()
                                     .createContextualFragment(enclosureYoutube);
-                                const iframe = enclosureMedium.querySelector('iframe');
+                                const iframe = enclosure.querySelector('iframe');
                                 const videoId = /\/v\/([a-zA-Z0-9_]+)/.exec(data.enclosure.url)[1];
                                 iframe.src = `https://www.youtube.com/embed/${videoId}`;
-                            }
-
-                            if (data.open) {
-                                enclosureMedium.querySelector('.enclosure').setAttribute('open', 'open');
-                            }
-                            enclosureMedium.querySelector('a').href = data.enclosure.url;
-                            enclosureMedium.querySelector('a').textContent = data.enclosure.medium ? data.enclosure.name + ' - ' + data.enclosure.media : data.enclosure.name;
-
-                            fragment.querySelector('#below-h1').appendChild(enclosureMedium);
-                        } else {
-                            const enclosure = document
-                                .createRange()
-                                .createContextualFragment(enclosureGeneral);
-                            const a = enclosure.querySelector('a');
-                            a.href = data.enclosure.url;
-                            a.textContent = data.enclosure.name;
-
-                            fragment.querySelector('#below-h1').appendChild(enclosure);
+                                break;
+                            default:
+                                enclosure = document
+                                    .createRange()
+                                    .createContextualFragment(enclosureGeneral);
                         }
+
+                        enclosure.querySelector('a').href = data.enclosure.url;
+                        enclosure.querySelector('a').textContent = data.enclosure.name;
+
+                        if (data.open && data.enclosure.media) {
+                            enclosure.querySelector('.enclosure').setAttribute('open', 'open');
+                        }
+
+                        return enclosure;
+                    }
+
+                    if (data.enclosure) {
+                        const enclosure = createEnclosure(data);
+                        fragment.querySelector('#below-h1').appendChild(enclosure);
                     }
                     this.el.appendChild(fragment);
                     const h1 = this.el.querySelector('h1');
