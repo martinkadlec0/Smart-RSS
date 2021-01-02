@@ -228,7 +228,7 @@ define([
                                 video.parentElement.removeChild(video);
                             }
                             const iframe = enclosureMedium.querySelector('iframe');
-                            const ytWrapper = enclosureMedium.querySelector('#yt-wrapper')
+                            const ytWrapper = enclosureMedium.querySelector('#yt-wrapper');
                             if (data.enclosure.url.includes('youtube.com')) {
                                 const videoId = /\/v\/([a-zA-Z0-9_]+)/.exec(data.enclosure.url)[1];
                                 iframe.src = `https://www.youtube.com/embed/${videoId}`;
