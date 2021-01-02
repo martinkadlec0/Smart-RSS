@@ -652,9 +652,11 @@ input[type=search]:not(:focus):not(:valid) {
 
 header {
   padding: 25px 15px 15px 30px;
-  border-bottom: var(--border);
   flex: 0 0 auto;
   overflow-y: auto;
+}
+header:not(:empty) {
+  border-bottom: var(--border);
 }
 
 header img, header video {
@@ -819,6 +821,7 @@ iframe {
   flex: 0 0 auto;
   padding-right: 5px;
 }
+
 /* ********************************/
 
 /*html {*/

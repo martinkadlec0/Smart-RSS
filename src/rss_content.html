@@ -4,13 +4,17 @@
   <meta charset="utf-8">
   <base href="about:blank" target="_blank"/>
   <link rel="stylesheet" type="text/css" href="styles/main.css" data-base-style/>
-  <style data-custom-style type="text/css"></style>
+  <style data-custom-style type="text/css">
+    #smart-rss-url[href=''] {
+      display: none;
+    }
+  </style>
 
 </head>
 <body id="smart-rss-article-body">
 <section id="smart-rss-content"></section>
 <footer id="smart-rss-content-footer">
-  <a id="smart-rss-url">{{FULL_ARTICLE}}</a>
+  <a href="" id="smart-rss-url">{{FULL_ARTICLE}}</a>
   <div id="full-article-url"></div>
 </footer>
 </body>
