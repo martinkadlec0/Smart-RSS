@@ -2,7 +2,7 @@
  * @module BgProcess
  * @submodule modules/RSSParser
  */
-define([], function () {
+define(['../../libs/he'], function (he) {
     class RSSParser {
 
         getLink() {
@@ -182,7 +182,7 @@ define([], function () {
             }
             let enclosure = {};
             enclosure.url = enclosureNode.hasAttribute('url') ? enclosureNode.getAttribute('url') : '';
-            enclosure.name = enclosureNode.hasAttribute('url') ? enclosure.url.substring(enclosure.url.lastIndexOf('/') + 1) : (media.title ? media.title : '');
+            enclosure.name = he.decode(enclosureNode.hasAttribute('url') ? enclosure.url.substring(enclosure.url.lastIndexOf('/') + 1) : (media.title ? media.title : ''));
             enclosure.type = enclosureNode.hasAttribute('type') ? enclosureNode.getAttribute('type') : '';
             enclosure.medium = enclosureNode.hasAttribute('medium') ? enclosureNode.getAttribute('medium') : this.getMediumFromType(enclosure.type, enclosure.name);
             enclosure.length = enclosureNode.hasAttribute('length') ? enclosureNode.getAttribute('length') : '';
@@ -227,7 +227,7 @@ define([], function () {
                 nodes = this.document.querySelectorAll('entry');
             }
 
-            const title = this.getTitle(this.document);
+            const title = he.decode(this.getTitle(this.document));
 
 
             if (title && (this.source.get('title') === this.source.get('url') || !this.source.get('title'))) {
@@ -282,11 +282,11 @@ define([], function () {
                 this.currentNode = node;
                 items.push({
                     id: this.getGuid(),
-                    title: this.getArticleTitle(),
+                    title: he.decode(this.getArticleTitle()),
                     url: this.getLink(),
                     date: this.getDate(),
-                    author: this.getAuthor(),
-                    content: this.getArticleContent(),
+                    author: he.decode(this.getAuthor()),
+                    content: he.decode(this.getArticleContent()),
                     sourceID: this.source.get('id'),
                     enclosure: this.getEnclosure(),
                     dateCreated: Date.now(),

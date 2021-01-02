@@ -157,8 +157,8 @@ define([
             } else {
                 itemPin.removeChild(icon);
             }
-            fragment.querySelector('.item-author').textContent = new DOMParser().parseFromString(article.author, 'text/html').documentElement.textContent;
-            fragment.querySelector('.item-title').textContent = new DOMParser().parseFromString(article.title, 'text/html').documentElement.textContent;
+            fragment.querySelector('.item-author').textContent = article.author;
+            fragment.querySelector('.item-title').textContent = article.title;
             fragment.querySelector('.item-date').textContent = article.date;
             fragment.querySelector('.item-date').setAttribute('datetime', article.datetime);
 
