@@ -1,51 +1,11 @@
 define([
-        'backbone', 'modules/Locale'
+        'backbone', 'modules/Locale', 'text!templates/propertiesView.html', 'text!templates/propertiesDetails.html'
     ],
-    function (BB, Locale) {
+    function (BB, Locale, propertiesTemplate, propertiesDetails) {
 
         return BB.View.extend({
             id: 'properties',
             current: null,
-            template: Locale.translateHTML(`
-<label id="property-title-label">
-  {{NAME}}:
-  <input id="prop-title" placeholder="{{FETCH_TITLE_TIP}}" title="{{FETCH_TITLE_TIP}}" type="text" value=""/>
-</label>
-
-<label id="property-title-address">{{ADDRESS}}: <input id="prop-url" type="url" value=""/></label>
-
-<label>{{UPDATE}}: <select id="prop-update-every">
-  <option value="-1">Use global setting</option>
-  <option value="0">{{NEVER}}</option>
-  <option value="5">{{EVERY_5_MINUTES}}</option>
-  <option value="15">{{EVERY_15_MINUTES}}</option>
-  <option value="30">{{EVERY_30_MINUTES}}</option>
-  <option value="60">{{EVERY_HOUR}}</option>
-  <option value="120">{{EVERY_2_HOURS}}</option>
-  <option value="180">{{EVERY_3_HOURS}}</option>
-  <option value="300">{{EVERY_5_HOURS}}</option>
-  <option value="600">{{EVERY_10_HOURS}}</option>
-  <option value="1440">{{EVERY_24_HOURS}}</option>
-  <option value="10080">{{EVERY_WEEK}}</option>
-</select></label>
-
-
-<label>{{PARENT}}: <select id="prop-parent">
-  <option value="0">{{ROOT_FOLDER}}</option>
-</select></label>
-
-
-<label>{{AUTOREMOVE}}: <select id="prop-autoremove">
-  <option value="0">{{NEVER}}</option>
-  <option value="1">{{OLDER_THAN_DAY}}</option>
-  <option value="7">{{OLDER_THAN_WEEK}}</option>
-  <option value="30">{{OLDER_THAN_MONTH}}</option>
-  <option value="60">{{OLDER_THAN_TWO_MONTHS}}</option>
-</select></label>
-
-<button id="prop-ok">{{OK}}</button>
-<button id="prop-cancel">{{CANCEL}}</button>
-`),
             events: {
                 'click button': 'handleClick',
                 'keydown button': 'handleKeyDown'
@@ -134,22 +94,11 @@ define([
                 const properties = this.current.toJSON();
                 properties.password = this.current.getPass();
 
-                const fragment = document.createRange().createContextualFragment(this.template);
+                const fragment = document.createRange().createContextualFragment(Locale.translateHTML(propertiesTemplate));
 
                 fragment.querySelector('#property-title-label input').value = properties.title;
                 fragment.querySelector('#property-title-address input').value = properties.url;
-                const details = document.createRange().createContextualFragment(Locale.translateHTML(`<details>
-  <summary>{{MORE}}</summary>
-  <label>{{USERNAME}}: <input id="prop-username" type="text" value=""/></label>
-  <label>{{PASSWORD}}: <input id="prop-password" type="password" value=""/></label>
-
-  <label>Proxy: <input id="prop-proxy" type="checkbox" value=""/></label>
-  <label>Open media preview: <select id="openEnclosure">
-    <option value="global">Use global setting</option>
-    <option value="yes">Yes</option>
-    <option value="no">No</option>
-  </select></label>
-</details>`));
+                const details = document.createRange().createContextualFragment(Locale.translateHTML(propertiesDetails));
                 details.querySelector('#prop-username').value = properties.username;
                 details.querySelector('#prop-password').value = properties.password;
                 details.querySelector('#prop-proxy').value = properties.proxyThroughFeedly;
