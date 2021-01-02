@@ -1,10 +1,7 @@
-define(['views/TopView',],
-    function (TopView) {
+define(['views/TopView', 'text!templates/specialView.html'],
+    function (TopView, specialView) {
         return TopView.extend({
             className: 'sources-list-item special',
-            template: `<img src="" class="source-icon"/>
-<div class="source-title"></div>
-<div class="source-counter"></div>`,
             /*events: {
                 'mouseup': 'handleMouseUp',
                 'click': 'handleClick'
@@ -78,7 +75,7 @@ define(['views/TopView',],
                     this.el.removeChild(this.el.firstChild);
                 }
 
-                const fragment = document.createRange().createContextualFragment(this.template);
+                const fragment = document.createRange().createContextualFragment(specialView);
                 fragment.querySelector('.source-icon').src = '/images/' + data.icon;
                 fragment.querySelector('.source-title').textContent = data.title;
                 fragment.querySelector('.source-counter').textContent = data.count;
