@@ -180,11 +180,10 @@ define([
                 clearTimeout(this.renderTimeout);
 
                 this.renderTimeout = setTimeout(() => {
+                    const stylePath = chrome.runtime.getURL('styles/main.css');
                     if (!this.model) {
                         return;
                     }
-
-                    const stylePath = chrome.runtime.getURL('styles/main.css');
 
                     this.show();
                     const source = this.model.getSource();
@@ -194,7 +193,7 @@ define([
 
                     const data = Object.create(this.model.attributes);
                     data.date = this.getFormattedDate(this.model.get('date'));
-                    data.title = stripTags(data.title).trim() || '&lt;no title&gt;';
+                    data.title = stripTags(data.title).trim() || '<no title>';
                     data.url = escapeHtml(data.url);
                     data.titleIsLink = bg.settings.get('titleIsLink');
                     data.open = open;
