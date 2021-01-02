@@ -3,7 +3,6 @@ define(['backbone', 'modules/Locale'], function (BB, Locale) {
         tagName: 'input',
         className: 'input-search',
         initialize: function () {
-
             this.el.setAttribute('placeholder', Locale.SEARCH);
             this.el.setAttribute('type', 'search');
             this.el.setAttribute('tabindex', -1);
