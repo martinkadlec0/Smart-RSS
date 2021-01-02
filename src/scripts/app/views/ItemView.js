@@ -3,8 +3,8 @@
  * @submodule views/ItemView
  */
 define([
-    'backbone', 'helpers/formatDate', 'instances/contextMenus', 'helpers/stripTags',
-], function (BB, formatDate, contextMenus, stripTags) {
+    'backbone', 'helpers/formatDate', 'instances/contextMenus', 'helpers/stripTags', 'text!templates/itemView.html'
+], function (BB, formatDate, contextMenus, stripTags, itemTemplate) {
 
     /**
      * View of one article item in article list
@@ -29,11 +29,6 @@ define([
          * @type String
          */
         className: 'articles-list-item',
-
-        template: `<div class="item-title"><%= title %></div>
-<div class="item-pin"><img src="<%= favicon %>" class="source-icon icon"/></div>
-<div class="item-author"><%- author %></div>
-<time class="item-date" datetime="<%- datetime %>"><%- date %></time>`,
 
         /**
          * Reference to view/articleList instance. It should be replaced with require('views/articleList')
@@ -149,7 +144,7 @@ define([
                 this.el.removeChild(this.el.firstChild);
             }
 
-            const fragment = document.createRange().createContextualFragment(this.template);
+            const fragment = document.createRange().createContextualFragment(itemTemplate);
             const itemPin = fragment.querySelector('.item-pin');
             const icon = itemPin.querySelector('.icon');
             if (typeof article.favicon !== 'undefined') {
