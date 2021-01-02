@@ -602,66 +602,8 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                     el.scrollTop = 0;
                 }
             },
-            // download: {
-            //     title: Locale.DOWNLOAD,
-            //     icon: 'save.png',
-            //     fn: function () {
-            //         const contentView = require('views/contentView');
-            //         const articleList = require('views/articleList');
-            //         if (!articleList.selectedItems.length) {
-            //             app.actions.execute('content:download');
-            //             return;
-            //         }
-            //         const tpl = contentView.downloadTemplate;
-            //
-            //         const list = {};
-            //         list.articles = articleList.selectedItems.map(function (itemView) {
-            //             const attrs = Object.create(itemView.model.attributes);
-            //             attrs.date = contentView.getFormattedDate(attrs.date);
-            //             return attrs;
-            //         });
-            //
-            //         const blob = new Blob([tpl(list)], {type: 'text\/html'});
-            //         const reader = new FileReader();
-            //         reader.readAsDataURL(blob);
-            //         reader.onload = function () {
-            //             window.open(this.result.replace('data:text/html;', 'data:text/html;charset=utf-8;'));
-            //         };
-            //     }
-            // }
         },
         content: {
-            // download: {
-            //     title: Locale.DOWNLOAD,
-            //     icon: 'save.png',
-            //     fn: function () {
-            //         var contentView = require('views/contentView');
-            //         if (!contentView.model) {
-            //             return;
-            //         }
-            //         var tpl = contentView.downloadTemplate;
-            //         var attrs = Object.create(contentView.model.attributes);
-            //         attrs.date = contentView.getFormattedDate(attrs.date);
-            //         var list = {articles: [attrs]};
-            //         var blob = new Blob([tpl(list)], {type: 'text\/html'});
-            //         var reader = new FileReader();
-            //         reader.readAsDataURL(blob);
-            //         reader.onload = function () {
-            //             window.open(this.result.replace('data:text/html;', 'data:text/html;charset=utf-8;'));
-            //         };
-            //     }
-            // },
-            // print: {
-            //     title: Locale.PRINT,
-            //     icon: 'print.png',
-            //     fn: function () {
-            //         var contentView = require('views/contentView');
-            //         if (!contentView.model) {
-            //             return;
-            //         }
-            //         window.print();
-            //     }
-            // },
             mark: {
                 title: Locale.MARK_AS_READ,
                 icon: 'read.png',
