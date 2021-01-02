@@ -1,16 +1,10 @@
 define([
-    'backbone', 'modules/Locale', 'views/feedList'
-], function (BB, Locale) {
+    'backbone', 'modules/Locale', 'text!templates/topView.html',
+], function (BB, Locale, topViewTemplate) {
     return BB.View.extend({
         tagName: 'div',
+        template: topViewTemplate,
         className: 'sources-list-item',
-        template: `<img src="/images/feedupdate.svg" class="source-icon loading"/>
-<img src="/images/brokenFeed.png" class="source-icon broken"/>
-<img src="<%= favicon %>" class="source-icon icon"/>
-
-<div class="source-title"><%- title %></div>
-<div class="source-counter"><%- count %></div>
-`,
         handleMouseUp: function (e) {
             if (e.which === 3) {
                 this.showContextMenu(e);
