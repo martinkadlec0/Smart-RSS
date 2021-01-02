@@ -57,6 +57,24 @@ module.exports = function (grunt) {
         grunt.file.write(manifestPath, JSON.stringify(manifest, null, 2));
     };
 
+
+    const scan = (dir) => {
+        const filesList = [];
+        readdirSync(dir).forEach((file) => {
+            if (file[0] === '.') {
+                return;
+            }
+            const filePath = join(dir, file);
+
+            if (lstatSync(filePath).isDirectory()) {
+                filesList.push(...scan(filePath));
+                return;
+            }
+            filesList.push(filePath);
+        });
+        return filesList;
+    };
+
     const zip = function () {
         const defaultConfig = {
             dirname: this.target,
@@ -66,24 +84,8 @@ module.exports = function (grunt) {
         const manifestPath = join(root, 'manifest.json');
 
 
-        const filesList = [];
+        const filesList = scan(root);
 
-        const scan = (dir) => {
-            readdirSync(dir).forEach((file) => {
-                if (file[0] === '.') {
-                    return;
-                }
-                const filePath = join(dir, file);
-
-                if (lstatSync(filePath).isDirectory()) {
-                    scan(filePath);
-                    return;
-                }
-                filesList.push(filePath);
-            });
-        };
-
-        scan(root);
         const version = getVersion(manifestPath);
         const AdmZip = require('adm-zip');
         const zipFile = new AdmZip();
@@ -99,6 +101,31 @@ module.exports = function (grunt) {
     const getVersion = function (manifest) {
         return grunt.file.readJSON(manifest).version;
     };
+
+    const stripComments = function () {
+        const defaultConfig = {
+            dirname: this.target,
+        };
+        const config = Object.assign(defaultConfig, this.data);
+        const multilineComment = /^[\t\s]*\/\*\*?[^!][\s\S]*?\*\/[\r\n]/gm
+        const specialComments = /^[\t\s]*\/\*!\*?[^!][\s\S]*?\*\/[\r\n]/gm
+        const singleLineComment = /^[\t\s]*(\/\/)[^\n\r]*[\n\r]/gm
+        const root = join(__dirname, 'dist', config.dirname);
+
+        const filesList = scan(root);
+
+        filesList.forEach((filePath) => {
+            if (!filePath.endsWith('.js')) {
+                return;
+            }
+            const contents = grunt.file.read(filePath)
+                .replace(multilineComment, '')
+                .replace(singleLineComment, '')
+                .replace(specialComments, '');
+
+            grunt.file.write(filePath, contents);
+        });
+    }
 
 
 // Project configuration.
@@ -157,8 +184,11 @@ module.exports = function (grunt) {
         zip: {
             firefox: {},
             chromium: {}
-        }
-
+        },
+        comments: {
+            firefox: {},
+            chromium: {}
+        },
     });
 
     grunt.registerTask('bump-version', '', bumpVersion);
@@ -169,7 +199,8 @@ module.exports = function (grunt) {
     grunt.registerMultiTask('cleanup', '', cleanup);
     grunt.registerMultiTask('zip', '', zip);
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.registerTask('prepare', ['copy', 'cleanup']);
+    grunt.registerMultiTask('comments', '', stripComments)
+    grunt.registerTask('prepare', ['copy', 'cleanup', 'comments']);
 
 
     grunt.registerTask('release', '', function (level = 'patch') {
@@ -177,7 +208,7 @@ module.exports = function (grunt) {
             console.error('Wrong update level, aborting');
             return false;
         }
-        grunt.task.run(['bump-version:' + level, 'commit:' + level, 'copy', 'cleanup', 'zip']);
+        grunt.task.run(['bump-version:' + level, 'commit:' + level, 'copy', 'cleanup', 'comments', 'zip']);
     });
 };
 
