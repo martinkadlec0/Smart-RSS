@@ -3,10 +3,29 @@
  * @submodule views/contentView
  */
 define([
-        'backbone', 'helpers/formatDate', 'helpers/escapeHtml', 'helpers/stripTags', 'text!templates/contentView.html',
-        'text!templates/enclosure.html',
+        'backbone',
+        'helpers/formatDate',
+        'helpers/escapeHtml',
+        'helpers/stripTags',
+        'text!templates/contentView.html',
+        'text!templates/enclosureGeneral.html',
+        'text!templates/enclosureAudio.html',
+        'text!templates/enclosureImage.html',
+        'text!templates/enclosureVideo.html',
+        'text!templates/enclosureYoutube.html',
+
     ],
-    function (BB, formatDate, escapeHtml, stripTags, contentViewTemplate, enclosureTemplate) {
+    function (BB,
+              formatDate,
+              escapeHtml,
+              stripTags,
+              contentViewTemplate,
+              enclosureGeneral,
+              enclosureAudio,
+              enclosureImage,
+              enclosureVideo,
+              enclosureYoutube
+    ) {
 
         /**
          * Full view of one article (right column)
@@ -161,7 +180,6 @@ define([
                 clearTimeout(this.renderTimeout);
 
                 this.renderTimeout = setTimeout(() => {
-
                     if (!this.model) {
                         return;
                     }
@@ -196,55 +214,54 @@ define([
                     }
                     if (data.enclosure) {
                         if (data.enclosure.medium || data.enclosure.url.includes('youtube.com')) {
-                            const enclosureMedium = document
-                                .createRange()
-                                .createContextualFragment(enclosureTemplate);
+                            let enclosureMedium;
+
+                            if (data.enclosure.medium === 'image') {
+                                enclosureMedium = document
+                                    .createRange()
+                                    .createContextualFragment(enclosureImage);
+                                const img = enclosureMedium.querySelector('img');
+                                img.src = data.enclosure.url;
+                                img.alt = data.enclosure.name;
+                            }
+
+                            if (data.enclosure.medium === 'audio') {
+                                enclosureMedium = document
+                                    .createRange()
+                                    .createContextualFragment(enclosureAudio);
+                                const audio = enclosureMedium.querySelector('audio');
+                                audio.querySelector('source').src = data.enclosure.url;
+                            }
+
+                            if (data.enclosure.medium === 'video') {
+                                enclosureMedium = document
+                                    .createRange()
+                                    .createContextualFragment(enclosureVideo);
+                                const video = enclosureMedium.querySelector('video');
+                                video.querySelector('source').src = data.enclosure.url;
+                                video.querySelector('source').type = data.enclosure.type;
+                            }
+
+                            if (data.enclosure.url.includes('youtube.com')) {
+                                enclosureMedium = document
+                                    .createRange()
+                                    .createContextualFragment(enclosureYoutube);
+                                const iframe = enclosureMedium.querySelector('iframe');
+                                const videoId = /\/v\/([a-zA-Z0-9_]+)/.exec(data.enclosure.url)[1];
+                                iframe.src = `https://www.youtube.com/embed/${videoId}`;
+                            }
+
                             if (data.open) {
                                 enclosureMedium.querySelector('.enclosure').setAttribute('open', 'open');
                             }
                             enclosureMedium.querySelector('a').href = data.enclosure.url;
                             enclosureMedium.querySelector('a').textContent = data.enclosure.medium ? data.enclosure.name + ' - ' + data.enclosure.media : data.enclosure.name;
 
-                            const img = enclosureMedium.querySelector('img');
-                            if (data.enclosure.medium === 'image') {
-                                img.src = data.enclosure.url;
-                                img.alt = data.enclosure.name;
-                            } else {
-                                img.parentElement.removeChild(img);
-                            }
-
-                            const audio = enclosureMedium.querySelector('audio');
-                            if (data.enclosure.medium === 'audio') {
-                                audio.querySelector('source').src = data.enclosure.url;
-                            } else {
-                                audio.parentElement.removeChild(audio);
-                            }
-
-                            const video = enclosureMedium.querySelector('video');
-                            if (data.enclosure.medium === 'video') {
-                                video.querySelector('source').src = data.enclosure.url;
-                                video.querySelector('source').type = data.enclosure.type;
-                            } else {
-                                video.parentElement.removeChild(video);
-                            }
-                            const iframe = enclosureMedium.querySelector('iframe');
-                            const ytWrapper = enclosureMedium.querySelector('#yt-wrapper');
-                            if (data.enclosure.url.includes('youtube.com')) {
-                                const videoId = /\/v\/([a-zA-Z0-9_]+)/.exec(data.enclosure.url)[1];
-                                iframe.src = `https://www.youtube.com/embed/${videoId}`;
-
-                            } else {
-                                ytWrapper.parentElement.removeChild(ytWrapper);
-                            }
-
                             fragment.querySelector('#below-h1').appendChild(enclosureMedium);
                         } else {
-                            const enclosure = document.createRange()
-                                .createContextualFragment(
-                                    `<p class="enclosure">
-                                            <a href="" target="_blank" tabindex="-1"></a>
-                                      </p>`
-                                );
+                            const enclosure = document
+                                .createRange()
+                                .createContextualFragment(enclosureGeneral);
                             const a = enclosure.querySelector('a');
                             a.href = data.enclosure.url;
                             a.textContent = data.enclosure.name;
