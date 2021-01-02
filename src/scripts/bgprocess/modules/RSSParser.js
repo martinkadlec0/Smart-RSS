@@ -185,6 +185,7 @@ define(['../../libs/he'], function (he) {
             enclosure.name = he.decode(enclosureNode.hasAttribute('url') ? enclosure.url.substring(enclosure.url.lastIndexOf('/') + 1) : (media.title ? media.title : ''));
             enclosure.type = enclosureNode.hasAttribute('type') ? enclosureNode.getAttribute('type') : '';
             enclosure.medium = enclosureNode.hasAttribute('medium') ? enclosureNode.getAttribute('medium') : this.getMediumFromType(enclosure.type, enclosure.name);
+            enclosure.medium = enclosure.url.includes('youtube.com') ? 'youtube' : enclosure.medium;
             enclosure.length = enclosureNode.hasAttribute('length') ? enclosureNode.getAttribute('length') : '';
             return enclosure;
         }
