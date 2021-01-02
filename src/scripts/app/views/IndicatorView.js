@@ -2,7 +2,7 @@
  * @module App
  * @submodule views/IndicatorView
  */
-define(['backbone', 'modules/Locale'], function (BB, Locale) {
+define(['backbone', 'modules/Locale', 'text!templates.indicatorView.html'], function (BB, Locale, indicatorTemplate) {
 
     /**
      * Feeds update indicator view
@@ -28,13 +28,7 @@ define(['backbone', 'modules/Locale'], function (BB, Locale) {
         initialize: function () {
             this.loaded = 0;
             this.maxSources = 0;
-            const fragment = document.createRange().createContextualFragment(
-                `<div id="indicator-progress">
-</div>
-<div id="indicator-toolbar">
-<div id="indicator-stop"></div>
-</div>`
-            );
+            const fragment = document.createRange().createContextualFragment(indicatorTemplate);
             this.el.appendChild(fragment);
             let port = chrome.runtime.connect({name: 'port-from-cs'});
             port.onMessage.addListener((m) => {
