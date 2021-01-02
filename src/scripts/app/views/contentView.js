@@ -31,15 +31,6 @@ define([
   <p class="pin-button" title="{{PIN}}"</p>
 </div>`,
 
-            // /**
-            //  * Template for downloading an article
-            //  * @property downloadTemplate
-            //  * @default ./templates/download.html
-            //  * @type Function
-            //  */
-            // downloadTemplate: template(tplDownload),
-
-
             events: {
                 'mousedown': 'handleMouseDown',
                 'click .pin-button': 'handlePinClick',
