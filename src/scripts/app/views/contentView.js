@@ -3,10 +3,10 @@
  * @submodule views/contentView
  */
 define([
-        'backbone', 'helpers/formatDate', 'helpers/escapeHtml', 'helpers/stripTags',
+        'backbone', 'helpers/formatDate', 'helpers/escapeHtml', 'helpers/stripTags', 'text!templates/contentView.html'
 
     ],
-    function (BB, formatDate, escapeHtml, stripTags) {
+    function (BB, formatDate, escapeHtml, stripTags, contentViewTemplate) {
 
         /**
          * Full view of one article (right column)
@@ -23,14 +23,6 @@ define([
              * @type String
              */
             tagName: 'header',
-
-            template: `<h1></h1>
-<div id="below-h1">
-  <p class="author"></p>
-  <p class="date"></p>
-  <p class="pin-button" title="{{PIN}}"</p>
-</div>`,
-
             events: {
                 'mousedown': 'handleMouseDown',
                 'click .pin-button': 'handlePinClick',
@@ -196,7 +188,7 @@ define([
                         this.el.removeChild(this.el.firstChild);
                     }
 
-                    const fragment = document.createRange().createContextualFragment(this.template);
+                    const fragment = document.createRange().createContextualFragment(contentViewTemplate);
                     fragment.querySelector('.author').textContent = data.author;
                     fragment.querySelector('.date').textContent = data.date;
                     if (data.pinned) {
