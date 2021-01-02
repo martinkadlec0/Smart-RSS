@@ -3,7 +3,6 @@ define(['backbone', ], function (BB) {
 		tagName: 'div',
 		className: 'dynamic-space',
 		initialize: function () {
-			// this.el.setAttribute('draggable', 'true');
 			this.el.view = this;
 		}
 	});
