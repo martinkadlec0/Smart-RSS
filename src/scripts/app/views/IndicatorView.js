@@ -2,7 +2,7 @@
  * @module App
  * @submodule views/IndicatorView
  */
-define(['backbone', 'modules/Locale', 'text!templates.indicatorView.html'], function (BB, Locale, indicatorTemplate) {
+define(['backbone', 'modules/Locale', 'text!templates/indicatorView.html'], function (BB, Locale, indicatorTemplate) {
 
     /**
      * Feeds update indicator view
@@ -17,7 +17,6 @@ define(['backbone', 'modules/Locale', 'text!templates.indicatorView.html'], func
          * @default indicator
          */
         id: 'indicator',
-
         events: {
             'click #indicator-stop': 'handleButtonStop'
         },
