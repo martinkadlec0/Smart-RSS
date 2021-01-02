@@ -3,10 +3,10 @@
  * @submodule views/contentView
  */
 define([
-        'backbone', 'helpers/formatDate', 'helpers/escapeHtml', 'helpers/stripTags', 'text!templates/contentView.html'
-
+        'backbone', 'helpers/formatDate', 'helpers/escapeHtml', 'helpers/stripTags', 'text!templates/contentView.html',
+        'text!templates/enclosure.html',
     ],
-    function (BB, formatDate, escapeHtml, stripTags, contentViewTemplate) {
+    function (BB, formatDate, escapeHtml, stripTags, contentViewTemplate, enclosureTemplate) {
 
         /**
          * Full view of one article (right column)
@@ -198,30 +198,7 @@ define([
                         if (data.enclosure.medium || data.enclosure.url.includes('youtube.com')) {
                             const enclosureMedium = document
                                 .createRange()
-                                .createContextualFragment(
-                                    `<details class="enclosure">
-    <summary>
-      <a href="#" target="_blank" tabindex="-1"></a>
-    </summary>
-    <img src="" alt=""/>
-    <audio controls="controls">
-      <source src=""/>
-    </audio>
-    <video controls="controls">
-      <source src="" type=""/>
-    </video>
-    <div id="yt-wrapper" style="  position: relative;
-    width: 100%;
-    height: 0;
-    padding-bottom: 56.25%;">
-    <iframe id="yt-player" src="" allowfullscreen="true" style="position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;"></iframe>
-    </div>
-  </details>
-`);
+                                .createContextualFragment(enclosureTemplate);
                             if (data.open) {
                                 enclosureMedium.querySelector('.enclosure').setAttribute('open', 'open');
                             }
