@@ -65,6 +65,7 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             openEnclosure: 'no',
             autoremove: 0,
             autoremovesetting: 'KEEP_UNREAD',
+            autoremovetrash: 0,
             openNewTab: 'background',
             userStyle: '',
             defaultStyle: ':root {\n' +

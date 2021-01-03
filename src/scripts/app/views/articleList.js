@@ -401,7 +401,7 @@ define([
                 this.selectPivot = null;
 
                 const length = items.length;
-                if(length === 0){
+                if (length === 0) {
                     return;
                 }
                 const that = this;
@@ -532,7 +532,13 @@ define([
                         return;
                     }
                 }
-                view.model.save({trashed: true, visited: true});
+                view.model.save(
+                    {
+                        trashed: true,
+                        visited: true,
+                        trashedOn: Date.now(),
+                    }
+                );
                 this.destroyItem(view);
                 this.trigger('items-destroyed');
             },

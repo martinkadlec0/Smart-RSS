@@ -648,7 +648,8 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
 
                         contentView.model.save({
                             trashed: true,
-                            visited: true
+                            visited: true,
+                            trashedOn: Date.now(),
                         });
                     }
                 }
