@@ -39,6 +39,7 @@ define(['backbone'], function (BB) {
                 content: '',
                 author: '',
                 title: '',
+                trashedOn: 0,
             });
         },
         trash: function(){
