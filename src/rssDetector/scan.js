@@ -6,10 +6,11 @@
         let bodyList = document.querySelector('body');
 
         const observer = new MutationObserver(function () {
-            if (oldHref !== document.location.href) {
-                oldHref = document.location.href;
-                scan();
+            if (oldHref === document.location.href) {
+                return;
             }
+            oldHref = document.location.href;
+            setTimeout(scan, 1500);
         });
 
         const config = {
