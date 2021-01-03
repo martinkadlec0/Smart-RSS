@@ -41,6 +41,13 @@ define(['backbone'], function (BB) {
                 title: '',
             });
         },
+        trash: function(){
+            this.save({
+                trashed: true,
+                visited: true,
+                trashedOn: Date.now(),
+            });
+        },
         _source: null,
         getSource: function () {
             if (!this._source) {
