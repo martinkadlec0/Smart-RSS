@@ -532,13 +532,7 @@ define([
                         return;
                     }
                 }
-                view.model.save(
-                    {
-                        trashed: true,
-                        visited: true,
-                        trashedOn: Date.now(),
-                    }
-                );
+                view.model.trash();
                 this.destroyItem(view);
                 this.trigger('items-destroyed');
             },
