@@ -90,9 +90,16 @@ define({
 	RENAME: 'Zmień nazwę',
 	FOLDER_NAME: 'Nazwa folderu',
 
-	AUTOREMOVE: 'Autoremove',
-	OLDER_THAN_DAY: 'Więcej niż dzień',
-	OLDER_THAN_WEEK: 'Starszy niż tydzień',
-	OLDER_THAN_MONTH: 'Starsze niż miesiąc',
-	OLDER_THAN_TWO_MONTHS: 'Starsze niż dwa miesiące'
+	AUTOREMOVE: 'Usuwaj automatycznie starsze niż:',
+	OLDER_THAN_DAY: 'Dzień',
+	OLDER_THAN_WEEK: 'Tydzień',
+	OLDER_THAN_MONTH: 'Miesiąc',
+	OLDER_THAN_TWO_MONTHS: 'Dwa miesiące',
+
+    AUTOREMOVE_SETTING: 'Usuwaj automatycznie:',
+    USE_GLOBAL_SETTING: 'Użyj globalnego ustawienia',
+    REMOVE_ALL: 'Wszystkie',
+    KEEP_UNVISITED: 'Zachowaj nieodwiedzone',
+    KEEP_UNREAD: 'Zachowaj nieprzeczytane',
+
 });
