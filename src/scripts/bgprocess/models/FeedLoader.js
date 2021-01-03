@@ -153,11 +153,11 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
         }
 
         getAutoRemoveTime(model) {
-            return parseInt(model.get('autoremove')) === -1 ? parseInt(bg.config.get('autoremove')) : parseInt(model.get('autoremove'));
+            return parseInt(model.get('autoremove')) === -1 ? parseInt(settings.get('autoremove')) : parseInt(model.get('autoremove'));
         }
 
         getAutoRemoveSetting(model) {
-            return model.get('autoremovesetting')=== 'GLOBAL' ? bg.config.get('autoremovesetting') : model.get('autoremovesetting');
+            return model.get('autoremovesetting')=== 'GLOBAL' ? settings.get('autoremovesetting') : model.get('autoremovesetting');
         }
 
         removeOldItems() {
