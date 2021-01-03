@@ -157,7 +157,7 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
         }
 
         getAutoRemoveSetting(model) {
-            return parseInt(model.get('autoremovesetting')) === -1 ? parseInt(bg.config.get('autoremovesetting')) : parseInt(model.get('autoremovesetting'));
+            return model.get('autoremovesetting')=== 'GLOBAL' ? bg.config.get('autoremovesetting') : model.get('autoremovesetting');
         }
 
         removeOldItems() {
@@ -172,11 +172,11 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
             };
 
             const autoRemoveSetting = this.getAutoRemoveSetting(this.model);
-            if (autoRemoveSetting === 1) {
+            if (autoRemoveSetting === 'KEEP_UNVISITED') {
                 itemsFilter['visited'] = true;
             }
 
-            if (autoRemoveSetting === 2) {
+            if (autoRemoveSetting === 'KEEP_UNREAD') {
                 itemsFilter['unread'] = false;
                 itemsFilter['visited'] = true;
             }

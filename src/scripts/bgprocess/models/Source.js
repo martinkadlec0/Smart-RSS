@@ -25,6 +25,7 @@ define(['backbone'], function (BB) {
             hasNew: false,
             isLoading: false,
             autoremove: -1, // in days
+            autoremovesetting: 'USE_GLOBAL',
             proxyThroughFeedly: false,
             favicon: '/images/feed.png',
             faviconExpires: 0,

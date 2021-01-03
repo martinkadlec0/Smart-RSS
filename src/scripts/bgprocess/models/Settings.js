@@ -63,6 +63,8 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             selectFirstArticle: 1,
             selectAllFeeds: 1,
             openEnclosure: 'no',
+            autoremove: 0,
+            autoremovesetting: 'KEEP_UNREAD',
             openNewTab: 'background',
             userStyle: '',
             defaultStyle: ':root {\n' +
