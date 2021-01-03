@@ -126,6 +126,7 @@ define([
             if (message.action === 'visibility-lost') {
                 animation.handleIconChange();
                 chrome.contextMenus.removeAll();
+                createLinksMenu();
                 if (settings.get('badgeMode') === 'sources') {
                     chrome.browserAction.setBadgeText({text: ''});
                 }
