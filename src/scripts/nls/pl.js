@@ -90,13 +90,13 @@ define({
 	RENAME: 'Zmień nazwę',
 	FOLDER_NAME: 'Nazwa folderu',
 
-	AUTOREMOVE: 'Usuwaj automatycznie starsze niż:',
+	AUTOREMOVE: 'Usuwaj automatycznie starsze niż',
 	OLDER_THAN_DAY: 'Dzień',
 	OLDER_THAN_WEEK: 'Tydzień',
 	OLDER_THAN_MONTH: 'Miesiąc',
 	OLDER_THAN_TWO_MONTHS: 'Dwa miesiące',
 
-    AUTOREMOVE_SETTING: 'Usuwaj automatycznie:',
+    AUTOREMOVE_SETTING: 'Usuwaj automatycznie',
     USE_GLOBAL_SETTING: 'Użyj globalnego ustawienia',
     REMOVE_ALL: 'Wszystkie',
     KEEP_UNVISITED: 'Zachowaj nieodwiedzone',

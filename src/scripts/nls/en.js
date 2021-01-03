@@ -92,13 +92,13 @@ define({
     RENAME: 'Rename',
     FOLDER_NAME: 'Folder name',
 
-    AUTOREMOVE: 'Automatically remove after:',
+    AUTOREMOVE: 'Automatically remove after',
     OLDER_THAN_DAY: 'Older than day',
     OLDER_THAN_WEEK: 'Older than week',
     OLDER_THAN_MONTH: 'Older than month',
     OLDER_THAN_TWO_MONTHS: 'Older than two months',
 
-    AUTOREMOVE_SETTING: 'Automatically remove:',
+    AUTOREMOVE_SETTING: 'Automatically remove',
     USE_GLOBAL_SETTING: 'Use global setting',
     REMOVE_ALL: 'Remove all',
     KEEP_UNVISITED: 'Keep unvisited',
