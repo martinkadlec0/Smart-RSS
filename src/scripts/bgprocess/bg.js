@@ -315,6 +315,16 @@ define([
                  * Set icon
                  */
 
+                chrome.contextMenus.create({
+                    title: 'Subscribe to this feed',
+                    contexts: ['link'],
+                    checked: false,
+                    onclick: (info) => {
+                        addSource(info.linkUrl);
+                    }
+
+                });
+
                 animation.stop();
                 resolve(true);
             });
