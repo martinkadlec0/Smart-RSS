@@ -27,6 +27,17 @@ define([
             }, {wait: true});
             openRSS(false, source.get('id'));
         }
+        function createLinksMenu(){
+            chrome.contextMenus.create({
+                title: 'Subscribe to this feed',
+                contexts: ['link'],
+                checked: false,
+                onclick: (info) => {
+                    addSource(info.linkUrl);
+                }
+
+            });
+        }
 
 
         function onMessage(message) {
@@ -40,6 +51,7 @@ define([
             }
             if (message.action === 'list-feeds') {
                 chrome.contextMenus.removeAll();
+                createLinksMenu();
                 if (!settings.get('detectFeeds')) {
                     return;
                 }
@@ -224,7 +236,6 @@ define([
 
 
         window.appStarted = new Promise((resolve) => {
-
             /**
              * Init
              */
@@ -310,21 +321,11 @@ define([
                     }
                     openRSS(true);
                 });
+                createLinksMenu();
 
                 /**
                  * Set icon
                  */
-
-                chrome.contextMenus.create({
-                    title: 'Subscribe to this feed',
-                    contexts: ['link'],
-                    checked: false,
-                    onclick: (info) => {
-                        addSource(info.linkUrl);
-                    }
-
-                });
-
                 animation.stop();
                 resolve(true);
             });
