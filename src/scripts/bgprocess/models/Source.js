@@ -24,7 +24,7 @@ define(['backbone'], function (BB) {
             password: '',
             hasNew: false,
             isLoading: false,
-            autoremove: 0, // in days
+            autoremove: -1, // in days
             proxyThroughFeedly: false,
             favicon: '/images/feed.png',
             faviconExpires: 0,

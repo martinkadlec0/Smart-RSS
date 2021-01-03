@@ -6,7 +6,7 @@
 <label id="property-title-address">{{ADDRESS}}: <input id="prop-url" type="url" value=""/></label>
 
 <label>{{UPDATE}}: <select id="prop-update-every">
-  <option value="-1">Use global setting</option>
+  <option value="-1">{{USE_GLOBAL_SETTING}}</option>
   <option value="0">{{NEVER}}</option>
   <option value="5">{{EVERY_5_MINUTES}}</option>
   <option value="15">{{EVERY_15_MINUTES}}</option>
@@ -26,13 +26,16 @@
 </select></label>
 
 
-<label>{{AUTOREMOVE}}: <select id="prop-autoremove">
-  <option value="0">{{NEVER}}</option>
-  <option value="1">{{OLDER_THAN_DAY}}</option>
-  <option value="7">{{OLDER_THAN_WEEK}}</option>
-  <option value="30">{{OLDER_THAN_MONTH}}</option>
-  <option value="60">{{OLDER_THAN_TWO_MONTHS}}</option>
-</select></label>
+<label>{{AUTOREMOVE}}:
+  <select id="prop-autoremove">
+    <option value="-1">{{USE_GLOBAL_SETTING}}</option>
+    <option value="0">{{NEVER}}</option>
+    <option value="1">{{OLDER_THAN_DAY}}</option>
+    <option value="7">{{OLDER_THAN_WEEK}}</option>
+    <option value="30">{{OLDER_THAN_MONTH}}</option>
+    <option value="60">{{OLDER_THAN_TWO_MONTHS}}</option>
+  </select>
+</label>
 
 <button id="prop-ok">{{OK}}</button>
 <button id="prop-cancel">{{CANCEL}}</button>

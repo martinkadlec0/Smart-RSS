@@ -152,15 +152,37 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
             return this.onFeedProcessed(false, this.request.status > 0);
         }
 
+        getAutoRemoveTime(model) {
+            return parseInt(model.get('autoremove')) === -1 ? parseInt(bg.config.get('autoremove')) : parseInt(model.get('autoremove'));
+        }
+
+        getAutoRemoveSetting(model) {
+            return parseInt(model.get('autoremovesetting')) === -1 ? parseInt(bg.config.get('autoremovesetting')) : parseInt(model.get('autoremovesetting'));
+        }
+
         removeOldItems() {
-            if (!parseInt(this.model.get('autoremove'))) {
+            const autoRemove = this.getAutoRemoveTime(this.model);
+            if (!autoRemove) {
                 return;
             }
-            items.where({
+            const itemsFilter = {
                 sourceID: this.model.get('id'),
                 deleted: false,
                 pinned: false
-            })
+            };
+
+            const autoRemoveSetting = this.getAutoRemoveSetting(this.model);
+            if (autoRemoveSetting === 1) {
+                itemsFilter['visited'] = true;
+            }
+
+            if (autoRemoveSetting === 2) {
+                itemsFilter['unread'] = false;
+                itemsFilter['visited'] = true;
+            }
+
+
+            items.where(itemsFilter)
                 .forEach((item) => {
                     const date = item.get('dateCreated') || item.get('date');
                     const removalInMs = this.model.get('autoremove') * 24 * 60 * 60 * 1000;
