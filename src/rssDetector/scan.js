@@ -1,5 +1,6 @@
 (function () {
     let oldHref = document.location.href;
+    const feedsData = [];
 
     function init() {
         scan();
@@ -31,7 +32,7 @@
         }
     }
 
-    function updateAvailableSourcesList(feedsData) {
+    function updateAvailableSourcesList() {
         if (document.hidden) {
             chrome.runtime.sendMessage({action: 'visibility-lost'});
             return;
@@ -40,8 +41,8 @@
     }
 
     function scan() {
+        feedsData.length = 0;
         const address = document.location.href;
-        const feedsData = [];
         if (typeof document.getRootNode !== 'undefined') {
             let rootNode = document.getRootNode();
             if (rootNode) {
@@ -163,7 +164,7 @@
                 feedsData.push({url: href, title: 'Channel feed'});
             }
 
-            return updateAvailableSourcesList(feedsData);
+            return updateAvailableSourcesList();
         }
 
         if (address.includes('steemit.com')) {
@@ -174,7 +175,7 @@
                 const href = 'http://www.hiverss.com/' + channelName + '/feed';
                 feedsData.push({url: href, title: 'Channel feed'});
             }
-            return updateAvailableSourcesList(feedsData);
+            return updateAvailableSourcesList();
         }
 
         if (address.includes('hive.blog')) {
@@ -185,7 +186,7 @@
                 const href = 'http://www.hiverss.com/' + channelName + '/feed';
                 feedsData.push({url: href, title: 'Channel feed'});
             }
-            return updateAvailableSourcesList(feedsData);
+            return updateAvailableSourcesList();
         }
 
         const selector = 'link[type="application/rss+xml"], link[type="application/atom+xml"]';
