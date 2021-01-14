@@ -41,7 +41,17 @@ define(['views/TopView', 'text!templates/specialView.html'],
                         this.render(true);
                     }
                     this.setTitle(bg.info.get('allCountUnread'), bg.info.get('allCountTotal'));
-                } else if (this.model.get('name') === 'trash') {
+                    return;
+                }
+                if (this.model.get('name') === 'pinned') {
+                    const changed = bg.info.changedAttributes();
+                    if (changed && typeof changed === 'object' && 'pinnedCountUnread' in changed) {
+                        this.render(true);
+                    }
+                    this.setTitle(bg.info.get('pinnedCountUnread'), bg.info.get('pinnedCountTotal'));
+                    return;
+                }
+                if (this.model.get('name') === 'trash') {
                     const tot = bg.info.get('trashCountTotal');
                     this.setTitle(bg.info.get('trashCountUnread'), tot);
 
@@ -66,6 +76,10 @@ define(['views/TopView', 'text!templates/specialView.html'],
                 data.count = 0;
                 if (this.model.get('name') === 'all-feeds') {
                     data.count = bg.info.get('allCountUnread');
+                }
+
+                if (this.model.get('name') === 'pinned') {
+                    data.count = bg.info.get('pinnedCountUnread');
                 }
 
                 if (data.count > 0) {

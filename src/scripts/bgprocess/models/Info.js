@@ -53,7 +53,9 @@ define(['backbone', 'modules/Animation', '../bg'], function (BB, animation) {
             allCountTotal: 0,
             allCountUnvisited: 0,
             trashCountUnread: 0,
-            trashCountTotal: 0
+            trashCountTotal: 0,
+            pinnedCountUnread: 0,
+            pinnedCountTotal: 0
         },
         badgeTimeout: null,
         refreshSpecialCounters: function () {
@@ -62,7 +64,9 @@ define(['backbone', 'modules/Animation', '../bg'], function (BB, animation) {
                 allCountTotal: items.where({trashed: false, deleted: false}).length,
                 allCountUnvisited: items.where({visited: false, trashed: false}).length,
                 trashCountUnread: items.where({trashed: true, deleted: false, unread: true}).length,
-                trashCountTotal: items.where({trashed: true, deleted: false}).length
+                trashCountTotal: items.where({trashed: true, deleted: false}).length,
+                pinnedCountUnread: items.where({trashed: false, deleted: false, unread: true, pinned: true}).length,
+                pinnedCountTotal: items.where({trashed: false, deleted: false, pinned: true}).length
             });
 
             sources.forEach(function (source) {
@@ -96,6 +100,8 @@ define(['backbone', 'modules/Animation', '../bg'], function (BB, animation) {
                 let trashUnread = 0;
                 let trashAll = 0;
                 let allUnvisited = 0;
+                let pinnedAll = 0;
+                let pinnedUnread = 0;
                 items.where({sourceID: source.get('id')}).forEach(function (item) {
                     if (!item.get('deleted')) {
                         if (!item.get('visited')) {
@@ -107,6 +113,12 @@ define(['backbone', 'modules/Animation', '../bg'], function (BB, animation) {
                         if (item.get('trashed') && item.get('unread')) {
                             trashUnread++;
                         }
+                        if (item.get('pinned') && !item.get('trashed')) {
+                            pinnedAll++;
+                        }
+                        if (item.get('pinned') && !item.get('trashed') && item.get('unread')) {
+                            pinnedUnread++;
+                        }
                     }
                     item.destroy();
                 });
@@ -116,7 +128,9 @@ define(['backbone', 'modules/Animation', '../bg'], function (BB, animation) {
                     allCountTotal: info.get('allCountTotal') - source.get('countAll'),
                     allCountUnvisited: info.get('allCountUnvisited') - allUnvisited,
                     trashCountUnread: info.get('trashCountUnread') - trashUnread,
-                    trashCountTotal: info.get('trashCountTotal') - trashAll
+                    trashCountTotal: info.get('trashCountTotal') - trashAll,
+                    pinnedCountUnread: info.get('pinnedCountUnread') - pinnedUnread,
+                    pinnedCountTotal: info.get('pinnedCountAll') - pinnedAll
                 });
 
                 if (source.get('folderID')) {
@@ -207,6 +221,15 @@ define(['backbone', 'modules/Animation', '../bg'], function (BB, animation) {
                     });
                 }
             });
+
+            items.on('change:pinned', function (model) {
+                    const change = model.previous('pinned') ? -1 : 1;
+                    info.set({
+                        'pinnedCountTotal': info.get('pinnedCountTotal') + change,
+                        'pinnedCountUnread': !model.previous('unread') ? info.get('pinnedCountUnread') : info.get('pinnedCountUnread') + change
+                    });
+                }
+            );
 
             items.on('change:visited', function (model) {
                 info.set({
