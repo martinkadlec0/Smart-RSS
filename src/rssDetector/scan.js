@@ -20,6 +20,7 @@
         };
         observer.observe(bodyList, config);
         document.addEventListener('visibilitychange', updateAvailableSourcesList, false);
+        document.addEventListener('pagehide', updateAvailableSourcesList, false);
     }
 
     function docReady(fn) {
@@ -37,7 +38,10 @@
             chrome.runtime.sendMessage({action: 'visibility-lost'});
             return;
         }
-        chrome.runtime.sendMessage({action: 'list-feeds', value: feedsData});
+        setTimeout(() => {
+            chrome.runtime.sendMessage({action: 'list-feeds', value: feedsData});
+        }, 500);
+
     }
 
     function scan() {
