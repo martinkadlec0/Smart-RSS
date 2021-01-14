@@ -101,6 +101,15 @@ chrome.runtime.getBackgroundPage((bg) => {
         document.querySelector('#import-settings').addEventListener('change', handleImportSettings);
         document.querySelector('#import-smart').addEventListener('change', handleImportSmart);
         document.querySelector('#import-opml').addEventListener('change', handleImportOPML);
+        document.querySelector('[name="queries"]').value = bg.settings.get('queries').join(',');
+
+            document.querySelector('[name="queries"]').addEventListener('change', handleChangeQueries);
+
+
+        function handleChangeQueries(event) {
+            const queries = event.target.value.split(',');
+            bg.settings.save('queries', queries);
+        }
 
 
         [...document.querySelectorAll('input[type=image]')].forEach((element) => {
@@ -249,7 +258,7 @@ chrome.runtime.getBackgroundPage((bg) => {
     function handleExportSettings() {
         const settingsExportStatus = document.querySelector('#settings-exported');
         const data = {
-            settings: bg.settings.toJSON(),
+            settings: bg.settings.toJSON()
         };
 
         settingsExportStatus.setAttribute('href', '#');
@@ -561,7 +570,7 @@ chrome.runtime.getBackgroundPage((bg) => {
         }
 
         bg.items.where({
-            deleted: true,
+            deleted: true
         })
             .forEach((item) => {
                 item.destroy();

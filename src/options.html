@@ -91,24 +91,24 @@
       <label class="web-content-select-label" for="showFullHeadline">
         <span class="selectLabel">Show full headline:</span>
         <select class="half-size" data-name="showFullHeadline" id="showFullHeadline">
-          <option value=1>Yes</option>
-          <option value=0>No</option>
+          <option value="1">Yes</option>
+          <option value="0">No</option>
         </select>
       </label>
 
       <label class="web-content-select-label" for="displayFaviconInsteadOfPin">
         <span class="selectLabel">Display favicon instead of pin when multiple sources selected:</span>
         <select class="half-size" data-name="displayFaviconInsteadOfPin" id="displayFaviconInsteadOfPin">
-          <option value=1>Yes</option>
-          <option value=0>No</option>
+          <option value="1">Yes</option>
+          <option value="0">No</option>
         </select>
       </label>
 
       <label class="web-content-select-label" for="lines">
         <span class="selectLabel">Article list display mode:</span>
         <select class="half-size" data-name="lines" id="lines">
-          <option value=1>One Line</option>
-          <option value=2>Two Lines</option>
+          <option value="1">One Line</option>
+          <option value="2">Two Lines</option>
         </select>
       </label>
 
@@ -344,6 +344,12 @@
         </select>
       </label>
 
+
+      <label class="web-content-select-label" id="queries">
+        <span class="selectLabel">Auto pin articles matching:</span>
+        <input name="queries">
+      </label>
+
     </section>
   </details>
 
@@ -418,7 +424,7 @@
     <section>
       <h2 class="section-header">Import</h2>
       <div class="ff-warning">Warning: Smart RSS will reload after finishing the SMART import, it's expected
-        behavior
+                              behavior
       </div>
       <label class="web-content-select-label">
         <span class="selectLabel">Settings:</span>

@@ -33,7 +33,7 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
                         author: item.author ? item.author : '',
                         content: item.content ? item.content.content : item.summary.content,
                         sourceID: this.model.get('id'),
-                        dateCreated: Date.now(),
+                        dateCreated: Date.now()
                     });
                 });
             } else {
@@ -63,6 +63,12 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
             const earliestDate = Math.min(0, ...currentItems.map((item) => {
                 return item.get('date');
             }));
+
+            const queries = settings.get('queries');
+            RegExp.escape = function (text) {
+                return String(text).replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+            };
+
             parsedData.forEach((item) => {
                 const existingItem = items.get(item.id);
                 if (!existingItem) {
@@ -70,6 +76,23 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
                         return;
                     }
                     hasNew = true;
+                    item.pinned = queries.some((query) => {
+                            let searchInContent = false;
+                            if (query[0] && query[0] === ':') {
+                                query = query.replace(/^:/, '', query);
+                                searchInContent = true;
+                            }
+                            const expression = new RegExp(RegExp.escape(query), 'i');
+
+
+                            const cleanedTitle = item.title.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                            const cleanedAuthor = item.author.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                            const cleanedContent = searchInContent ? item.content.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : '';
+                            return (expression.test(cleanedTitle) || expression.test(cleanedAuthor) || (searchInContent && expression.test(cleanedContent)));
+                        }
+                    );
+
+
                     items.create(item, {
                         sort: false
                     });
@@ -97,7 +120,7 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
                 if (fetchedIDs.length > 0) {
                     items.where({
                         sourceID: this.model.get('id'),
-                        deleted: true,
+                        deleted: true
                     }).forEach((item) => {
                         if (item.emptyDate) {
                             return;
@@ -157,7 +180,7 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
         }
 
         getAutoRemoveSetting(model) {
-            return model.get('autoremovesetting')=== 'GLOBAL' ? settings.get('autoremovesetting') : model.get('autoremovesetting');
+            return model.get('autoremovesetting') === 'GLOBAL' ? settings.get('autoremovesetting') : model.get('autoremovesetting');
         }
 
         removeOldItems() {
@@ -201,7 +224,7 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
                 isLoading: false,
                 lastChecked: Date.now(),
                 errorCount: success ? 0 : (isOnline ? this.model.get('errorCount') + 1 : this.model.get('errorCount')),
-                folderID: this.model.get('folderID') === '' ? '0' : this.model.get('folderID'),
+                folderID: this.model.get('folderID') === '' ? '0' : this.model.get('folderID')
             };
             this.model.save(data);
             this.model.trigger('update', {
