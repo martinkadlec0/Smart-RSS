@@ -194,6 +194,7 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             showAllFeeds: true,
             showPinned: true,
             displayFaviconInsteadOfPin: '0',
+            queries: [],
         },
         /**
          * @property localStorage
