@@ -6,7 +6,7 @@
   },
   "description": "RSS Reader",
   "manifest_version": 2,
-  "version": "2.20.0",
+  "version": "2.21.0",
   "background": {
     "page": "index.html"
   },
