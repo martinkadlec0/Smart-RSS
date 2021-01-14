@@ -73,7 +73,7 @@ define([
              */
             handleAttach: function () {
                 app.on('select-all-feeds', () => {
-                    const allFeeds = document.querySelector('.special:nth-of-type(1)');
+                    const allFeeds = document.querySelector('.special.all-feeds');
                     if (!allFeeds) {
                         return;
                     }
@@ -113,9 +113,14 @@ define([
                 if (bg.settings.get('showAllFeeds')) {
                     this.addSpecial(specials.allFeeds);
                 }
-                this.addSpecial(specials.trash);
 
                 this.addSources(bg.sources);
+
+
+
+
+                this.addSpecial(specials.trash);
+
 
                 return this;
             },
@@ -192,7 +197,10 @@ define([
             addSpecial: function (special) {
                 const view = new SpecialView({model: special});
                 if (view.model.get('position') === 'top') {
-                    this.el.insertAdjacentElement('afterbegin', view.render().el);
+                    const element = view.render().el;
+                    element.classList.add('topSpecial');
+                    element.classList.add(view.model.get('name'));
+                    this.el.insertAdjacentElement('afterbegin', element);
                 } else {
                     this.el.insertAdjacentElement('beforeend', view.render().el);
                 }
@@ -210,7 +218,7 @@ define([
                 if (folderViews.length) {
                     this.insertBefore(view, folderViews);
                 } else {
-                    const special = document.querySelector('.special:nth-of-type(1)');
+                    const special = document.querySelector('.topSpecial:last-of-type');
                     if (special) {
                         special.insertAdjacentElement('afterend', view.render().el);
                     } else {
@@ -295,7 +303,7 @@ define([
                     fls[fls.length - 1].insertAdjacentElement('afterend', view.render().el);
                     return;
                 }
-                const first = document.querySelector('.special:nth-of-type(1)');
+                const first = document.querySelector('.topSpecial:last-of-type');
                 if (first) {
                     // .special-first = all feeds, with more "top" specials this will have to be changed
                     first.insertAdjacentElement('afterend', view.render().el);

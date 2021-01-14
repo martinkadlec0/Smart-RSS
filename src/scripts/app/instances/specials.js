@@ -25,7 +25,7 @@ define(['backbone', 'models/Special', 'instances/contextMenus', 'modules/Locale'
                 title: Locale.PINNED,
                 icon: 'pinsource.png',
                 filter: {trashed: false, pinned: true},
-                position: 'top',
+                position: 'bottom',
                 name: 'pinned'
             })
         };
