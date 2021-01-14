@@ -77,10 +77,17 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
                     }
                     hasNew = true;
                     item.pinned = queries.some((query) => {
+                            query = query.trim();
+                            if (query === '') {
+                                return false;
+                            }
                             let searchInContent = false;
                             if (query[0] && query[0] === ':') {
                                 query = query.replace(/^:/, '', query);
                                 searchInContent = true;
+                            }
+                            if (query === '') {
+                                return false;
                             }
                             const expression = new RegExp(RegExp.escape(query), 'i');
 
