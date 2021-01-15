@@ -64,11 +64,11 @@ chrome.runtime.getBackgroundPage((bg) => {
             warning.parentNode.removeChild(warning);
         }
         document.querySelector('#version').textContent = chrome.runtime.getManifest().version;
-        browser.runtime.getBrowserInfo().then((info) => {
-            console.log(info);
-            document.querySelector('#browser-info').textContent = `${info.vendor} ${info.name} ${info.version} ${info.buildID}`;
-        });
-
+        if(typeof browser !== 'undefined') {
+            browser.runtime.getBrowserInfo().then((info) => {
+                document.querySelector('#browser-info').textContent = `${info.vendor} ${info.name} ${info.version} ${info.buildID}`;
+            });
+        }
 
         [...document.querySelectorAll('select[id], input[type=number], input[type=range], textarea')].forEach((item) => {
             item.value = bg.settings.get(item.id);
