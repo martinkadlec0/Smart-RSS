@@ -71,6 +71,8 @@ define([
              */
             noFocus: false,
 
+            currentRenderId: 0,
+
             events: {
                 // 'dragstart .articles-list-item': 'handleDragStart',
                 'mousedown .articles-list-item': 'handleMouseDown',
@@ -406,7 +408,11 @@ define([
                 }
                 const that = this;
 
-                const renderBlock = function (startingPoint = 0) {
+                const renderBlock = function (renderId, startingPoint = 0) {
+                    if (that.currentRenderId !== renderId) {
+                        return;
+                    }
+
                     let internalCounter = 0;
                     while (true) {
                         const item = items[startingPoint + internalCounter];
@@ -426,9 +432,10 @@ define([
                         }
                         return;
                     }
-                    setTimeout(renderBlock, 0, startingPoint + internalCounter);
+                    setTimeout(renderBlock, 0, renderId, startingPoint + internalCounter);
                 };
-                renderBlock();
+                this.currentRenderId = Date.now();
+                renderBlock(this.currentRenderId);
             },
 
             /**
