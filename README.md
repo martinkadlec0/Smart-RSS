@@ -19,7 +19,7 @@ Extension is available in following repositories:
 
 ## Known issues:
 
-- in Firefox builds prior to `2017-08-09` and derivatives there's issue with CSP that causes extension to fail all requests following the one that got blocked, the only way to recover is to reload extension but it will happen again next time given source is loaded, issue reported to Waterfox #1780 in hope the fix will get ported to Classic
+- in Firefox builds prior to `2017-08-09` and derivatives there's issue with CSP that causes extension to fail all requests following the one that got blocked, the only way to recover is to reload extension but it will happen again next time given source is loaded, issue reported to Waterfox MrAlex94/Waterfox#1780 in hope the fix will get ported to Classic - in the meantime attempted to work around this bug by removing CSP header from data loaded by the extension
 
 ## For developers
 
