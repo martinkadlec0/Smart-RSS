@@ -17,6 +17,10 @@ Extension is available in following repositories:
 #### Opera Extensions: https://addons.opera.com/extensions/details/smart-rss-4/ (available for Beta and Dev, awaiting manual moderation)
 
 
+## Known issues:
+
+- in Firefox builds prior to `2017-08-09` and derivatives there's issue with CSP that causes extension to fail all requests following the one that got blocked, the only way to recover is to reload extension but it will happen again next time given source is loaded, issue reported to Waterfox #1780 in hope the fix will get ported to Classic
+
 ## For developers
 
 If you are interested in improving Smart RSS then there are few tips to get started.
