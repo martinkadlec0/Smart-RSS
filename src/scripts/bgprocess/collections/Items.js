@@ -40,7 +40,7 @@ define(['backbone', 'models/Item', 'preps/indexeddb'], function (BB, Item) {
             const aVal = getS(a.get(sortBy));
             const bVal = getS(b.get(sortBy));
 
-            val = this.spaceship(aVal, bVal);
+            const val = this.spaceship(aVal, bVal);
 
             if (val === 0) {
                 return sorting ? 0 :  this.comparator(a, b, true);
