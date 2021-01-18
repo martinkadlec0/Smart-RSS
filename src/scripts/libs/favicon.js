@@ -3,92 +3,108 @@
  * @submodule modules/toDataURI
  */
 define([], function () {
-    function checkFavicon(source) {
+    async function checkFavicon(source) {
         return new Promise((resolve, reject) => {
             const baseUrl = new URL(source.get('base'));
             const hostBaseAddress = baseUrl.origin;
-            let xhr = new XMLHttpRequest();
-            xhr.ontimeout = () => {
-                resolve({});
-            };
-            xhr.onloadend = () => {
-                if (xhr.readyState === 4) {
-                    if (xhr.status !== 200) {
-                        toDataURI(hostBaseAddress + '/favicon.ico')
-                            .then(response => {
-                                resolve(response);
-                            })
-                            .catch(() => {
-                                resolve({});
-                            });
-                        resolve({});
+
+            async function getFaviconAddress(baseUrl) {
+                return new Promise((resolve, reject) => {
+                    if (settings.get('faviconSource') === 'duckduckgo') {
+                        resolve('https://icons.duckduckgo.com/ip3/' + baseUrl + '.ico');
+                        return;
                     }
-                    const baseDocumentContents = xhr.responseText.replace(/<body(.*?)<\/body>/gm, '');
-                    const baseDocument = new DOMParser().parseFromString(baseDocumentContents, 'text/html');
-                    let iconAddress = hostBaseAddress + '/favicon.ico';
-                    const links = baseDocument.querySelectorAll('link');
-                    const iconLinks = Array.from(links).filter(link => {
-                        return link.hasAttribute('rel') && link.getAttribute('rel').includes('icon');
-                    });
-                    let size = 0;
-                    let tempIcon = '';
-                    iconLinks.some((link) => {
-                        if(size === 16){
-                            return false;
+
+                    if (settings.get('faviconsSource') === 'google') {
+                        resolve('https://www.google.com/s2/favicons?domain=' + baseUrl);
+                        return;
+                    }
+
+                    let xhr = new XMLHttpRequest();
+                    xhr.ontimeout = () => {
+                        reject('timeout');
+                    };
+                    xhr.onloadend = () => {
+                        if (xhr.readyState !== 4) {
+                            reject('network error');
+                            return;
                         }
-                        tempIcon = link.getAttribute('href');
-                        if (!tempIcon) {
-                            return false;
+                        if (xhr.status !== 200) {
+                            reject('non-200');
+                            return;
                         }
-                        if (tempIcon.includes('svg')) {
-                            return false;
-                        }
-                        const localSize = link.getAttribute('sizes');
-                        if (!localSize) {
-                            if (size === 0) {
-                                iconAddress = tempIcon;
+                        const baseDocumentContents = xhr.responseText.replace(/<body(.*?)<\/body>/gm, '');
+                        const baseDocument = new DOMParser().parseFromString(baseDocumentContents, 'text/html');
+                        let iconAddress = hostBaseAddress + '/favicon.ico';
+                        const links = baseDocument.querySelectorAll('link');
+                        const iconLinks = Array.from(links).filter(link => {
+                            return link.hasAttribute('rel') && link.getAttribute('rel').includes('icon');
+                        });
+                        let size = 0;
+                        let tempIcon = '';
+                        iconLinks.some((link) => {
+                            if (size === 16) {
+                                return false;
                             }
-                            return false;
-                        }
-                        const side = parseInt(localSize.split('x')[0]);
-                        if (side === 16) {
+                            tempIcon = link.getAttribute('href');
+                            if (!tempIcon) {
+                                return false;
+                            }
+                            if (tempIcon.includes('svg')) {
+                                return false;
+                            }
+                            const localSize = link.getAttribute('sizes');
+                            if (!localSize) {
+                                if (size === 0) {
+                                    iconAddress = tempIcon;
+                                }
+                                return false;
+                            }
+                            const side = parseInt(localSize.split('x')[0]);
+                            if (side === 16) {
+                                size = side;
+                                iconAddress = tempIcon;
+                                return true;
+                            }
+                            if (side < size) {
+                                return false;
+                            }
                             size = side;
                             iconAddress = tempIcon;
-                            return true;
-                        }
-                        if (side < size) {
-                            return false;
-                        }
-                        size = side;
-                        iconAddress = tempIcon;
-                    });
+                        });
 
-                    if (!iconAddress.includes('//')) {
-                        if (iconAddress[0] === '.') {
-                            iconAddress = iconAddress.substr(1);
+                        if (!iconAddress.includes('//')) {
+                            if (iconAddress[0] === '.') {
+                                iconAddress = iconAddress.substr(1);
+                            }
+                            if (iconAddress[0] === '/') {
+                                iconAddress = iconAddress.substr(1);
+                            }
+                            iconAddress = hostBaseAddress + '/' + iconAddress;
                         }
-                        if (iconAddress[0] === '/') {
-                            iconAddress = iconAddress.substr(1);
+                        if (iconAddress.startsWith('//')) {
+                            iconAddress = baseUrl.protocol + iconAddress;
                         }
-                        iconAddress = hostBaseAddress + '/' + iconAddress;
-                    }
-                    if (iconAddress.startsWith('//')) {
-                        iconAddress = baseUrl.protocol + iconAddress;
-                    }
 
-                    toDataURI(iconAddress)
+                        resolve(iconAddress);
+
+                    };
+                    xhr.open('GET', hostBaseAddress);
+                    xhr.timeout = 1000 * 30;
+                    xhr.send();
+                });
+            }
+
+            getFaviconAddress(hostBaseAddress)
+                .then((faviconAddress) => {
+                    toDataURI(faviconAddress)
                         .then(response => {
                             resolve(response);
                         })
                         .catch(() => {
-                            resolve({});
+                            reject();
                         });
-
-                }
-            };
-            xhr.open('GET', hostBaseAddress);
-            xhr.timeout = 1000 * 30;
-            xhr.send();
+                });
         });
     }
 
@@ -107,36 +123,38 @@ define([], function () {
                 reject('[modules/toDataURI] XMLHttpRequest error on', url);
             };
             xhr.ontimeout = () => {
-                resolve({});
+                reject('timeout');
             };
             xhr.onloadend = function () {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        const type = xhr.getResponseHeader('content-type');
-                        if (!~type.indexOf('image') || xhr.response.byteLength < 10) {
-                            reject('[modules/toDataURI] Not an image on', url);
-                        } else {
-                            let expires = 0;
-                            const expiresHeader = xhr.getResponseHeader('expires');
-                            if (expiresHeader) {
-                                expires = parseInt(Math.round((new Date(expiresHeader)).getTime() / 1000));
-                            } else {
-                                const cacheControlHeader = xhr.getResponseHeader('cache-control');
-                                let maxAge = 60 * 60 * 24 * 7;
-                                if (cacheControlHeader && cacheControlHeader.includes('max-age=')) {
-                                    const newMaxAge = parseInt(/max-age=([0-9]+).*/gi.exec(cacheControlHeader)[1]);
-                                    maxAge = newMaxAge > 0 ? newMaxAge : maxAge;
-                                }
-                                expires = parseInt(Math.round((new Date()).getTime() / 1000)) + maxAge;
-                            }
-
-                            const imgData = 'data:' + type + ';base64,' + AB2B64(xhr.response);
-                            resolve({favicon: imgData, faviconExpires: expires});
-                        }
-                    } else {
-                        reject({});
-                    }
+                if (xhr.readyState !== XMLHttpRequest.DONE) {
+                    reject('[modules/toDataURI] XMLHttpRequest error on', url);
+                    return;
                 }
+                if (xhr.status !== 200) {
+                    reject('[modules/toDataURI] XMLHttpRequest error on', url);
+                    return;
+                }
+                const type = xhr.getResponseHeader('content-type');
+                if (!~type.indexOf('image') || xhr.response.byteLength < 10) {
+                    reject('[modules/toDataURI] Not an image on', url);
+                    return;
+                }
+                let expires = 0;
+                const expiresHeader = xhr.getResponseHeader('expires');
+                if (expiresHeader) {
+                    expires = parseInt(Math.round((new Date(expiresHeader)).getTime() / 1000));
+                } else {
+                    const cacheControlHeader = xhr.getResponseHeader('cache-control');
+                    let maxAge = 60 * 60 * 24 * 7;
+                    if (cacheControlHeader && cacheControlHeader.includes('max-age=')) {
+                        const newMaxAge = parseInt(/max-age=([0-9]+).*/gi.exec(cacheControlHeader)[1]);
+                        maxAge = newMaxAge > 0 ? newMaxAge : maxAge;
+                    }
+                    expires = parseInt(Math.round((new Date()).getTime() / 1000)) + maxAge;
+                }
+
+                const imgData = 'data:' + type + ';base64,' + AB2B64(xhr.response);
+                resolve({favicon: imgData, faviconExpires: expires});
             };
             xhr.open('GET', url);
             xhr.timeout = 1000 * 30;
