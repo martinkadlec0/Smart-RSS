@@ -193,6 +193,7 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             detectFeeds: true,
             showAllFeeds: true,
             showPinned: true,
+            showOnlyUnreadSources: false,
             displayFaviconInsteadOfPin: '0',
             queries: [],
         },
