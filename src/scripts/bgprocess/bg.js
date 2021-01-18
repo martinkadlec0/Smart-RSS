@@ -332,13 +332,12 @@ define([
 
                 if (typeof browser !== 'undefined') {
                     browser.runtime.getBrowserInfo().then((info) => {
-                        if (info.name !== 'Waterfox') {
+                        if (!info.name.includes('Waterfox')) {
                             return;
                         }
-                        if (info.version.split('.')[0] !== 56) {
+                        if (info.version.split('.')[0] !== '56') {
                             return;
                         }
-
                         const onHeadersReceived = function (details) {
                             details.tabId === -1;
 
