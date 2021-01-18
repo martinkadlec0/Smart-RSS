@@ -117,8 +117,6 @@ define([
                 this.addSources(bg.sources);
 
 
-
-
                 this.addSpecial(specials.trash);
 
 
@@ -267,6 +265,11 @@ define([
             placeSource: function (view, noManualSort) {
                 let sourceViews;
                 const source = view.model;
+
+                if (source.get('count') === 0 && bg.settings.get('showOnlyUnreadSources')) {
+                    return;
+                }
+
                 if (source.get('folderID')) {
                     const folder = document.querySelector('.folder[data-id="' + source.get('folderID') + '"]');
                     if (folder) {
