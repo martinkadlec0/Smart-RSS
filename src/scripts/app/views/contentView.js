@@ -12,7 +12,7 @@ define([
         'text!templates/enclosureAudio.html',
         'text!templates/enclosureImage.html',
         'text!templates/enclosureVideo.html',
-        'text!templates/enclosureYoutube.html',
+        'text!templates/enclosureYoutube.html'
 
     ],
     function (BB,
@@ -256,7 +256,7 @@ define([
                         enclosure.querySelector('a').href = data.enclosure.url;
                         enclosure.querySelector('a').textContent = data.enclosure.name;
 
-                        if (data.open && data.enclosure.media) {
+                        if (data.open && data.enclosure.medium) {
                             enclosure.querySelector('.enclosure').setAttribute('open', 'open');
                         }
 
