@@ -307,7 +307,7 @@ define([
                         }
                         const now = Date.now();
                         const diff = trashCleaningDelay * 1000 * 60 * 60 * 24;
-                        bg.items.where({trashed: true, deleted: false}).forEach(function (item) {
+                        items.where({trashed: true, deleted: false}).forEach(function (item) {
                             if (now - item.get('trashedOn') > diff) {
                                 item.markAsDeleted();
                             }
