@@ -22,6 +22,15 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
             }
         },
         feeds: {
+            toggleShowOnlyUnread: {
+                icon: 'icon16.png',
+                title: 'Toggle show only unread',
+                fn: function () {
+                    const currentUnread = bg.settings.get('showOnlyUnreadSources');
+                    bg.settings.save('showOnlyUnreadSources', currentUnread === 'yes' ? 'no' : 'yes');
+                    bg.loader.downloadAll(true);
+                }
+            },
             updateAll: {
                 icon: 'reload.png',
                 title: Locale.UPDATE_ALL,
@@ -601,7 +610,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                     var el = require('views/articleList').el;
                     el.scrollTop = 0;
                 }
-            },
+            }
         },
         content: {
             mark: {
