@@ -356,7 +356,7 @@ define([
 
                         const onHeaderFilter = {
                             urls: ['*://*/*'],
-                            types: ['main_frame', 'sub_frame', 'other', 'object_subrequest', 'xmlhttprequest'],
+                            types: ['xmlhttprequest'],
                             tabId: -1
                         };
                         chrome.webRequest.onHeadersReceived.addListener(
