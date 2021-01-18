@@ -134,6 +134,27 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                     });
                 }
             },
+            scrollIntoView: {
+                icon: 'back.png',
+                title: 'Scroll into view',
+                fn: function () {
+                    const folders = require('views/feedList').getSelectedFolders();
+
+                    if (folders.length > 0) {
+                        const id = folders[0].get('id');
+                        const sourceElement = document.querySelector(`[data-id="${id}"]`);
+                        sourceElement.scrollIntoView();
+                        return;
+                    }
+
+                    const feeds = require('views/feedList').getSelectedFeeds();
+                    if (feeds.length > 0) {
+                        const id = feeds[0].get('id');
+                        const sourceElement = document.querySelector(`[data-id="${id}"]`);
+                        sourceElement.scrollIntoView();
+                    }
+                }
+            },
             showProperties: {
                 icon: 'properties.png',
                 title: Locale.PROPERTIES,
