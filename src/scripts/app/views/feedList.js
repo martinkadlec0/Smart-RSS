@@ -61,6 +61,7 @@ define([
                 bg.sources.on('change:folderID', this.handleChangeFolder, this);
                 bg.folders.on('add', this.addFolder, this);
                 bg.sources.on('clear-events', this.handleClearEvents, this);
+                bg.settings.on('change:showOnlyUnreadSources', this.insertFeeds, this);
 
                 this.on('pick', this.handlePick);
 
@@ -106,6 +107,9 @@ define([
              * @@chainable
              */
             insertFeeds: function () {
+                while (this.el.firstChild) {
+                    this.el.removeChild(this.el.lastChild);
+                }
                 this.addFolders(bg.folders);
                 if (bg.settings.get('showPinned')) {
                     this.addSpecial(specials.pinned);
@@ -211,6 +215,9 @@ define([
              * @param folder {models/Folder} Folder model to add
              */
             addFolder: function (folder) {
+                if (folder.get('count') === 0 && bg.settings.get('showOnlyUnreadSources') === 'yes') {
+                    return;
+                }
                 const view = new FolderView({model: folder}, this);
                 const folderViews = [...document.querySelectorAll('.folder')];
                 if (folderViews.length) {
@@ -266,7 +273,7 @@ define([
                 let sourceViews;
                 const source = view.model;
 
-                if (source.get('count') === 0 && bg.settings.get('showOnlyUnreadSources')) {
+                if (source.get('count') === 0 && bg.settings.get('showOnlyUnreadSources') === 'yes') {
                     return;
                 }
 
