@@ -95,7 +95,6 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favico
                 }
                 this.sourcesToLoad.push(source);
                 this.maxSources = this.maxSources + 1;
-                return;
             }
         }
 
