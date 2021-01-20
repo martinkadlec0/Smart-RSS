@@ -361,9 +361,10 @@ define([
                         frame.contentDocument.removeEventListener('load', resizeFrame);
                         frame.contentDocument.addEventListener('load', resizeFrame);
 
-                        [...frame.contentDocument.querySelectorAll('img, picture, iframe, video, audio')].forEach((img) => {
-                            img.onload = resizeFrame;
-                        });
+                        [...frame.contentDocument.querySelectorAll('img, picture, iframe, video, audio')]
+                            .forEach((img) => {
+                                img.onload = resizeFrame;
+                            });
 
                         resizeFrame();
                     };
