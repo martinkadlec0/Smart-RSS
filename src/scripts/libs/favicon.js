@@ -104,6 +104,9 @@ define([], function () {
                         .catch(() => {
                             reject();
                         });
+                })
+                .catch(() => {
+                    reject();
                 });
         });
     }
