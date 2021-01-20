@@ -187,7 +187,7 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
         }
 
         getAutoRemoveSetting(model) {
-            return model.get('autoremovesetting') === 'GLOBAL' ? settings.get('autoremovesetting') : model.get('autoremovesetting');
+            return model.get('autoremovesetting') === 'USE_GLOBAL' ? settings.get('autoremovesetting') : model.get('autoremovesetting');
         }
 
         removeOldItems() {
