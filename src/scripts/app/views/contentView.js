@@ -361,6 +361,11 @@ define([
                         frame.contentDocument.removeEventListener('load', resizeFrame);
                         frame.contentDocument.addEventListener('load', resizeFrame);
 
+                        if (typeof ResizeObserver !== 'undefined') {
+                            const resizeObserver = new ResizeObserver(resizeFrame);
+                            resizeObserver.observe(frame.contentDocument.body);
+                        }
+
                         [...frame.contentDocument.querySelectorAll('img, picture, iframe, video, audio')]
                             .forEach((img) => {
                                 img.onload = resizeFrame;
