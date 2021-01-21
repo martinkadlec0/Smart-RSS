@@ -64,7 +64,7 @@ chrome.runtime.getBackgroundPage((bg) => {
             warning.parentNode.removeChild(warning);
         }
         document.querySelector('#version').textContent = chrome.runtime.getManifest().version;
-        if(typeof browser !== 'undefined') {
+        if (typeof browser !== 'undefined') {
             browser.runtime.getBrowserInfo().then((info) => {
                 document.querySelector('#browser-info').textContent = `${info.vendor} ${info.name} ${info.version} ${info.buildID}`;
             });
@@ -103,7 +103,7 @@ chrome.runtime.getBackgroundPage((bg) => {
         document.querySelector('#import-opml').addEventListener('change', handleImportOPML);
         document.querySelector('[name="queries"]').value = bg.settings.get('queries').join(',');
 
-            document.querySelector('[name="queries"]').addEventListener('change', handleChangeQueries);
+        document.querySelector('[name="queries"]').addEventListener('change', handleChangeQueries);
 
 
         function handleChangeQueries(event) {
