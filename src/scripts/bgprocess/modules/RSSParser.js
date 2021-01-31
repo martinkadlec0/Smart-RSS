@@ -6,12 +6,11 @@ define(['../../libs/he'], function (he) {
     class RSSParser {
 
         getLink() {
-            let base = this.source.get('base');
+            const urlMatcher = /.+:\/\//;
+            let base = urlMatcher.exec(this.source.get('base')) ? this.source.get('base') : this.source.get('url'); // some feeds only give relative URLs but no base
+
             const node = this.currentNode;
             let link = node.querySelector('link[rel="alternate"]');
-            if (!link) {
-                link = node.querySelector('link[type="text/html"]');
-            }
             if (!link) {
                 link = node.querySelector('link[type="text/html"]');
             }
@@ -24,7 +23,7 @@ define(['../../libs/he'], function (he) {
             if (!link) {
                 const guid = node.querySelector('guid');
                 let tmp;
-                if (guid && (tmp = guid.textContent.match(/:\/\//)) && tmp.length) {
+                if (guid && (tmp = guid.textContent.match(urlMatcher)) && tmp.length) {
                     link = guid;
                 }
             }
@@ -34,15 +33,15 @@ define(['../../libs/he'], function (he) {
 
             let address = (link.textContent || link.getAttribute('href')).trim();
 
-            const match = /.+:\/\//.exec(address);
+            const match = urlMatcher.exec(address);
             if (!match) {
-                if (address.startsWith('/')) {
-                    address = address.substr(1);
+                try {
+                    // it might be a relative URL, so try to convert it into one based on the base
+                    address = new URL(address, base).toString();
+                } catch (e) {
+                    // not a valid URL
+                    return false;
                 }
-                if (base.endsWith('/')) {
-                    base = base.substr(0, base.length - 1);
-                }
-                address = base + '/' + address;
             }
 
             return address;
