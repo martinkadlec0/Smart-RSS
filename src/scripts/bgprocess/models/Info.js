@@ -210,6 +210,13 @@ define(['backbone', 'modules/Animation', '../bg'], function (BB, animation) {
                         });
                     }
                 }
+
+                if (!model.get('deleted')) {
+                    info.set({
+                        'pinnedCountTotal': info.get('pinnedCountTotal') + (model.get('trashed') ? -1 : 1) * (model.get('pinned') ? 1 : 0),
+                        'pinnedCountUnread': info.get('pinnedCountUnread') + (model.get('trashed') ? -1 : 1) * (model.get('pinned') ? 1 : 0)
+                    });
+                }
             });
 
 
