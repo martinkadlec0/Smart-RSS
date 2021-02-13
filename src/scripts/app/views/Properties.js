@@ -177,7 +177,7 @@ define([
                 /**
                  * Create HTML
                  */
-                const fragment = document.createRange().createContextualFragment(this.template);
+                const fragment = document.createRange().createContextualFragment(Locale.translateHTML(propertiesTemplate));
 
                 const labelTitle = fragment.querySelector('#property-title-label');
                 if (properties.title) {
