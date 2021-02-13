@@ -136,6 +136,23 @@ define([
                     chrome.browserAction.setBadgeText({text: ''});
                 }
             }
+            if (message.action === 'get-setting') {
+               return new Promise((resolve) => {
+                    resolve(settings.get(message.key));
+                });
+            }
+            if (message.action === 'save-setting') {
+                return new Promise((resolve) => {
+                    settings.save(message.key, message.value);
+                    resolve(settings.get(message.key));
+                });
+            }
+
+            if (message.action === 'get-settings') {
+                return new Promise((resolve) => {
+                    resolve(settings.attributes);
+                });
+            }
         }
 
         chrome.runtime.onMessage.addListener(onMessage);
