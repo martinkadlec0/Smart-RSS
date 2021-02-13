@@ -272,7 +272,8 @@ define(['../../libs/he'], function (he) {
                     baseStr = new URL(this.source.get('url')).origin;
                 }
 
-                data.base = baseStr;
+                const urlMatcher = /.+:\/\//;
+                data.base = urlMatcher.exec(baseStr) ? baseStr : this.source.get('url');
 
                 data.uid = this.source.get('url').replace(/^(.*:)?(\/\/)?(www*?\.)?/, '').replace(/\/$/, '');
                 this.source.save(data);
