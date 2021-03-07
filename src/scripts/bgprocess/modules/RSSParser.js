@@ -131,7 +131,7 @@ define(['../../libs/he'], function (he) {
             return (this.currentNode.querySelector('title') ? this.currentNode.querySelector('title').textContent : '&lt;no title&gt;').trim();
         }
 
-        getArticleContent() {
+        getArticleContent2() {
             const node = this.currentNode;
             let desc = node.querySelector('encoded');
             if (desc) {
@@ -145,6 +145,21 @@ define(['../../libs/he'], function (he) {
 
             desc = node.querySelector('content');
             if (desc) {
+                if (desc.getAttribute('type') === 'xhtml') {
+                    const childNodes = desc.childNodes;
+                    let text = '';
+                    var s = new XMLSerializer();
+                    [...childNodes].forEach((node) => {
+                        if (node.nodeType !== Node.TEXT_NODE) {
+                            text += s.serializeToString(node);
+                        }
+                    });
+                    const searchRegExp = /xhtml:/g;
+                    const replaceWith = '';
+
+                    text = text.replace(searchRegExp, replaceWith);
+                    return text;
+                }
                 return desc.textContent;
             }
 
@@ -154,6 +169,10 @@ define(['../../libs/he'], function (he) {
             }
 
             return '&nbsp;';
+        }
+
+        getArticleContent() {
+            return he.decode(this.getArticleContent2());
         }
 
         getGuid() {
@@ -291,7 +310,7 @@ define(['../../libs/he'], function (he) {
                     sourceID: this.source.get('id'),
                     enclosure: this.getEnclosure(),
                     dateCreated: Date.now(),
-                    emptyDate: false,
+                    emptyDate: false
                 });
 
                 const last = items[items.length - 1];
