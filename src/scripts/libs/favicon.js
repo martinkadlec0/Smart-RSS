@@ -9,14 +9,17 @@ define([], function () {
             const hostBaseAddress = baseUrl.origin;
 
             async function getFaviconAddress(baseUrl) {
+                if (!baseUrl instanceof URL) {
+                    baseUrl = new URL(baseUrl);
+                }
                 return new Promise((resolve, reject) => {
                     if (settings.get('faviconSource') === 'duckduckgo') {
-                        resolve('https://icons.duckduckgo.com/ip3/' + baseUrl + '.ico');
+                        resolve('https://icons.duckduckgo.com/ip3/' + baseUrl.host + '.ico');
                         return;
                     }
 
                     if (settings.get('faviconsSource') === 'google') {
-                        resolve('https://www.google.com/s2/favicons?domain=' + baseUrl);
+                        resolve('https://www.google.com/s2/favicons?domain=' + baseUrl.host);
                         return;
                     }
 
@@ -83,7 +86,7 @@ define([], function () {
                             iconAddress = hostBaseAddress + '/' + iconAddress;
                         }
                         if (iconAddress.startsWith('//')) {
-                            iconAddress = baseUrl.protocol + iconAddress;
+                            iconAddress = baseUrl.protocol ? baseUrl.protocol : 'https:' + iconAddress;
                         }
 
                         resolve(iconAddress);
