@@ -11,7 +11,7 @@ define([
         document.documentElement.style.fontSize = bg.settings.get('uiFontSize') + '%';
 
         document.addEventListener('contextmenu', function (event) {
-            if (!event.target.matches('#content header, #content header *, input[type=search]')) {
+            if (!event.target.matches('#content header, #content header *, input')) {
                 event.preventDefault();
             }
         });
