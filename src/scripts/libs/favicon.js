@@ -4,6 +4,36 @@
  */
 define([], function () {
     async function checkFavicon(source) {
+        if (typeof Promise.any !== 'function') {
+            Promise.any = (promises) => {
+                return new Promise((resolve, reject) => {
+                    let hasResolved = false;
+                    let processedPromises = 0;
+                    const rejectionReasons = [];
+                    const resolveOnce = (value) => {
+                        if (!hasResolved) {
+                            hasResolved = true;
+                            resolve(value);
+                        }
+                    };
+                    const rejectionCheck = (reason) => {
+                        rejectionReasons.push(reason);
+                        if (rejectionReasons.length >= processedPromises) {
+                            reject(rejectionReasons);
+                        }
+                    };
+                    for (const promise of promises) {
+                        processedPromises++;
+                        promise.then((result) => {
+                            resolveOnce(result);
+                        }).catch((reason) => {
+                            rejectionCheck(reason);
+                        });
+                    }
+                });
+            };
+        }
+
         return new Promise((resolve, reject) => {
             const baseUrl = new URL(source.get('base'));
 
@@ -24,60 +54,72 @@ define([], function () {
                         reject('timeout');
                     };
                     xhr.onloadend = () => {
-                        if (xhr.readyState !== 4) {
+                        if (xhr.readyState !== XMLHttpRequest.DONE) {
                             reject('network error');
                             return;
                         }
                         if (xhr.status !== 200) {
-                            reject('non-200');
+                            reject('Encountered non-200 response trying to parse ' + baseUrl.origin);
                             return;
                         }
                         const baseDocumentContents = xhr.responseText.replace(/<body(.*?)<\/body>/gm, '');
                         const baseDocument = new DOMParser().parseFromString(baseDocumentContents, 'text/html');
-                        const iconLinks = [...baseDocument.querySelectorAll('link[rel*="icon"][href]')];
+                        const linkElements = [...baseDocument.querySelectorAll('link[rel*="icon"][href]')];
 
-                        iconLinks.some((link) => {
-                            favicon = link.getAttribute('href');
+                        const links = [];
+
+                        linkElements.forEach((link) => {
+                            const favicon = link.getAttribute('href');
                             if (!favicon) {
-                                return false;
+                                return;
                             }
                             if (favicon.includes('svg')) {
-                                return false;
+                                return;
+                            }
+                            if (favicon.startsWith('http')) {
+                                links.push(favicon);
+                            }
+                            if (favicon.startsWith('//')) {
+                                links.push(baseUrl.protocol + favicon);
+                                return;
+                            }
+                            if (favicon.startsWith('data')) {
+                                links.push(favicon);
+                                return;
                             }
                             if (favicon.startsWith('/')) {
-                                const prefix = favicon.startsWith('//') ? 'https:' : baseUrl.origin;
-                                resolve(prefix + favicon);
-                                return true;
-                            }
-                            if (!favicon.startsWith('http')) {
-                                resolve(baseUrl.origin + '/' + favicon);
-                                return true;
+                                links.push(baseUrl.origin + favicon);
+                                return;
                             }
 
-                            resolve(favicon);
+                            links.push(baseUrl.origin + '/' + favicon);
                         });
 
-                        resolve(baseUrl.origin + '/favicon.ico');
+                        links.push(baseUrl.origin + '/favicon.ico');
+
+                        resolve(links);
                     };
 
-                    xhr.open('GET', baseUrl);
+                    xhr.open('GET', baseUrl.origin);
                     xhr.timeout = 1000 * 30;
                     xhr.send();
                 });
             }
 
             getFaviconAddress(baseUrl)
-                .then((faviconAddress) => {
-                    toDataURI(faviconAddress)
-                        .then(response => {
-                            resolve(response);
-                        })
-                        .catch(() => {
-                            reject();
-                        });
+                .then((faviconAddresses) => {
+                    const promises = faviconAddresses.map((favicon) => {
+                        return toDataURI(favicon);
+                    });
+                    Promise.any(promises)
+                        .then((dataURI) => {
+                            resolve(dataURI);
+                        }).catch((errors) => {
+                        reject(errors);
+                    });
                 })
-                .catch(() => {
-                    reject();
+                .catch((error) => {
+                    reject(error);
                 });
         });
     }
@@ -89,32 +131,38 @@ define([], function () {
     //  * @constructor
     //  * @extends Object
     //  */
-    function toDataURI(url) {
-        return new Promise(function (resolve, reject) {
+    function toDataURI(favicon) {
+        return new Promise((resolve, reject) => {
+            if (favicon.startsWith('data')) {
+                resolve(favicon);
+            }
             const xhr = new window.XMLHttpRequest();
             xhr.responseType = 'arraybuffer';
-            xhr.onerror = function () {
-                reject('[modules/toDataURI] XMLHttpRequest error on', url);
+            xhr.onerror = () => {
+                reject('[modules/toDataURI] error on: ' + favicon);
             };
             xhr.ontimeout = () => {
                 reject('timeout');
             };
             xhr.onloadend = function () {
                 if (xhr.readyState !== XMLHttpRequest.DONE) {
-                    reject('[modules/toDataURI] XMLHttpRequest error on', url);
+                    reject('[modules/toDataURI] network error on: ' + favicon);
                     return;
                 }
                 if (xhr.status !== 200) {
-                    reject('[modules/toDataURI] XMLHttpRequest error on', url);
+                    reject('[modules/toDataURI] non-200 on: ' + favicon);
                     return;
                 }
                 const type = xhr.getResponseHeader('content-type');
                 if (!~type.indexOf('image') || xhr.response.byteLength < 10) {
-                    reject('[modules/toDataURI] Not an image on', url);
+                    reject('[modules/toDataURI] Not an image on: ' + favicon);
                     return;
                 }
-                let expires = 0;
+                const imgData = 'data:' + type + ';base64,' + AB2B64(xhr.response);
+
                 const expiresHeader = xhr.getResponseHeader('expires');
+
+                let expires = 0;
                 if (expiresHeader) {
                     expires = parseInt(Math.round((new Date(expiresHeader)).getTime() / 1000));
                 } else {
@@ -127,10 +175,9 @@ define([], function () {
                     expires = parseInt(Math.round((new Date()).getTime() / 1000)) + maxAge;
                 }
 
-                const imgData = 'data:' + type + ';base64,' + AB2B64(xhr.response);
                 resolve({favicon: imgData, faviconExpires: expires});
             };
-            xhr.open('GET', url);
+            xhr.open('GET', favicon);
             xhr.timeout = 1000 * 30;
             xhr.send();
         });
