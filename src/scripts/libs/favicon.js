@@ -6,12 +6,8 @@ define([], function () {
     async function checkFavicon(source) {
         return new Promise((resolve, reject) => {
             const baseUrl = new URL(source.get('base'));
-            const hostBaseAddress = baseUrl.origin;
 
             async function getFaviconAddress(baseUrl) {
-                if (!baseUrl instanceof URL) {
-                    baseUrl = new URL(baseUrl);
-                }
                 return new Promise((resolve, reject) => {
                     if (settings.get('faviconSource') === 'duckduckgo') {
                         resolve('https://icons.duckduckgo.com/ip3/' + baseUrl.host + '.ico');
@@ -38,60 +34,39 @@ define([], function () {
                         }
                         const baseDocumentContents = xhr.responseText.replace(/<body(.*?)<\/body>/gm, '');
                         const baseDocument = new DOMParser().parseFromString(baseDocumentContents, 'text/html');
-                        let iconAddress = hostBaseAddress + '/favicon.ico';
                         const iconLinks = [...baseDocument.querySelectorAll('link[rel*="icon"][href]')];
-                        let size = 0;
-                        let tempIcon = '';
+
                         iconLinks.some((link) => {
-                            if (size === 16) {
+                            favicon = link.getAttribute('href');
+                            if (!favicon) {
                                 return false;
                             }
-                            if (tempIcon.includes('svg')) {
+                            if (favicon.includes('svg')) {
                                 return false;
                             }
-                            const localSize = link.getAttribute('sizes');
-                            if (!localSize) {
-                                if (size === 0) {
-                                    iconAddress = tempIcon;
-                                }
-                                return false;
-                            }
-                            const side = parseInt(localSize.split('x')[0]);
-                            if (side === 16) {
-                                size = side;
-                                iconAddress = tempIcon;
+                            if (favicon.startsWith('/')) {
+                                const prefix = favicon.startsWith('//') ? 'https:' : baseUrl.origin;
+                                resolve(prefix + favicon);
                                 return true;
                             }
-                            if (side < size) {
-                                return false;
+                            if (!favicon.startsWith('http')) {
+                                resolve(baseUrl.origin + '/' + favicon);
+                                return true;
                             }
-                            size = side;
-                            iconAddress = tempIcon;
+
+                            resolve(favicon);
                         });
 
-                        if (!iconAddress.includes('//')) {
-                            if (iconAddress[0] === '.') {
-                                iconAddress = iconAddress.substr(1);
-                            }
-                            if (iconAddress[0] === '/') {
-                                iconAddress = iconAddress.substr(1);
-                            }
-                            iconAddress = hostBaseAddress + '/' + iconAddress;
-                        }
-                        if (iconAddress.startsWith('//')) {
-                            iconAddress = baseUrl.protocol ? baseUrl.protocol : 'https:' + iconAddress;
-                        }
-
-                        resolve(iconAddress);
-
+                        resolve(baseUrl.origin + '/favicon.ico');
                     };
-                    xhr.open('GET', hostBaseAddress);
+
+                    xhr.open('GET', baseUrl);
                     xhr.timeout = 1000 * 30;
                     xhr.send();
                 });
             }
 
-            getFaviconAddress(hostBaseAddress)
+            getFaviconAddress(baseUrl)
                 .then((faviconAddress) => {
                     toDataURI(faviconAddress)
                         .then(response => {
