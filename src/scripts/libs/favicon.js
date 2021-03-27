@@ -39,18 +39,11 @@ define([], function () {
                         const baseDocumentContents = xhr.responseText.replace(/<body(.*?)<\/body>/gm, '');
                         const baseDocument = new DOMParser().parseFromString(baseDocumentContents, 'text/html');
                         let iconAddress = hostBaseAddress + '/favicon.ico';
-                        const links = baseDocument.querySelectorAll('link');
-                        const iconLinks = Array.from(links).filter(link => {
-                            return link.hasAttribute('rel') && link.getAttribute('rel').includes('icon');
-                        });
+                        const iconLinks = [...baseDocument.querySelectorAll('link[rel*="icon"][href]')];
                         let size = 0;
                         let tempIcon = '';
                         iconLinks.some((link) => {
                             if (size === 16) {
-                                return false;
-                            }
-                            tempIcon = link.getAttribute('href');
-                            if (!tempIcon) {
                                 return false;
                             }
                             if (tempIcon.includes('svg')) {
