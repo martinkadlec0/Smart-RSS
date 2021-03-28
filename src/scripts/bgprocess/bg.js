@@ -137,7 +137,7 @@ define([
                 }
             }
             if (message.action === 'get-setting') {
-               return new Promise((resolve) => {
+                return new Promise((resolve) => {
                     resolve(settings.get(message.key));
                 });
             }
@@ -323,12 +323,13 @@ define([
                             return;
                         }
                         const now = Date.now();
-                        const diff = trashCleaningDelay * 1000 * 60 * 60 * 24;
-                        items.where({trashed: true, deleted: false}).forEach(function (item) {
-                            if (now - item.get('trashedOn') > diff) {
-                                item.markAsDeleted();
-                            }
-                        });
+                        const trashCleaningDelayInMs = trashCleaningDelay * 1000 * 60 * 60 * 24;
+                        items.where({trashed: true, deleted: false})
+                            .forEach((item) => {
+                                if (now - item.get('trashedOn') > trashCleaningDelayInMs) {
+                                    item.markAsDeleted();
+                                }
+                            });
                     }
                 });
 
