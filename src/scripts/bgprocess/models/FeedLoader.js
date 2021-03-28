@@ -215,7 +215,7 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
             items.where(itemsFilter)
                 .forEach((item) => {
                     const date = item.get('dateCreated') || item.get('date');
-                    const removalInMs = this.model.get('autoremove') * 24 * 60 * 60 * 1000;
+                    const removalInMs = this.getAutoRemoveTime(this.model) * 24 * 60 * 60 * 1000;
                     if (date + removalInMs < Date.now()) {
                         item.markAsDeleted();
                     }
