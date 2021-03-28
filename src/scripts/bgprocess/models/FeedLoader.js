@@ -211,12 +211,12 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
                 itemsFilter['visited'] = true;
             }
 
-
+            const now = Date.now();
             items.where(itemsFilter)
                 .forEach((item) => {
                     const date = item.get('dateCreated') || item.get('date');
-                    const removalInMs = this.getAutoRemoveTime(this.model) * 24 * 60 * 60 * 1000;
-                    if (date + removalInMs < Date.now()) {
+                    const removalDelayInMs = this.getAutoRemoveTime(this.model) * 24 * 60 * 60 * 1000;
+                    if (now - date > removalDelayInMs) {
                         item.markAsDeleted();
                     }
                 });
