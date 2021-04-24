@@ -2,7 +2,9 @@
  * @module App
  * @submodule collections/Groups
  */
-define(['backbone', 'models/Group'], function (BB, Group) {
+define(function (require) {
+    const BB = require('backbone');
+    const Group = require('models/Group');
 
     /**
      * Collection of date groups
