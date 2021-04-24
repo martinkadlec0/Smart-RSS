@@ -5,7 +5,7 @@
  * @submodule helpers/stripTags
  * @param string {String} String with html to be removed
  */
-define([], function () {
+define(function () {
     return function (str) {
         if (str == null) {
             return '';
