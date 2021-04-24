@@ -20,6 +20,7 @@ define(function () {
 
     const getDOY = function () {
         const dt = new Date(_date);
+        dt.setHours(0, 0, 0);
         const start = new Date(dt.getFullYear(), 0, 0);
         const diff = (dt - start) + ((start.getTimezoneOffset() - dt.getTimezoneOffset()) * 60 * 1000);
         const oneDay = 1000 * 60 * 60 * 24;
@@ -27,12 +28,14 @@ define(function () {
     };
 
     const getWOY = function () {
-        const dt = new Date(_date);
-        const firstJanuary = new Date(dt.getFullYear(), 0, 1);
-        dt.setHours(0, 0, 0);
-        dt.setDate(dt.getDate() + 4 - (dt.getDay() || 7));
-        return Math.ceil((((dt - firstJanuary) / 86400000) + firstJanuary.getDay() + 1) / 7);
+        const d = new Date(_date);
+        const dt = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+        const dayNum = d.getUTCDay() || 7;
+        dt.setUTCDate(d.getUTCDate() + 4 - dayNum);
+        const yearStart = new Date(Date.UTC(dt.getUTCFullYear(), 0, 1));
+        return Math.ceil((((dt - yearStart) / 86400000) + 1) / 7);
     };
+
     const dateVal = function (all, found) {
         switch (found) {
             case 'DD':
