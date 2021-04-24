@@ -2,7 +2,8 @@
  * @module App
  * @submodule models/Special
  */
-define(['backbone'], function (BB) {
+define(function (require) {
+    const BB = require('backbone');
     /**
      * Model for special items in feed list like all-feeds, pinned and trash
      * @class Special

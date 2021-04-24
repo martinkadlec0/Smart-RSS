@@ -2,8 +2,8 @@
  * @module App
  * @submodule models/ToolbarButton
  */
-define(['backbone'], function (BB) {
-
+define(function (require) {
+    const BB = require('backbone');
     /**
      * Button model for toolbars
      * @class ToolbarButton

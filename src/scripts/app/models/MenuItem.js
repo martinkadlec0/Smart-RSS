@@ -2,7 +2,8 @@
  * @module App
  * @submodule models/MenuItem
  */
-define(['backbone'], function (BB) {
+define(function (require) {
+    const BB = require('backbone');
 
     /**
      * Context menu item

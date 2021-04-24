@@ -2,7 +2,8 @@
  * @module App
  * @submodule models/Action
  */
-define(['backbone'], function (BB) {
+define(function (require) {
+    const BB = require('backbone');
 
     /**
      * Executable action. Actions are usually executed by shorcuts, buttons or context menus.
