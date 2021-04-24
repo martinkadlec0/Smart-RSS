@@ -2,7 +2,10 @@
  * @module App
  * @submodule collections/Actions
  */
-define(['backbone', 'models/Action', 'staticdb/actions'], function (BB, Action, db) {
+define(function (require) {
+    const BB = require('backbone');
+    const Action = require('models/Action');
+    const db = require('staticdb/actions');
 
     /**
      * Collection of executable actions. Actions are usually executed by shortcuts, buttons or context menus.
