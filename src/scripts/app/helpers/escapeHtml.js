@@ -4,14 +4,14 @@
  * @submodule helpers/escapeHtml
  * @param string {String} String with html to be escaped
  */
-define([], function () {
+define(function () {
     const entityMap = {
         '&': '&amp;',
         '<': '&lt;',
         '>': '&gt;',
         '"': '&quot;',
         '\'': '&#39;',
-        '/': '&#x2F;',
+        '/': '&#x2F;'
     };
 
     return function (str) {
