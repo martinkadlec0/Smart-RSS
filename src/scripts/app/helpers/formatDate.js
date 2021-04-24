@@ -6,7 +6,7 @@
  * @param formatString {String} String consisting of special characters
  * @example formatDate(new Date, 'YYYY-MM-DD hh:mm');
  */
-define([], function () {
+define(function () {
     return (function () {
         let that;
         const zeroPad = function (num) {
