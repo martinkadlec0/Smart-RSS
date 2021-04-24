@@ -3,6 +3,7 @@
  * @module App
  * @submodule controllers/comm
  */
-define(['backbone'], function (BB) {
+define(function (require) {
+    const BB = require('backbone');
     return Object.create(BB.Events);
 });
