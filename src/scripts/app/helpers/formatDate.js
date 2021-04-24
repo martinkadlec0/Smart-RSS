@@ -20,10 +20,12 @@ define(function () {
 
     const getDOY = function () {
         const dt = new Date(_date);
-        const firstJanuary = new Date(dt.getFullYear(), 0, 1);
-        dt.setHours(0, 0, 0);
-        return Math.ceil((dt - firstJanuary) / 86400000);
+        const start = new Date(dt.getFullYear(), 0, 0);
+        const diff = (dt - start) + ((start.getTimezoneOffset() - dt.getTimezoneOffset()) * 60 * 1000);
+        const oneDay = 1000 * 60 * 60 * 24;
+        return Math.floor(diff / oneDay);
     };
+
     const getWOY = function () {
         const dt = new Date(_date);
         const firstJanuary = new Date(dt.getFullYear(), 0, 1);
