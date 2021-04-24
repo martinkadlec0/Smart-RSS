@@ -2,8 +2,9 @@
  * @module App
  * @submodule collections/MenuCollection
  */
-define(['backbone', 'models/MenuItem'], function (BB, MenuItem) {
-
+define(function (require) {
+    const BB = require('backbone');
+    const MenuItem = require('models/MenuItem');
     /**
      * Each ContextMenu has its own MenuCollection instance
      * @class MenuCollection
