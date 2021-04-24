@@ -2,8 +2,9 @@
  * @module App
  * @submodule collections/ToolbarItems
  */
-define(['backbone', 'models/ToolbarButton'], function (BB, ToolbarButton) {
-
+define(function (require) {
+    const BB = require('backbone');
+    const ToolbarButton = require('models/ToolbarButton');
     /**
      * Each ToolbarView has its own ToolbarItems instance
      * @class ToolbarItems
