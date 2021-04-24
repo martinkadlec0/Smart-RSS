@@ -2,7 +2,8 @@
  * @module App
  * @submodule layouts/Layout
  */
-define(['backbone'], function (BB) {
+define(function (require) {
+    const BB = require('backbone');
 
     /**
      * Layout abstract class
