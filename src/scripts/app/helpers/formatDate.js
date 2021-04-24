@@ -6,7 +6,7 @@
  * @param formatString {String} String consisting of special characters
  * @example formatDate(new Date, 'YYYY-MM-DD hh:mm');
  */
-define(function () {
+define(function (require) {
     let _date;
     const zeroPad = function (num) {
         if (num < 10) {
@@ -18,6 +18,8 @@ define(function () {
         return n % z;
     };
 
+    const getWOY = require('helpers/getWOY');
+
     const getDOY = function () {
         const dt = new Date(_date);
         dt.setHours(0, 0, 0);
@@ -25,15 +27,6 @@ define(function () {
         const diff = (dt - start) + ((start.getTimezoneOffset() - dt.getTimezoneOffset()) * 60 * 1000);
         const oneDay = 1000 * 60 * 60 * 24;
         return Math.floor(diff / oneDay);
-    };
-
-    const getWOY = function () {
-        const d = new Date(_date);
-        const dt = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-        const dayNum = d.getUTCDay() || 7;
-        dt.setUTCDate(d.getUTCDate() + 4 - dayNum);
-        const yearStart = new Date(Date.UTC(dt.getUTCFullYear(), 0, 1));
-        return Math.ceil((((dt - yearStart) / 86400000) + 1) / 7);
     };
 
     const dateVal = function (all, found) {
@@ -86,6 +79,7 @@ define(function () {
                 return '';
         }
     };
+
     return function (date, str) {
         if (!(date instanceof Date)) {
             date = new Date(date);
