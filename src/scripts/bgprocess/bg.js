@@ -2,12 +2,20 @@
  * @module BgProcess
  */
 
-define([
-        'modules/Animation', 'models/Settings', 'models/Info', 'models/Source',
-        'collections/Sources', 'collections/Items', 'collections/Folders', 'models/Loader',
-        'models/Folder', 'models/Item', 'collections/Toolbars'
-    ],
-    function (animation, Settings, Info, Source, Sources, Items, Folders, Loader, Folder, Item, Toolbars) {
+define(
+    function (require) {
+        const Animation = require('modules/Animation');
+        const Settings = require('models/Settings');
+        const Info = require('models/Info');
+        const Source = require('models/Source');
+        const Sources = require('collections/Sources');
+        const Item = require('models/Item');
+        const Items = require('collections/Items');
+        const Folders = require('collections/Folders');
+        const Loader = require('models/Loader');
+        const Folder = require('models/Folder');
+        const Toolbars = require('collections/Toolbars');
+
         /**
          * Messages
          */
@@ -84,7 +92,7 @@ define([
                     }
 
                     if (feeds.length === 0) {
-                        animation.handleIconChange();
+                        Animation.handleIconChange();
                         return;
                     }
 
@@ -129,7 +137,7 @@ define([
 
             }
             if (message.action === 'visibility-lost') {
-                animation.handleIconChange();
+                Animation.handleIconChange();
                 chrome.contextMenus.removeAll();
                 createLinksMenu();
                 if (settings.get('badgeMode') === 'sources') {
@@ -198,7 +206,7 @@ define([
         /**
          * Update animations
          */
-        animation.start();
+        Animation.start();
 
         /**
          * Items
@@ -291,8 +299,8 @@ define([
                     sources.sort();
                 });
 
-                sources.on('change:hasNew', animation.handleIconChange);
-                settings.on('change:icon', animation.handleIconChange);
+                sources.on('change:hasNew', Animation.handleIconChange);
+                settings.on('change:icon', Animation.handleIconChange);
 
                 info.setEvents(sources);
 
@@ -386,7 +394,7 @@ define([
                 /**
                  * Set icon
                  */
-                animation.stop();
+                Animation.stop();
                 resolve(true);
             });
         });

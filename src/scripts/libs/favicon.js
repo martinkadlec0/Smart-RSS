@@ -2,7 +2,7 @@
  * @module BgProcess
  * @submodule modules/toDataURI
  */
-define([], function () {
+define(function () {
     async function checkFavicon(source) {
         if (typeof Promise.any !== 'function') {
             Promise.any = (promises) => {
