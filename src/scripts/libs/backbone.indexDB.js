@@ -173,7 +173,8 @@
 
         const that = this;
 
-        let errorMessage, syncDfd = options.syncDfd || (Backbone.$.Deferred && Backbone.$.Deferred()); //If $ is having Deferred - use it.
+        let errorMessage;
+        let syncDfd = options.syncDfd || (Backbone.$.Deferred && Backbone.$.Deferred()); //If $ is having Deferred - use it.
         options.syncDfd = syncDfd;
 
         if (!store.db) {
