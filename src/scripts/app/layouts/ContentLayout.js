@@ -35,30 +35,6 @@ define([
                     this.attach('content', contentView);
                     this.attach('sandbox', new SandboxView());
                 });
-
-                // this.el.addEventListener('focus', (event) => {
-                //     event.target.classList.add('focused');
-                //     clearTimeout(blurTimeout);
-                // });
-
-                // let focus = true;
-                // let blurTimeout;
-                //
-                // comm.on('stop-blur', function () {
-                //     focus = false;
-                // });
-                //
-                // this.el.addEventListener('blur', (event) => {
-                //     blurTimeout = setTimeout(() => {
-                //         if (focus && !event.relatedTarget) {
-                //             this.focus();
-                //             return;
-                //         }
-                //         event.target.classList.remove('focused');
-                //         focus = true;
-                //     }, 0);
-                // });
-
             }
         });
 
