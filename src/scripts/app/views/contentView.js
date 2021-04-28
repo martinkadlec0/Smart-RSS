@@ -371,9 +371,15 @@ define([
 
                         [...frame.contentDocument.querySelectorAll('img, picture, iframe, video, audio')]
                             .forEach((element) => {
+                                if (element.src.startsWith('https://www.youtube.com/watch?')) {
+                                    element.src = element.src.replace('https://www.youtube.com/watch?v=', 'https://www.youtube-nocookie.com/embed/');
+                                    element.removeAttribute('allowfullscreen');
+                                    element.removeAttribute('height');
+                                    element.removeAttribute('width');
+                                    element.setAttribute('allowfullscreen', 'allowfullscreen');
+                                }
                                 element.onload = resizeFrame;
                             });
-
                         resizeFrame();
                     };
 
