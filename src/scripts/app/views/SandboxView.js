@@ -24,6 +24,7 @@ define(['backbone', 'modules/Locale'], function (BB, Locale) {
 
             const darkStylePath = chrome.runtime.getURL('styles/dark.css');
             this.el.contentDocument.querySelector('[data-dark-style]').setAttribute('href', darkStylePath);
+            this.el.contentDocument.querySelector('[data-custom-style]').innerHTML = bg.settings.get('userStyle');
             this.trigger('load');
         }
     });
