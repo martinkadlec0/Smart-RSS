@@ -64,6 +64,28 @@ define([
             }
         }
 
+        function applyStylesToSandbox() {
+            const baseStylePath = chrome.runtime.getURL('styles/main.css');
+
+            const frame = document.querySelector('[name="sandbox"]');
+            if (!frame) {
+                return;
+            }
+            console.log(frame, frame.contentDocument);
+
+            const baseStyleTag = frame.contentDocument.querySelector('[data-base-style]');
+            if (!!baseStyleTag) {
+                baseStyleTag.setAttribute('href', baseStylePath);
+            }
+
+            const darkStylePath = chrome.runtime.getURL('styles/dark.css');
+            const darkStyleTag = frame.contentDocument.querySelector('[data-dark-style]');
+            if (!!darkStyleTag) {
+                darkStyleTag.setAttribute('href', darkStylePath);
+            }
+
+        }
+
         const app = window.app = new (Layout.extend({
             el: 'body',
             fixURL: function (url) {
@@ -122,6 +144,7 @@ define([
 
                 this.feeds.enableResizing('horizontal', bg.settings.get('posA'));
                 this.articles.enableResizing('horizontal', bg.settings.get('posB'));
+                // applyStylesToSandbox();
                 changeUserStyle();
                 changeInvertColors();
                 this.handleLayoutChange();
