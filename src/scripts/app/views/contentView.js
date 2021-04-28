@@ -244,7 +244,7 @@ define([
                                     .createContextualFragment(enclosureYoutube);
                                 const iframe = enclosure.querySelector('iframe');
                                 const videoId = /\/v\/([a-zA-Z0-9_]+)/.exec(data.enclosure.url)[1];
-                                iframe.src = `https://www.youtube.com/embed/${videoId}`;
+                                iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}`;
                                 break;
                             default:
                                 enclosure = document
