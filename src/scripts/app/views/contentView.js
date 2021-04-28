@@ -180,8 +180,6 @@ define([
                 clearTimeout(this.renderTimeout);
 
                 this.renderTimeout = setTimeout(() => {
-                    const stylePath = chrome.runtime.getURL('styles/main.css');
-                    const darkPath = chrome.runtime.getURL('styles/dark.css');
                     if (!this.model) {
                         return;
                     }
@@ -311,14 +309,8 @@ define([
                         frame.contentWindow.scrollTo(0, 0);
                         document.querySelector('#content').scrollTo(0, 0);
                         frame.contentDocument.documentElement.style.fontSize = bg.settings.get('articleFontSize') + '%';
-                        frame.contentDocument.querySelector('base').href = source.get('base') || source.get('url');
-
-                        frame.contentDocument.querySelector('[data-base-style]').setAttribute('href', stylePath);
-                        frame.contentDocument.querySelector('[data-dark-style]').setAttribute('href', darkPath);
-                        frame.contentDocument.querySelector('[data-custom-style]').innerHTML = bg.settings.get('userStyle');
 
                         const contentElement = frame.contentDocument.querySelector('#smart-rss-content');
-
 
                         while (contentElement.firstChild) {
                             contentElement.removeChild(contentElement.firstChild);
@@ -327,9 +319,9 @@ define([
                         const fragment = document.createRange().createContextualFragment(content);
                         contentElement.appendChild(fragment);
 
-
-                        frame.contentDocument.querySelector('#smart-rss-url').href = this.model.get('url');
-                        frame.contentDocument.querySelector('#full-article-url').textContent = this.model.get('url');
+                        const articleUrl = this.model.get('url');
+                        frame.contentDocument.querySelector('#smart-rss-url').href = articleUrl;
+                        frame.contentDocument.querySelector('#full-article-url').textContent = articleUrl;
 
                         const clickHandler = (event) => {
                             if (event.target.matches('a')) {
