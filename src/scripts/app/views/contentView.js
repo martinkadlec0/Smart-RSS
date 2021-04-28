@@ -370,8 +370,8 @@ define([
                         }
 
                         [...frame.contentDocument.querySelectorAll('img, picture, iframe, video, audio')]
-                            .forEach((img) => {
-                                img.onload = resizeFrame;
+                            .forEach((element) => {
+                                element.onload = resizeFrame;
                             });
 
                         resizeFrame();
