@@ -300,6 +300,13 @@ define([
                     };
 
                     const loadContent = () => {
+                        const body = frame.contentDocument.querySelector('body');
+                        const shouldInvertColors = bg.settings.get('invertColors') === 'yes';
+                        if (shouldInvertColors) {
+                            body.classList.add('dark-theme');
+                        } else {
+                            body.classList.remove('dark-theme');
+                        }
 
                         frame.contentWindow.scrollTo(0, 0);
                         document.querySelector('#content').scrollTo(0, 0);
@@ -311,6 +318,8 @@ define([
                         frame.contentDocument.querySelector('[data-custom-style]').innerHTML = bg.settings.get('userStyle');
 
                         const contentElement = frame.contentDocument.querySelector('#smart-rss-content');
+
+
                         while (contentElement.firstChild) {
                             contentElement.removeChild(contentElement.firstChild);
                         }

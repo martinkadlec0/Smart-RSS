@@ -32,9 +32,35 @@ define([
             customStyleTag.textContent = userStyle;
         }
 
+        function changeInvertColors() {
+            const shouldInvertColors = bg.settings.get('invertColors') === 'yes';
+            const body = document.querySelector('body');
+            if (shouldInvertColors) {
+                body.classList.add('dark-theme');
+            } else {
+                body.classList.remove('dark-theme');
+            }
+            const frame = document.querySelector('[name="sandbox"]');
+            if (!frame) {
+                return;
+            }
+            const frameBody = frame.contentDocument.querySelector('body');
+            if (!frameBody) {
+                return;
+            }
+            if (shouldInvertColors) {
+                frameBody.classList.add('dark-theme');
+            } else {
+                frameBody.classList.remove('dark-theme');
+            }
+        }
+
         function onMessage(message) {
             if (message.action === 'changeUserStyle') {
                 changeUserStyle();
+            }
+            if (message.action === 'changeInvertColors') {
+                changeInvertColors();
             }
         }
 
@@ -97,6 +123,7 @@ define([
                 this.feeds.enableResizing('horizontal', bg.settings.get('posA'));
                 this.articles.enableResizing('horizontal', bg.settings.get('posB'));
                 changeUserStyle();
+                changeInvertColors();
                 this.handleLayoutChange();
             },
             handleKeyDown: function (event) {
