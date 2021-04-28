@@ -203,6 +203,9 @@ chrome.runtime.getBackgroundPage((bg) => {
         if (target.id === 'userStyle') {
             chrome.runtime.sendMessage({action: 'changeUserStyle'});
         }
+        if (target.id === 'invertColors') {
+            chrome.runtime.sendMessage({action: 'changeInvertColors'});
+        }
     }
 
     function handleCheck(event) {
