@@ -181,6 +181,7 @@ define([
 
                 this.renderTimeout = setTimeout(() => {
                     const stylePath = chrome.runtime.getURL('styles/main.css');
+                    const darkPath = chrome.runtime.getURL('styles/dark.css');
                     if (!this.model) {
                         return;
                     }
@@ -306,6 +307,7 @@ define([
                         frame.contentDocument.querySelector('base').href = source.get('base') || source.get('url');
 
                         frame.contentDocument.querySelector('[data-base-style]').setAttribute('href', stylePath);
+                        frame.contentDocument.querySelector('[data-dark-style]').setAttribute('href', darkPath);
                         frame.contentDocument.querySelector('[data-custom-style]').innerHTML = bg.settings.get('userStyle');
 
                         const contentElement = frame.contentDocument.querySelector('#smart-rss-content');

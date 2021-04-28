@@ -877,8 +877,6 @@ iframe {
   font-size: 0.8rem;
 }
 
-@media print {
-  #smart-rss-content-footer {
-    display: none !important;
-  }
+#smart-rss-url[href=''] {
+  display: none;
 }
