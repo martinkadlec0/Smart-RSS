@@ -11,7 +11,8 @@ define([
         'text!templates/enclosureAudio.html',
         'text!templates/enclosureImage.html',
         'text!templates/enclosureVideo.html',
-        'text!templates/enclosureYoutube.html'
+        'text!templates/enclosureYoutube.html',
+        'text!templates/enclosureYoutubeCover.html'
 
     ],
     function (BB,
@@ -22,7 +23,8 @@ define([
               enclosureAudio,
               enclosureImage,
               enclosureVideo,
-              enclosureYoutube
+              enclosureYoutube,
+              enclosureYoutubeCover
     ) {
 
         /**
@@ -238,10 +240,25 @@ define([
                             case 'youtube':
                                 enclosure = document
                                     .createRange()
-                                    .createContextualFragment(enclosureYoutube);
-                                const iframe = enclosure.querySelector('iframe');
+                                    .createContextualFragment(enclosureYoutubeCover);
                                 const videoId = /^.*\/(.*)\?(.*)$/.exec(data.enclosure.url)[1];
-                                iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}`;
+
+                                const posterUrl = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+                                const videoUrl = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1`;
+                                const cover = enclosure.querySelector('.youtube-cover');
+                                cover.style.backgroundImage = `url("${posterUrl}")`;
+
+                                cover.addEventListener('click', () => {
+                                    iframeEnclosure = document
+                                        .createRange()
+                                        .createContextualFragment(enclosureYoutube);
+                                    const iframe = iframeEnclosure.querySelector('iframe');
+                                    iframe.src = videoUrl;
+                                    cover.replaceWith(iframeEnclosure);
+                                    iframeEnclosure.focus();
+                                });
+
+
                                 break;
                             default:
                                 enclosure = document
