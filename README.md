@@ -14,7 +14,7 @@ Extension is available in following repositories:
 
 #### Chrome Web Store: https://chrome.google.com/webstore/detail/eggggihfcaabljfpjiiaohloefmgejic/
 
-#### Opera Extensions: https://addons.opera.com/extensions/details/smart-rss-4/ (available for Beta and Dev, awaiting manual moderation)
+If you encounter issue with a specific feed for best results please back up and include current state of that feed in your report, this will be helpful in case the feed changes before I get to check it, thanks in advance
 
 
 ## Known issues:
