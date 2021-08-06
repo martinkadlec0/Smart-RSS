@@ -5,7 +5,6 @@
 define([
         'backbone',
         'helpers/formatDate',
-        'helpers/escapeHtml',
         'helpers/stripTags',
         'text!templates/contentView.html',
         'text!templates/enclosureGeneral.html',
@@ -17,7 +16,6 @@ define([
     ],
     function (BB,
               formatDate,
-              escapeHtml,
               stripTags,
               contentViewTemplate,
               enclosureGeneral,
@@ -193,7 +191,6 @@ define([
                     const data = Object.create(this.model.attributes);
                     data.date = this.getFormattedDate(this.model.get('date'));
                     data.title = stripTags(data.title).trim() || '<no title>';
-                    data.url = escapeHtml(data.url);
                     data.titleIsLink = bg.settings.get('titleIsLink');
                     data.open = open;
 

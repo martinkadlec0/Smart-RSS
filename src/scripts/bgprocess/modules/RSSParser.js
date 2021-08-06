@@ -44,7 +44,7 @@ define(['../../libs/he'], function (he) {
                 }
             }
 
-            return address;
+            return address.replace(/^(javascript:\.)/,'');
         }
 
         getTitle() {
@@ -195,7 +195,7 @@ define(['../../libs/he'], function (he) {
                 return '';
             }
             let enclosure = {};
-            enclosure.url = enclosureNode.hasAttribute('url') ? enclosureNode.getAttribute('url') : '';
+            enclosure.url = enclosureNode.hasAttribute('url') ? enclosureNode.getAttribute('url').replace(/^(javascript:\.)/,'') : '';
             enclosure.name = he.decode(enclosureNode.hasAttribute('url') ? enclosure.url.substring(enclosure.url.lastIndexOf('/') + 1) : (media.title ? media.title : ''));
             enclosure.type = enclosureNode.hasAttribute('type') ? enclosureNode.getAttribute('type') : '';
             enclosure.medium = enclosureNode.hasAttribute('medium') ? enclosureNode.getAttribute('medium') : this.getMediumFromType(enclosure.type, enclosure.name);
