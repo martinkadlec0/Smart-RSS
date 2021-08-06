@@ -107,9 +107,35 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
                     createdNo++;
                     return;
                 }
-                if (existingItem.get('deleted') === false && existingItem.get('content') !== item.content) {
+
+                function areDifferent(newItem, existingItem) {
+                    if (existingItem.get('content') !== newItem.content) {
+                        return true;
+                    }
+                    if (existingItem.get('title') !== newItem.title) {
+                        return true;
+                    }
+                    if (existingItem.get('date') !== newItem.date) {
+                        return true;
+                    }
+                    if (existingItem.get('author') !== newItem.author) {
+                        return true;
+                    }
+                    if (existingItem.get('enclosure') !== newItem.enclosure) {
+                        return true;
+                    }
+                    return false;
+                }
+
+                if (existingItem.get('deleted') === false && areDifferent(item, existingItem)) {
                     existingItem.save({
-                        content: item.content
+                        content: item.content,
+                        title: item.title,
+                        date: item.date,
+                        author: item.author,
+                        enclosure: item.enclosure,
+                        unread: true,
+                        visited: false
                     });
                 }
             });
