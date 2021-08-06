@@ -240,7 +240,7 @@ define([
                                     .createRange()
                                     .createContextualFragment(enclosureYoutube);
                                 const iframe = enclosure.querySelector('iframe');
-                                const videoId = /\/v\/([a-zA-Z0-9_]+)/.exec(data.enclosure.url)[1];
+                                const videoId = /^.*\/(.*)\?(.*)$/.exec(data.enclosure.url)[1];
                                 iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}`;
                                 break;
                             default:
@@ -313,7 +313,14 @@ define([
                             contentElement.removeChild(contentElement.firstChild);
                         }
 
-                        const fragment = document.createRange().createContextualFragment(content);
+                        let fragment;
+                        switch (data.enclosure.medium) {
+                            case 'youtube':
+                                fragment = document.createRange().createContextualFragment(content.replace(/\r/g, '<br>'));
+                                break;
+                            default:
+                                fragment = document.createRange().createContextualFragment(content);
+                        }
                         contentElement.appendChild(fragment);
 
                         const articleUrl = this.model.get('url');
