@@ -201,6 +201,16 @@ define(
             });
         }
 
+        chrome.browserAction.onClicked.addListener(function (tab, onClickData) {
+            if (typeof onClickData !== 'undefined') {
+                if (onClickData.button === 1) {
+                    openInNewTab();
+                    return;
+                }
+            }
+            openRSS(true);
+        });
+
         window.openRSS = openRSS;
 
         /**
@@ -223,6 +233,7 @@ define(
         window.sources = new Sources();
         window.items = new Items();
         window.folders = new Folders();
+        window.loaded = false;
 
         /**
          * This is used for when new feed is subscribed and smart rss tab is opened to focus the newly added feed
@@ -344,21 +355,14 @@ define(
                 /**
                  * onclick:button -> open RSS
                  */
-                chrome.browserAction.onClicked.addListener(function (tab, onClickData) {
-                    if (typeof onClickData !== 'undefined') {
-                        if (onClickData.button === 1) {
-                            openInNewTab();
-                            return;
-                        }
-                    }
-                    openRSS(true);
-                });
+
                 createLinksMenu();
 
                 /**
                  * Set icon
                  */
                 Animation.stop();
+                window.loaded = true;
                 resolve(true);
             });
         });

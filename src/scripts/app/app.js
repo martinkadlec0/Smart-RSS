@@ -138,16 +138,24 @@ define([
                 comm.trigger('hide-overlays', {blur: true});
             },
             start: function () {
-                this.attach('feeds', new FeedsLayout);
-                this.attach('articles', new ArticlesLayout);
-                this.attach('content', new ContentLayout);
+                const isLoaded = () => {
+                    if (bg.loaded) {
+                        this.attach('feeds', new FeedsLayout);
+                        this.attach('articles', new ArticlesLayout);
+                        this.attach('content', new ContentLayout);
 
-                this.feeds.enableResizing('horizontal', bg.settings.get('posA'));
-                this.articles.enableResizing('horizontal', bg.settings.get('posB'));
-                // applyStylesToSandbox();
-                changeUserStyle();
-                changeInvertColors();
-                this.handleLayoutChange();
+                        this.feeds.enableResizing('horizontal', bg.settings.get('posA'));
+                        this.articles.enableResizing('horizontal', bg.settings.get('posB'));
+                        applyStylesToSandbox();
+                        changeUserStyle();
+                        changeInvertColors();
+                        this.handleLayoutChange();
+                        document.querySelector('body').classList.remove('loading');
+                    } else {
+                        setTimeout(isLoaded, 150);
+                    }
+                };
+                isLoaded();
             },
             handleKeyDown: function (event) {
                 const activeElement = document.activeElement;

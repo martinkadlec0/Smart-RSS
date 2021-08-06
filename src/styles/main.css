@@ -249,6 +249,10 @@ input[type=search]:not(:focus):not(:valid) {
   border-image: none;
 }
 
+.loading .region {
+  border: none;
+}
+
 #feeds {
   flex-shrink: 0;
   flex-grow: 0;
@@ -655,6 +659,7 @@ header {
   flex: 0 0 auto;
   overflow-y: auto;
 }
+
 header:not(:empty) {
   border-bottom: var(--border);
 }
@@ -879,4 +884,90 @@ iframe {
 
 #smart-rss-url[href=''] {
   display: none;
+}
+
+body.loading .loader {
+  display: block;
+}
+
+body.loading > section {
+  display: none;
+}
+
+.loader {
+  display: none;
+  width: 75px;
+  height: 75px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -35px 0 0 -35px;
+  transform: rotateZ(45deg);
+}
+
+.loader .cube {
+  position: relative;
+  transform: rotateZ(45deg);
+}
+
+.loader .cube {
+  float: left;
+  width: 50%;
+  height: 50%;
+  position: relative;
+  transform: scale(1.1);
+}
+
+.loader .cube:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fb9610;
+  animation: foldthecube 2.4s infinite linear both;
+  transform-origin: 100% 100%;
+}
+
+.loader .c2 {
+  transform: scale(1.1) rotateZ(90deg);
+}
+
+.loader .c3 {
+  transform: scale(1.1) rotateZ(180deg);
+}
+
+.loader .c4 {
+  transform: scale(1.1) rotateZ(270deg);
+}
+
+.loader .c2:before {
+  animation-delay: 0.3s;
+}
+
+.loader .c3:before {
+  animation-delay: 0.6s;
+}
+
+.loader .c4:before {
+  animation-delay: 0.9s;
+}
+
+@keyframes foldthecube {
+  0%,
+  10% {
+    transform: perspective(140px) rotateX(-180deg);
+    opacity: 0;
+  }
+  25%,
+  75% {
+    transform: perspective(140px) rotateX(0deg);
+    opacity: 1;
+  }
+  90%,
+  100% {
+    transform: perspective(140px) rotateY(180deg);
+    opacity: 0;
+  }
 }
