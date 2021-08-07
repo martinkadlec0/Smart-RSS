@@ -131,7 +131,7 @@ input[type=search] {
 }
 
 input[type=search]:not(:focus):not(:valid) {
-  background: url("/images/search.png") no-repeat right center var(--white);
+  background: url("../images/search.png") no-repeat right center var(--white);
 }
 
 /**
@@ -141,7 +141,7 @@ input[type=search]:not(:focus):not(:valid) {
   min-width: 150px;
   max-width: 250px;
   border: var(--overlay-border);
-  background: url("/images/context-border.png") repeat-y 27px top var(--grey-10);
+  background: url("../images/context-border.png") repeat-y 27px top var(--grey-10);
   position: absolute;
   top: 300px;
   left: 10px;
@@ -374,11 +374,11 @@ input[type=search]:not(:focus):not(:valid) {
   width: 14px;
   height: 14px;
   flex: 0 0 14px;
-  background: url("/images/arrow-right.png") no-repeat center center;
+  background: url("../images/arrow-right.png") no-repeat center center;
 }
 
 .opened .folder-arrow {
-  background: url("/images/arrow-down.png") no-repeat center center;
+  background: url("../images/arrow-down.png") no-repeat center center;
 }
 
 .has-unread .source-title {
@@ -723,7 +723,7 @@ header .enclosure {
 header .pin-button {
   flex: 0 0 25px;
   height: 16px;
-  background: url("/images/mail_unpinned.png") no-repeat right center;
+  background: url("../images/mail_unpinned.png") no-repeat right center;
   opacity: 0.8;
   transition: opacity 0.1s;
   cursor: pointer;
@@ -734,31 +734,13 @@ header .pin-button:hover {
 }
 
 header .pin-button.pinned {
-  background: url("/images/mail_pinned.png") no-repeat right center;
+  background: url("../images/mail_pinned.png") no-repeat right center;
 }
 
 iframe {
   min-height: 70%;
   flex: 1 1 auto;
   width: 100%;
-}
-
-/*footer {*/
-/*  border-top: var(--border);*/
-/*  padding: 5px 10px;*/
-/*  font-size: 0.75rem;*/
-/*  display: none;*/
-/*  max-height: 300px;*/
-/*  overflow-x: hidden;*/
-/*  overflow-y: auto;*/
-/*  background: var(--white);*/
-/*}*/
-
-@media print {
-  header,
-  #toolbar {
-    display: none;
-  }
 }
 
 .overlay #config-layout {
