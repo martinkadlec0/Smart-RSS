@@ -198,6 +198,7 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             faviconSource: 'internal',
             queries: [],
             invertColors: 'no',
+            defaultView: 'feed',
         },
         /**
          * @property localStorage
