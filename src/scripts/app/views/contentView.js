@@ -13,6 +13,7 @@ define([
         'text!templates/enclosureVideo.html',
         'text!templates/enclosureYoutube.html',
         'text!templates/enclosureYoutubeCover.html'
+        // '../../libs/readability'
 
     ],
     function (BB,
@@ -25,6 +26,7 @@ define([
               enclosureVideo,
               enclosureYoutube,
               enclosureYoutubeCover
+              // Readability
     ) {
 
         /**
@@ -179,7 +181,7 @@ define([
             render: function () {
                 clearTimeout(this.renderTimeout);
 
-                this.renderTimeout = setTimeout(() => {
+                this.renderTimeout = setTimeout(async () => {
                     if (!this.model) {
                         return;
                     }
@@ -195,6 +197,19 @@ define([
                     data.title = stripTags(data.title).trim() || '<no title>';
                     data.titleIsLink = bg.settings.get('titleIsLink');
                     data.open = open;
+
+
+                    // let content = await fetch(this.model.get('url'), {
+                    //     method: 'GET', // *GET, POST, PUT, DELETE, etc.
+                    //     credentials: 'same-origin', // include, *same-origin, omit
+                    //     redirect: 'follow', // manual, *follow, error
+                    //     referrerPolicy: 'no-referrer' // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+                    // });
+                    // content = await content.text();
+                    //
+                    // var parser = new DOMParser();
+                    // content = parser.parseFromString(content, 'text/html');
+                    // content = new Readability(content).parse().content;
 
 
                     const content = this.model.get('content');
