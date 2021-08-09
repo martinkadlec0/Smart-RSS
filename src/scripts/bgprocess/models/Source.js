@@ -34,6 +34,7 @@ define(['backbone'], function (BB) {
             uid: '',
             openEnclosure: 'global',
             folderID: '0',
+            defaultView: 'global'
         },
 
         initialize: function () {
