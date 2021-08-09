@@ -12,8 +12,8 @@ define([
         'text!templates/enclosureImage.html',
         'text!templates/enclosureVideo.html',
         'text!templates/enclosureYoutube.html',
-        'text!templates/enclosureYoutubeCover.html'
-        // '../../libs/readability'
+        'text!templates/enclosureYoutubeCover.html',
+        '../../libs/readability'
 
     ],
     function (BB,
@@ -25,8 +25,8 @@ define([
               enclosureImage,
               enclosureVideo,
               enclosureYoutube,
-              enclosureYoutubeCover
-              // Readability
+              enclosureYoutubeCover,
+              Readability
     ) {
 
         /**
@@ -189,6 +189,7 @@ define([
                     this.show();
                     const source = this.model.getSource();
                     const openEnclosure = source.get('openEnclosure');
+                    const defaultView = source.get('defaultView');
 
                     const open = openEnclosure === 'yes' || openEnclosure === 'global' && bg.settings.get('openEnclosure') === 'yes';
 
@@ -199,20 +200,23 @@ define([
                     data.open = open;
 
 
-                    // let content = await fetch(this.model.get('url'), {
-                    //     method: 'GET', // *GET, POST, PUT, DELETE, etc.
-                    //     credentials: 'same-origin', // include, *same-origin, omit
-                    //     redirect: 'follow', // manual, *follow, error
-                    //     referrerPolicy: 'no-referrer' // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-                    // });
-                    // content = await content.text();
-                    //
-                    // var parser = new DOMParser();
-                    // content = parser.parseFromString(content, 'text/html');
-                    // content = new Readability(content).parse().content;
+                    let content = this.model.get('content');
 
+                    if (defaultView !== 'feed') {
+                        const response = await fetch(this.model.get('url'), {
+                            method: 'GET',
+                            redirect: 'follow', // manual, *follow, error
+                            referrerPolicy: 'no-referrer'
+                        });
+                        const websiteContent = await response.text();
 
-                    const content = this.model.get('content');
+                        if (defaultView === 'mozilla') {
+                            const parser = new DOMParser();
+                            const websiteDocument = parser.parseFromString(websiteContent, 'text/html');
+                            content = new Readability(websiteDocument).parse().content;
+                        }
+                    }
+
 
                     while (this.el.firstChild) {
                         this.el.removeChild(this.el.firstChild);
