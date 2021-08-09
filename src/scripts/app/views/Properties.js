@@ -27,6 +27,7 @@ define([
                 const updateEvery = parseInt(document.querySelector('#prop-update-every').value);
                 const autoRemove = parseInt(document.querySelector('#prop-autoremove').value);
                 const folderId = document.querySelector('#prop-parent').value;
+                const defaultView = document.querySelector('#defaultView').value;
 
                 if (this.current instanceof bg.Source) {
                     /* encrypt the password */
@@ -41,6 +42,7 @@ define([
                         autoremove: autoRemove,
                         proxyThroughFeedly: document.querySelector('#prop-proxy').checked,
                         openEnclosure: document.querySelector('#openEnclosure').value,
+                        defaultView: defaultView
                     });
                     if (folderId === '0') {
                         this.current.unset('folderID');
@@ -130,6 +132,9 @@ define([
                 if (this.current.get('openEnclosure')) {
                     document.querySelector('#openEnclosure').value = this.current.get('openEnclosure');
                 }
+                if (this.current.get('defaultView')) {
+                    document.querySelector('#defaultView').value = this.current.get('defaultView');
+                }
 
                 if (this.current.get('proxyThroughFeedly')) {
                     document.querySelector('#prop-proxy').checked = true;
@@ -145,7 +150,7 @@ define([
                     folderIdDiffers: false,
                     firstUpdate: listOfSources[0].get('updateEvery'),
                     firstAutoremove: listOfSources[0].get('autoremove'),
-                    firstFolderId: listOfSources[0].get('folderID'),
+                    firstFolderId: listOfSources[0].get('folderID')
                 };
 
 
