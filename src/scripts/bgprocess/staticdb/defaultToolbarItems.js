@@ -13,7 +13,7 @@ define([], function () {
         {
             version: 2,
             region: 'content',
-            actions: ['content:mark', 'content:delete', '!dynamicSpace', 'content:showConfig']
+            actions: ['content:mark', 'content:delete', '!dynamicSpace', 'content:changeView', 'content:showConfig']
         }
     ];
 });

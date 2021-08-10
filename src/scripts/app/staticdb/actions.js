@@ -634,6 +634,18 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
             }
         },
         content: {
+            changeView: {
+                title: Locale.CHANGE_VIEW,
+                icon: 'report.png',
+                fn: function () {
+                    var contentView = require('views/contentView');
+                    if (!contentView.model) {
+                        return;
+                    }
+                    const view = contentView.view === 'feed' ? 'mozilla' : 'feed';
+                    contentView.render(view);
+                }
+            },
             mark: {
                 title: Locale.MARK_AS_READ,
                 icon: 'read.png',

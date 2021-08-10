@@ -50,6 +50,8 @@ define([
                 'keydown': 'handleKeyDown'
             },
 
+            view: '',
+
             /**
              * Changes pin state
              * @method handlePinClick
@@ -67,6 +69,7 @@ define([
                     pinned: target.classList.contains('pinned')
                 });
             },
+
 
             /**
              * Called when new instance is created
@@ -178,7 +181,7 @@ define([
              * @method render
              * @chainable
              */
-            render: function () {
+            render: function (overrideView = '') {
                 clearTimeout(this.renderTimeout);
 
                 this.renderTimeout = setTimeout(async () => {
@@ -189,7 +192,9 @@ define([
                     this.show();
                     const source = this.model.getSource();
                     const openEnclosure = source.get('openEnclosure');
-                    const defaultView = source.get('defaultView');
+                    const sourceDefaultView = source.get('defaultView');
+                    const defaultView = sourceDefaultView === 'global' ? bg.settings.get('defaultView') : sourceDefaultView;
+
 
                     const open = openEnclosure === 'yes' || openEnclosure === 'global' && bg.settings.get('openEnclosure') === 'yes';
 
@@ -202,7 +207,13 @@ define([
 
                     let content = this.model.get('content');
 
-                    if (defaultView !== 'feed') {
+                    if (overrideView !== '') {
+                        this.view = overrideView;
+                    } else {
+                        this.view = defaultView;
+                    }
+
+                    if (this.view !== 'feed') {
                         const response = await fetch(this.model.get('url'), {
                             method: 'GET',
                             redirect: 'follow', // manual, *follow, error
@@ -210,7 +221,7 @@ define([
                         });
                         const websiteContent = await response.text();
 
-                        if (defaultView === 'mozilla') {
+                        if (this.view === 'mozilla') {
                             const parser = new DOMParser();
                             const websiteDocument = parser.parseFromString(websiteContent, 'text/html');
                             content = new Readability(websiteDocument).parse().content;
