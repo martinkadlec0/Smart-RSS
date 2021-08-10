@@ -135,7 +135,8 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
                         author: item.author,
                         enclosure: item.enclosure,
                         unread: true,
-                        visited: false
+                        visited: false,
+                        parsedContent: {}
                     });
                 }
             });
