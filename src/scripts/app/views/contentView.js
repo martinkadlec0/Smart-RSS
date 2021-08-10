@@ -204,8 +204,8 @@ define([
                     data.titleIsLink = bg.settings.get('titleIsLink');
                     data.open = open;
 
+                    let content = '';
 
-                    let content = this.model.get('content');
 
                     if (overrideView !== '') {
                         this.view = overrideView;
@@ -213,7 +213,11 @@ define([
                         this.view = defaultView;
                     }
 
-                    if (this.view !== 'feed') {
+                    if (this.view === 'feed') {
+                        content = this.model.get('content');
+                    }
+
+                    if (this.view === 'mozilla') {
                         const response = await fetch(this.model.get('url'), {
                             method: 'GET',
                             redirect: 'follow', // manual, *follow, error
@@ -221,11 +225,9 @@ define([
                         });
                         const websiteContent = await response.text();
 
-                        if (this.view === 'mozilla') {
-                            const parser = new DOMParser();
-                            const websiteDocument = parser.parseFromString(websiteContent, 'text/html');
-                            content = new Readability(websiteDocument).parse().content;
-                        }
+                        const parser = new DOMParser();
+                        const websiteDocument = parser.parseFromString(websiteContent, 'text/html');
+                        content = new Readability(websiteDocument).parse().content;
                     }
 
 
