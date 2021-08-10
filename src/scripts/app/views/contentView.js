@@ -236,10 +236,7 @@ define([
                         }
                         if (bg.settings.get('cacheParsedArticles')) {
                             parsedContent[this.view] = content;
-                            this.model.save({
-                                    parsedContent: parsedContent
-                                }
-                            );
+                            this.model.set('parsedContent', parsedContent);
                         }
                     }
 
