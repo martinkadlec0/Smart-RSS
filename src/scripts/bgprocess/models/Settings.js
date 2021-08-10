@@ -185,7 +185,7 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
                     'shift+3': 'content:focus',
                     'shift+4': 'content:focusSandbox',
                     'esc': 'global:hideOverlays'
-                },
+                }
             },
             version: 1,
             showNewArticlesIcon: 'always',
@@ -199,6 +199,7 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             queries: [],
             invertColors: 'no',
             defaultView: 'feed',
+            cacheParsedArticles: false
         },
         /**
          * @property localStorage
