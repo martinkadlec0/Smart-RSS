@@ -24,9 +24,10 @@ define(['backbone'], function (BB) {
             trashed: false,
             pinned: false,
             dateCreated: 0,
-            enclosure: '' ,
+            enclosure: '',
             emptyDate: false,
             trashedOn: 0,
+            parsedContent: {}
         },
         markAsDeleted: function () {
             this.save({
@@ -40,19 +41,20 @@ define(['backbone'], function (BB) {
                 author: '',
                 title: '',
                 trashedOn: 0,
+                parsedContent: {}
             });
         },
-        trash: function(){
+        trash: function () {
             this.save({
                 trashed: true,
                 visited: true,
-                trashedOn: Date.now(),
+                trashedOn: Date.now()
             });
         },
         _source: null,
         getSource: function () {
             if (!this._source) {
-                this._source = sources.findWhere({ id: this.get('sourceID') });
+                this._source = sources.findWhere({id: this.get('sourceID')});
             }
             return this._source;
         },
