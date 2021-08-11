@@ -252,42 +252,42 @@ define([
                         fragment.querySelector('.pin-button').classList.add('pinned');
                     }
 
-                    function createEnclosure(data) {
-                        let enclosure;
+                    function createEnclosure(enclosureData) {
+                        let newEnclosure;
 
-                        switch (data.enclosure.medium) {
+                        switch (enclosureData.medium) {
                             case 'image':
-                                enclosure = document
+                                newEnclosure = document
                                     .createRange()
                                     .createContextualFragment(enclosureImage);
-                                const img = enclosure.querySelector('img');
-                                img.src = data.enclosure.url;
-                                img.alt = data.enclosure.name;
+                                const img = newEnclosure.querySelector('img');
+                                img.src = enclosureData.url;
+                                img.alt = enclosureData.name;
                                 break;
                             case 'video':
-                                enclosure = document
+                                newEnclosure = document
                                     .createRange()
                                     .createContextualFragment(enclosureVideo);
-                                const video = enclosure.querySelector('video');
-                                video.querySelector('source').src = data.enclosure.url;
-                                video.querySelector('source').type = data.enclosure.type;
+                                const video = newEnclosure.querySelector('video');
+                                video.querySelector('source').src = enclosureData.url;
+                                video.querySelector('source').type = enclosureData.type;
                                 break;
                             case 'audio':
-                                enclosure = document
+                                newEnclosure = document
                                     .createRange()
                                     .createContextualFragment(enclosureAudio);
-                                const audio = enclosure.querySelector('audio');
-                                audio.querySelector('source').src = data.enclosure.url;
+                                const audio = newEnclosure.querySelector('audio');
+                                audio.querySelector('source').src = enclosureData.url;
                                 break;
                             case 'youtube':
-                                enclosure = document
+                                newEnclosure = document
                                     .createRange()
                                     .createContextualFragment(enclosureYoutubeCover);
-                                const videoId = /^.*\/(.*)\?(.*)$/.exec(data.enclosure.url)[1];
+                                const videoId = /^.*\/(.*)\?(.*)$/.exec(enclosureData.url)[1];
 
                                 const posterUrl = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
                                 const videoUrl = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1`;
-                                const cover = enclosure.querySelector('.youtube-cover');
+                                const cover = newEnclosure.querySelector('.youtube-cover');
                                 cover.style.backgroundImage = `url("${posterUrl}")`;
 
                                 cover.addEventListener('click', () => {
@@ -303,24 +303,28 @@ define([
 
                                 break;
                             default:
-                                enclosure = document
+                                newEnclosure = document
                                     .createRange()
                                     .createContextualFragment(enclosureGeneral);
                         }
 
-                        enclosure.querySelector('a').href = data.enclosure.url;
-                        enclosure.querySelector('a').textContent = data.enclosure.name;
+                        newEnclosure.querySelector('a').href = enclosureData.url;
+                        newEnclosure.querySelector('a').textContent = enclosureData.name;
 
-                        if (data.open && data.enclosure.medium) {
-                            enclosure.querySelector('.enclosure').setAttribute('open', 'open');
-                        }
-
-                        return enclosure;
+                        return newEnclosure;
                     }
 
                     if (data.enclosure) {
-                        const enclosure = createEnclosure(data);
-                        fragment.querySelector('#below-h1').appendChild(enclosure);
+                        const enclosures = Array.isArray(data.enclosure) ? data.enclosure : [data.enclosure];
+                        enclosures.forEach((enclosureData) => {
+                            const enclosure = createEnclosure(enclosureData);
+                            fragment.querySelector('#below-h1').appendChild(enclosure);
+                        });
+                        if (data.open && enclosures.length < 2) {
+                            fragment.querySelector('.enclosure').setAttribute('open', 'open');
+                        }
+
+
                     }
                     this.el.appendChild(fragment);
                     const h1 = this.el.querySelector('h1');
