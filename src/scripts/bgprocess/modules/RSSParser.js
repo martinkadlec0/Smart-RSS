@@ -44,7 +44,7 @@ define(['../../libs/he'], function (he) {
                 }
             }
 
-            return address.replace(/^(javascript:\.)/,'');
+            return address.replace(/^(javascript:\.)/, '');
         }
 
         getTitle() {
@@ -177,31 +177,44 @@ define(['../../libs/he'], function (he) {
             return (guid ? guid.textContent : this.getLink() || '').trim() + this.source.get('id');
         }
 
-        getEnclosure() {
-            const node = this.currentNode;
-            let enclosureNode = node.querySelector('enclosure');
-            let media = {};
-
-            if (!enclosureNode) {
-                enclosureNode = [...node.getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'content')][0];
-
-                const mediaTitleNode = [...node.getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'title')][0];
-                if (mediaTitleNode) {
-                    media.title = mediaTitleNode.textContent;
-                }
-            }
-
-            if (!enclosureNode) {
-                return '';
-            }
+        getEnclosure(enclosureNode, title) {
             let enclosure = {};
-            enclosure.url = enclosureNode.hasAttribute('url') ? enclosureNode.getAttribute('url').replace(/^(javascript:\.)/,'') : '';
-            enclosure.name = he.decode(enclosureNode.hasAttribute('url') ? enclosure.url.substring(enclosure.url.lastIndexOf('/') + 1) : (media.title ? media.title : ''));
+            enclosure.url = enclosureNode.hasAttribute('url') ? enclosureNode.getAttribute('url').replace(/^(javascript:\.)/, '') : '';
+            enclosure.name = he.decode(enclosureNode.hasAttribute('url') ? enclosure.url.substring(enclosure.url.lastIndexOf('/') + 1) : title);
             enclosure.type = enclosureNode.hasAttribute('type') ? enclosureNode.getAttribute('type') : '';
             enclosure.medium = enclosureNode.hasAttribute('medium') ? enclosureNode.getAttribute('medium') : this.getMediumFromType(enclosure.type, enclosure.name);
             enclosure.medium = enclosure.url.includes('youtube.com') ? 'youtube' : enclosure.medium;
             enclosure.length = enclosureNode.hasAttribute('length') ? enclosureNode.getAttribute('length') : '';
             return enclosure;
+        }
+
+        getEnclosures() {
+            const node = this.currentNode;
+            const seenUrls = [];
+            let title = '';
+            const mediaTitleNode = [...node.getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'title')][0];
+            if (mediaTitleNode) {
+                title = mediaTitleNode.textContent;
+            }
+            const enclosures = [];
+            let enclosureNode = node.querySelector('enclosure');
+
+            if (!!enclosureNode) {
+                const foundEnclosure = this.getEnclosure(enclosureNode, title);
+                enclosures.push(foundEnclosure);
+                seenUrls.push(foundEnclosure.url);
+            }
+            const enclosureNodes = [...node.getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'content')];
+            enclosureNodes.forEach((enclosureNode) => {
+                const foundEnclosure = this.getEnclosure(enclosureNode, title);
+                if (seenUrls.includes(foundEnclosure.url)) {
+                    return;
+                }
+                seenUrls.push(foundEnclosure.url);
+                enclosures.push(foundEnclosure);
+            });
+
+            return enclosures;
         }
 
         getMediumFromType(type, name) {
@@ -304,7 +317,7 @@ define(['../../libs/he'], function (he) {
                     author: he.decode(this.getAuthor()),
                     content: this.getArticleContent(),
                     sourceID: this.source.get('id'),
-                    enclosure: this.getEnclosure(),
+                    enclosure: this.getEnclosures(),
                     dateCreated: Date.now(),
                     emptyDate: false
                 });
