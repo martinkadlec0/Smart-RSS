@@ -24,7 +24,7 @@ define(['backbone'], function (BB) {
             trashed: false,
             pinned: false,
             dateCreated: 0,
-            enclosure: '',
+            enclosure: [],
             emptyDate: false,
             trashedOn: 0,
             parsedContent: {}
