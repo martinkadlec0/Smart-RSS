@@ -336,13 +336,15 @@ define([
                 }
 
                 let after = null;
-                if (noManualSort !== true) {
-                    [...document.querySelectorAll('#article-list .articles-list-item, #article-list .date-group')].some(function (itemEl) {
-                        if (bg.items.comparator(itemEl.view.model, item) === 1) {
-                            after = itemEl;
-                            return true;
-                        }
-                    });
+                if (!noManualSort) {
+                    [...document
+                        .querySelectorAll('#article-list .articles-list-item, #article-list .date-group')]
+                        .some((itemEl) => {
+                            if (bg.items.comparator(itemEl.view.model, item) === 1) {
+                                after = itemEl;
+                                return true;
+                            }
+                        });
                 }
 
                 const view = new ItemView({model: item}, this);
