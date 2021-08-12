@@ -121,24 +121,11 @@ define([
                     parentSelect.insertAdjacentElement('beforeend', option);
                 });
 
-                if (this.current.get('updateEvery')) {
-                    document.querySelector('#prop-update-every').value = this.current.get('updateEvery');
-                }
-
-                if (this.current.get('autoremove')) {
-                    document.querySelector('#prop-autoremove').value = this.current.get('autoremove');
-                }
-
-                if (this.current.get('openEnclosure')) {
-                    document.querySelector('#openEnclosure').value = this.current.get('openEnclosure');
-                }
-                if (this.current.get('defaultView')) {
-                    document.querySelector('#defaultView').value = this.current.get('defaultView');
-                }
-
-                if (this.current.get('proxyThroughFeedly')) {
-                    document.querySelector('#prop-proxy').checked = true;
-                }
+                document.querySelector('#prop-update-every').value = this.current.get('updateEvery');
+                document.querySelector('#prop-autoremove').value = this.current.get('autoremove');
+                document.querySelector('#openEnclosure').value = this.current.get('openEnclosure');
+                document.querySelector('#defaultView').value = this.current.get('defaultView');
+                document.querySelector('#prop-proxy').checked = !!this.current.get('proxyThroughFeedly');
             },
             renderGroup: function () {
                 const isFolder = this.current instanceof bg.Folder;
