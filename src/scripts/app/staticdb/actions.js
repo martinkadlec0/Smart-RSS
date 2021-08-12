@@ -291,13 +291,18 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                     }
                     const folder = Array.from(document.querySelectorAll('.folder.selected'))[0];
 
+                    let unreadOnly = !!event.altKey || target.className === 'source-counter';
+                    if (bg.settings.get('defaultToUnreadOnly')) {
+                        unreadOnly = !unreadOnly;
+                    }
+
                     app.trigger('select:' + feedList.el.id, {
                         action: 'new-select',
                         feeds: feedIds,
                         filter: special ? Object.assign({}, special.get('filter')) : null,
                         name: special ? special.get('name') : null,
                         multiple: !!(special || folder),
-                        unreadOnly: !!event.altKey || target.className === 'source-counter'
+                        unreadOnly: unreadOnly
                     });
 
 
