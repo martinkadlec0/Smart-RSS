@@ -199,7 +199,8 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             queries: [],
             invertColors: 'no',
             defaultView: 'feed',
-            cacheParsedArticles: false
+            cacheParsedArticles: false,
+            defaultToUnreadOnly: false
         },
         /**
          * @property localStorage
