@@ -327,25 +327,24 @@ define([
              * Adds new article item to the list
              * @method addItem
              * @param item {Item} bg.Item
-             * @param noManualSort {Boolean} true when adding items in a batch in right order
              */
-            addItem: function (item, noManualSort) {
+            addItem: function (item) {
                 //Don't add newly fetched items to middle column, when they shouldn't be
-                if (noManualSort !== true && !this.inCurrentData(item)) {
+                if (!this.inCurrentData(item)) {
                     return false;
                 }
 
                 let after = null;
-                if (!noManualSort) {
-                    [...document
-                        .querySelectorAll('#article-list .articles-list-item, #article-list .date-group')]
-                        .some((itemEl) => {
-                            if (bg.items.comparator(itemEl.view.model, item) === 1) {
-                                after = itemEl;
-                                return true;
-                            }
-                        });
-                }
+                [
+                    ...document
+                        .querySelectorAll('#article-list .articles-list-item, #article-list .date-group')
+                ]
+                    .some((itemEl) => {
+                        if (bg.items.comparator(itemEl.view.model, item) === 1) {
+                            after = itemEl;
+                            return true;
+                        }
+                    });
 
                 const view = new ItemView({model: item}, this);
 
