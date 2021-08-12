@@ -68,7 +68,7 @@ define([
                 while (this.el.firstChild) {
                     this.el.removeChild(this.el.firstChild);
                 }
-    const data = this.model.toJSON();
+                const data = this.model.toJSON();
                 const fragment = document.createRange().createContextualFragment(this.template);
                 fragment.querySelector('.source-icon.icon').src = data.favicon;
                 fragment.querySelector('.source-title').textContent = data.title;
