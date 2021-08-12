@@ -234,7 +234,7 @@ define([
 
                             }
                         }
-                        if (bg.settings.get('cacheParsedArticles') && !(this.view in parsedContent)) {
+                        if (bg.settings.get('cacheParsedArticles') === 'true' && !(this.view in parsedContent)) {
                             parsedContent[this.view] = content;
                             this.model.set('parsedContent', parsedContent);
                         }

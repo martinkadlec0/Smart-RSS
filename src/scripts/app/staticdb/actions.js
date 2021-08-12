@@ -292,7 +292,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                     const folder = Array.from(document.querySelectorAll('.folder.selected'))[0];
 
                     let unreadOnly = !!event.altKey || target.className === 'source-counter';
-                    if (bg.settings.get('defaultToUnreadOnly')) {
+                    if (bg.settings.get('defaultToUnreadOnly') === 'true') {
                         unreadOnly = !unreadOnly;
                     }
 
