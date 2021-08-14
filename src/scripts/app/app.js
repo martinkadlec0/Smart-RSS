@@ -71,7 +71,6 @@ define([
             if (!frame) {
                 return;
             }
-            console.log(frame, frame.contentDocument);
 
             const baseStyleTag = frame.contentDocument.querySelector('[data-base-style]');
             if (!!baseStyleTag) {
