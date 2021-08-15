@@ -1,63 +1,40 @@
-const entityMap = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    '\'': '&#39;'
-};
+define(['../app/staticdb/actions', 'staticdb/shortcuts'], function (actions, shortcuts) {
+    const entityMap = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        '\'': '&#39;'
+    };
 
-
-const keys = {
-    8: 'backspace',
-    9: 'tab',
-    13: 'enter',
-    //16: 'shift',
-    //17: 'ctrl',
-    20: 'capslock',
-    27: 'esc',
-    32: 'space',
-    33: 'pgup',
-    34: 'pgdown',
-    35: 'end',
-    36: 'home',
-    37: 'left',
-    38: 'up',
-    39: 'right',
-    40: 'down',
-    45: 'insert',
-    46: 'del'
-};
-
-
-function escapeHtml(string) {
-    return String(string).replace(/[&<>"']/gm, (s) => {
-        return entityMap[s];
-    }).replace(/\s/, (f) => {
-        return f === ' ' ? ' ' : '';
-    });
-}
-
-function decodeHTML(str = '') {
-    let map = {'gt': '>', 'lt': '<', 'amp': '&', 'quot': '"'};
-    return str.replace(/&(#(?:x[0-9a-f]+|\d+)|[a-z]+);?/gmi, function ($0, $1) {
-        if ($1[0] === '#') {
-            return String.fromCharCode($1[1].toLowerCase() === 'x' ? parseInt($1.substr(2), 16) : parseInt($1.substr(1), 10));
-        } else {
-            return map.hasOwnProperty($1) ? map[$1] : $0;
-        }
-    });
-}
-
-
-JSON.safeParse = function (str) {
-    try {
-        return JSON.parse(str);
-    } catch (e) {
-        return null;
+    function escapeHtml(string) {
+        return String(string).replace(/[&<>"']/gm, (s) => {
+            return entityMap[s];
+        }).replace(/\s/, (f) => {
+            return f === ' ' ? ' ' : '';
+        });
     }
-};
 
-chrome.runtime.getBackgroundPage((bg) => {
+    function decodeHTML(str = '') {
+        let map = {'gt': '>', 'lt': '<', 'amp': '&', 'quot': '"'};
+        return str.replace(/&(#(?:x[0-9a-f]+|\d+)|[a-z]+);?/gmi, function ($0, $1) {
+            if ($1[0] === '#') {
+                return String.fromCharCode($1[1].toLowerCase() === 'x' ? parseInt($1.substr(2), 16) : parseInt($1.substr(1), 10));
+            } else {
+                return map.hasOwnProperty($1) ? map[$1] : $0;
+            }
+        });
+    }
+
+
+    JSON.safeParse = function (str) {
+        try {
+            return JSON.parse(str);
+        } catch (e) {
+            return null;
+        }
+    };
+
     const documentReady = () => {
         if (typeof browser === 'undefined') {
             const warning = document.querySelector('.ff-warning');
@@ -117,37 +94,160 @@ chrome.runtime.getBackgroundPage((bg) => {
         });
 
         const hotkeysElement = document.querySelector('#hotkeys');
-        const hotkeys = bg.settings.get('hotkeys');
-        for (const region in hotkeys) {
-            if (hotkeys.hasOwnProperty(region)) {
-                const regionElement = document.createElement('h3');
-                regionElement.insertAdjacentText('afterbegin', region);
-                hotkeysElement.insertAdjacentElement('beforeend', regionElement);
+        hotkeysElement.addEventListener('keydown', (event) => {
+            const target = event.target;
+            if (target.tagName !== 'INPUT') {
+                return true;
+            }
+            event.preventDefault();
+            let shortcut = '';
+            if (event.ctrlKey) {
+                shortcut += 'ctrl+';
+            }
+            if (event.altKey) {
+                shortcut += 'alt+';
+            }
+            if (event.shiftKey) {
+                shortcut += 'shift+';
+            }
 
-                const regionHotkeys = hotkeys[region];
-                for (const regionHotkey in regionHotkeys) {
-                    if (regionHotkeys.hasOwnProperty(regionHotkey)) {
+            if (event.keyCode > 46 && event.keyCode < 91) {
+                shortcut += String.fromCharCode(event.keyCode).toLowerCase();
+            } else if (event.keyCode in shortcuts.keys) {
+                shortcut += shortcuts.keys[event.keyCode];
+            } else {
+                return;
+            }
+            target.value = shortcut;
+            return false;
+        });
 
-                        const label = document.createElement('label');
-                        label.classList.add('web-content-select-label');
+        const saveHotkeys = () => {
+            const hotkeysSettings = {};
+            [...hotkeysElement.querySelectorAll('section')].forEach((section) => {
+                const sectionSettings = {};
+                const sectionName = section.id;
+                [...section.querySelectorAll('label')].forEach((label) => {
+                    const hotkey = label.querySelector('input').value;
+                    const action = label.querySelector('select').value;
+                    if (hotkey === '') {
+                        return;
+                    }
+                    if (action === '') {
+                        return;
+                    }
+                    sectionSettings[hotkey] = action;
+                });
+                hotkeysSettings[sectionName] = sectionSettings;
+            });
+            bg.settings.save('hotkeys', hotkeysSettings);
+        };
+        let actionsMap = {};
+        Object.entries(actions).forEach((obj) => {
+            Object.entries(obj[1]).forEach((action) => {
+                actionsMap[obj[0] + ':' + action[0]] = action[1]['title'];
+            });
+        });
 
-                        const hotkey = document.createElement('input');
-                        hotkey.setAttribute('disabled', true);
-                        hotkey.classList.add('selectLabel');
-                        hotkey.value = regionHotkey;
+        const renderHotkeysBlock = () => {
+            hotkeysElement.textContent = '';
+            const resetHotkeysButton = document.createElement('button');
+            resetHotkeysButton.classList.add('resetHotkeysButton');
+            resetHotkeysButton.textContent = 'Reset hotkeys';
+            hotkeysElement.insertAdjacentElement('beforeend', resetHotkeysButton);
+            const hotkeys = bg.settings.get('hotkeys');
+            let actionsMap = {};
+            Object.entries(actions).forEach((obj) => {
+                Object.entries(obj[1]).forEach((action) => {
+                    actionsMap[obj[0] + ':' + action[0]] = action[1]['title'];
+                });
+            });
 
-                        const action = document.createElement('input');
-                        action.setAttribute('disabled', true);
-                        action.value = regionHotkeys[regionHotkey];
+            for (const region in hotkeys) {
+                if (hotkeys.hasOwnProperty(region)) {
+                    const regionElement = document.createElement('section');
+                    regionElement.id = region;
+                    const regionHeader = document.createElement('h3');
+                    regionHeader.insertAdjacentText('afterbegin', region);
+                    regionElement.insertAdjacentElement('afterbegin', regionHeader);
 
-                        label.insertAdjacentElement('beforeend', hotkey);
-                        label.insertAdjacentElement('beforeend', action);
-                        hotkeysElement.insertAdjacentElement('beforeend', label);
+                    hotkeysElement.insertAdjacentElement('beforeend', regionElement);
+
+                    const regionHotkeys = hotkeys[region];
+                    const addHotkeyButton = document.createElement('button');
+                    addHotkeyButton.textContent = '+';
+                    addHotkeyButton.classList.add('addHotkeyButton');
+                    regionElement.insertAdjacentElement('beforeend', addHotkeyButton);
+                    for (const regionHotkey in regionHotkeys) {
+                        addHotkeyToElement(regionElement, regionHotkey, regionHotkeys[regionHotkey]);
                     }
                 }
             }
-        }
+        };
 
+
+        const hotkeyChangeHandler = (event) => {
+            const target = event.target;
+            if (target.classList.contains('actionHotkey') || target.classList.contains('actionSelect')) {
+                saveHotkeys();
+            }
+        };
+
+        hotkeysElement.addEventListener('change', hotkeyChangeHandler);
+        hotkeysElement.addEventListener('keyup', hotkeyChangeHandler);
+        hotkeysElement.addEventListener('click', (event) => {
+            const target = event.target;
+            if (target.classList.contains('addHotkeyButton')) {
+                addHotkeyToElement(target.parentElement);
+                return true;
+            }
+            if (target.classList.contains('removeHotkeyButton')) {
+                target.parentElement.remove();
+                saveHotkeys();
+                return true;
+            }
+            if (target.classList.contains('resetHotkeysButton')) {
+                if (typeof browser === 'undefined' || confirm('Resetting hotkeys will require extension reload, do you want to continue?')) {
+                    bg.settings.save('hotkeys', bg.settings.defaults.hotkeys);
+                    if (typeof browser === 'undefined') {
+                        renderHotkeysBlock();
+                        return true;
+                    }
+                    chrome.runtime.reload();
+                }
+            }
+            return true;
+        });
+
+        const addHotkeyToElement = (element, hotkeyString = '', actionString = '') => {
+            const label = document.createElement('label');
+            label.classList.add('web-content-select-label');
+
+            const hotkey = document.createElement('input');
+            hotkey.classList.add('actionHotkey');
+            hotkey.value = hotkeyString;
+
+            const actionSelect = document.createElement('select');
+            actionSelect.classList.add('actionSelect');
+            Object.entries(actionsMap).forEach((action) => {
+                const actionOption = document.createElement('option');
+                actionOption.value = action[0];
+                const text = !!action[1] ? action[1] : action[0];
+                actionOption.textContent = text;
+                actionSelect.insertAdjacentElement('beforeend', actionOption);
+            });
+            actionSelect.value = actionString;
+            const removeHotkeyButton = document.createElement('button');
+            removeHotkeyButton.classList.add('removeHotkeyButton');
+            removeHotkeyButton.textContent = '-';
+
+            label.insertAdjacentElement('beforeend', hotkey);
+            label.insertAdjacentElement('beforeend', actionSelect);
+            label.insertAdjacentElement('beforeend', removeHotkeyButton);
+            element.querySelector('.addHotkeyButton').insertAdjacentElement('beforebegin', label);
+        };
+
+        renderHotkeysBlock();
         handleLayoutChange(bg.settings.get('layout'));
     };
 
@@ -596,5 +696,4 @@ chrome.runtime.getBackgroundPage((bg) => {
         alert('Done');
     }
 
-})
-;
+});

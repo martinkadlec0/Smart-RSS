@@ -156,7 +156,7 @@ define([
                 };
                 isLoaded();
             },
-            handleKeyDown: function (event) {
+            handleKeyDown: (event) => {
                 const activeElement = document.activeElement;
                 const hotkeys = bg.settings.get('hotkeys');
 
