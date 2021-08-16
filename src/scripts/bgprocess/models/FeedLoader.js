@@ -110,18 +110,19 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
 
                 function areDifferent(newItem, existingItem) {
                     if (existingItem.get('content') !== newItem.content) {
+                        console.log(existingItem.get('content'), newItem.content);
                         return true;
                     }
                     if (existingItem.get('title') !== newItem.title) {
+                        console.log(existingItem.get('title'), newItem.title);
                         return true;
                     }
                     if (existingItem.get('date') !== newItem.date) {
+                        console.log(existingItem.get('date'), newItem.date);
                         return true;
                     }
                     if (existingItem.get('author') !== newItem.author) {
-                        return true;
-                    }
-                    if (existingItem.get('enclosure') !== newItem.enclosure) {
+                        console.log(existingItem.get('author'), newItem.author);
                         return true;
                     }
                     return false;
