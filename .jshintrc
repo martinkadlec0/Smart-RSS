@@ -21,6 +21,7 @@
     "quotmark": "single",
     "-W030": true,
     "-W117": true,
+    "-W089": true,
     "esversion": 8,
     "futurehostile": true,
     "globals": {
