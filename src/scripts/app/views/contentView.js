@@ -320,7 +320,7 @@ define([
                             const enclosure = createEnclosure(enclosureData);
                             fragment.querySelector('#below-h1').appendChild(enclosure);
                         });
-                        if (data.open && enclosures.length < 2) {
+                        if (data.open && enclosures.length === 1) {
                             fragment.querySelector('.enclosure').setAttribute('open', 'open');
                         }
 
