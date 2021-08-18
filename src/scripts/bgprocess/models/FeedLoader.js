@@ -66,7 +66,7 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
 
             const queries = settings.get('queries');
             RegExp.escape = function (text) {
-                return String(text).replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+                return String(text).replace(/[\-\[\]\/{}()*+?.\\^$|]/g, '\\$&');
             };
 
             parsedData.forEach((item) => {
@@ -109,20 +109,27 @@ define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon
                 }
 
                 function areDifferent(newItem, existingItem) {
-                    if (existingItem.get('content') !== newItem.content) {
-                        console.log(existingItem.get('content'), newItem.content);
-                        return true;
+                    const existingContent = existingItem.get('content');
+                    const newContent = newItem.content;
+                    if (existingContent !== newContent) {
+                        const existingContentFragment = document.createRange().createContextualFragment(existingContent);
+                        if (!existingContentFragment) {
+                            return true;
+                        }
+                        const newContentFragment = document.createRange().createContextualFragment(newContent);
+                        if (!newContentFragment) {
+                            return true;
+                        }
+                        const existingContentText = existingContentFragment.innerText;
+                        const newContentText = newContentFragment.innerText;
+                        if (existingContentText !== newContentText) {
+                            return true;
+                        }
                     }
                     if (existingItem.get('title') !== newItem.title) {
-                        console.log(existingItem.get('title'), newItem.title);
-                        return true;
-                    }
-                    if (existingItem.get('date') !== newItem.date) {
-                        console.log(existingItem.get('date'), newItem.date);
                         return true;
                     }
                     if (existingItem.get('author') !== newItem.author) {
-                        console.log(existingItem.get('author'), newItem.author);
                         return true;
                     }
                     return false;
