@@ -359,6 +359,12 @@ define([
 
                     const loadContent = () => {
                         const body = frame.contentDocument.querySelector('body');
+                        const articleUrl = this.model.get('url');
+                        const oURL = new URL(articleUrl);
+                        const articleDomain = oURL.protocol + oURL.host;
+
+                        let base = frame.contentDocument.querySelector('base');
+                        base.href = articleDomain;
                         const shouldInvertColors = bg.settings.get('invertColors') === 'yes';
                         if (shouldInvertColors) {
                             body.classList.add('dark-theme');
@@ -386,7 +392,7 @@ define([
                         }
                         contentElement.appendChild(fragment);
 
-                        const articleUrl = this.model.get('url');
+
                         frame.contentDocument.querySelector('#smart-rss-url').href = articleUrl;
                         frame.contentDocument.querySelector('#full-article-url').textContent = articleUrl;
 
