@@ -7,7 +7,7 @@ define(function () {
         selectNextSelectable: function (e) {
             e = e || {};
 
-            const selector = e.selectUnread ? '.unread' : '.' + this.itemClass;
+            const selector = (e.selectUnread ? '.unread' : '.' + this.itemClass) + ':not([hidden])';
             let nextElement;
             let currentElement;
             if (e.selectUnread && this.selectPivot) {
@@ -38,7 +38,7 @@ define(function () {
         selectPrev: function (e) {
             e = e || {};
 
-            const selector = e.selectUnread ? '.unread' : '.' + this.itemClass;
+            const selector = e.selectUnread ? '.unread' : '.' + this.itemClass + ':not([hidden])';
             let previousElement;
             let currentElement;
             if (e.selectUnread && this.selectPivot) {
