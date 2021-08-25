@@ -94,6 +94,7 @@ define(['views/TopView', 'text!templates/specialView.html'],
                 fragment.querySelector('.source-title').textContent = data.title;
                 fragment.querySelector('.source-counter').textContent = data.count;
                 this.el.appendChild(fragment);
+                this.el.href = '#';
 
                 if (!noinfo) {
                     this.changeInfo();

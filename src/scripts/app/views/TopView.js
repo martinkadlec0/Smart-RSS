@@ -2,11 +2,11 @@ define([
     'backbone', 'modules/Locale', 'text!templates/topView.html',
 ], function (BB, Locale, topViewTemplate) {
     return BB.View.extend({
-        tagName: 'div',
+        tagName: 'a',
         template: topViewTemplate,
         className: 'sources-list-item',
         handleMouseUp: function (e) {
-            if (e.which === 3) {
+            if (e.button === 2) {
                 this.showContextMenu(e);
             }
         },

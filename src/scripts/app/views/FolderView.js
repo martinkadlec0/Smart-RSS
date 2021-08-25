@@ -3,7 +3,7 @@
  * @submodule views/FolderView
  */
 define([
-        'backbone', 'views/TopView', 'instances/contextMenus',
+        'backbone', 'views/TopView', 'instances/contextMenus'
     ],
     function (BB, TopView, contextMenus) {
 
@@ -191,6 +191,7 @@ define([
 
 
                 this.setTitle(this.model.get('count'), this.model.get('countAll'));
+                this.el.href = '#';
 
                 return this;
             },

@@ -74,6 +74,7 @@ define([
                 fragment.querySelector('.source-title').textContent = data.title;
                 fragment.querySelector('.source-counter').textContent = data.count;
                 this.el.appendChild(fragment);
+                this.el.href = data.base;
 
                 if (bg.sourceToFocus === this.model.get('id')) {
                     setTimeout(function () {

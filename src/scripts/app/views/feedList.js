@@ -42,6 +42,7 @@ define([
             id: 'feed-list',
 
             events: {
+                'click .sources-list-item': 'handleMouseDown',
                 'mousedown .sources-list-item': 'handleMouseDown',
                 'mouseup .sources-list-item': 'handleMouseUp'
             },

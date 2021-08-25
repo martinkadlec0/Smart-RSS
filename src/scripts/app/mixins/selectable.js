@@ -4,10 +4,10 @@ define(function () {
         selectedItems: [],
         selectPivot: null,
         selectFlag: false,
-        selectSibling: function(e, relation){
+        selectSibling: function (e, relation) {
             e = e || {};
 
-            const sibling = relation === 'previous' ? 'previousElementSibling':'nextElementSibling';
+            const sibling = relation === 'previous' ? 'previousElementSibling' : 'nextElementSibling';
 
             const selector = (e.selectUnread ? '.unread' : '.' + this.itemClass) + ':not([hidden])';
             let siblingElement;
@@ -77,7 +77,6 @@ define(function () {
                     const viewIndex = [...viewElement.parentNode.children].indexOf(viewElement);
                     const siblings = [];
                     if (currentIndex < viewIndex) {
-
                         let sibling = element.nextElementSibling;
                         while (sibling) {
                             if (sibling.classList.contains('date-group')) {
@@ -90,7 +89,6 @@ define(function () {
                             siblings.push(sibling);
                             sibling = sibling.nextElementSibling;
                         }
-
                     } else {
                         let sibling = viewElement.nextElementSibling;
                         while (sibling) {
@@ -142,10 +140,8 @@ define(function () {
             if (event.which === 2) {
                 return true;
             }
+            event.preventDefault();
             const item = event.currentTarget.view;
-            if (item.el.classList.contains('articles-list-item')) {
-                event.preventDefault();
-            }
             if (this.selectedItems.length > 1 && item.el.classList.contains('selected') && !event.ctrlKey && !event.shiftKey) {
                 this.selectFlag = true;
                 return false;
