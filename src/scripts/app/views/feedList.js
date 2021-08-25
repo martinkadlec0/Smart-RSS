@@ -137,7 +137,7 @@ define([
              * @param event {Event} Mouse or key event
              */
             handlePick: function (view, event) {
-                if (event.type === 'mousedown' && event.which === 1) {
+                if (event.type && event.type === 'mousedown' && event.which === 1) {
                     app.actions.execute('feeds:showAndFocusArticles', event);
                 }
             },
