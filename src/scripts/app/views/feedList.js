@@ -96,6 +96,7 @@ define([
                         return;
                     }
                     this.select(feed.view);
+                    feed.view.el.focus();
                     app.actions.execute('feeds:showAndFocusArticles');
                 });
 
