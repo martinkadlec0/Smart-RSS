@@ -217,9 +217,8 @@ define([
                         content = this.model.get('content');
                     } else {
                         const parsedContent = this.model.get('parsedContent');
-                        const toRemove = chrome.runtime.getURL('');
                         if (this.view in parsedContent) {
-                            content = parsedContent[this.view].replace(toRemove, '/');
+                            content = parsedContent[this.view];
                         } else {
                             if (this.view === 'mozilla') {
                                 const response = await fetch(this.model.get('url'), {
@@ -232,7 +231,7 @@ define([
                                 const parser = new DOMParser();
                                 const websiteDocument = parser.parseFromString(websiteContent, 'text/html');
 
-                                content = new Readability(websiteDocument).parse().content.replace(toRemove, '/');
+                                content = new Readability(websiteDocument).parse().content;
                             }
                         }
                         if (bg.settings.get('cacheParsedArticles') === 'true' && !(this.view in parsedContent)) {
@@ -240,7 +239,9 @@ define([
                             this.model.set('parsedContent', parsedContent);
                         }
                     }
-
+                    const toRemove = chrome.runtime.getURL('');
+                    const re = new RegExp(toRemove, 'g');
+                    content = content.replace(re, '/');
 
                     while (this.el.firstChild) {
                         this.el.removeChild(this.el.firstChild);
