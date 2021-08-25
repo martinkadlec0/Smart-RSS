@@ -130,7 +130,7 @@ define(function () {
             if (lastSelected) {
                 lastSelected.classList.remove('last-selected');
             }
-            if (this.selectedItems[0] !== view) {
+            if (!this.selectedItems[0] || this.selectedItems[0] !== view) {
                 this.selectedItems.push(view);
                 view.el.classList.add('selected');
             }
