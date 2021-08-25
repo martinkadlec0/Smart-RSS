@@ -232,8 +232,7 @@ define(['../app/staticdb/actions', 'staticdb/shortcuts'], function (actions, sho
             Object.entries(actionsMap).forEach((action) => {
                 const actionOption = document.createElement('option');
                 actionOption.value = action[0];
-                const text = !!action[1] ? action[1] : action[0];
-                actionOption.textContent = text;
+                actionOption.textContent = !!action[1] ? action[1] : action[0];
                 actionSelect.insertAdjacentElement('beforeend', actionOption);
             });
             actionSelect.value = actionString;
