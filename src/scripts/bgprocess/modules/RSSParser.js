@@ -291,12 +291,6 @@ define(['../../libs/he'], function (he) {
                     }
                 }
                 if (!baseStr) {
-                    const node = mainEl.querySelector('link');
-                    if (node) {
-                        baseStr = node.textContent;
-                    }
-                }
-                if (!baseStr) {
                     baseStr = new URL(this.source.get('url')).origin;
                 }
 
