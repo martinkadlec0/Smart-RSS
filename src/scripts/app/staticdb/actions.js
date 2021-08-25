@@ -1,4 +1,4 @@
-define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (stripTags, Locale, comm) {
+define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (stripTags, L, comm) {
     return {
         global: {
             default: {
@@ -8,13 +8,13 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             hideOverlays: {
-                title: 'Hide Overlays',
+                title: L.HIDE_OVERLAYS,
                 fn: function () {
                     comm.trigger('hide-overlays');
                 }
             },
             openOptions: {
-                title: 'Options',
+                title: L.OPTIONS,
                 icon: 'options.png',
                 fn: function () {
                     chrome.runtime.openOptionsPage();
@@ -24,7 +24,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
         feeds: {
             toggleShowOnlyUnread: {
                 icon: 'icon16.png',
-                title: 'Toggle show only unread',
+                title: L.TOGGLE_SHOW_ONLY_UNREAD,
                 fn: function () {
                     const currentUnread = bg.settings.get('showOnlyUnreadSources');
                     bg.settings.save('showOnlyUnreadSources', currentUnread === 'yes' ? 'no' : 'yes');
@@ -33,14 +33,14 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
             },
             updateAll: {
                 icon: 'reload.png',
-                title: Locale.UPDATE_ALL,
+                title: L.UPDATE_ALL,
                 fn: function () {
                     bg.loader.downloadAll(true);
                 }
             },
             update: {
                 icon: 'reload.png',
-                title: Locale.UPDATE,
+                title: L.UPDATE,
                 fn: function () {
                     const selectedItems = require('views/feedList').selectedItems;
                     if (selectedItems.length) {
@@ -53,14 +53,14 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
             },
             stopUpdate: {
                 icon: 'stop.png',
-                title: 'Stop updating feeds',
+                title: L.STOP_UPDATE,
                 fn: function () {
                     bg.loader.abortDownloading();
                 }
             },
             mark: {
                 icon: 'read.png',
-                title: Locale.MARK_ALL_AS_READ,
+                title: L.MARK_ALL_AS_READ,
                 fn: function () {
                     const selectedFeeds = require('views/feedList').getSelectedFeeds();
                     if (!selectedFeeds.length) {
@@ -84,7 +84,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             openHome: {
-                title: Locale.OPEN_HOME,
+                title: L.OPEN_HOME,
                 fn: function () {
                     const selectedFeeds = require('views/feedList').getSelectedFeeds();
                     if (!selectedFeeds.length) {
@@ -100,7 +100,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             refetch: {
-                title: Locale.REFETCH, /****localization needed****/
+                title: L.REFETCH,
                 fn: function () {
                     const selectedFeeds = require('views/feedList').getSelectedFeeds();
                     if (!selectedFeeds.length) {
@@ -116,9 +116,9 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
             },
             delete: {
                 icon: 'delete.png',
-                title: Locale.DELETE,
+                title: L.DELETE,
                 fn: function () {
-                    if (!confirm(Locale.REALLY_DELETE)) {
+                    if (!confirm(L.REALLY_DELETE)) {
                         return;
                     }
 
@@ -136,7 +136,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
             },
             scrollIntoView: {
                 icon: 'back.png',
-                title: 'Scroll into view',
+                title: L.SCROLL_INTO_VIEW,
                 fn: function () {
                     const folders = require('views/feedList').getSelectedFolders();
 
@@ -157,7 +157,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
             },
             showProperties: {
                 icon: 'properties.png',
-                title: Locale.PROPERTIES,
+                title: L.PROPERTIES,
                 fn: function () {
                     const properties = app.feeds.properties;
                     const feedList = require('views/feedList');
@@ -175,9 +175,9 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
             },
             addSource: {
                 icon: 'add.png',
-                title: Locale.ADD_RSS_SOURCE,
+                title: L.ADD_RSS_SOURCE,
                 fn: function () {
-                    let url = (prompt(Locale.RSS_FEED_URL) || '').trim();
+                    let url = (prompt(L.RSS_FEED_URL) || '').trim();
                     if (!url) {
                         return;
                     }
@@ -211,9 +211,9 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
             },
             addFolder: {
                 icon: 'add_folder.png',
-                title: Locale.NEW_FOLDER,
+                title: L.NEW_FOLDER,
                 fn: function () {
-                    const title = (prompt(Locale.FOLDER_NAME + ': ') || '').trim();
+                    const title = (prompt(L.FOLDER_NAME + ': ') || '').trim();
                     if (!title) {
                         return;
                     }
@@ -224,25 +224,25 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             focus: {
-                title: 'Focus feeds',
+                title: L.FOCUS_FEEDS,
                 fn: function () {
                     app.setFocus('feeds');
                 }
             },
             selectNext: {
-                title: 'Select next',
+                title: L.SELECT_NEXT_FEED,
                 fn: function (event) {
                     require('views/feedList').selectNextSelectable(event);
                 }
             },
             selectPrevious: {
-                title: 'Select previous',
+                title: L.SELECT_PREVIOUS_FEED,
                 fn: function (event) {
                     require('views/feedList').selectPrev(event);
                 }
             },
             closeFolders: {
-                title: 'Close folders',
+                title: L.CLOSE_FOLDERS,
                 fn: function (event) {
                     const folders = Array.from(document.querySelectorAll('.folder.opened'));
                     if (!folders.length) {
@@ -256,7 +256,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             openFolders: {
-                title: 'Open folders',
+                title: L.OPEN_FOLDERS,
                 fn: function (event) {
                     const folders = Array.from(document.querySelectorAll('.folder:not(.opened)'));
                     folders.forEach((folder) => {
@@ -267,7 +267,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             toggleFolder: {
-                title: 'Toggle folder',
+                title: L.TOGGLE_FOLDER,
                 fn: function (event) {
                     event = event || {};
                     const selectedItems = require('views/feedList').selectedItems;
@@ -277,7 +277,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             showArticles: {
-                title: 'Show articles',
+                title: L.SHOW_ARTICLES,
                 fn: function (event = {}) {
                     const target = event.target || {};
                     const feedList = require('views/feedList');
@@ -323,7 +323,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             showAndFocusArticles: {
-                title: 'Show and focus articles',
+                title: L.SHOW_AND_FOCUS_ARTICLES,
                 fn: function (event) {
                     event = event || {};
                     const selectedItems = require('views/feedList').selectedItems;
@@ -337,14 +337,14 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
         articles: {
             mark: {
                 icon: 'read.png',
-                title: Locale.MARK_AS_READ,
+                title: L.MARK_AS_READ,
                 fn: function () {
                     require('views/articleList').changeUnreadState();
                 }
             },
             update: {
                 icon: 'reload.png',
-                title: Locale.UPDATE,
+                title: L.UPDATE,
                 fn: function () {
                     const list = require('views/articleList');
                     if (list.currentData.feeds.length) {
@@ -358,7 +358,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
             },
             delete: {
                 icon: 'delete.png',
-                title: Locale.DELETE,
+                title: L.DELETE,
                 fn: function (event) {
                     const list = require('views/articleList');
                     if (list.currentData.name === 'trash' || event.shiftKey) {
@@ -373,7 +373,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
             },
             undelete: {
                 icon: 'undelete.png',
-                title: Locale.UNDELETE,
+                title: L.UNDELETE,
                 fn: function () {
                     const articleList = require('views/articleList');
                     if (!articleList.selectedItems || !articleList.selectedItems.length || articleList.currentData.name !== 'trash') {
@@ -383,17 +383,19 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             selectNext: {
+                title: L.SELECT_NEXT_ARTICLE,
                 fn: function (event) {
                     require('views/articleList').selectNextSelectable(event);
                 }
             },
             selectPrevious: {
+                title: L.SELECT_PREVIOUS_ARTICLE,
                 fn: function (event) {
                     require('views/articleList').selectPrev(event);
                 }
             },
             search: {
-                title: Locale.SEARCH_TIP,
+                title: L.SEARCH_TIP,
                 fn: function (event) {
                     event = event || {currentTarget: document.querySelector('input[type=search]')};
                     let query = event.currentTarget.value || '';
@@ -447,19 +449,19 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             focusSearch: {
-                title: 'Focus Search',
+                title: L.FOCUS_SEARCH,
                 fn: function () {
                     document.querySelector('input[type=search]').focus();
                 }
             },
             focus: {
-                title: 'Focus Articles',
+                title: L.FOCUS_ARTICLES,
                 fn: function () {
                     app.setFocus('articles');
                 }
             },
             fullArticle: {
-                title: Locale.FULL_ARTICLE,
+                title: L.FULL_ARTICLE,
                 icon: 'full_article.png',
                 fn: function (event) {
                     const articleList = app.articles.articleList;
@@ -474,13 +476,12 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                     const openNewTab = bg.settings.get('openNewTab');
                     const active = openNewTab === 'background' ? !!event.shiftKey : !event.shiftKey;
                     articleList.selectedItems.forEach(function (item) {
-
                         chrome.tabs.create({url: stripTags(item.model.get('url')), active: active});
                     });
                 }
             },
             oneFullArticle: {
-                title: 'One full article',
+                title: L.FULL_ARTICLE_SINGLE,
                 fn: function (event) {
                     event = event || {};
                     const articleList = app.articles.articleList;
@@ -502,7 +503,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             markAndNextUnread: {
-                title: Locale.MARK_AND_NEXT_UNREAD,
+                title: L.MARK_AND_NEXT_UNREAD,
                 icon: 'find_next.png',
                 fn: function () {
                     require('views/articleList').changeUnreadState({onlyToRead: true});
@@ -510,7 +511,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             markAndPrevUnread: {
-                title: Locale.MARK_AND_PREV_UNREAD,
+                title: L.MARK_AND_PREV_UNREAD,
                 icon: 'find_previous.png',
                 fn: function () {
                     require('views/articleList').changeUnreadState({onlyToRead: true});
@@ -518,21 +519,21 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             nextUnread: {
-                title: Locale.NEXT_UNREAD,
+                title: L.NEXT_UNREAD,
                 icon: 'forward.png',
                 fn: function () {
                     require('views/articleList').selectNextSelectable({selectUnread: true});
                 }
             },
             prevUnread: {
-                title: Locale.PREV_UNREAD,
+                title: L.PREV_UNREAD,
                 icon: 'back.png',
                 fn: function () {
                     require('views/articleList').selectPrev({selectUnread: true});
                 }
             },
             markAllAsRead: {
-                title: Locale.MARK_ALL_AS_READ,
+                title: L.MARK_ALL_AS_READ,
                 icon: 'read.png',
                 fn: function () {
                     const articleList = require('views/articleList');
@@ -545,7 +546,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                             }
                         });
                     } else if (articleList.currentData.name === 'all-feeds') {
-                        if (confirm(Locale.MARK_ALL_QUESTION)) {
+                        if (confirm(L.MARK_ALL_QUESTION)) {
                             bg.items.forEach(function (item) {
                                 if (item.get('unread') === true) {
                                     item.save({unread: false, visited: true});
@@ -560,7 +561,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             selectAll: {
-                title: 'Select All',
+                title: L.SELECT_ALL_ARTICLES,
                 fn: function () {
                     const articleList = require('views/articleList');
                     [...articleList.el.querySelectorAll('.selected')].forEach((element) => {
@@ -586,7 +587,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             pin: {
-                title: Locale.PIN,
+                title: L.PIN,
                 icon: 'pinsource_context.png',
                 fn: function () {
                     const articleList = require('views/articleList');
@@ -610,28 +611,28 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             pageUp: {
-                title: 'Page up',
+                title: L.PAGE_UP,
                 fn: function () {
                     var el = require('views/articleList').el;
                     el.scrollByPages(-1);
                 }
             },
             pageDown: {
-                title: 'Page down',
+                title: L.PAGE_DOWN,
                 fn: function () {
                     var el = require('views/articleList').el;
                     el.scrollByPages(1);
                 }
             },
             scrollToBottom: {
-                title: 'Scroll to bottom',
+                title: L.SCROLL_TO_BOTTOM,
                 fn: function () {
                     var el = require('views/articleList').el;
                     el.scrollTop = el.scrollHeight;
                 }
             },
             scrollToTop: {
-                title: 'Scroll to top',
+                title: L.SCROLL_TO_TOP,
                 fn: function () {
                     var el = require('views/articleList').el;
                     el.scrollTop = 0;
@@ -640,10 +641,10 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
         },
         content: {
             changeView: {
-                title: Locale.CHANGE_VIEW,
+                title: L.CHANGE_VIEW,
                 icon: 'report.png',
                 fn: function () {
-                    var contentView = require('views/contentView');
+                    const contentView = require('views/contentView');
                     if (!contentView.model) {
                         return;
                     }
@@ -652,7 +653,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             mark: {
-                title: Locale.MARK_AS_READ,
+                title: L.MARK_AS_READ,
                 icon: 'read.png',
                 fn: function () {
                     var contentView = require('views/contentView');
@@ -666,7 +667,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             delete: {
-                title: Locale.DELETE,
+                title: L.DELETE,
                 icon: 'delete.png',
                 fn: function (e) {
                     const contentView = require('views/contentView');
@@ -678,16 +679,15 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
 
                     if (e.shiftKey) {
                         if (contentView.model.get('pinned') && askRmPinned && askRmPinned !== 'none') {
-                            let conf = confirm(Locale.PIN_QUESTION_A + contentView.model.escape('title') + Locale.PIN_QUESTION_B);
+                            let conf = confirm(L.PIN_QUESTION_A + contentView.model.escape('title') + L.PIN_QUESTION_B);
                             if (!conf) {
                                 return;
                             }
                         }
-
                         contentView.model.markAsDeleted();
                     } else {
                         if (contentView.model.get('pinned') && askRmPinned === 'all') {
-                            let conf = confirm(Locale.PIN_QUESTION_A + contentView.model.escape('title') + Locale.PIN_QUESTION_B);
+                            let conf = confirm(L.PIN_QUESTION_A + contentView.model.escape('title') + L.PIN_QUESTION_B);
                             if (!conf) {
                                 return;
                             }
@@ -698,7 +698,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             showConfig: {
-                title: Locale.SETTINGS,
+                title: L.SETTINGS,
                 icon: 'config.png',
                 fn: function () {
                     let url = chrome.extension.getURL('options.html');
@@ -723,7 +723,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             focus: {
-                title: 'Focus Article',
+                title: L.FOCUS_CONTENT,
                 fn: function () {
                     app.setFocus('content');
                 }
@@ -735,14 +735,14 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             scrollDown: {
-                title: 'Scroll down',
+                title: L.SCROLL_DOWN,
                 fn: function () {
                     const cw = document.querySelector('iframe').contentWindow;
                     cw.scrollBy(0, 40);
                 }
             },
             scrollUp: {
-                title: 'Scroll up',
+                title: L.SCROLL_UP,
                 fn: function () {
                     const cw = document.querySelector('iframe').contentWindow;
                     cw.scrollBy(0, -40);
@@ -755,7 +755,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             pageUp: {
-                title: 'Page up',
+                title: L.PAGE_UP,
                 fn: function () {
                     const cw = document.querySelector('iframe').contentWindow;
                     const d = cw.document;
@@ -763,7 +763,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             pageDown: {
-                title: 'Page down',
+                title: L.PAGE_DOWN,
                 fn: function () {
                     const cw = document.querySelector('iframe').contentWindow;
                     const d = cw.document;
@@ -771,7 +771,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             scrollToBottom: {
-                title: 'Scroll to bottom',
+                title: L.SCROLL_TO_BOTTOM,
                 fn: function () {
                     const cw = document.querySelector('iframe').contentWindow;
                     const d = cw.document;
@@ -779,13 +779,12 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 }
             },
             scrollToTop: {
-                title: 'Scroll to top',
+                title: L.SCROLL_TO_TOP,
                 fn: function () {
                     const cw = document.querySelector('iframe').contentWindow;
                     cw.scrollTo(0, 0);
                 }
             }
         }
-
     };  // end actions object
 }); // end define function

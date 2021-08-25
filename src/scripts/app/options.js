@@ -145,7 +145,7 @@ define(['../app/staticdb/actions', 'staticdb/shortcuts'], function (actions, sho
         let actionsMap = {};
         Object.entries(actions).forEach((obj) => {
             Object.entries(obj[1]).forEach((action) => {
-                actionsMap[obj[0] + ':' + action[0]] = action[1]['title'];
+                actionsMap[obj[0] + ':' + action[0]] = obj[0] + ':' + action[1]['title'];
             });
         });
 
