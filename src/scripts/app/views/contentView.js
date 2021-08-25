@@ -117,7 +117,7 @@ define([
                 if (cw.offsetHeight + cw.scrollTop >= cw.scrollHeight) {
                     app.trigger('give-me-next');
                 } else {
-                    cw.scrollBy(0, doc.documentElement.clientHeight * 0.85);
+                    cw.scrollBy(0, cw.offsetHeight * 0.85);
                 }
             },
 
