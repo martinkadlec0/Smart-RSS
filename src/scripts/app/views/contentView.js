@@ -217,8 +217,9 @@ define([
                         content = this.model.get('content');
                     } else {
                         const parsedContent = this.model.get('parsedContent');
+                        const toRemove = chrome.runtime.getURL('');
                         if (this.view in parsedContent) {
-                            content = parsedContent[this.view];
+                            content = parsedContent[this.view].replace(toRemove, '/');
                         } else {
                             if (this.view === 'mozilla') {
                                 const response = await fetch(this.model.get('url'), {
@@ -230,7 +231,7 @@ define([
 
                                 const parser = new DOMParser();
                                 const websiteDocument = parser.parseFromString(websiteContent, 'text/html');
-                                const toRemove = chrome.runtime.getURL('');
+
                                 content = new Readability(websiteDocument).parse().content.replace(toRemove, '/');
                             }
                         }
