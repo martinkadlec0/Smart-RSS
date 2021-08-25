@@ -202,6 +202,7 @@ define([
                         this.selectedItems[0].model.save({unread: false});
                     }
                     this.selectNextSelectable({selectUnread: true});
+                    app.actions.execute('content:focus');
                 }, this);
 
                 if (bg.sourceToFocus) {
