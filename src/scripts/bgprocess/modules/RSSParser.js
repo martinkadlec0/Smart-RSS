@@ -273,19 +273,19 @@ define(['../../libs/he'], function (he) {
                     baseStr = mainEl.getAttribute('base');
                 }
                 if (!baseStr) {
-                    const node = mainEl.querySelector('link[rel="alternate"]');
+                    const node = mainEl.querySelector(':scope > link[rel="alternate"]');
                     if (node) {
                         baseStr = node.textContent;
                     }
                 }
                 if (!baseStr) {
-                    const node = mainEl.querySelector('link[rel="alternate"]');
+                    const node = mainEl.querySelector(':scope > link[rel="alternate"]');
                     if (node) {
                         baseStr = node.getAttribute('href');
                     }
                 }
                 if (!baseStr) {
-                    const node = mainEl.querySelector('link:not([rel="self"])');
+                    const node = mainEl.querySelector(':scope > link:not([rel="self"])');
                     if (node) {
                         baseStr = node.getAttribute('href');
                     }
