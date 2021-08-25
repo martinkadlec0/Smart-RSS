@@ -113,13 +113,11 @@ define([
              * @triggered when space is pressed in middle column
              */
             handleSpace: function () {
-                const iframe = document.querySelector('iframe');
-                const contentWindow = iframe.contentWindow;
-                const doc = contentWindow.document;
-                if (doc.documentElement.clientHeight + doc.body.scrollTop >= doc.body.offsetHeight) {
+                const cw = document.querySelector('#content');
+                if (cw.offsetHeight + cw.scrollTop >= cw.scrollHeight) {
                     app.trigger('give-me-next');
                 } else {
-                    contentWindow.scrollBy(0, doc.documentElement.clientHeight * 0.85);
+                    cw.scrollBy(0, doc.documentElement.clientHeight * 0.85);
                 }
             },
 

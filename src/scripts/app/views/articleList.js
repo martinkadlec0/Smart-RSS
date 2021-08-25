@@ -201,7 +201,7 @@ define([
                     if (this.selectedItems[0] && this.selectedItems[0].model.get('unread') === true) {
                         this.selectedItems[0].model.save({unread: false});
                     }
-                    this.selectNext({selectUnread: true});
+                    this.selectNextSelectable({selectUnread: true});
                 }, this);
 
                 if (bg.sourceToFocus) {
