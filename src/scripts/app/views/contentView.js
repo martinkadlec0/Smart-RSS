@@ -362,8 +362,7 @@ define([
                     const loadContent = () => {
                         const body = frame.contentDocument.querySelector('body');
                         const articleUrl = this.model.get('url');
-                        const oURL = new URL(articleUrl);
-                        const articleDomain = oURL.protocol +  '//' + oURL.host;
+                        const articleDomain = new URL(articleUrl).origin;
 
                         let base = frame.contentDocument.querySelector('base');
                         base.href = articleDomain;
