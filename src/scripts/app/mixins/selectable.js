@@ -4,68 +4,44 @@ define(function () {
         selectedItems: [],
         selectPivot: null,
         selectFlag: false,
-        selectNextSelectable: function (e) {
+        selectSibling: function(e, relation){
             e = e || {};
+
+            const sibling = relation === 'previous' ? 'previousElementSibling':'nextElementSibling';
 
             const selector = (e.selectUnread ? '.unread' : '.' + this.itemClass) + ':not([hidden])';
-            let nextElement;
+            let siblingElement;
             let currentElement;
             if (e.selectUnread && this.selectPivot) {
-                nextElement = this.selectPivot.el.nextElementSibling;
+                siblingElement = this.selectPivot.el[sibling];
             } else {
                 currentElement = this.el.querySelector('.last-selected');
-                currentElement && (nextElement = currentElement.nextElementSibling);
+                currentElement && (siblingElement = currentElement[sibling]);
             }
-            while (nextElement && !nextElement.matches(selector)) {
-                nextElement = nextElement.nextElementSibling;
+            while (siblingElement && !siblingElement.matches(selector)) {
+                siblingElement = siblingElement[sibling];
             }
 
-            if (bg.settings.get('circularNavigation') && !e.ctrlKey && !e.shiftKey && !nextElement) {
-                nextElement = this.el.querySelector(selector + ':nth-of-type(1)');
-                if (e.currentIsRemoved && nextElement && this.el.querySelector('.last-selected') === nextElement) {
-                    nextElement = null;
+            if (bg.settings.get('circularNavigation') && !e.ctrlKey && !e.shiftKey && !siblingElement) {
+                siblingElement = this.el.querySelector(selector + ':nth-of-type(1)');
+                if (e.currentIsRemoved && siblingElement && this.el.querySelector('.last-selected') === siblingElement) {
+                    siblingElement = null;
                 }
             }
-            if (nextElement && nextElement.view) {
-                this.select(nextElement.view, e, true);
+            if (siblingElement && siblingElement.view) {
+                this.select(siblingElement.view, e, true);
             } else if (e.currentIsRemoved) {
                 app.trigger('no-items:' + this.el.id);
             }
-            if (nextElement) {
-                nextElement.focus();
+            if (siblingElement) {
+                siblingElement.focus();
             }
         },
+        selectNextSelectable: function (e) {
+            this.selectSibling(e, 'next');
+        },
         selectPrev: function (e) {
-            e = e || {};
-
-            const selector = e.selectUnread ? '.unread' : '.' + this.itemClass + ':not([hidden])';
-            let previousElement;
-            let currentElement;
-            if (e.selectUnread && this.selectPivot) {
-                previousElement = this.selectPivot.el.previousElementSibling;
-            } else {
-                currentElement = this.el.querySelector('.last-selected');
-                currentElement && (previousElement = currentElement.previousElementSibling);
-
-            }
-            while (previousElement && !previousElement.matches(selector)) {
-                previousElement = previousElement.previousElementSibling;
-            }
-
-            if (bg.settings.get('circularNavigation') && !e.ctrlKey && !e.shiftKey && !previousElement) {
-                previousElement = this.el.querySelector(selector + ':last-child');
-                if (e.currentIsRemoved && previousElement && this.el.querySelector('.last-selected') === previousElement) {
-                    previousElement = null;
-                }
-            }
-            if (previousElement && previousElement.view) {
-                this.select(previousElement.view, e, true);
-            } else if (e.currentIsRemoved) {
-                app.trigger('no-items:' + this.el.id);
-            }
-            if (previousElement) {
-                previousElement.focus();
-            }
+            this.selectSibling(e, 'previous');
         },
         select: function (view, e = {}, forceSelect = false) {
             if ((e.shiftKey !== true && e.ctrlKey !== true) || (e.shiftKey && !this.selectPivot)) {
