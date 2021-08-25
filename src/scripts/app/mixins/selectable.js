@@ -44,7 +44,7 @@ define(function () {
             this.selectSibling(e, 'previous');
         },
         select: function (view, e = {}, forceSelect = false) {
-            if ((e.shiftKey !== true && e.ctrlKey !== true) || (e.shiftKey && !this.selectPivot)) {
+            if ((!e.shiftKey && !e.ctrlKey) || (e.shiftKey && !this.selectPivot)) {
                 this.selectedItems = [];
                 this.selectPivot = view;
                 const selectedItems = this.el.querySelectorAll('.selected');
