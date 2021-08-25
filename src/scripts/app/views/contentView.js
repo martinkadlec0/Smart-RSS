@@ -232,7 +232,6 @@ define([
                                 const websiteDocument = parser.parseFromString(websiteContent, 'text/html');
                                 const toRemove = chrome.runtime.getURL('');
                                 content = new Readability(websiteDocument).parse().content.replace(toRemove, '/');
-
                             }
                         }
                         if (bg.settings.get('cacheParsedArticles') === 'true' && !(this.view in parsedContent)) {
