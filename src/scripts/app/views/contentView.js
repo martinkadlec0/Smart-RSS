@@ -230,7 +230,8 @@ define([
 
                                 const parser = new DOMParser();
                                 const websiteDocument = parser.parseFromString(websiteContent, 'text/html');
-                                content = new Readability(websiteDocument).parse().content;
+                                const toRemove = chrome.runtime.getURL('');
+                                content = new Readability(websiteDocument).parse().content.replace(toRemove, '/');
 
                             }
                         }
@@ -361,7 +362,7 @@ define([
                         const body = frame.contentDocument.querySelector('body');
                         const articleUrl = this.model.get('url');
                         const oURL = new URL(articleUrl);
-                        const articleDomain = oURL.protocol + oURL.host;
+                        const articleDomain = oURL.protocol +  '//' + oURL.host;
 
                         let base = frame.contentDocument.querySelector('base');
                         base.href = articleDomain;
