@@ -360,6 +360,8 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 icon: 'delete.png',
                 title: L.DELETE,
                 fn: function (event) {
+                    const activeElement = document.activeElement;
+                    const toFocus = activeElement.closest('.region');
                     const list = require('views/articleList');
                     if (list.currentData.name === 'trash' || event.shiftKey) {
                         if (!confirm('Remove selected items permanently?')) {
@@ -369,6 +371,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                     } else {
                         list.destroyBatch(list.selectedItems, list.removeItem);
                     }
+                    toFocus.focus();
                 }
             },
             undelete: {
