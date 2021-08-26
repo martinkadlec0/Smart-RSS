@@ -1017,4 +1017,7 @@ body.loading > section {
   height: 100%;
 }
 
+.region:focus-within .toolbar {
+  filter: brightness(95%);
+}
 
