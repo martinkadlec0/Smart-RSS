@@ -166,7 +166,7 @@ define(
         chrome.runtime.onMessage.addListener(onMessage);
 
         function openRSS(closeIfActive, focusSource) {
-            let url = chrome.extension.getURL('rss.html');
+            const url = chrome.runtime.getURL('rss.html');
             chrome.tabs.query({url: url},
                 (tabs) => {
                     if (tabs[0]) {
