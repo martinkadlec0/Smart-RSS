@@ -2,7 +2,7 @@
  * @module BgProcess
  * @submodule models/FeedLoader
  */
-define(['modules/RSSParser', '../../libs/favicon'], function (RSSParser, Favicon) {
+define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
     return class FeedLoader {
         constructor(loader) {
             this.loader = loader;

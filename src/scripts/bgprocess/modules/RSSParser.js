@@ -2,7 +2,7 @@
  * @module BgProcess
  * @submodule modules/RSSParser
  */
-define(['../../libs/he'], function (he) {
+define(['he'], function (he) {
     class RSSParser {
 
         getLink() {

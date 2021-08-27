@@ -2,7 +2,7 @@
  * @module BgProcess
  * @submodule models/Loader
  */
-define(['backbone', 'modules/RSSParser', 'modules/Animation', '../../libs/favicon', 'models/FeedLoader'], function (BB, RSSParser, animation, Favicon, FeedLoader) {
+define(['backbone', 'modules/RSSParser', 'modules/Animation', 'favicon', 'models/FeedLoader'], function (BB, RSSParser, animation, Favicon, FeedLoader) {
     /**
      * Updates feeds and keeps info about progress
      * @class Loader
