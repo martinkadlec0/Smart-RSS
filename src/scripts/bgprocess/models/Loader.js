@@ -102,6 +102,9 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'favicon', 'models
             this.sourcesToLoad = [];
             this.loaders.forEach((loader) => {
                 loader.request.abort();
+                loader.request = null;
+                delete loader.request;
+                loader = null;
             });
             this.loaders = [];
             this.sourcesLoading = [];
@@ -211,6 +214,9 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'favicon', 'models
             this.loaded = 0;
             this.loading = false;
             this.itemsDownloaded = false;
+            this.sourcesToLoad = [];
+            this.loaders = [];
+            this.sourcesLoading = [];
             animation.stop();
         }
 
