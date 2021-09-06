@@ -54,6 +54,11 @@ define(
                 return;
             }
 
+            if (message.action === 'load-all') {
+                loader.downloadAll(true);
+                return;
+            }
+
             if (message.action === 'new-rss' && message.value) {
                 addSource(message.value);
                 return;

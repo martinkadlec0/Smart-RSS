@@ -28,14 +28,14 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 fn: function () {
                     const currentUnread = bg.settings.get('showOnlyUnreadSources');
                     bg.settings.save('showOnlyUnreadSources', currentUnread === 'yes' ? 'no' : 'yes');
-                    bg.loader.downloadAll(true);
+                    chrome.runtime.sendMessage({action: 'load-all'});
                 }
             },
             updateAll: {
                 icon: 'reload.png',
                 title: L.UPDATE_ALL,
                 fn: function () {
-                    bg.loader.downloadAll(true);
+                    chrome.runtime.sendMessage({action: 'load-all'});
                 }
             },
             update: {
@@ -352,7 +352,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                             bg.loader.download(bg.sources.get(id));
                         });
                     } else {
-                        bg.loader.downloadAll(true);
+                        chrome.runtime.sendMessage({action: 'load-all'});
                     }
                 }
             },
