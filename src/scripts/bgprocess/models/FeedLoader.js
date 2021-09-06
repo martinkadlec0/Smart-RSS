@@ -266,9 +266,7 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                 ok: success || !isOnline
             });
             this.loader.sourceLoaded(this.model);
-            // setTimeout(() => {
             this.downloadNext();
-            // }, 100);
         }
 
         downloadNext() {

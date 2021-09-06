@@ -185,6 +185,7 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'favicon', 'models
         workerFinished(worker) {
             const loaderIndex = this.loaders.indexOf(worker);
             if (loaderIndex > -1) {
+                this.loaders[loaderIndex] = null;
                 this.loaders.splice(loaderIndex, 1);
             }
             if (this.loaders.length > 0) {
