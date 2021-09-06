@@ -437,6 +437,8 @@ input[type=search]:not(:focus):not(:valid) {
   align-items: stretch;
   -moz-user-select: none;
   user-select: none;
+}
+.indicator-invisible {
   background: linear-gradient(to right, var(--grey-20) 0%, var(--grey-30) 0%);
 }
 
