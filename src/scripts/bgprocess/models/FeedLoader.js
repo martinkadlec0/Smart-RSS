@@ -41,9 +41,6 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                 const data = new DOMParser().parseFromString(response, 'text/xml');
                 const error = data.querySelector('parsererror');
                 if (error) {
-                    // TODO: save error for later review
-                    console.log(error.outerHTML);
-                    console.log('Failed load source: ' + this.model.get('url') + (proxy ? 'using Feedly proxy' : ''));
                     return this.onFeedProcessed(false);
                 }
                 try {
