@@ -437,9 +437,11 @@ input[type=search]:not(:focus):not(:valid) {
   align-items: stretch;
   -moz-user-select: none;
   user-select: none;
+  overflow: hidden;
 }
+
 .indicator-invisible {
-  background: linear-gradient(to right, var(--grey-20) 0%, var(--grey-30) 0%);
+  background-color: var(--grey-10);
 }
 
 #indicator-progress {
@@ -456,10 +458,6 @@ input[type=search]:not(:focus):not(:valid) {
   font-size: 0.8rem;
 }
 
-#indicator.indicator-visible {
-  display: flex;
-  min-width: 0;
-}
 .indicator-invisible > #indicator-toolbar, .indicator-invisible>#indicator-progress {
   display: none;
 }
@@ -467,7 +465,7 @@ input[type=search]:not(:focus):not(:valid) {
 #indicator-toolbar {
   flex-shrink: 0;
   flex-grow: 0;
-  flex-basis: 2rem;
+  flex-basis: 1.75rem;
   padding: 0.1rem;
   display: flex;
   min-width: 0;
