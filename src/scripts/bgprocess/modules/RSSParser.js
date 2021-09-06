@@ -323,10 +323,17 @@ define(['he'], function (he) {
                     last.emptyDate = true;
                 }
             });
+            this.document = null;
+            this.source = null;
             return items;
         }
 
-        constructor(document, source) {
+        constructor(response, source) {
+            const document = new DOMParser().parseFromString(response.trim(), 'text/xml');
+            const error = document.querySelector('parsererror');
+            if (error) {
+                throw error.textContent;
+            }
             if (!document) {
                 throw 'No document specified';
             }

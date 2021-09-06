@@ -37,18 +37,15 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                     });
                 });
             } else {
-                const response = this.request.responseText.trim();
-                const data = new DOMParser().parseFromString(response, 'text/xml');
-                const error = data.querySelector('parsererror');
-                if (error) {
-                    return this.onFeedProcessed(false);
-                }
+                const response = this.request.responseText;
                 try {
-                    let parser = new RSSParser(data, this.model);
+                    let parser = new RSSParser(response, this.model);
                     parsedData = parser.parse();
                     parser = null;
                 } catch (e) {
                     parsedData = [];
+                    console.log(e, this.model.get('url'), response);
+                    return this.onFeedProcessed(false);
                 }
             }
             let hasNew = false;
