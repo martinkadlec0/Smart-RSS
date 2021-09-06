@@ -44,7 +44,6 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                     parser = null;
                 } catch (e) {
                     parsedData = [];
-                    console.log(e, this.model.get('url'), response);
                     return this.onFeedProcessed(false);
                 }
             }
