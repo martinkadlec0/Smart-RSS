@@ -1,6 +1,8 @@
 (function () {
     let oldHref = document.location.href;
     const feedsData = [];
+    let scanTimeout = null;
+    let visibilityTimeout = null;
 
     function init() {
         scan();
@@ -11,14 +13,17 @@
                 return;
             }
             oldHref = document.location.href;
-            setTimeout(scan, 1500);
+            if (scanTimeout) {
+                clearTimeout(scanTimeout);
+            }
+            scanTimeout = setTimeout(scan, 1500);
         });
 
-        const config = {
+        const observerConfig = {
             childList: true,
             subtree: true
         };
-        observer.observe(bodyList, config);
+        observer.observe(bodyList, observerConfig);
         document.addEventListener('visibilitychange', updateAvailableSourcesList, false);
         document.addEventListener('pagehide', updateAvailableSourcesList, false);
     }
@@ -38,7 +43,11 @@
             chrome.runtime.sendMessage({action: 'visibility-lost'});
             return;
         }
-        setTimeout(() => {
+        if (visibilityTimeout) {
+            clearTimeout(visibilityTimeout);
+        }
+
+        visibilityTimeout = setTimeout(() => {
             chrome.runtime.sendMessage({action: 'list-feeds', value: feedsData});
         }, 500);
 
@@ -199,6 +208,7 @@
             return {url: feed.href, title: feed.title || feed.href};
         }));
 
+        // no feeds found yet, try to bruteforce something
         if (feedsData.length === 0) {
             const generator = document.querySelector('meta[name="generator"]');
 
