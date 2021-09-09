@@ -659,6 +659,8 @@ input[type=search]:not(:focus):not(:valid) {
   font-weight: bold;
   -moz-user-select: none;
   user-select: none;
+  position: sticky;
+  top: 0;
 }
 
 header {
