@@ -213,28 +213,28 @@ define([
                     if (this.view === 'feed') {
                         content = this.model.get('content');
                     } else {
-                        const parsedContent = this.model.get('parsedContent');
-                        if (this.view in parsedContent) {
-                            content = parsedContent[this.view];
-                        } else {
-                            if (this.view === 'mozilla') {
-                                const response = await fetch(this.model.get('url'), {
-                                    method: 'GET',
-                                    redirect: 'follow', // manual, *follow, error
-                                    referrerPolicy: 'no-referrer'
-                                });
-                                const websiteContent = await response.text();
+                        // const parsedContent = this.model.get('parsedContent');
+                        // if (this.view in parsedContent) {
+                        //     content = parsedContent[this.view];
+                        // } else {
+                        if (this.view === 'mozilla') {
+                            const response = await fetch(this.model.get('url'), {
+                                method: 'GET',
+                                redirect: 'follow', // manual, *follow, error
+                                referrerPolicy: 'no-referrer'
+                            });
+                            const websiteContent = await response.text();
 
-                                const parser = new DOMParser();
-                                const websiteDocument = parser.parseFromString(websiteContent, 'text/html');
+                            const parser = new DOMParser();
+                            const websiteDocument = parser.parseFromString(websiteContent, 'text/html');
 
-                                content = new Readability(websiteDocument).parse().content;
-                            }
+                            content = new Readability(websiteDocument).parse().content;
                         }
-                        if (bg.settings.get('cacheParsedArticles') === 'true' && !(this.view in parsedContent)) {
-                            parsedContent[this.view] = content;
-                            this.model.set('parsedContent', parsedContent);
-                        }
+                        // }
+                        // if (bg.settings.get('cacheParsedArticles') === 'true' && !(this.view in parsedContent)) {
+                        //     parsedContent[this.view] = content;
+                        //     this.model.set('parsedContent', parsedContent);
+                        // }
                     }
                     const toRemove = chrome.runtime.getURL('');
                     const re = new RegExp(toRemove, 'g');
