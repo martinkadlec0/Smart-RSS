@@ -2,15 +2,16 @@
  * @module App
  * @submodule views/IndicatorView
  */
-define(['backbone', 'modules/Locale', 'text!templates/indicatorView.html'], function (BB, Locale, indicatorTemplate) {
-
+define( function (require) {
+    const BB = require('backbone');
+    const Locale = require('modules/Locale');
     /**
      * Feeds update indicator view
      * @class IndicatorView
      * @constructor
      * @extends Backbone.View
      */
-    var IndicatorView = BB.View.extend({
+    const IndicatorView = BB.View.extend({
         /**
          * Indicator element id
          * @property id
@@ -27,7 +28,7 @@ define(['backbone', 'modules/Locale', 'text!templates/indicatorView.html'], func
         initialize: function () {
             this.loaded = 0;
             this.maxSources = 0;
-            const fragment = document.createRange().createContextualFragment(indicatorTemplate);
+            const fragment = document.createRange().createContextualFragment(require('text!templates/indicatorView.html'));
             this.el.appendChild(fragment);
             let port = chrome.runtime.connect({name: 'port-from-cs'});
             port.onMessage.addListener((m) => {
