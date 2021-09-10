@@ -19,7 +19,6 @@ define([
         let ArticlesLayout = Layout.extend({
             el: '#articles',
             events: {
-                'keydown': 'handleKeyDown',
                 'mousedown': 'handleMouseDown'
             },
             initialize: function () {
