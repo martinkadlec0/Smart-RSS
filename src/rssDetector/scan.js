@@ -6,26 +6,28 @@
 
     function init() {
         scan();
-        let bodyList = document.querySelector('body');
-
-        const observer = new MutationObserver(function () {
-            if (oldHref === document.location.href) {
-                return;
-            }
-            oldHref = document.location.href;
-            if (scanTimeout) {
-                clearTimeout(scanTimeout);
-            }
-            scanTimeout = setTimeout(scan, 1500);
-        });
-
-        const observerConfig = {
-            childList: true,
-            subtree: true
-        };
-        observer.observe(bodyList, observerConfig);
         document.addEventListener('visibilitychange', updateAvailableSourcesList, false);
         document.addEventListener('pagehide', updateAvailableSourcesList, false);
+
+        if (oldHref.includes('youtube')) {
+            let bodyList = document.querySelector('body');
+            const observer = new MutationObserver(function () {
+                if (oldHref === document.location.href) {
+                    return;
+                }
+                oldHref = document.location.href;
+                if (scanTimeout) {
+                    clearTimeout(scanTimeout);
+                }
+                scanTimeout = setTimeout(scan, 1500);
+            });
+
+            const observerConfig = {
+                childList: true,
+                subtree: true
+            };
+            observer.observe(bodyList, observerConfig);
+        }
     }
 
     function docReady(fn) {
