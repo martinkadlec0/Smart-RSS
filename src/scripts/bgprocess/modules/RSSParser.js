@@ -61,7 +61,8 @@ define(['he'], function (he) {
                 title = this.document.querySelector('channel > link, feed > link, rss > link');
             }
             title = title && title.textContent ? title.textContent.trim() || 'rss' : 'rss';
-            return title.trim();
+            title = title.trim();
+            return title.length ? title : '<no title>';
         }
 
         replaceUTCAbbr(str) {
@@ -121,14 +122,19 @@ define(['he'], function (he) {
                     creator = creator.replace(/^\S+@\S+\.\S+\s+\((.+)\)$/, '$1');
                 }
                 creator = creator.replace(/\s*\(\)\s*$/, '');
-                return creator.trim();
+                return he.decode(creator.trim());
             }
 
             return 'no author';
         }
 
         getArticleTitle() {
-            return (this.currentNode.querySelector('title') ? this.currentNode.querySelector('title').textContent : '&lt;no title&gt;').trim();
+            const node = this.currentNode.querySelector('title');
+            let title = '<no title>';
+            if (node) {
+                title = this.currentNode.querySelector('title').textContent.trim() || title;
+            }
+            return he.decode(title);
         }
 
         getArticleContent() {
@@ -305,10 +311,10 @@ define(['he'], function (he) {
                 this.currentNode = node;
                 items.push({
                     id: this.getGuid(),
-                    title: he.decode(this.getArticleTitle()),
+                    title: this.getArticleTitle(),
                     url: this.getLink(),
                     date: this.getDate(),
-                    author: he.decode(this.getAuthor()),
+                    author: this.getAuthor(),
                     content: this.getArticleContent(),
                     sourceID: this.source.get('id'),
                     enclosure: this.getEnclosures(),
