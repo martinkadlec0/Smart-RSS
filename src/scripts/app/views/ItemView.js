@@ -3,8 +3,8 @@
  * @submodule views/ItemView
  */
 define([
-    'backbone', 'helpers/formatDate', 'instances/contextMenus', 'helpers/stripTags', 'text!templates/itemView.html'
-], function (BB, formatDate, contextMenus, stripTags, itemTemplate) {
+    'backbone', 'helpers/dateUtils', 'instances/contextMenus', 'helpers/stripTags', 'text!templates/itemView.html'
+], function (BB, dateUtils, contextMenus, stripTags, itemTemplate) {
 
     /**
      * View of one article item in article list
@@ -176,13 +176,13 @@ define([
 
             if (date) {
                 if (bg.settings.get('fullDate')) {
-                    date = formatDate(new Date(date), pickedFormat + ' ' + timeFormat);
-                } else if (parseInt(formatDate(date, 'T') / 86400000, 10) >= parseInt(formatDate(Date.now(), 'T') / 86400000, 10)) {
-                    date = formatDate(new Date(date), timeFormat);
+                    date = dateUtils.formatDate(date, pickedFormat + ' ' + timeFormat);
+                } else if (Math.floor(dateUtils.formatDate(date, 'T') / 86400000) >= Math.floor(formatDate(Date.now(), 'T') / 86400000)) {
+                    date = dateUtils.formatDate(date, timeFormat);
                 } else if ((new Date(date)).getFullYear() === (new Date()).getFullYear()) {
-                    date = formatDate(new Date(date), pickedFormat.replace(/\/?YYYY(?!-)/, ''));
+                    date = dateUtils.formatDate(date, pickedFormat.replace(/\/?YYYY(?!-)/, ''));
                 } else {
-                    date = formatDate(new Date(date), pickedFormat);
+                    date = dateUtils.formatDate(date, pickedFormat);
                 }
             }
 

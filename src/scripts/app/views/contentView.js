@@ -4,7 +4,7 @@
  */
 define([
         'backbone',
-        'helpers/formatDate',
+        'helpers/dateUtils',
         'helpers/stripTags',
         'text!templates/contentView.html',
         'text!templates/enclosureGeneral.html',
@@ -17,7 +17,7 @@ define([
 
     ],
     function (BB,
-              formatDate,
+              dateUtils,
               stripTags,
               contentViewTemplate,
               enclosureGeneral,
@@ -160,9 +160,9 @@ define([
                 const dateFormats = {normal: 'DD.MM.YYYY', iso: 'YYYY-MM-DD', us: 'MM/DD/YYYY'};
                 const pickedFormat = dateFormats[bg.settings.get('dateType') || 'normal'] || dateFormats['normal'];
 
-                const timeFormat = bg.settings.get('hoursFormat') === '12h' ? 'H:mm a' : 'hh:mm:ss';
+                const timeFormat = bg.settings.get('hoursFormat') === '12h' ? 'H:mm:ss a' : 'hh:mm:ss';
 
-                return formatDate(new Date(unixtime), pickedFormat + ' ' + timeFormat);
+                return dateUtils.formatDate(unixtime, pickedFormat + ' ' + timeFormat);
             },
 
             /**
