@@ -2,7 +2,7 @@
  * @module BgProcess
  * @submodule models/Info
  */
-define(['backbone', 'modules/Animation', '../bg'], function (BB, animation) {
+define(['backbone', 'modules/Animation'], function (BB, animation) {
     let handleAllCountChange = function (model) {
         if (settings.get('badgeMode') === 'disabled') {
             if (model === settings) {
