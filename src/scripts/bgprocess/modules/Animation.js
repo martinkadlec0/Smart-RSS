@@ -2,14 +2,14 @@
  * @module BgProcess
  * @submodule modules/Animation
  */
-define([], function () {
+define(function () {
     /**
      * Handles animation of browser action button icon
      * @class Animation
      * @constructor
      * @extends Object
      */
-    let Animation = {
+    const Animation = {
         i: 2,
         interval: null,
         update: function () {
