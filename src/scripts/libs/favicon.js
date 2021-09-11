@@ -229,11 +229,7 @@ define(function () {
     }
 
     return {
-        image: function () {
-            return toDataURI.apply(null, arguments);
-        },
-        checkFavicon: function () {
-            return checkFavicon.apply(null, arguments);
-        }
+        image: toDataURI,
+        checkFavicon: checkFavicon
     };
 });
