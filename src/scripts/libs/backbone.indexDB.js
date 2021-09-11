@@ -4,20 +4,11 @@
  * Version 1.1.6
  * https://github.com/jeromegn/Backbone.localStorage
  */
-(function (root, factory) {
-    if (typeof exports === 'object' && root.require) {
-        module.exports = factory(require('backbone'));
-    } else if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['backbone'], function (Backbone) {
-            // Use global variables if the locals are undefined.
-            return factory(Backbone || root.Backbone);
-        });
-    } else {
-        // RequireJS isn't being used. Assume underscore and backbone are loaded in <script> tags
-        factory(Backbone);
-    }
-}(this, function (Backbone) {
+(function (factory) {
+    define(['backbone'], function (Backbone) {
+        return factory(Backbone);
+    });
+}(function (Backbone) {
     // A simple module to replace `Backbone.sync` with *IndexedDB*-based
     // persistence. Models are given GUIDS, and saved into a JSON object. Simple
     // as that.
@@ -167,7 +158,7 @@
     // localSync delegate to the model or collection's
     // *indexedDB* property, which should be an instance of `Store`.
     // window.Store.sync and Backbone.localSync is deprecated, use Backbone.IndexedDB.sync instead
-    Backbone.IndexedDB.sync =  function (method, model, options) {
+    Backbone.IndexedDB.sync = function (method, model, options) {
         const store = model.indexedDB || model.collection.indexedDB;
         options = options || {};
 
