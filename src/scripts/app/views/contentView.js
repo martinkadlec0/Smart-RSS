@@ -163,6 +163,7 @@ define(function (require) {
                 if (!this.model) {
                     return;
                 }
+                const modelUrl = this.model.get('url');
 
                 this.show();
                 const source = this.model.getSource();
@@ -205,6 +206,9 @@ define(function (require) {
                         const parser = new DOMParser();
                         const websiteDocument = parser.parseFromString(websiteContent, 'text/html');
                         const Readability = require('../../libs/readability');
+                        if(this.model.get('url') !== modelUrl){
+                            return;
+                        }
                         content = new Readability(websiteDocument).parse().content;
                     }
                     // }
