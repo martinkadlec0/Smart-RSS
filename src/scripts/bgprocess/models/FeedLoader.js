@@ -64,82 +64,81 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
 
             parsedData.forEach((item) => {
                 const existingItem = items.get(item.id);
-                if (!existingItem) {
-                    if (earliestDate > item.date) {
+                if (existingItem) {
+                    const areDifferent = function (newItem, existingItem) {
+                        const existingContent = existingItem.get('content');
+                        const newContent = newItem.content;
+                        if (existingContent !== newContent) {
+                            const existingContentFragment = document.createRange().createContextualFragment(existingContent);
+                            if (!existingContentFragment) {
+                                return true;
+                            }
+                            const newContentFragment = document.createRange().createContextualFragment(newContent);
+                            if (!newContentFragment) {
+                                return true;
+                            }
+                            const existingContentText = existingContentFragment.innerText;
+                            const newContentText = newContentFragment.innerText;
+                            if (existingContentText !== newContentText) {
+                                return true;
+                            }
+                        }
+                        if (existingItem.get('title') !== newItem.title) {
+                            return true;
+                        }
+                        if (existingItem.get('author') !== newItem.author) {
+                            return true;
+                        }
+                        return false;
+                    };
+
+                    if (existingItem.get('deleted') === false && areDifferent(item, existingItem)) {
+                        existingItem.save({
+                            content: item.content,
+                            title: item.title,
+                            date: item.date,
+                            author: item.author,
+                            enclosure: item.enclosure,
+                            unread: true,
+                            visited: false,
+                            parsedContent: {}
+                        });
                         return;
                     }
-                    hasNew = true;
-                    item.pinned = queries.some((query) => {
-                            query = query.trim();
-                            if (query === '') {
-                                return false;
-                            }
-                            let searchInContent = false;
-                            if (query[0] && query[0] === ':') {
-                                query = query.replace(/^:/, '', query);
-                                searchInContent = true;
-                            }
-                            if (query === '') {
-                                return false;
-                            }
-                            const expression = new RegExp(RegExp.escape(query), 'i');
-
-
-                            const cleanedTitle = item.title.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-                            const cleanedAuthor = item.author.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-                            const cleanedContent = searchInContent ? item.content.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : '';
-                            return (expression.test(cleanedTitle) || expression.test(cleanedAuthor) || (searchInContent && expression.test(cleanedContent)));
-                        }
-                    );
-
-
-                    items.create(item, {
-                        sort: false
-                    });
-                    lastArticle = Math.max(lastArticle, item.date);
-                    createdNo++;
+                }
+                if (earliestDate > item.date) {
                     return;
                 }
+                hasNew = true;
+                item.pinned = queries.some((query) => {
+                        query = query.trim();
+                        if (query === '') {
+                            return false;
+                        }
+                        let searchInContent = false;
+                        if (query[0] && query[0] === ':') {
+                            query = query.replace(/^:/, '', query);
+                            searchInContent = true;
+                        }
+                        if (query === '') {
+                            return false;
+                        }
+                        const expression = new RegExp(RegExp.escape(query), 'i');
 
-                function areDifferent(newItem, existingItem) {
-                    const existingContent = existingItem.get('content');
-                    const newContent = newItem.content;
-                    if (existingContent !== newContent) {
-                        const existingContentFragment = document.createRange().createContextualFragment(existingContent);
-                        if (!existingContentFragment) {
-                            return true;
-                        }
-                        const newContentFragment = document.createRange().createContextualFragment(newContent);
-                        if (!newContentFragment) {
-                            return true;
-                        }
-                        const existingContentText = existingContentFragment.innerText;
-                        const newContentText = newContentFragment.innerText;
-                        if (existingContentText !== newContentText) {
-                            return true;
-                        }
-                    }
-                    if (existingItem.get('title') !== newItem.title) {
-                        return true;
-                    }
-                    if (existingItem.get('author') !== newItem.author) {
-                        return true;
-                    }
-                    return false;
-                }
 
-                if (existingItem.get('deleted') === false && areDifferent(item, existingItem)) {
-                    existingItem.save({
-                        content: item.content,
-                        title: item.title,
-                        date: item.date,
-                        author: item.author,
-                        enclosure: item.enclosure,
-                        unread: true,
-                        visited: false,
-                        parsedContent: {}
-                    });
-                }
+                        const cleanedTitle = item.title.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                        const cleanedAuthor = item.author.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                        const cleanedContent = searchInContent ? item.content.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : '';
+                        return (expression.test(cleanedTitle) || expression.test(cleanedAuthor) || (searchInContent && expression.test(cleanedContent)));
+                    }
+                );
+
+
+                items.create(item, {
+                    sort: false
+                });
+                lastArticle = Math.max(lastArticle, item.date);
+                createdNo++;
             });
             this.model.set('lastArticle', lastArticle);
             items.sort({
