@@ -180,6 +180,9 @@ define(['he'], function (he) {
         getGuid() {
             const node = this.currentNode;
             let guid = node.querySelector('guid');
+            if(!guid){
+                guid = node.querySelector('id');
+            }
             return (guid ? guid.textContent : this.getLink() || '').trim() + this.source.get('id');
         }
 
