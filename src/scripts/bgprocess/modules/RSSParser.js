@@ -309,7 +309,7 @@ define(['he'], function (he) {
 
             [...nodes].forEach((node) => {
                 this.currentNode = node;
-                items.push({
+                const newItem = {
                     id: this.getGuid(),
                     title: this.getArticleTitle(),
                     url: this.getLink(),
@@ -320,14 +320,12 @@ define(['he'], function (he) {
                     enclosure: this.getEnclosures(),
                     dateCreated: Date.now(),
                     emptyDate: false
-                });
-
-                const last = items[items.length - 1];
-
-                if (last.date === 0) {
-                    last.date = Date.now();
-                    last.emptyDate = true;
+                };
+                if (newItem.date === 0) {
+                    newItem.date = Date.now();
+                    newItem.emptyDate = true;
                 }
+                items.push(newItem);
             });
             this.document = null;
             this.source = null;
