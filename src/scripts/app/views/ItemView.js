@@ -176,7 +176,7 @@ define([
             if (date) {
                 if (bg.settings.get('fullDate')) {
                     date = dateUtils.formatDate(date, pickedFormat + ' ' + timeFormat);
-                } else if (Math.floor(dateUtils.formatDate(date, 'T') / 86400000) >= Math.floor(formatDate(Date.now(), 'T') / 86400000)) {
+                } else if (Math.floor(dateUtils.formatDate(date, 'T') / 86400000) >= Math.floor(dateUtils.formatDate(Date.now(), 'T') / 86400000)) {
                     date = dateUtils.formatDate(date, timeFormat);
                 } else if ((new Date(date)).getFullYear() === (new Date()).getFullYear()) {
                     date = dateUtils.formatDate(date, pickedFormat.replace(/\/?YYYY(?!-)/, ''));
