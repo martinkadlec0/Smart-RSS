@@ -63,7 +63,11 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
             };
 
             parsedData.forEach((item) => {
-                const existingItem = items.get(item.id);
+                let existingItem = items.get(item.id);
+                if (!existingItem) {
+                    existingItem = items.get(item.oldId);
+                }
+
                 if (!existingItem) {
                     if (earliestDate > item.date) {
                         return;
@@ -115,11 +119,11 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                         }
                         const existingContentText = existingContentFragment.innerText;
                         const newContentText = newContentFragment.innerText;
-                        if (existingContentText !== newContentText) {
+                        if (existingContentText.trim() !== newContentText.trim()) {
                             return true;
                         }
                     }
-                    if (existingItem.get('title') !== newItem.title) {
+                    if (existingItem.get('title').trim() !== newItem.title.trim()) {
                         return true;
                     }
                     if (existingItem.get('author') !== newItem.author) {

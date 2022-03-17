@@ -186,6 +186,12 @@ define(['he'], function (he) {
             return (guid ? guid.textContent : this.getLink() || '').trim() + this.source.get('id');
         }
 
+        getOldGuid() {
+            const node = this.currentNode;
+            let guid = node.querySelector('guid');
+            return (guid ? guid.textContent : this.getLink() || '').trim() + this.source.get('id');
+        }
+
         getEnclosure(enclosureNode, title) {
             let enclosure = {};
             enclosure.url = enclosureNode.hasAttribute('url') ? enclosureNode.getAttribute('url').replace(/^(javascript:\.)/, '') : '';
@@ -314,6 +320,7 @@ define(['he'], function (he) {
                 this.currentNode = node;
                 const newItem = {
                     id: this.getGuid(),
+                    oldId: this.getOldGuid(),
                     title: this.getArticleTitle(),
                     url: this.getLink(),
                     date: this.getDate(),
