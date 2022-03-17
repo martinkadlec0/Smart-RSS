@@ -410,7 +410,7 @@ define([
                 }
                 const that = this;
 
-                const renderBlock = function (renderId, startingPoint = 0) {
+                const renderBlock = (renderId, startingPoint = 0)  => {
                     if (that.currentRenderId !== renderId) {
                         return;
                     }
@@ -424,7 +424,7 @@ define([
                         item.multiple = multiple;
                         that.addItem(item, true);
                         internalCounter++;
-                        if (internalCounter === 250 || startingPoint + internalCounter === length) {
+                        if (internalCounter === 100 || startingPoint + internalCounter === length) {
                             break;
                         }
                     }
@@ -434,10 +434,10 @@ define([
                         }
                         return;
                     }
-                    setTimeout(renderBlock, 0, renderId, startingPoint + internalCounter);
+                    window.requestIdleCallback(renderBlock.bind(this, renderId, startingPoint + internalCounter));
                 };
                 this.currentRenderId = Date.now();
-                renderBlock(this.currentRenderId);
+                window.requestIdleCallback(renderBlock.bind(this, this.currentRenderId, 0));
             },
 
             /**
