@@ -27,11 +27,12 @@ define([
                 const updateEvery = parseInt(document.querySelector('#prop-update-every').value);
                 const autoRemove = parseInt(document.querySelector('#prop-autoremove').value);
                 const folderId = document.querySelector('#prop-parent').value;
-                const defaultView = document.querySelector('#defaultView').value;
 
                 if (this.current instanceof bg.Source) {
                     /* encrypt the password */
                     this.current.setPass(document.querySelector('#prop-password').value);
+                    const defaultView = document.querySelector('#defaultView').value;
+
 
                     this.current.save({
                         title: document.querySelector('#prop-title').value,
