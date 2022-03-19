@@ -692,7 +692,7 @@ h1 {
   padding: 0;
   color: var(--grey-70);
   font-size: 1.5rem;
-  max-height: 6rem;
+  /*max-height: 6rem;*/
   overflow: hidden;
   text-overflow: ellipsis;
 }
