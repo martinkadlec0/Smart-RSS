@@ -419,6 +419,9 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                         query = query.replace(/^:/, '', query);
                         searchInContent = true;
                     }
+                    RegExp.escape = function (text) {
+                        return String(text).replace(/[\-\[\]\/{}()*+?.\\^$|]/g, '\\$&');
+                    };
                     const expression = new RegExp(RegExp.escape(query), 'i');
                     const selectedSpecial = document.querySelector('.sources-list-item.selected.special');
                     list.views.some(function (view) {
