@@ -93,16 +93,16 @@
       <label class="web-content-select-label" for="showFullHeadline">
         <span class="selectLabel">Show full headline:</span>
         <select class="half-size" data-name="showFullHeadline" id="showFullHeadline">
-          <option value="1">Yes</option>
-          <option value="0">No</option>
+          <option value="true">Yes</option>
+          <option value="false">No</option>
         </select>
       </label>
 
       <label class="web-content-select-label" for="displayFaviconInsteadOfPin">
         <span class="selectLabel">Display favicon instead of pin when multiple sources selected:</span>
         <select class="half-size" data-name="displayFaviconInsteadOfPin" id="displayFaviconInsteadOfPin">
-          <option value="1">Yes</option>
-          <option value="0">No</option>
+          <option value="true">Yes</option>
+          <option value="false">No</option>
         </select>
       </label>
 
@@ -184,8 +184,8 @@
              title="Controls whether media preview should be visible when displaying article contents. Can be overridden per source">
         <span class="selectLabel">Open media preview automatically:</span>
         <select id="openEnclosure">
-          <option value="yes">Yes</option>
-          <option value="no">No</option>
+          <option value="true">Yes</option>
+          <option value="false">No</option>
         </select>
       </label>
 
@@ -193,14 +193,17 @@
              title="Controls whether media preview should be visible when displaying article contents. Can be overridden per source">
         <span class="selectLabel">Show only sources with unread articles:</span>
         <select id="showOnlyUnreadSources">
-          <option value="yes">Yes</option>
-          <option value="no">No</option>
+          <option value="true">Yes</option>
+          <option value="false">No</option>
         </select>
       </label>
 
       <label class="web-content-select-label">
         <span class="selectLabel">Disable date groups:</span>
-        <input id="disableDateGroups" type="checkbox"/>
+        <select id="disableDateGroups">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
       </label>
 
       <label class="web-content-select-label">
@@ -216,7 +219,10 @@
       <label class="web-content-select-label"
              title="Replace favicon of feed with spinner animation during feed update.">
         <span class="selectLabel">Show spinner during update:</span>
-        <input id="showSpinner" type="checkbox"/>
+        <select id="showSpinner">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
       </label>
 
       <label class="web-content-select-label">
@@ -235,8 +241,8 @@
              title="Controls whether interface colors should be inverted, works as most basic dark theme">
         <span class="selectLabel">Invert colors:</span>
         <select id="invertColors">
-          <option value="yes">Yes</option>
-          <option value="no">No</option>
+          <option value="true">Yes</option>
+          <option value="false">No</option>
         </select>
       </label>
     </section>
@@ -249,45 +255,69 @@
       <label class="web-content-select-label"
              title="If checked clicking toolbar button will open new tab, else it will load reader in the same tab.">
         <span class="selectLabel">Open Reader in new tab:</span>
-        <input id="openInNewTab" type="checkbox"/>
+        <select id="openInNewTab">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
       </label>
 
       <label class="web-content-select-label">
         <span class="selectLabel">Select first article on feed selection:</span>
-        <input id="selectFirstArticle" type="checkbox"/>
+        <select id="selectFirstArticle">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
       </label>
 
       <label class="web-content-select-label">
         <span class="selectLabel">Select all feeds on reader open:</span>
-        <input id="selectAllFeeds" type="checkbox"/>
+        <select id="selectAllFeeds">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
       </label>
 
       <label class="web-content-select-label"
              title="This option will immediately mark as read every article you visit in the right column.">
         <span class="selectLabel">Automatically mark articles as read:</span>
-        <input id="readOnVisit" type="checkbox"/>
+        <select id="readOnVisit">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
       </label>
 
       <label class="web-content-select-label"
              title="When you select more than 10 feeds in article list and choose 'Open article link' options from context menu.">
         <span class="selectLabel">Ask when opening 10+ tabs:</span>
-        <input id="askOnOpening" type="checkbox"/>
+        <select id="askOnOpening">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
       </label>
 
       <label class="web-content-select-label" title="Effects date in article list.">
         <span class="selectLabel">Always show full date:</span>
-        <input id="fullDate" type="checkbox"/>
+        <select id="fullDate">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
       </label>
 
       <label class="web-content-select-label"
              title="If enabled, pressing arrow up in a list when the first item is selected will select the last item and visa-versa.">
         <span class="selectLabel">Circular navigation:</span>
-        <input id="circularNavigation" type="checkbox"/>
+        <select id="circularNavigation">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
       </label>
 
       <label class="web-content-select-label" title="If enabled, title of article is a link to full article.">
         <span class="selectLabel">Title is link to full article:</span>
-        <input id="titleIsLink" type="checkbox"/>
+        <select id="titleIsLink">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
       </label>
 
       <label class="web-content-select-label" title="Controls how to handle `Enter` press on article list">
@@ -324,7 +354,10 @@
 
       <label class="web-content-select-label">
         <span class="selectLabel">Disable auto update completely:</span>
-        <input id="disableAutoUpdate" type="checkbox"/>
+        <select id="disableAutoUpdate">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
       </label>
 
       <label class="web-content-select-label">
@@ -390,8 +423,8 @@
       <label class="web-content-select-label" title="Should parsed article be saved in local storage after parsing the website?">
         <span class="selectLabel">Cache article after parsing:</span>
         <select id="cacheParsedArticles">
-          <option value="false">No</option>
           <option value="true">Yes</option>
+          <option value="false">No</option>
         </select>
       </label>
 
@@ -420,7 +453,10 @@
       <label class="web-content-select-label"
              title="If enabled, browser will make a sound when new articles are downloaded.">
         <span class="selectLabel">Enable sound notifications:</span>
-        <input id="soundNotifications" type="checkbox"/>
+        <select id="soundNotifications">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
       </label>
 
       <label class="web-content-select-label">

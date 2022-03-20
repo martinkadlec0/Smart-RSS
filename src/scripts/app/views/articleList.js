@@ -172,7 +172,7 @@ define([
                 }
                 app.trigger('select:' + this.el.id, {action: 'new-select', value: view.model.id});
 
-                if (view.model.get('unread') && bg.settings.get('readOnVisit')) {
+                if (view.model.get('unread') && bg.getBoolean('readOnVisit')) {
                     view.model.save({
                         visited: true,
                         unread: false
@@ -212,7 +212,7 @@ define([
                     }, 0);
                     return;
                 }
-                if (bg.settings.get('selectAllFeeds') && bg.settings.get('showAllFeeds')) {
+                if (bg.getBoolean('selectAllFeeds') && bg.getBoolean('showAllFeeds')) {
                     this.loadAllFeeds();
                 }
             },
@@ -353,7 +353,7 @@ define([
                     view.render();
                     this.views.push(view);
                     this.el.insertAdjacentElement('beforeend', view.el);
-                    if (!this.selectedItems.length && bg.settings.get('selectFirstArticle')) {
+                    if (this.selectedItems.length > 0 && bg.getBoolean('selectFirstArticle')) {
                         this.select(view);
                     }
                 } else {
@@ -364,7 +364,7 @@ define([
                     this.views.splice(index, 0, view);
                 }
 
-                if (!bg.settings.get('disableDateGroups') && bg.settings.get('sortBy') === 'date') {
+                if (!bg.getBoolean('disableDateGroups') && bg.settings.get('sortBy') === 'date') {
                     const group = Group.getGroup(item.get('date'));
                     if (!groups.findWhere({title: group.title})) {
                         groups.add(new Group(group), {before: view.el});
@@ -410,7 +410,7 @@ define([
                 }
                 const that = this;
 
-                const renderBlock = (renderId, startingPoint = 0)  => {
+                const renderBlock = (renderId, startingPoint = 0) => {
                     if (that.currentRenderId !== renderId) {
                         return;
                     }
@@ -534,7 +534,7 @@ define([
              * @param view {views/ItemView} Removed article view
              */
             removeItem: function (view) {
-                askRmPinned = bg.settings.get('askRmPinned');
+                const askRmPinned = bg.settings.get('askRmPinned');
                 if (view.model.get('pinned') && askRmPinned === 'all') {
                     const confirmation = confirm(Locale.PIN_QUESTION_A + view.model.escape('title') + Locale.PIN_QUESTION_B);
                     if (!confirmation) {
@@ -552,7 +552,7 @@ define([
              * @param view {views/ItemView} Removed article view
              */
             removeItemCompletely: function (view) {
-                askRmPinned = bg.settings.get('askRmPinned');
+                const askRmPinned = bg.settings.get('askRmPinned');
                 if (view.model.get('pinned') && askRmPinned && askRmPinned !== 'none') {
                     const confirmation = confirm(Locale.PIN_QUESTION_A + view.model.escape('title') + Locale.PIN_QUESTION_B);
                     if (!confirmation) {

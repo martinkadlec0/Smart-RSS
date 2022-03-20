@@ -33,7 +33,7 @@ define([
         }
 
         function changeInvertColors() {
-            const shouldInvertColors = bg.settings.get('invertColors') === 'yes';
+            const shouldInvertColors = bg.getBoolean('invertColors');
             const body = document.querySelector('body');
             if (shouldInvertColors) {
                 body.classList.add('dark-theme');

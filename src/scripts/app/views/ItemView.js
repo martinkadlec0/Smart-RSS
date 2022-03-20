@@ -126,13 +126,13 @@ define([
             if (this.multiple) {
                 const source = bg.sources.find({id: this.model.get('sourceID')});
                 article.sourceTitle = source.get('title');
-                if (bg.settings.get('displayFaviconInsteadOfPin') === '1') {
+                if (bg.getBoolean('displayFaviconInsteadOfPin')) {
                     article.favicon = source.get('favicon');
                 }
                 article.author = article.sourceTitle !== article.author ? article.sourceTitle + ' - ' + article.author : article.author;
             }
             this.el.setAttribute('href', article.url);
-            if (bg.settings.get('showFullHeadline') === '1') {
+            if (bg.getBoolean('showFullHeadline')) {
                 this.el.classList.add('full-headline');
             } else {
                 this.el.setAttribute('title', article.title);
@@ -174,7 +174,7 @@ define([
             const timeFormat = bg.settings.get('hoursFormat') === '12h' ? 'H:mm a' : 'hh:mm';
 
             if (date) {
-                if (bg.settings.get('fullDate')) {
+                if (bg.getBoolean('fullDate')) {
                     date = dateUtils.formatDate(date, pickedFormat + ' ' + timeFormat);
                 } else if (Math.floor(dateUtils.formatDate(date, 'T') / 86400000) >= Math.floor(dateUtils.formatDate(Date.now(), 'T') / 86400000)) {
                     date = dateUtils.formatDate(date, timeFormat);

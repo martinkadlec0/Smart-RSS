@@ -167,17 +167,15 @@ define(function (require) {
 
                 this.show();
                 const source = this.model.getSource();
-                const openEnclosure = source.get('openEnclosure');
+                const openEnclosure = bg.getElementBoolean(source, 'openEnclosure');
                 const sourceDefaultView = source.get('defaultView');
                 const defaultView = sourceDefaultView === 'global' ? bg.settings.get('defaultView') : sourceDefaultView;
 
 
-                const open = openEnclosure === 'yes' || openEnclosure === 'global' && bg.settings.get('openEnclosure') === 'yes';
-
                 const data = Object.create(this.model.attributes);
                 data.date = this.getFormattedDate(this.model.get('date'));
-                data.titleIsLink = bg.settings.get('titleIsLink');
-                data.open = open;
+                data.titleIsLink = bg.getBoolean('titleIsLink');
+                data.open = openEnclosure;
 
                 let content = '';
 
@@ -206,7 +204,7 @@ define(function (require) {
                         const parser = new DOMParser();
                         const websiteDocument = parser.parseFromString(websiteContent, 'text/html');
                         const Readability = require('../../libs/readability');
-                        if(this.model.get('url') !== modelUrl){
+                        if (this.model.get('url') !== modelUrl) {
                             return;
                         }
                         content = new Readability(websiteDocument).parse().content;
@@ -344,7 +342,7 @@ define(function (require) {
 
                     let base = frame.contentDocument.querySelector('base');
                     base.href = articleDomain;
-                    const shouldInvertColors = bg.settings.get('invertColors') === 'yes';
+                    const shouldInvertColors = bg.getBoolean('invertColors');
                     if (shouldInvertColors) {
                         body.classList.add('dark-theme');
                     } else {

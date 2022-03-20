@@ -250,6 +250,23 @@ define(
         window.loader = new Loader();
 
 
+        window.valueToBoolean = function (value) {
+            return value === 1 || value === '1' || value === 'on' || value === 'yes' || value === 'true' || value === true;
+        };
+
+        window.getBoolean = function (name) {
+            return valueToBoolean(settings.get(name));
+        };
+
+        window.getElementBoolean = function (element, setting) {
+            const elementValue = element.get(setting);
+            if (elementValue === 'global') {
+                return getBoolean(setting);
+            }
+            return valueToBoolean(elementValue);
+        };
+
+
         function fetchOne(tasks) {
             return new Promise((resolve) => {
                 if (tasks.length === 0) {

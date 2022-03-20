@@ -209,5 +209,6 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
          */
         indexedDB: new Backbone.IndexedDB('settings-backbone')
     });
+
     return Settings;
 });

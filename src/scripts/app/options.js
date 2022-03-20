@@ -7,6 +7,7 @@ define(['../app/staticdb/actions', 'staticdb/shortcuts'], function (actions, sho
         '\'': '&#39;'
     };
 
+
     function escapeHtml(string) {
         return String(string).replace(/[&<>"']/gm, (s) => {
             return entityMap[s];
@@ -47,19 +48,21 @@ define(['../app/staticdb/actions', 'staticdb/shortcuts'], function (actions, sho
             });
         }
 
-        [...document.querySelectorAll('select[id], input[type=number], input[type=range], textarea')].forEach((item) => {
-            item.value = bg.settings.get(item.id);
-            if (item.type === 'number') {
-                item.addEventListener('input', handleChange);
-            } else {
-                item.addEventListener('change', handleChange);
-            }
-        });
+        [...document.querySelectorAll('select[id], input[type=number], input[type=range], textarea')]
+            .forEach((item) => {
+                item.value = bg.settings.get(item.id);
+                if (item.type === 'number') {
+                    item.addEventListener('input', handleChange);
+                } else {
+                    item.addEventListener('change', handleChange);
+                }
+            });
 
-        [...document.querySelectorAll('input[type=checkbox]')].forEach((item) => {
-            item.checked = !!bg.settings.get(item.id);
-            item.addEventListener('change', handleCheck);
-        });
+        [...document.querySelectorAll('input[type=checkbox]')]
+            .forEach((item) => {
+                item.checked = bg.getBoolean(item.id);
+                item.addEventListener('change', handleCheck);
+            });
 
         document.querySelector('#useSound').addEventListener('change', () => {
             bg.loader.playNotificationSound();

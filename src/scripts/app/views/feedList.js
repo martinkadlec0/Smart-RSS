@@ -113,10 +113,10 @@ define([
                     this.el.removeChild(this.el.lastChild);
                 }
                 this.addFolders(bg.folders);
-                if (bg.settings.get('showPinned')) {
+                if (bg.getBoolean('showPinned')) {
                     this.addSpecial(specials.pinned);
                 }
-                if (bg.settings.get('showAllFeeds')) {
+                if (bg.getBoolean('showAllFeeds')) {
                     this.addSpecial(specials.allFeeds);
                 }
 
@@ -217,7 +217,7 @@ define([
              * @param folder {models/Folder} Folder model to add
              */
             addFolder: function (folder) {
-                if (folder.get('count') === 0 && bg.settings.get('showOnlyUnreadSources') === 'yes') {
+                if (folder.get('count') === 0 && bg.getBoolean('showOnlyUnreadSources')) {
                     return;
                 }
                 const view = new FolderView({model: folder}, this);
@@ -275,7 +275,7 @@ define([
                 let sourceViews;
                 const source = view.model;
 
-                if (source.get('count') === 0 && bg.settings.get('showOnlyUnreadSources') === 'yes') {
+                if (source.get('count') === 0 && bg.getBoolean('showOnlyUnreadSources')) {
                     return;
                 }
 

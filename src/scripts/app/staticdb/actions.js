@@ -1,4 +1,4 @@
-define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (stripTags, L, comm) {
+define(['helpers/stripTags', 'modules/Locale', 'controllers/comm', '../../libs/settingsHelper'], function (stripTags, L, comm, settingsHelper) {
     return {
         global: {
             default: {
@@ -26,8 +26,8 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 icon: 'icon16.png',
                 title: L.TOGGLE_SHOW_ONLY_UNREAD,
                 fn: function () {
-                    const currentUnread = bg.settings.get('showOnlyUnreadSources');
-                    bg.settings.save('showOnlyUnreadSources', currentUnread === 'yes' ? 'no' : 'yes');
+                    const currentUnread = bg.getBoolean('showOnlyUnreadSources');
+                    bg.settings.save('showOnlyUnreadSources', !currentUnread);
                     chrome.runtime.sendMessage({action: 'load-all'});
                 }
             },
@@ -292,7 +292,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                     const folder = Array.from(document.querySelectorAll('.folder.selected'))[0];
 
                     let unreadOnly = !!event.altKey || target.className === 'source-counter';
-                    if (bg.settings.get('defaultToUnreadOnly') === 'true') {
+                    if (bg.getBoolean('defaultToUnreadOnly')) {
                         unreadOnly = !unreadOnly;
                     }
 
@@ -474,7 +474,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                     if (!articleList.selectedItems || !articleList.selectedItems.length) {
                         return;
                     }
-                    if (articleList.selectedItems.length > 10 && bg.settings.get('askOnOpening')) {
+                    if (articleList.selectedItems.length > 10 && bg.getBoolean('askOnOpening')) {
                         if (!confirm('Do you really want to open ' + articleList.selectedItems.length + ' articles?')) {
                             return;
                         }
