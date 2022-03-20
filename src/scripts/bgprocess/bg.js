@@ -268,7 +268,7 @@ define(
 
         window.getElementSetting = function (element, setting) {
             const elementSetting = element.get(setting);
-            return (elementSetting === 'global' || elementSetting === 'USE_GLOBAL')? bg.settings.get(setting) : elementSetting;
+            return (elementSetting === 'global' || elementSetting === 'USE_GLOBAL')? settings.get(setting) : elementSetting;
         };
 
 
