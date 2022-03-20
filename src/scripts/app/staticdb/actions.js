@@ -707,7 +707,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm', '../../libs/s
                 title: L.SETTINGS,
                 icon: 'config.png',
                 fn: function () {
-                    let url = runtime.getURL('options.html');
+                    let url = chrome.runtime.getURL('options.html');
                     chrome.tabs.query({
                         url: url
                     }, function (tabs) {
