@@ -119,6 +119,9 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                         }
                         const existingContentText = existingContentFragment.innerText;
                         const newContentText = newContentFragment.innerText;
+                        if(!existingContentText){
+                            return true;
+                        }
                         if (existingContentText.trim() !== newContentText.trim()) {
                             return true;
                         }
