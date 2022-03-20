@@ -168,8 +168,7 @@ define(function (require) {
                 this.show();
                 const source = this.model.getSource();
                 const openEnclosure = bg.getElementBoolean(source, 'openEnclosure');
-                const sourceDefaultView = source.get('defaultView');
-                const defaultView = sourceDefaultView === 'global' ? bg.settings.get('defaultView') : sourceDefaultView;
+                const defaultView = bg.getElementSetting(source, 'defaultView');
 
 
                 const data = Object.create(this.model.attributes);

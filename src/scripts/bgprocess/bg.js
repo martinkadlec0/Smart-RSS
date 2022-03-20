@@ -266,6 +266,11 @@ define(
             return valueToBoolean(elementValue);
         };
 
+        window.getElementSetting = function (element, setting) {
+            const elementSetting = element.get(setting);
+            return (elementSetting === 'global' || elementSetting === 'USE_GLOBAL')? bg.settings.get(setting) : elementSetting;
+        };
+
 
         function fetchOne(tasks) {
             return new Promise((resolve) => {
