@@ -59,11 +59,11 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             updateFrequency: 15, // in minutes
             disableAutoUpdate: false,
             openInNewTab: true,
-            showFullHeadline: 0,
-            selectFirstArticle: 1,
-            selectAllFeeds: 1,
-            openEnclosure: 'no',
-            autoremove: 0,
+            showFullHeadline: false,
+            selectFirstArticle: true,
+            selectAllFeeds: true,
+            openEnclosure: false,
+            autoremove: false,
             autoremovesetting: 'KEEP_UNREAD',
             autoremovetrash: 0,
             openNewTab: 'background',
@@ -193,14 +193,14 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             detectFeeds: true,
             showAllFeeds: true,
             showPinned: true,
-            showOnlyUnreadSources: 'no',
+            showOnlyUnreadSources: false,
             displayFaviconInsteadOfPin: '0',
             faviconSource: 'internal',
             queries: [],
-            invertColors: 'no',
+            invertColors: false,
             defaultView: 'feed',
-            cacheParsedArticles: 'false',
-            defaultToUnreadOnly: 'false'
+            cacheParsedArticles: false,
+            defaultToUnreadOnly: false
         },
         /**
          * @property localStorage

@@ -353,7 +353,7 @@ define([
                     view.render();
                     this.views.push(view);
                     this.el.insertAdjacentElement('beforeend', view.el);
-                    if (this.selectedItems.length > 0 && bg.getBoolean('selectFirstArticle')) {
+                    if (this.selectedItems.length === 0 && bg.getBoolean('selectFirstArticle')) {
                         this.select(view);
                     }
                 } else {

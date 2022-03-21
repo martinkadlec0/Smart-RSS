@@ -251,7 +251,13 @@ define(
 
 
         window.valueToBoolean = function (value) {
-            return value === 1 || value === '1' || value === 'on' || value === 'yes' || value === 'true' || value === true;
+            if (value === 1 || value === '1' || value === 'on' || value === 'yes' || value === 'true') {
+                return true;
+            }
+            if (value === 0 || value === '0' || value === 'off' || value === 'no' || value === 'false') {
+                return true;
+            }
+            return value;
         };
 
         window.getBoolean = function (name) {
@@ -268,7 +274,7 @@ define(
 
         window.getElementSetting = function (element, setting) {
             const elementSetting = element.get(setting);
-            return (elementSetting === 'global' || elementSetting === 'USE_GLOBAL')? settings.get(setting) : elementSetting;
+            return (elementSetting === 'global' || elementSetting === 'USE_GLOBAL') ? settings.get(setting) : elementSetting;
         };
 
 

@@ -50,7 +50,12 @@ define(['../app/staticdb/actions', 'staticdb/shortcuts'], function (actions, sho
 
         [...document.querySelectorAll('select[id], input[type=number], input[type=range], textarea')]
             .forEach((item) => {
-                item.value = bg.settings.get(item.id);
+                const v = bg.settings.get(item.id);
+                if (item.querySelector('option[value="true"]')) {
+                    item.value = v ? 'true' : 'false';
+                } else {
+                    item.value = v;
+                }
                 if (item.type === 'number') {
                     item.addEventListener('input', handleChange);
                 } else {
@@ -301,7 +306,14 @@ define(['../app/staticdb/actions', 'staticdb/shortcuts'], function (actions, sho
 
     function handleChange(event) {
         const target = event.target;
-        bg.settings.save(target.id, target.value);
+        let v = target.value;
+        if (target.value === 'true') {
+            v = true;
+        }
+        if (target.value === 'false') {
+            v = false;
+        }
+        bg.settings.save(target.id, v);
         if (target.id === 'userStyle') {
             chrome.runtime.sendMessage({action: 'changeUserStyle'});
         }
