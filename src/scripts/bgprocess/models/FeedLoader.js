@@ -117,8 +117,16 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                         if (!newContentFragment) {
                             return true;
                         }
-                        const existingContentText = existingContentFragment.innerText;
-                        const newContentText = newContentFragment.innerText;
+                        let existingContentText = '';
+                        [...existingContentFragment.children].forEach((child)=>{
+                            existingContentText += child.innerText;
+                        });
+
+                        let newContentText = '';
+                        [...newContentFragment.children].forEach((child)=>{
+                            newContentText += child.innerText;
+                        });
+
                         if(!existingContentText){
                             return true;
                         }
@@ -127,9 +135,6 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                         }
                     }
                     if (existingItem.get('title').trim() !== newItem.title.trim()) {
-                        return true;
-                    }
-                    if (existingItem.get('author') !== newItem.author) {
                         return true;
                     }
                     return false;
