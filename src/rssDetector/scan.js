@@ -90,6 +90,14 @@
             }
         }
 
+        if (address.match(/^https:\/\/github.com\/(?:.+)\/(?:.+)/)) {
+            const base = address.replace(/(^https:\/\/github.com\/(?:.+)\/(?:.+))(\/.+)/, '$1');
+            feedsData.push({
+                url: base + '/releases.atom',
+                title: base.match(/^https:\/\/github.com\/((?:.+)\/(?:.+))/)[1] + ' - Releases'
+            });
+        }
+
         function findFeedsForYoutubeAddress(address) {
             const youtubeFeeds = [];
             const userMatch = /c\/(.+)/.exec(address);
