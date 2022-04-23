@@ -22,6 +22,23 @@ define(function (require) {
             if (!name || !this[name]) {
                 return;
             }
+            const articles = document.querySelector('#articles');
+            if (articles) {
+                articles.classList.remove('focused');
+            }
+            const feeds = document.querySelector('#feeds');
+            if (feeds) {
+                feeds.classList.remove('focused');
+            }
+            const content = document.querySelector('#content');
+            if (content) {
+                content.classList.remove('focused');
+            }
+            const x = document.querySelector('#' + name);
+            if (x) {
+                x.classList.add('focused');
+            }
+
             this[name].el.focus();
         },
 

@@ -1039,3 +1039,14 @@ body.loading > section {
   filter: brightness(95%);
 }
 
+@media (max-width: 900px) or (orientation: portrait){
+
+  #feeds:not(.focused),
+  #articles:not(.focused),
+  #content:not(.focused){
+    display: none;
+  }
+  .focused {
+    min-width: 100%;
+  }
+}
