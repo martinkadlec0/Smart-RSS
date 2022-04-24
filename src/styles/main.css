@@ -616,7 +616,7 @@ input[type=search]:not(:focus):not(:valid) {
 }
 
 .item-pin {
-  width: 0.4rem;
+  /*width: 0.4rem;*/
   height: 0.5rem;
   margin-right: 0.4rem;
   margin-left: 0.2rem;
