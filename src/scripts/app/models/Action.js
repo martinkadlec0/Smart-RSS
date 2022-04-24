@@ -48,7 +48,8 @@ define(function (require) {
              * @type String
              * @default ''
              */
-            title: ''
+            title: '',
+            state: null,
         }
     });
 

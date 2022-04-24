@@ -24,6 +24,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
         feeds: {
             toggleShowOnlyUnread: {
                 icon: 'icon16.png',
+                state: 'showOnlyUnreadSources',
                 title: L.TOGGLE_SHOW_ONLY_UNREAD,
                 fn: function () {
                     const currentUnread = bg.getBoolean('showOnlyUnreadSources');
