@@ -194,7 +194,7 @@ define(['backbone', 'preps/indexeddb'], function (BB) {
             showAllFeeds: true,
             showPinned: true,
             showOnlyUnreadSources: false,
-            displayFaviconInsteadOfPin: '0',
+            displayFaviconInsteadOfPin: false,
             faviconSource: 'internal',
             queries: [],
             invertColors: false,
