@@ -352,6 +352,16 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                     require('views/articleList').changeUnreadState();
                 }
             },
+            toggleShowOnlyUnread: {
+                // icon: 'icon16.png',
+                glyph: '📰',
+                state: 'defaultToUnreadOnly',
+                title: L.DEFAULT_TO_UNREAD_ONLY,
+                fn: function () {
+                    const currentUnread = bg.getBoolean('defaultToUnreadOnly');
+                    bg.settings.save('defaultToUnreadOnly', !currentUnread);
+                }
+            },
             update: {
                 icon: 'reload.png',
                 title: L.UPDATE,
