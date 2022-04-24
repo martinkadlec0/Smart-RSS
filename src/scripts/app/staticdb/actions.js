@@ -292,10 +292,19 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                     }
                     const folder = Array.from(document.querySelectorAll('.folder.selected'))[0];
 
-                    let unreadOnly = !!event.altKey || target.className === 'source-counter';
+                    let unreadOnly = false;
                     if (bg.getBoolean('defaultToUnreadOnly')) {
+                        unreadOnly = true;
+                    }
+
+                    if (bg.getBoolean('showOnlyUnreadSources')) {
+                        unreadOnly = true;
+                    }
+
+                    if (!!event.altKey || target.className === 'source-counter') {
                         unreadOnly = !unreadOnly;
                     }
+
 
                     app.trigger('select:' + feedList.el.id, {
                         action: 'new-select',
