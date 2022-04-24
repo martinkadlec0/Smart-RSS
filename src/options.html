@@ -190,9 +190,18 @@
       </label>
 
       <label class="web-content-select-label"
-             title="Controls whether media preview should be visible when displaying article contents. Can be overridden per source">
+             title="Controls whether only sources with unread articles should be visible">
         <span class="selectLabel">Show only sources with unread articles:</span>
         <select id="showOnlyUnreadSources">
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+      </label>
+
+      <label class="web-content-select-label"
+             title="Controls whether only unread articles should be visible">
+        <span class="selectLabel">Show only unread articles:</span>
+        <select id="defaultToUnreadOnly">
           <option value="true">Yes</option>
           <option value="false">No</option>
         </select>
