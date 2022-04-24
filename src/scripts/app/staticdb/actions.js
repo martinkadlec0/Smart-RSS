@@ -1,4 +1,4 @@
-define(['helpers/stripTags', 'modules/Locale', 'controllers/comm', '../../libs/settingsHelper'], function (stripTags, L, comm, settingsHelper) {
+define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (stripTags, L, comm) {
     return {
         global: {
             default: {
