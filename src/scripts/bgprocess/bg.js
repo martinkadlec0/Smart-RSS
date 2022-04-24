@@ -37,6 +37,9 @@ define(
         }
 
         function createLinksMenu() {
+            if (!getBoolean('displaySubscribeToLink')) {
+                return;
+            }
             chrome.contextMenus.create({
                 title: 'Subscribe to this feed',
                 contexts: ['link'],
@@ -44,7 +47,6 @@ define(
                 onclick: (info) => {
                     addSource(info.linkUrl);
                 }
-
             });
         }
 
@@ -388,7 +390,6 @@ define(
                 /**
                  * onclick:button -> open RSS
                  */
-
                 createLinksMenu();
 
                 /**
