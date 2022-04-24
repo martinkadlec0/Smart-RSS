@@ -14,7 +14,12 @@ define(['backbone'], function (BB) {
             };
 
             const action = app.actions.get(this.model.get('actionName'));
-            this.el.style.background = 'url("/images/' + action.get('icon') + '") no-repeat center center';
+            if (action.get('icon')) {
+                this.el.style.background = 'url("/images/' + action.get('icon') + '") no-repeat center center';
+            }
+            if (action.get('glyph')) {
+                this.el.textContent = action.get('glyph');
+            }
 
 
             this.el.dataset.action = this.model.get('actionName');

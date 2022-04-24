@@ -41,7 +41,7 @@ define(function (require) {
              * @type String
              * @default unknown.png
              */
-            icon: 'unknown.png',
+            icon: null,
 
             /**
              * @attribute title
@@ -50,6 +50,7 @@ define(function (require) {
              */
             title: '',
             state: null,
+            glyph: null,
         }
     });
 

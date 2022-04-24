@@ -23,7 +23,8 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
         },
         feeds: {
             toggleShowOnlyUnread: {
-                icon: 'icon16.png',
+                // icon: 'icon16.png',
+                glyph: '📰',
                 state: 'showOnlyUnreadSources',
                 title: L.TOGGLE_SHOW_ONLY_UNREAD,
                 fn: function () {

@@ -23,7 +23,7 @@ define(function (require) {
             Object.keys(actions).forEach((region) => {
                 Object.keys(actions[region]).forEach((name) => {
                     const c = actions[region][name];
-                    this.add({name: region + ':' + name, fn: c.fn, icon: c.icon, title: c.title, state: c.state});
+                    this.add({name: region + ':' + name, fn: c.fn, icon: c.icon, title: c.title, state: c.state, glyph: c.glyph});
                 });
             });
         },
