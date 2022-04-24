@@ -8,7 +8,7 @@ define([], function () {
         {
             version: 1,
             region: 'articles',
-            actions: ['articles:mark', 'articles:update', 'articles:undelete', 'articles:delete', '!dynamicSpace', 'articles:search']
+            actions: ['articles:mark', 'articles:update', 'articles:undelete', 'articles:delete', '!dynamicSpace', 'articles:toggleShowOnlyUnread', 'articles:search']
         },
         {
             version: 2,

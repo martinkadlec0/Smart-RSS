@@ -151,11 +151,17 @@ define([
                 bg.items.on('search', this.handleSearch, this);
                 bg.sources.on('destroy', this.handleSourcesDestroy, this);
                 bg.sources.on('clear-events', this.handleClearEvents, this);
+                bg.settings.on('change', this.onSettingsChange, this);
 
                 groups.on('add', this.addGroup, this);
 
                 this.on('attach', this.handleAttached, this);
                 this.on('pick', this.handlePick, this);
+            },
+
+            onSettingsChange: function(){
+                this.unreadOnly = bg.getBoolean('defaultToUnreadOnly');
+                this.handleNewSelected(this.currentData);
             },
 
             /**
@@ -190,7 +196,7 @@ define([
             handleAttached: function () {
                 app.on('select:feed-list', function (data) {
                     this.el.scrollTop = 0;
-                    this.unreadOnly = data.unreadOnly;
+                    this.unreadOnly = bg.getBoolean('defaultToUnreadOnly');
 
                     if (data.action === 'new-select') {
                         this.handleNewSelected(data);
