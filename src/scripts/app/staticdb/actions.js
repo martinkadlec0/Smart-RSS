@@ -30,7 +30,6 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
                 fn: function () {
                     const currentUnread = bg.getBoolean('showOnlyUnreadSources');
                     bg.settings.save('showOnlyUnreadSources', !currentUnread);
-                    chrome.runtime.sendMessage({action: 'load-all'});
                 }
             },
             updateAll: {
