@@ -20,14 +20,16 @@
     "https://code.fb.com/*",
     "https://dev.opera.com/*",
     "webRequest",
-    "webRequestBlocking"
+    "webRequestBlocking",
+    "notifications"
   ],
   "chromium_permissions": [
     "unlimitedStorage",
     "contextMenus",
     "alarms",
     "tabs",
-    "<all_urls>"
+    "<all_urls>",
+    "notifications"
   ],
   "content_security_policy": "default-src * 'self' data: 'unsafe-inline'; script-src 'self'; style-src * 'self' data: 'unsafe-inline'; img-src * 'self' data:; object-src 'self'",
   "chromium_content_security_policy": "script-src 'self'; object-src 'self'",

@@ -437,13 +437,13 @@
         </select>
       </label>
 
-<!--      <label class="web-content-select-label" title="If selected to see all articles hold alt or click on the counter">-->
-<!--        <span class="selectLabel">Show only unread articles by default:</span>-->
-<!--        <select id="defaultToUnreadOnly">-->
-<!--          <option value="false">No</option>-->
-<!--          <option value="true">Yes</option>-->
-<!--        </select>-->
-<!--      </label>-->
+      <!--      <label class="web-content-select-label" title="If selected to see all articles hold alt or click on the counter">-->
+      <!--        <span class="selectLabel">Show only unread articles by default:</span>-->
+      <!--        <select id="defaultToUnreadOnly">-->
+      <!--          <option value="false">No</option>-->
+      <!--          <option value="true">Yes</option>-->
+      <!--        </select>-->
+      <!--      </label>-->
 
     </section>
   </details>
@@ -457,7 +457,17 @@
   </details>
 
   <details>
-    <summary class="section-header">Sound notifications</summary>
+    <summary class="section-header">Notifications</summary>
+
+    <label class="web-content-select-label"
+           title="If enabled, browser will display a notification when new articles are found.">
+      <span class="selectLabel">Enable system notifications:</span>
+      <select id="systemNotifications">
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+      </select>
+    </label>
+
     <section>
       <label class="web-content-select-label"
              title="If enabled, browser will make a sound when new articles are downloaded.">

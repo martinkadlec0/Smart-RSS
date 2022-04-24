@@ -167,6 +167,24 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'favicon', 'models
             this.startDownloading();
         }
 
+        handleNotifications() {
+            if (settings.get('soundNotifications')) {
+                this.playNotificationSound();
+            }
+            if (settings.get('systemNotifications')) {
+                this.displaySystemNotification();
+            }
+        }
+
+
+        displaySystemNotification() {
+            chrome.notifications.create({
+                type: 'basic',
+                title: 'Smart RSS',
+                message: 'New articles found'
+            });
+        }
+
         playNotificationSound() {
             let audio;
             if (!settings.get('useSound') || settings.get('useSound') === ':user') {
@@ -208,8 +226,8 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'favicon', 'models
             if (foundSome) {
                 info.refreshSpecialCounters();
             }
-            if (this.itemsDownloaded && settings.get('soundNotifications')) {
-                this.playNotificationSound();
+            if (this.itemsDownloaded) {
+                this.handleNotifications();
             }
             this.maxSources = 0;
             this.loaded = 0;
