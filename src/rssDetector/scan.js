@@ -114,12 +114,13 @@
                 deeperScan = false;
                 youtubeFeeds.push({url: feedUrl, title: 'Channel feed'});
             }
-            const playlistMatch = /list=([a-zA-Z0-9]+)/.exec(address);
+            const playlistMatch = /list=([a-zA-Z\d\-_]+)/.exec(address);
             if (playlistMatch) {
                 feedUrl = 'https://www.youtube.com/feeds/videos.xml?playlist_id=' + playlistMatch[1];
                 youtubeFeeds.push({url: feedUrl, title: 'Current playlist feed'});
             }
             return [youtubeFeeds, deeperScan];
+
         }
 
         if (address.includes('youtube')) {
