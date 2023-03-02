@@ -511,7 +511,7 @@ define(['../app/staticdb/actions', 'staticdb/shortcuts'], function (actions, sho
         if (typeof browser !== 'undefined') {
             reader.readAsText(file);
         } else {
-            const url = chrome.extension.getURL('rss.html');
+            const url = chrome.runtime.getURL('rss.html');
             chrome.tabs.query({url: url}, function (tabs) {
                 for (let i = 0; i < tabs.length; i++) {
                     chrome.tabs.remove(tabs[i].id);
@@ -571,7 +571,7 @@ define(['../app/staticdb/actions', 'staticdb/shortcuts'], function (actions, sho
         if (typeof browser !== 'undefined') {
             reader.readAsText(file);
         } else {
-            const url = chrome.extension.getURL('rss.html');
+            const url = chrome.runtime.getURL('rss.html');
             chrome.tabs.query({url: url}, function (tabs) {
                 for (let i = 0; i < tabs.length; i++) {
                     chrome.tabs.remove(tabs[i].id);

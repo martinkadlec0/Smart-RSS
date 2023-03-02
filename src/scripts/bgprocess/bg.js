@@ -203,7 +203,7 @@ define(
 
         function openInNewTab() {
             chrome.tabs.create({
-                url: chrome.extension.getURL('rss.html')
+                url: chrome.runtime.getURL('rss.html')
             }, () => {
             });
         }
