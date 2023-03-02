@@ -560,7 +560,7 @@ define(['helpers/stripTags', 'modules/Locale', 'controllers/comm'], function (st
             },
             markAllAsRead: {
                 title: L.MARK_ALL_AS_READ,
-                icon: 'read.png',
+                icon: 'read_all.png',
                 fn: function () {
                     const articleList = require('views/articleList');
                     const feeds = articleList.currentData.feeds;
