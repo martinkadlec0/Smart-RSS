@@ -1,8 +1,7 @@
 {
   "name": "Smart RSS",
   "developer": {
-    "name": "zakius",
-    "url": ""
+    "name": "zakius"
   },
   "description": "RSS Reader",
   "manifest_version": 2,
