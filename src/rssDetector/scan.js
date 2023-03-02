@@ -90,11 +90,11 @@
             }
         }
 
-        if (address.match(/^https:\/\/github.com\/(?:.+)\/(?:.+)/)) {
-            const base = address.replace(/(^https:\/\/github.com\/(?:.+)\/(?:.+))(\/.+)/, '$1');
+        if (address.match(/^https:\/\/github.com\/.+\/.+/)) {
+            const base = address.replace(/(^https:\/\/github.com\/.+\/.+)(\/.+)/, '$1');
             feedsData.push({
                 url: base + '/releases.atom',
-                title: base.match(/^https:\/\/github.com\/((?:.+)\/(?:.+))/)[1] + ' - Releases'
+                title: base.match(/^https:\/\/github.com\/(.+\/.+)/)[1] + ' - Releases'
             });
         }
 
@@ -196,7 +196,7 @@
             const channelNameMatch = /steemit\.com\/(.+)/.exec(currentUrl);
             if (channelNameMatch) {
                 const channelName = channelNameMatch[1];
-                const href = 'http://www.hiverss.com/' + channelName + '/feed';
+                const href = 'https://www.hiverss.com/' + channelName + '/feed';
                 feedsData.push({url: href, title: 'Channel feed'});
             }
             return updateAvailableSourcesList();
@@ -207,7 +207,7 @@
             const channelNameMatch = /hive\.blog\/(.+)/.exec(currentUrl);
             if (channelNameMatch) {
                 const channelName = channelNameMatch[1];
-                const href = 'http://www.hiverss.com/' + channelName + '/feed';
+                const href = 'https://www.hiverss.com/' + channelName + '/feed';
                 feedsData.push({url: href, title: 'Channel feed'});
             }
             return updateAvailableSourcesList();
