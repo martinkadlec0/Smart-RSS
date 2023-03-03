@@ -20,6 +20,9 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
 
         onLoad() {
             let parsedData = [];
+            if (this.request.responseURL !== this.model.get('url')) {
+                this.model.save({url: this.request.responseURL});
+            }
             const proxy = this.model.get('proxyThroughFeedly');
             if (proxy) {
                 const response = JSON.parse(this.request.responseText);
@@ -118,16 +121,16 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                             return true;
                         }
                         let existingContentText = '';
-                        [...existingContentFragment.children].forEach((child)=>{
+                        [...existingContentFragment.children].forEach((child) => {
                             existingContentText += child.innerText;
                         });
 
                         let newContentText = '';
-                        [...newContentFragment.children].forEach((child)=>{
+                        [...newContentFragment.children].forEach((child) => {
                             newContentText += child.innerText;
                         });
 
-                        if(!existingContentText){
+                        if (!existingContentText) {
                             return true;
                         }
                         if (existingContentText.trim() !== newContentText.trim()) {
@@ -290,35 +293,53 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                 // may happen if source is still loading after last attempt
                 return this.downloadNext();
             }
-            this.loader.sourcesLoading.push(this.model);
-            if (settings.get('showSpinner')) {
-                this.model.set('isLoading', true);
-            }
-            const proxy = this.model.get('proxyThroughFeedly');
+
             let url = this.model.get('url');
-            if (proxy) {
-                const i = items.where({
-                    sourceID: sourceID
-                });
-                let date = 0;
-                i.forEach((item) => {
-                    if (item.date > date) {
-                        date = item.date;
-                    }
-                });
-                url = 'https://cloud.feedly.com/v3/streams/contents?streamId=feed%2F' + encodeURIComponent(url) + '&count=' + (1000) + ('&newerThan=' + (date));
-            }
-            this.request.open('GET', url);
-            this.request.setRequestHeader('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
-            this.request.setRequestHeader('Pragma', 'no-cache');
-            this.request.setRequestHeader('X-Time-Stamp', Date.now());
-            if (!proxy && (this.model.get('username') || this.model.get('password'))) {
-                const username = this.model.get('username') || '';
-                const password = this.model.getPass() || '';
-                this.request.withCredentials = true;
-                this.request.setRequestHeader('Authorization', 'Basic ' + btoa(`${username}:${password}`));
-            }
-            this.request.send();
+            const origin = new URL(url).origin;
+
+            navigator.locks.request(origin, () => {
+                console.log(this.loader.timestamps[origin] || 0);
+                if (Date.now() < (this.loader.timestamps[origin] || 0) + 1000 * 20 * 100) {
+                    console.log('should throttle');
+                    return false;
+                }
+                this.loader.timestamps[origin] = Date.now();
+                return true;
+            }).then((canContinue) => {
+                if (!canContinue) {
+                    return this.downloadNext();
+                }
+
+                this.loader.sourcesLoading.push(this.model);
+                if (settings.get('showSpinner')) {
+                    this.model.set('isLoading', true);
+                }
+                const proxy = this.model.get('proxyThroughFeedly');
+                if (proxy) {
+                    const i = items.where({
+                        sourceID: this.model.get('sourceID'),
+                    });
+                    let date = 0;
+                    i.forEach((item) => {
+                        if (item.date > date) {
+                            date = item.date;
+                        }
+                    });
+                    url = 'https://cloud.feedly.com/v3/streams/contents?streamId=feed%2F' + encodeURIComponent(url) + '&count=' + (1000) + ('&newerThan=' + (date));
+                }
+                this.request.open('GET', url);
+                if (url.startsWith('https://openrss.org/')) {
+                    this.request.setRequestHeader('User-Agent', navigator.userAgent + ' + SmartRSS');
+                }
+                if (!proxy && (this.model.get('username') || this.model.get('password'))) {
+                    const username = this.model.get('username') || '';
+                    const password = this.model.getPass() || '';
+                    this.request.withCredentials = true;
+                    this.request.setRequestHeader('Authorization', 'Basic ' + btoa(`${username}:${password}`));
+                }
+                this.request.send();
+            });
+
         }
     };
 });
