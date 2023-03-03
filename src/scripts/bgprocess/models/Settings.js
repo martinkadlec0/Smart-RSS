@@ -4,7 +4,7 @@
  */
 define(['backbone', 'preps/indexeddb'], function (BB) {
     /**
-     * Test navigator.language and if it matches some avalable language
+     * Test `navigator.language` and if it matches some available language
      */
     function getLangFromNavigator() {
         const ln = String(navigator.language)
