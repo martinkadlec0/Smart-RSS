@@ -70,7 +70,6 @@ define(['backbone', 'modules/RSSParser', 'modules/Animation', 'favicon', 'models
             this.sourcesToLoad = [];
             this.sourcesLoading = [];
             this.itemsDownloaded = false;
-            this.sourcesToLoad = [];
             this.sourcesLoading = [];
             this.loaders = [];
             this.timestamps = {};
