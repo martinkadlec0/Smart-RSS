@@ -4,36 +4,6 @@
  */
 define(function () {
     async function getFavicon(source) {
-        if (typeof Promise.any !== 'function') {
-            Promise.any = (promises) => {
-                return new Promise((resolve, reject) => {
-                    let hasResolved = false;
-                    let processedPromises = 0;
-                    const rejectionReasons = [];
-                    const resolveOnce = (value) => {
-                        if (!hasResolved) {
-                            hasResolved = true;
-                            resolve(value);
-                        }
-                    };
-                    const rejectionCheck = (reason) => {
-                        rejectionReasons.push(reason);
-                        if (rejectionReasons.length >= processedPromises) {
-                            reject(rejectionReasons);
-                        }
-                    };
-                    for (const promise of promises) {
-                        processedPromises++;
-                        promise.then((result) => {
-                            resolveOnce(result);
-                        }).catch((reason) => {
-                            rejectionCheck(reason);
-                        });
-                    }
-                });
-            };
-        }
-
         return new Promise((resolve, reject) => {
             async function getFaviconAddress(source) {
                 const baseUrl = new URL(source.get('base'));

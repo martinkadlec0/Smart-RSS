@@ -10,28 +10,28 @@ define(['he'], function (he) {
             let base = urlMatcher.exec(this.source.get('base')) ? this.source.get('base') : this.source.get('url'); // some feeds only give relative URLs but no base
 
             const node = this.currentNode;
-            let link = node.querySelector('link[rel="alternate"]');
-            if (!link) {
-                link = node.querySelector('link[type="text/html"]');
+            let linkNode = node.querySelector('link[rel="alternate"]');
+            if (!linkNode) {
+                linkNode = node.querySelector('link[type="text/html"]');
             }
 
             // prefer non atom links over atom links because of http://logbuch-netzpolitik.de/
-            if (!link || link.prefix === 'atom') {
-                link = node.querySelector('link');
+            if (!linkNode || linkNode.prefix === 'atom') {
+                linkNode = node.querySelector('link');
             }
 
-            if (!link) {
+            if (!linkNode) {
                 const guid = node.querySelector('guid');
                 let tmp;
                 if (guid && (tmp = guid.textContent.match(urlMatcher)) && tmp.length) {
-                    link = guid;
+                    linkNode = guid;
                 }
             }
-            if (!link) {
+            if (!linkNode) {
                 return false;
             }
 
-            let address = (link.textContent || link.getAttribute('href')).trim();
+            let address = (linkNode.textContent || linkNode.getAttribute('href')).trim();
 
             const match = urlMatcher.exec(address);
             if (!match) {
@@ -47,7 +47,7 @@ define(['he'], function (he) {
             return address.replace(/^(javascript:\.)/, '');
         }
 
-        getTitle() {
+        getSourceTitle() {
             let title = this.document.querySelector('channel > title, feed > title, rss > title');
             if (!title || !(title.textContent).trim()) {
                 title = this.document.querySelector('channel > description, feed > description, rss > description');
@@ -80,20 +80,20 @@ define(['he'], function (he) {
 
         getDate() {
             const node = this.currentNode;
-            let pubDate = node.querySelector('pubDate, published');
-            if (pubDate) {
-                return (new Date(this.replaceUTCAbbr(pubDate.textContent))).getTime() || 0;
+            let publicationDate = node.querySelector('pubDate, published');
+            if (publicationDate) {
+                return (new Date(this.replaceUTCAbbr(publicationDate.textContent))).getTime() || 0;
             }
 
-            pubDate = node.querySelector('date');
-            if (pubDate) {
-                return (new Date(this.replaceUTCAbbr(pubDate.textContent))).getTime() || 0;
+            publicationDate = node.querySelector('date');
+            if (publicationDate) {
+                return (new Date(this.replaceUTCAbbr(publicationDate.textContent))).getTime() || 0;
             }
 
-            pubDate = node.querySelector('lastBuildDate, updated, update');
+            publicationDate = node.querySelector('lastBuildDate, updated, update');
 
-            if (pubDate) {
-                return (new Date(this.replaceUTCAbbr(pubDate.textContent))).getTime() || 0;
+            if (publicationDate) {
+                return (new Date(this.replaceUTCAbbr(publicationDate.textContent))).getTime() || 0;
             }
             return 0;
         }
@@ -130,48 +130,43 @@ define(['he'], function (he) {
 
         getArticleTitle() {
             const node = this.currentNode.querySelector('title');
-            let title = '<no title>';
-            if (node) {
-                title = this.currentNode.querySelector('title').textContent.trim() || title;
-            }
+            const title = node ? this.currentNode.querySelector('title').textContent.trim() : '<no title>';
             return he.decode(title);
         }
 
         getArticleContent() {
             const node = this.currentNode;
-            let desc = node.querySelector('encoded');
-            if (desc) {
-                return he.decode(desc.textContent);
+            const encoded = node.querySelector('encoded');
+            if (encoded) {
+                return he.decode(encoded.textContent);
             }
 
-            desc = node.querySelector('description');
-            if (desc) {
-                return he.decode(desc.textContent);
+            const description = node.querySelector('description');
+            if (description) {
+                return he.decode(description.textContent);
             }
 
-            desc = node.querySelector('content');
-            if (desc) {
-                if (desc.getAttribute('type') === 'xhtml') {
-                    const childNodes = desc.childNodes;
-                    let text = '';
-                    var s = new XMLSerializer();
-                    [...childNodes].forEach((node) => {
-                        if (node.nodeType !== Node.TEXT_NODE) {
-                            text += s.serializeToString(node);
-                        }
-                    });
-                    const searchRegExp = /xhtml:/g;
-                    const replaceWith = '';
-
-                    text = text.replace(searchRegExp, replaceWith);
-                    return he.decode(text);
+            const content = node.querySelector('content');
+            if (content) {
+                if (content.getAttribute('type') !== 'xhtml') {
+                    return he.decode(content.textContent);
                 }
-                return he.decode(desc.textContent);
+                const childNodes = content.childNodes;
+                let stitchedText = '';
+                const xmlSerializer = new XMLSerializer();
+                [...childNodes].forEach((node) => {
+                    if (node.nodeType !== Node.TEXT_NODE) {
+                        stitchedText += xmlSerializer.serializeToString(node);
+                    }
+                });
+
+                const text = stitchedText.replace(/xhtml:/g, '');
+                return he.decode(text);
             }
 
-            desc = node.querySelector('summary');
-            if (desc) {
-                return desc.textContent;
+            const summary = node.querySelector('summary');
+            if (summary) {
+                return summary.textContent;
             }
 
             return '&nbsp;';
@@ -180,7 +175,7 @@ define(['he'], function (he) {
         getGuid() {
             const node = this.currentNode;
             let guid = node.querySelector('guid');
-            if(!guid){
+            if (!guid) {
                 guid = node.querySelector('id');
             }
             return (guid ? guid.textContent : this.getLink() || '').trim() + this.source.get('id');
@@ -205,27 +200,25 @@ define(['he'], function (he) {
 
         getEnclosures() {
             const node = this.currentNode;
-            const seenUrls = [];
-            let title = '';
+            const knownUrls = [];
             const mediaTitleNode = [...node.getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'title')][0];
-            if (mediaTitleNode) {
-                title = mediaTitleNode.textContent;
-            }
-            const enclosures = [];
-            let enclosureNode = node.querySelector('enclosure');
+            const title = mediaTitleNode ? mediaTitleNode.textContent : '';
 
-            if (!!enclosureNode) {
+            const enclosures = [];
+            const enclosureNode = node.querySelector('enclosure');
+            if (enclosureNode) {
                 const foundEnclosure = this.getEnclosure(enclosureNode, title);
                 enclosures.push(foundEnclosure);
-                seenUrls.push(foundEnclosure.url);
+                knownUrls.push(foundEnclosure.url);
             }
+
             const enclosureNodes = [...node.getElementsByTagNameNS('http://search.yahoo.com/mrss/', 'content')];
             enclosureNodes.forEach((enclosureNode) => {
                 const foundEnclosure = this.getEnclosure(enclosureNode, title);
-                if (seenUrls.includes(foundEnclosure.url)) {
+                if (knownUrls.includes(foundEnclosure.url)) {
                     return;
                 }
-                seenUrls.push(foundEnclosure.url);
+                knownUrls.push(foundEnclosure.url);
                 enclosures.push(foundEnclosure);
             });
 
@@ -260,61 +253,63 @@ define(['he'], function (he) {
             return '';
         }
 
+        getBaseUrl() {
+            const rootElement = this.document.querySelector('rss, rdf, feed, channel');
+            if (!rootElement) {
+                return;
+            }
+            let baseStr = rootElement.getAttribute('xml:base');
+            if (!baseStr) {
+                baseStr = rootElement.getAttribute('xmlns:base');
+            }
+            if (!baseStr) {
+                baseStr = rootElement.getAttribute('base');
+            }
+            if (!baseStr) {
+                const node = rootElement.querySelector(':scope > link[rel="alternate"]');
+                if (node) {
+                    baseStr = node.textContent;
+                }
+            }
+            if (!baseStr) {
+                const node = rootElement.querySelector(':scope > link[rel="alternate"]');
+                if (node) {
+                    baseStr = node.getAttribute('href');
+                }
+            }
+            if (!baseStr) {
+                const node = rootElement.querySelector(':scope > link:not([rel="self"])');
+                if (node) {
+                    baseStr = node.getAttribute('href');
+                }
+            }
+            if (!baseStr) {
+                baseStr = new URL(this.source.get('url')).origin;
+            }
+
+            const urlMatcher = /.+:\/\//;
+            return urlMatcher.exec(baseStr) ? baseStr : this.source.get('url');
+        }
+
 
         parse() {
-            let items = [];
-            const data = {};
+            const items = [];
+            const sourceData = {};
 
-            let nodes = this.document.querySelectorAll('item');
-            if (!nodes.length) {
-                nodes = this.document.querySelectorAll('entry');
-            }
+            const nodes = [...this.document.querySelectorAll('item, entry')];
 
-            const title = he.decode(this.getTitle(this.document));
-
-
+            const title = he.decode(this.getSourceTitle());
             if (title && (this.source.get('title') === this.source.get('url') || !this.source.get('title'))) {
-                data.title = title;
+                sourceData.title = title;
+            }
+            const baseUrl = this.getBaseUrl();
+            if (baseUrl) {
+                sourceData.base = baseUrl;
             }
 
+            sourceData.uid = this.source.get('url').replace(/^(.*:)?(\/\/)?(ww+\.)?/, '').replace(/\/$/, '');
+            this.source.save(sourceData);
 
-            const mainEl = this.document.querySelector('rss, rdf, feed, channel');
-            if (mainEl) {
-                let baseStr = mainEl.getAttribute('xml:base');
-                if (!baseStr) {
-                    baseStr = mainEl.getAttribute('xmlns:base');
-                }
-                if (!baseStr) {
-                    baseStr = mainEl.getAttribute('base');
-                }
-                if (!baseStr) {
-                    const node = mainEl.querySelector(':scope > link[rel="alternate"]');
-                    if (node) {
-                        baseStr = node.textContent;
-                    }
-                }
-                if (!baseStr) {
-                    const node = mainEl.querySelector(':scope > link[rel="alternate"]');
-                    if (node) {
-                        baseStr = node.getAttribute('href');
-                    }
-                }
-                if (!baseStr) {
-                    const node = mainEl.querySelector(':scope > link:not([rel="self"])');
-                    if (node) {
-                        baseStr = node.getAttribute('href');
-                    }
-                }
-                if (!baseStr) {
-                    baseStr = new URL(this.source.get('url')).origin;
-                }
-
-                const urlMatcher = /.+:\/\//;
-                data.base = urlMatcher.exec(baseStr) ? baseStr : this.source.get('url');
-
-                data.uid = this.source.get('url').replace(/^(.*:)?(\/\/)?(www*?\.)?/, '').replace(/\/$/, '');
-                this.source.save(data);
-            }
 
             [...nodes].forEach((node) => {
                 this.currentNode = node;

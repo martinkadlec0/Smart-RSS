@@ -19,11 +19,10 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
         }
 
         parseProxyResponse() {
-            const parsedData = [];
             const response = JSON.parse(this.request.responseText);
-            response.items.forEach((item) => {
-                let canonical = item.canonical ? item.canonical[0] : item.alternate[0];
-                parsedData.push({
+            return response.items.map((item) => {
+                const canonical = item.canonical ? item.canonical[0] : item.alternate[0];
+                return {
                     id: item.originId,
                     title: item.title,
                     url: canonical.href,
@@ -32,50 +31,49 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                     content: item.content ? item.content.content : item.summary.content,
                     sourceID: this.model.get('id'),
                     dateCreated: Date.now()
-                });
+                };
             });
-            return parsedData;
         }
 
         parseResponse() {
             const response = this.request.responseText;
-            let parser = new RSSParser(response, this.model);
-            const parsedData = parser.parse();
-            parser = null;
-            return parsedData;
+            const parser = new RSSParser(response, this.model);
+            return parser.parse();
         }
 
         onLoad() {
             let parsedData = [];
+            const queries = settings.get('queries');
             let modelUrl = this.model.get('url');
-
             const proxy = this.model.get('proxyThroughFeedly');
+            const modelId = this.model.get('id');
+            let lastArticle = this.model.get('lastArticle');
+
+
             try {
                 parsedData = proxy ? this.parseProxyResponse() : this.parseResponse();
             } catch (e) {
                 console.log(`Couldn't parse`, modelUrl, e);
-                return this.onFeedProcessed(false);
+                return this.onFeedProcessed({success: false});
             }
-            let hasNew = false;
+
+            let foundNewArticles = false;
             let createdNo = 0;
-            let lastArticle = this.model.get('lastArticle');
             const currentItems = items.where({
-                sourceID: this.model.get('id')
+                sourceID: modelId
             });
             const earliestDate = Math.min(0, ...currentItems.map((item) => {
                 return item.get('date');
             }));
 
-            const queries = settings.get('queries');
+
             RegExp.escape = function (text) {
                 return String(text).replace(/[\-\[\]\/{}()*+?.\\^$|]/g, '\\$&');
             };
+            const insert = [];
 
             parsedData.forEach((item) => {
-                let existingItem = items.get(item.id);
-                if (!existingItem) {
-                    existingItem = items.get(item.oldId);
-                }
+                const existingItem = items.get(item.id) || items.get(item.oldId);
 
                 if (existingItem) {
                     if (existingItem.get('deleted')) {
@@ -114,7 +112,8 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                     };
 
                     if (areDifferent(item, existingItem)) {
-                        existingItem.save({
+                        insert.push({
+                            id: item.id,
                             content: item.content,
                             title: item.title,
                             date: item.date,
@@ -124,17 +123,27 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                             visited: false,
                             parsedContent: {}
                         });
+                        // existingItem.save({
+                        //     content: item.content,
+                        //     title: item.title,
+                        //     date: item.date,
+                        //     author: item.author,
+                        //     enclosure: item.enclosure,
+                        //     unread: true,
+                        //     visited: false,
+                        //     parsedContent: {}
+                        // });
                     }
                     return;
                 }
                 if (earliestDate > item.date) {
-                    console.log('discarding entry with date older than the earliest know article in the feed', this.model.get('url'));
+                    console.log('discarding entry with date older than the earliest know article in the feed', modelUrl);
                     return;
                 }
-                hasNew = true;
+                foundNewArticles = true;
                 item.pinned = queries.some((query) => {
                         query = query.trim();
-                        if (query === '') {
+                        if (!query) {
                             return false;
                         }
                         let searchInContent = false;
@@ -142,7 +151,7 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                             query = query.replace(/^:/, '', query);
                             searchInContent = true;
                         }
-                        if (query === '') {
+                        if (!query) {
                             return false;
                         }
                         const expression = new RegExp(RegExp.escape(query), 'i');
@@ -155,18 +164,16 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                     }
                 );
 
-
-                items.create(item, {
-                    sort: false
-                });
+                insert.push(item);
                 lastArticle = Math.max(lastArticle, item.date);
                 createdNo++;
             });
-            this.model.set('lastArticle', lastArticle);
+            items.add(insert, {sort: false, merge: true});
+
             items.sort({
                 silent: true
             });
-            if (hasNew) {
+            if (foundNewArticles) {
                 items.trigger('search');
                 loader.itemsDownloaded = true;
                 // remove old deleted content
@@ -175,7 +182,7 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                 });
                 if (fetchedIDs.length > 0) {
                     items.where({
-                        sourceID: this.model.get('id'),
+                        sourceID: modelId,
                         deleted: true
                     }).forEach((item) => {
                         if (item.emptyDate) {
@@ -189,29 +196,31 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                 }
             }
 
-            const countAll = items.where({
-                sourceID: this.model.get('id'),
+            const articlesCount = items.where({
+                sourceID: modelId,
                 trashed: false
-            })
-                .length;
-            const unreadCount = items.where({
+            }).length;
+
+            const unreadArticlesCount = items.where({
                 sourceID: this.model.get('id'),
                 unread: true,
                 trashed: false
-            })
-                .length;
+            }).length;
 
-            const modelUpdate = {
-                'count': unreadCount,
-                'countAll': countAll,
-                'lastUpdate': Date.now(),
-                'hasNew': hasNew || this.model.get('hasNew'),
-                'lastStatus': 200
-            };
+
             if (this.request.responseURL !== modelUrl) {
                 modelUrl = this.request.responseURL;
-                modelUpdate.url = this.request.responseURL;
             }
+
+            const modelUpdate = {
+                'count': unreadArticlesCount,
+                'countAll': articlesCount,
+                'lastUpdate': Date.now(),
+                'hasNew': foundNewArticles || this.model.get('hasNew'),
+                'lastStatus': 200,
+                'lastArticle': lastArticle,
+                'url': modelUrl
+            };
 
             info.set({
                 allCountUnvisited: info.get('allCountUnvisited') + createdNo
@@ -230,24 +239,22 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                         console.warn(`Couldn't load favicon for:`, modelUrl, err);
                     })
                     .finally(() => {
-                        this.model.save(modelUpdate);
-                        return this.onFeedProcessed();
+                        return this.onFeedProcessed({data: modelUpdate});
                     });
             }
 
-
-            return this.onFeedProcessed();
+            return this.onFeedProcessed({data: modelUpdate});
         }
 
         onTimeout() {
-            return this.onFeedProcessed(false);
+            return this.onFeedProcessed({success: false});
         }
 
         onError() {
             this.model.save({
                 lastStatus: this.request.status
             });
-            return this.onFeedProcessed(false, this.request.status > 0);
+            return this.onFeedProcessed({success: false, isOnline: this.request.status > 0});
         }
 
         getAutoRemoveTime(model) {
@@ -290,21 +297,23 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                 });
         }
 
-        onFeedProcessed(success = true, isOnline = true) {
-            isOnline = isOnline && (typeof navigator.onLine !== 'undefined' ? navigator.onLine : true);
+        onFeedProcessed(result = {}) {
+            const success = `success` in result ? result.success : true;
+            const isOnline = `isOnline` in result ? result.isOnline && (typeof navigator.onLine !== 'undefined' ? navigator.onLine : true) : true;
             if (success && isOnline) {
                 this.removeOldItems(this.model);
             }
-            const data = {
+            const data = `data` in result ? result.data : {};
+            Object.assign(data, {
                 isLoading: false,
                 lastChecked: Date.now(),
                 errorCount: success ? 0 : (isOnline ? this.model.get('errorCount') + 1 : this.model.get('errorCount')),
                 folderID: this.model.get('folderID') === '' ? '0' : this.model.get('folderID')
-            };
-            this.model.save(data);
-            this.model.trigger('update', {
-                ok: success || !isOnline
             });
+
+
+            this.model.save(data);
+            this.model.trigger('update', {ok: success || !isOnline});
             this.loader.sourceLoaded(this.model);
             this.downloadNext();
         }
@@ -319,8 +328,8 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                 return this.downloadNext();
             }
 
-            let url = this.model.get('url');
-            const origin = new URL(url).origin;
+            let sourceUrl = this.model.get('url');
+            const origin = new URL(sourceUrl).origin;
 
             navigator.locks.request(origin, () => {
                 if (Date.now() < (this.loader.timestamps[origin] || 0) + 1000 * 5) {
@@ -338,24 +347,24 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                 if (settings.get('showSpinner')) {
                     this.model.set('isLoading', true);
                 }
-                const proxy = this.model.get('proxyThroughFeedly');
-                if (proxy) {
-                    const i = items.where({
+                const shouldUseFeedlyCache = this.model.get('proxyThroughFeedly');
+                if (shouldUseFeedlyCache) {
+                    const itemsArray = items.where({
                         sourceID: this.model.get('sourceID')
                     });
                     let date = 0;
-                    i.forEach((item) => {
+                    itemsArray.forEach((item) => {
                         if (item.date > date) {
                             date = item.date;
                         }
                     });
-                    url = 'https://cloud.feedly.com/v3/streams/contents?streamId=feed%2F' + encodeURIComponent(url) + '&count=' + (1000) + ('&newerThan=' + (date));
+                    sourceUrl = 'https://cloud.feedly.com/v3/streams/contents?streamId=feed%2F' + encodeURIComponent(sourceUrl) + '&count=' + (1000) + ('&newerThan=' + (date));
                 }
-                this.request.open('GET', url);
-                if (url.startsWith('https://openrss.org/')) {
+                this.request.open('GET', sourceUrl);
+                if (sourceUrl.startsWith('https://openrss.org/')) {
                     this.request.setRequestHeader('User-Agent', navigator.userAgent + ' + SmartRSS');
                 }
-                if (!proxy && (this.model.get('username') || this.model.get('password'))) {
+                if (!shouldUseFeedlyCache && (this.model.get('username') || this.model.get('password'))) {
                     const username = this.model.get('username') || '';
                     const password = this.model.getPass() || '';
                     this.request.withCredentials = true;
