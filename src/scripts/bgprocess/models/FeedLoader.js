@@ -298,9 +298,7 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
             const origin = new URL(url).origin;
 
             navigator.locks.request(origin, () => {
-                console.log(this.loader.timestamps[origin] || 0);
                 if (Date.now() < (this.loader.timestamps[origin] || 0) + 1000 * 5) {
-                    console.log('should throttle');
                     return false;
                 }
                 this.loader.timestamps[origin] = Date.now();
