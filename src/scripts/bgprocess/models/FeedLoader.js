@@ -230,7 +230,7 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
         }
 
         getAutoRemoveSetting(model) {
-            return bg.getElementSetting(model, 'autoremovesetting');
+            return getElementSetting(model, 'autoremovesetting');
         }
 
         removeOldItems() {
@@ -316,7 +316,7 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                 const proxy = this.model.get('proxyThroughFeedly');
                 if (proxy) {
                     const i = items.where({
-                        sourceID: this.model.get('sourceID'),
+                        sourceID: this.model.get('sourceID')
                     });
                     let date = 0;
                     i.forEach((item) => {
