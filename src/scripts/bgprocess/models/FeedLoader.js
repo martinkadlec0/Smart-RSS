@@ -18,37 +18,42 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
             this.model.save({isLoading: false});
         }
 
+        parseProxyResponse() {
+            const parsedData = [];
+            const response = JSON.parse(this.request.responseText);
+            response.items.forEach((item) => {
+                let canonical = item.canonical ? item.canonical[0] : item.alternate[0];
+                parsedData.push({
+                    id: item.originId,
+                    title: item.title,
+                    url: canonical.href,
+                    date: item.updated ? item.updated : (item.published ? item.published : Date.now()),
+                    author: item.author ? item.author : '',
+                    content: item.content ? item.content.content : item.summary.content,
+                    sourceID: this.model.get('id'),
+                    dateCreated: Date.now()
+                });
+            });
+            return parsedData;
+        }
+
+        parseResponse() {
+            const response = this.request.responseText;
+            let parser = new RSSParser(response, this.model);
+            const parsedData = parser.parse();
+            parser = null;
+            return parsedData;
+        }
+
         onLoad() {
             let parsedData = [];
-            if (this.request.responseURL !== this.model.get('url')) {
-                this.model.save({url: this.request.responseURL});
-            }
+
             const proxy = this.model.get('proxyThroughFeedly');
-            if (proxy) {
-                const response = JSON.parse(this.request.responseText);
-                response.items.forEach((item) => {
-                    let canonical = item.canonical ? item.canonical[0] : item.alternate[0];
-                    parsedData.push({
-                        id: item.originId,
-                        title: item.title,
-                        url: canonical.href,
-                        date: item.updated ? item.updated : (item.published ? item.published : Date.now()),
-                        author: item.author ? item.author : '',
-                        content: item.content ? item.content.content : item.summary.content,
-                        sourceID: this.model.get('id'),
-                        dateCreated: Date.now()
-                    });
-                });
-            } else {
-                const response = this.request.responseText;
-                try {
-                    let parser = new RSSParser(response, this.model);
-                    parsedData = parser.parse();
-                    parser = null;
-                } catch (e) {
-                    parsedData = [];
-                    return this.onFeedProcessed(false);
-                }
+            try {
+                parsedData = proxy ? this.parseProxyResponse() : this.parseResponse();
+            } catch (e) {
+                console.log(`Couldn't parse`, this.model.get('url'), e);
+                return this.onFeedProcessed(false);
             }
             let hasNew = false;
             let createdNo = 0;
@@ -71,90 +76,90 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                     existingItem = items.get(item.oldId);
                 }
 
-                if (!existingItem) {
-                    if (earliestDate > item.date) {
+                if (existingItem) {
+                    if (existingItem.get('deleted')) {
                         return;
                     }
-                    hasNew = true;
-                    item.pinned = queries.some((query) => {
-                            query = query.trim();
-                            if (query === '') {
-                                return false;
+                    const areDifferent = function (newItem, existingItem) {
+                        const existingContent = existingItem.get('content');
+                        const newContent = newItem.content;
+                        if (existingContent !== newContent) {
+                            const existingContentFragment = document.createRange().createContextualFragment(existingContent);
+                            if (!existingContentFragment) {
+                                return true;
                             }
-                            let searchInContent = false;
-                            if (query[0] && query[0] === ':') {
-                                query = query.replace(/^:/, '', query);
-                                searchInContent = true;
+                            const newContentFragment = document.createRange().createContextualFragment(newContent);
+                            if (!newContentFragment) {
+                                return true;
                             }
-                            if (query === '') {
-                                return false;
-                            }
-                            const expression = new RegExp(RegExp.escape(query), 'i');
+                            let existingContentText = '';
+                            [...existingContentFragment.children].forEach((child) => {
+                                existingContentText += child.innerText;
+                            });
 
+                            let newContentText = '';
+                            [...newContentFragment.children].forEach((child) => {
+                                newContentText += child.innerText;
+                            });
 
-                            const cleanedTitle = item.title.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-                            const cleanedAuthor = item.author.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-                            const cleanedContent = searchInContent ? item.content.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : '';
-                            return (expression.test(cleanedTitle) || expression.test(cleanedAuthor) || (searchInContent && expression.test(cleanedContent)));
+                            if (!existingContentText) {
+                                return true;
+                            }
+                            if (existingContentText.trim() !== newContentText.trim()) {
+                                return true;
+                            }
                         }
-                    );
+                        return existingItem.get('title').trim() !== newItem.title.trim();
+                    };
 
-
-                    items.create(item, {
-                        sort: false
-                    });
-                    lastArticle = Math.max(lastArticle, item.date);
-                    createdNo++;
+                    if (areDifferent(item, existingItem)) {
+                        existingItem.save({
+                            content: item.content,
+                            title: item.title,
+                            date: item.date,
+                            author: item.author,
+                            enclosure: item.enclosure,
+                            unread: true,
+                            visited: false,
+                            parsedContent: {}
+                        });
+                    }
                     return;
                 }
-
-                function areDifferent(newItem, existingItem) {
-                    const existingContent = existingItem.get('content');
-                    const newContent = newItem.content;
-                    if (existingContent !== newContent) {
-                        const existingContentFragment = document.createRange().createContextualFragment(existingContent);
-                        if (!existingContentFragment) {
-                            return true;
-                        }
-                        const newContentFragment = document.createRange().createContextualFragment(newContent);
-                        if (!newContentFragment) {
-                            return true;
-                        }
-                        let existingContentText = '';
-                        [...existingContentFragment.children].forEach((child) => {
-                            existingContentText += child.innerText;
-                        });
-
-                        let newContentText = '';
-                        [...newContentFragment.children].forEach((child) => {
-                            newContentText += child.innerText;
-                        });
-
-                        if (!existingContentText) {
-                            return true;
-                        }
-                        if (existingContentText.trim() !== newContentText.trim()) {
-                            return true;
-                        }
-                    }
-                    if (existingItem.get('title').trim() !== newItem.title.trim()) {
-                        return true;
-                    }
-                    return false;
+                if (earliestDate > item.date) {
+                    console.log('discarding entry with date older than the earliest know article in the feed', this.model.get('url'));
+                    return;
                 }
+                hasNew = true;
+                item.pinned = queries.some((query) => {
+                        query = query.trim();
+                        if (query === '') {
+                            return false;
+                        }
+                        let searchInContent = false;
+                        if (query[0] && query[0] === ':') {
+                            query = query.replace(/^:/, '', query);
+                            searchInContent = true;
+                        }
+                        if (query === '') {
+                            return false;
+                        }
+                        const expression = new RegExp(RegExp.escape(query), 'i');
 
-                if (existingItem.get('deleted') === false && areDifferent(item, existingItem)) {
-                    existingItem.save({
-                        content: item.content,
-                        title: item.title,
-                        date: item.date,
-                        author: item.author,
-                        enclosure: item.enclosure,
-                        unread: true,
-                        visited: false,
-                        parsedContent: {}
-                    });
-                }
+
+                        const cleanedTitle = item.title.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                        const cleanedAuthor = item.author.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                        const cleanedContent = searchInContent ? item.content.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : '';
+                        return (expression.test(cleanedTitle) || expression.test(cleanedAuthor) || (searchInContent && expression.test(cleanedContent)));
+                    }
+                );
+
+
+                items.create(item, {
+                    sort: false
+                });
+                lastArticle = Math.max(lastArticle, item.date);
+                createdNo++;
             });
             this.model.set('lastArticle', lastArticle);
             items.sort({
@@ -194,26 +199,41 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                 trashed: false
             })
                 .length;
-            this.model.save({
+
+            const modelUpdate = {
                 'count': unreadCount,
                 'countAll': countAll,
                 'lastUpdate': Date.now(),
-                'hasNew': hasNew || this.model.get('hasNew')
-            });
+                'hasNew': hasNew || this.model.get('hasNew'),
+                'lastStatus': 200
+            };
+            if (this.request.responseURL !== this.model.get('url')) {
+                modelUpdate.url = this.request.responseURL;
+            }
+
             info.set({
                 allCountUnvisited: info.get('allCountUnvisited') + createdNo
             });
-            if (this.model.get('faviconExpires') < parseInt(Math.round((new Date())
-                .getTime() / 1000))) {
-                return Favicon.checkFavicon(this.model)
-                    // no finally available in Waterfox 56
+
+            function isFaviconExpired(model) {
+                return model.get('faviconExpires') < Math.round((new Date()).getTime() / 1000);
+            }
+
+            if (isFaviconExpired(this.model)) {
+                return Favicon.getFavicon(this.model)
                     .then((response) => {
-                        this.model.save(response);
-                        return this.onFeedProcessed();
-                    }, () => {
+                        modelUpdate.favicon = response.favicon;
+                        modelUpdate.faviconExpires = response.faviconExpires;
+                    }, (err) => {
+                        console.log(err);
+                    })
+                    .finally(() => {
+                        this.model.save(modelUpdate);
                         return this.onFeedProcessed();
                     });
             }
+
+
             return this.onFeedProcessed();
         }
 
@@ -222,6 +242,9 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
         }
 
         onError() {
+            this.model.save({
+                lastStatus: this.request.status
+            });
             return this.onFeedProcessed(false, this.request.status > 0);
         }
 

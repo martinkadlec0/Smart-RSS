@@ -3,7 +3,7 @@
  * @submodule modules/toDataURI
  */
 define(function () {
-    async function checkFavicon(source) {
+    async function getFavicon(source) {
         if (typeof Promise.any !== 'function') {
             Promise.any = (promises) => {
                 return new Promise((resolve, reject) => {
@@ -230,6 +230,6 @@ define(function () {
 
     return {
         image: toDataURI,
-        checkFavicon: checkFavicon
+        getFavicon: getFavicon
     };
 });
