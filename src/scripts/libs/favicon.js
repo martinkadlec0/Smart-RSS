@@ -119,12 +119,11 @@ define(function () {
                     reject('[modules/toDataURI] non-200 on: ' + favicon);
                     return;
                 }
-                const type = xhr.getResponseHeader('content-type');
-                if (!~type.indexOf('image') || xhr.response.byteLength < 10) {
+
+                const imageDataUri = getImageData(xhr);
+                if (!imageDataUri) {
                     reject('[modules/toDataURI] Not an image on: ' + favicon);
-                    return;
                 }
-                const imgData = 'data:' + type + ';base64,' + AB2B64(xhr.response);
 
                 const expiresHeader = xhr.getResponseHeader('expires');
 
@@ -141,7 +140,7 @@ define(function () {
                     expires = Math.round((new Date()).getTime() / 1000) + maxAge;
                 }
 
-                resolve({favicon: imgData, faviconExpires: expires});
+                resolve({favicon: imageDataUri, faviconExpires: expires});
             };
             xhr.open('GET', favicon);
             xhr.timeout = 1000 * 30;
@@ -149,49 +148,16 @@ define(function () {
         });
     }
 
-
-    /* Custom Base64 encoder. */
-    function AB2B64(arrayBuffer) {
-        let base64 = '';
-        const encodings = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-
-        const bytes = new Uint8Array(arrayBuffer);
-        const byteLength = bytes.byteLength;
-        const byteRemainder = byteLength % 3;
-        const mainLength = byteLength - byteRemainder;
-
-        let a, b, c, d;
-        let chunk;
-
-        for (let i = 0; i < mainLength; i = i + 3) {
-            chunk = (bytes[i] << 16) | (bytes[i + 1] << 8) | bytes[i + 2];
-
-            a = (chunk & 16515072) >> 18; // 16515072 = (2^6 - 1) << 18
-            b = (chunk & 258048) >> 12; // 258048   = (2^6 - 1) << 12
-            c = (chunk & 4032) >> 6; // 4032     = (2^6 - 1) << 6
-            d = chunk & 63; // 63       = 2^6 - 1
-
-            base64 += encodings[a] + encodings[b] + encodings[c] + encodings[d];
+    function getImageData(xhr) {
+        const type = xhr.getResponseHeader('content-type');
+        if (!~type.indexOf('image') || xhr.response.byteLength < 10) {
+            return;
         }
 
-        if (byteRemainder === 1) {
-            chunk = bytes[mainLength];
+        const array = new Uint8Array(xhr.response);
+        const raw = String.fromCharCode.apply(null, array);
 
-            a = (chunk & 252) >> 2; // 252 = (2^6 - 1) << 2
-            b = (chunk & 3) << 4; // 3   = 2^2 - 1
-
-            base64 += encodings[a] + encodings[b] + '==';
-        } else if (byteRemainder === 2) {
-            chunk = (bytes[mainLength] << 8) | bytes[mainLength + 1];
-
-            a = (chunk & 64512) >> 10; // 64512 = (2^6 - 1) << 10
-            b = (chunk & 1008) >> 4; // 1008  = (2^6 - 1) << 4
-            c = (chunk & 15) << 2; // 15    = 2^4 - 1
-
-            base64 += encodings[a] + encodings[b] + encodings[c] + '=';
-        }
-
-        return base64;
+        return 'data:' + type + ';base64,' + btoa(raw);
     }
 
     return {
