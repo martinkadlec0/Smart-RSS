@@ -47,12 +47,13 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
 
         onLoad() {
             let parsedData = [];
+            let modelUrl = this.model.get('url');
 
             const proxy = this.model.get('proxyThroughFeedly');
             try {
                 parsedData = proxy ? this.parseProxyResponse() : this.parseResponse();
             } catch (e) {
-                console.log(`Couldn't parse`, this.model.get('url'), e);
+                console.log(`Couldn't parse`, modelUrl, e);
                 return this.onFeedProcessed(false);
             }
             let hasNew = false;
@@ -207,7 +208,8 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                 'hasNew': hasNew || this.model.get('hasNew'),
                 'lastStatus': 200
             };
-            if (this.request.responseURL !== this.model.get('url')) {
+            if (this.request.responseURL !== modelUrl) {
+                modelUrl = this.request.responseURL;
                 modelUpdate.url = this.request.responseURL;
             }
 
@@ -225,7 +227,7 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                         modelUpdate.favicon = response.favicon;
                         modelUpdate.faviconExpires = response.faviconExpires;
                     }, (err) => {
-                        console.log(err);
+                        console.warn(`Couldn't load favicon for:`, modelUrl, err);
                     })
                     .finally(() => {
                         this.model.save(modelUpdate);

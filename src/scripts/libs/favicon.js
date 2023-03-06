@@ -35,9 +35,8 @@ define(function () {
         }
 
         return new Promise((resolve, reject) => {
-            const baseUrl = new URL(source.get('base'));
-
-            async function getFaviconAddress(baseUrl) {
+            async function getFaviconAddress(source) {
+                const baseUrl = new URL(source.get('base'));
                 return new Promise((resolve, reject) => {
                     if (settings.get('faviconSource') === 'duckduckgo') {
                         resolve('https://icons.duckduckgo.com/ip3/' + baseUrl.host + '.ico');
@@ -66,7 +65,8 @@ define(function () {
                         const baseDocument = new DOMParser().parseFromString(baseDocumentContents, 'text/html');
                         const linkElements = [...baseDocument.querySelectorAll('link[rel*="icon"][href]')];
 
-                        const links = [];
+                        const links = new Set();
+                        links.add(baseUrl.origin + '/favicon.ico');
 
                         linkElements.forEach((link) => {
                             const favicon = link.getAttribute('href');
@@ -77,27 +77,26 @@ define(function () {
                                 return;
                             }
                             if (favicon.startsWith('http')) {
-                                links.push(favicon);
+                                links.add(favicon);
                             }
                             if (favicon.startsWith('//')) {
-                                links.push(baseUrl.protocol + favicon);
+                                links.add(baseUrl.protocol + favicon);
                                 return;
                             }
                             if (favicon.startsWith('data')) {
-                                links.push(favicon);
+                                links.add(favicon);
                                 return;
                             }
                             if (favicon.startsWith('/')) {
-                                links.push(baseUrl.origin + favicon);
+                                links.add(baseUrl.origin + favicon);
                                 return;
                             }
 
-                            links.push(baseUrl.origin + '/' + favicon);
+                            links.add(baseUrl.origin + '/' + favicon);
                         });
 
-                        links.push(baseUrl.origin + '/favicon.ico');
 
-                        resolve(links);
+                        resolve([...links]);
                     };
 
                     xhr.open('GET', baseUrl.origin);
@@ -106,7 +105,7 @@ define(function () {
                 });
             }
 
-            getFaviconAddress(baseUrl)
+            getFaviconAddress(source)
                 .then((faviconAddresses) => {
                     const promises = faviconAddresses.map((favicon) => {
                         return toDataURI(favicon);
@@ -164,7 +163,7 @@ define(function () {
 
                 let expires = 0;
                 if (expiresHeader) {
-                    expires = parseInt(Math.round((new Date(expiresHeader)).getTime() / 1000));
+                    expires = Math.round((new Date(expiresHeader)).getTime() / 1000);
                 } else {
                     const cacheControlHeader = xhr.getResponseHeader('cache-control');
                     let maxAge = 60 * 60 * 24 * 7;
@@ -172,7 +171,7 @@ define(function () {
                         const newMaxAge = parseInt(/max-age=([0-9]+).*/gi.exec(cacheControlHeader)[1]);
                         maxAge = newMaxAge > 0 ? newMaxAge : maxAge;
                     }
-                    expires = parseInt(Math.round((new Date()).getTime() / 1000)) + maxAge;
+                    expires = Math.round((new Date()).getTime() / 1000) + maxAge;
                 }
 
                 resolve({favicon: imgData, faviconExpires: expires});
