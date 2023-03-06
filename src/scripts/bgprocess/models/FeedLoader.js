@@ -299,7 +299,7 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
 
             navigator.locks.request(origin, () => {
                 console.log(this.loader.timestamps[origin] || 0);
-                if (Date.now() < (this.loader.timestamps[origin] || 0) + 1000 * 20 * 100) {
+                if (Date.now() < (this.loader.timestamps[origin] || 0) + 1000 * 5) {
                     console.log('should throttle');
                     return false;
                 }
@@ -307,6 +307,7 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                 return true;
             }).then((canContinue) => {
                 if (!canContinue) {
+                    this.loader.sourcesToLoad.push(this.model);
                     return this.downloadNext();
                 }
 
