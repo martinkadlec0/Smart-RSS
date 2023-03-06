@@ -68,31 +68,28 @@ define(function () {
                         const links = new Set();
                         links.add(baseUrl.origin + '/favicon.ico');
 
-                        linkElements.forEach((link) => {
-                            const favicon = link.getAttribute('href');
-                            if (!favicon) {
+                        linkElements.forEach((linkElement) => {
+                            const faviconAddress = linkElement.getAttribute('href');
+                            if (!faviconAddress) {
                                 return;
                             }
-                            if (favicon.includes('svg')) {
+                            if (faviconAddress.includes('svg')) {
                                 return;
                             }
-                            if (favicon.startsWith('http')) {
-                                links.add(favicon);
+                            if (faviconAddress.startsWith('http')) {
+                                return links.add(faviconAddress);
                             }
-                            if (favicon.startsWith('//')) {
-                                links.add(baseUrl.protocol + favicon);
-                                return;
+                            if (faviconAddress.startsWith('//')) {
+                                return links.add(baseUrl.protocol + faviconAddress);
                             }
-                            if (favicon.startsWith('data')) {
-                                links.add(favicon);
-                                return;
+                            if (faviconAddress.startsWith('data')) {
+                                return links.add(faviconAddress);
                             }
-                            if (favicon.startsWith('/')) {
-                                links.add(baseUrl.origin + favicon);
-                                return;
+                            if (faviconAddress.startsWith('/')) {
+                                return links.add(baseUrl.origin + faviconAddress);
                             }
 
-                            links.add(baseUrl.origin + '/' + favicon);
+                            links.add(baseUrl.origin + '/' + faviconAddress);
                         });
 
 
