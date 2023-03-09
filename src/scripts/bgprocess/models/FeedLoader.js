@@ -236,6 +236,7 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
                         modelUpdate.favicon = response.favicon;
                         modelUpdate.faviconExpires = response.faviconExpires;
                     }, (err) => {
+                        modelUpdate.faviconExpires = Math.round((new Date()).getTime() / 1000) + 60 * 60 * 24 * 7;
                         console.warn(`Couldn't load favicon for:`, modelUrl, err);
                     })
                     .finally(() => {
@@ -330,9 +331,8 @@ define(['modules/RSSParser', 'favicon'], function (RSSParser, Favicon) {
 
             let sourceUrl = this.model.get('url');
             const origin = new URL(sourceUrl).origin;
-
             navigator.locks.request(origin, () => {
-                if (Date.now() < (this.loader.timestamps[origin] || 0) + 1000 * 5) {
+                if (Date.now() < (this.loader.timestamps[origin] || 0) + 1000 * 1 && origin.includes('openrss.org')) {
                     return false;
                 }
                 this.loader.timestamps[origin] = Date.now();

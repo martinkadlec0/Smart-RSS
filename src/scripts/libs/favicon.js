@@ -135,7 +135,7 @@ define(function () {
                     let maxAge = 60 * 60 * 24 * 7;
                     if (cacheControlHeader && cacheControlHeader.includes('max-age=')) {
                         const newMaxAge = parseInt(/max-age=([0-9]+).*/gi.exec(cacheControlHeader)[1]);
-                        maxAge = newMaxAge > 0 ? newMaxAge : maxAge;
+                        maxAge = Math.max(newMaxAge, maxAge);
                     }
                     expires = Math.round((new Date()).getTime() / 1000) + maxAge;
                 }
